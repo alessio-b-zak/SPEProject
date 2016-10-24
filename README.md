@@ -1,2 +1,2 @@
 # SPEProject
-Open-water data catchement application
+Open-water data catchment application
