@@ -1,4 +1,4 @@
-package com.example.stefan.speproject1;
+package com.bitbusters.android.speproject;
 
 import android.*;
 import android.content.pm.PackageManager;

@@ -1,4 +1,4 @@
-package com.example.stefan.speproject1;
+package com.bitbusters.android.speproject;
 
 import android.content.Intent;
 import android.os.AsyncTask;
