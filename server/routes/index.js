@@ -6,6 +6,17 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var wims = new XMLHttpRequest();
+
+wims.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point/AN-WOODTON", false);
+wims.send();
+
+console.log(wims.status);
+console.log(wims.statusText);
+console.log(wims.responseText);
+
+/*
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('test.db');
 
@@ -26,5 +37,5 @@ db.serialize(function() {
 });
 
 db.close();
-
+*/
 module.exports = router;
