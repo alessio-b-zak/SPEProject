@@ -20,7 +20,8 @@
         android:layout_marginBottom="100dp"
         android:scaleX="1.2"
         android:scaleY="1.2"
-        android:src="@drawable/target_icon"/>
+        android:src="@drawable/target_icon"
+        android:onClick="currentLocation"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/cam_button"
