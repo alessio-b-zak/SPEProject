@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var router = express.Router();
 
@@ -9,12 +11,27 @@ router.get('/', function(req, res, next) {
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var wims = new XMLHttpRequest();
 
-wims.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point/AN-WOODTON", false);
+wims.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point?_limit=60000", false);
 wims.send();
 
+// status 200 = OK
 console.log(wims.status);
 console.log(wims.statusText);
-console.log(wims.responseText);
+//console.log(wims.responseText);
+
+var json = JSON.parse(wims.responseText);
+var count = Object.keys(json.items).length;
+console.log(count);
+
+//Get the file contents
+// TODO: fix ReferenceError: File is not defined
+/*
+var txtFile = new File('sampling-points.txt');
+txtFile.writeln(JSON.stringify(json.items));
+txtFile.close();
+*/
+
+//console.log(JSON.parse(wims.responseText).length);
 
 /*
 var sqlite3 = require('sqlite3').verbose();
