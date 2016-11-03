@@ -2,6 +2,7 @@ package com.bitbusters.android.speproject;
 
 import android.*;
 import android.Manifest;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -28,15 +29,19 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
     private FloatingActionButton mCamButton;
+
+    //variables used for displaying current location
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
     private boolean connected;
+    private Marker currentLocationMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +72,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    protected void onStart() {
+    protected void onResume() {
         mGoogleApiClient.connect();
-        super.onStart();
+        super.onResume();
     }
 
     @Override
@@ -78,16 +83,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onStop();
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+     // Manipulates the map once available when created.
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -104,59 +100,69 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e("MapsActivityRaw", "Can't find style.", e);
         }
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-
-
-
     }
 
-    // GPS Location Code
-
+    //Method called when connection established with Google Play Service Location API
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
+            zoomToCurrentLocation();
         } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
     }
 
-    public void currentLocation(View v){
-        if(connected) {
-            mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    //Attempts to display user current location, zooming in to LatLng if connection exists
+    public void zoomToCurrentLocation(){
+        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLocation != null) {
             double longitude = mLocation.getLongitude();
             double latitude = mLocation.getLatitude();
-            mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.target_icon)));
-            CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(latitude,longitude)).build();
+            if(currentLocationMarker != null){
+                currentLocationMarker.remove();
+            }
+            currentLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.target_icon)));
+            CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(latitude, longitude)).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
         }
     }
 
+    //Method called when location button is pressed
+    public void currentLocation(View v){
+        if(connected) {
+            zoomToCurrentLocation();
+        }else{
+            mGoogleApiClient.connect();
+        }
+    }
 
+    //Requesting permission for location information at runtime. Need for devices running Android 6 upwards
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1) {
-            if(grantResults.length == 1
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // We can now safely use the API we requested access to
-                    connected = true;
+                connected = true;
+                zoomToCurrentLocation();
             } else {
-                // Permission was denied or request was cancelled
+                connected = false;
             }
         }
     }
+
+    //Called when user is temporarily in a disconnected state.
     @Override
     public void onConnectionSuspended(int i) {
+        connected = false;
         Log.i("LocationAPI", "Connection Suspended");
         mGoogleApiClient.connect();
     }
 
+    //Called when there is an error connecting the client to the service
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.i("LocationAPI", "Connection failed. Error: " + connectionResult.getErrorCode());
+        connected = false;
+        mGoogleApiClient.connect();
     }
 }
