@@ -13,8 +13,7 @@ router.get('/getSamplingPoints/:lat/:lon', function(req, res) {
 	var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 	var wims = new XMLHttpRequest();
 
-	wims.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point?lat=" \
-			  + req.params.lat + "&long=" + req.params.lon + "&dist=10&samplingPointStatus=open", false);
+	wims.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point?lat=" + req.params.lat + "&long=" + req.params.lon + "&dist=10&samplingPointStatus=open", false);
 	wims.send();
 
 	// status 200 = OK
