@@ -1,8 +1,6 @@
 package com.bitbusters.android.speproject;
 
-import android.*;
 import android.Manifest;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -10,12 +8,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,7 +31,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class DataViewActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private FloatingActionButton mCamButton;
@@ -42,11 +41,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLocation;
     private boolean connected;
     private Marker currentLocationMarker;
+    private FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_dataview);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -57,7 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mCamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MapsActivity.this, R.string.cam_toast, Toast.LENGTH_SHORT).show();
+                Toast.makeText(DataViewActivity.this, R.string.cam_toast, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -69,6 +69,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                      .addApi(LocationServices.API)
                      .build();
          }
+
+        fm = getSupportFragmentManager();
+
     }
 
     @Override
@@ -81,6 +84,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+    }
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        if(marker.getTag().equals("Sample_point")) {
+            Fragment fragment = fm.findFragmentById(R.id.spdatafragment_container);
+
+            if (fragment == null) {
+                fragment = new SPDataFragment();
+                fm.beginTransaction().add(R.id.spdatafragment_container, fragment).commit();
+            }
+        }else{
+            //Photo marker
+        }
+
+
+
+        return false;
     }
 
      // Manipulates the map once available when created.
@@ -100,6 +121,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e("MapsActivityRaw", "Can't find style.", e);
         }
 
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        Marker test = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        test.setTag("Sample_point");
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        mMap.setOnMarkerClickListener(this);
+
     }
 
     //Method called when connection established with Google Play Service Location API
@@ -114,7 +143,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //Attempts to display user current location, zooming in to LatLng if connection exists
-    public void zoomToCurrentLocation(){
+    public void zoomToCurrentLocation() {
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLocation != null) {
             double longitude = mLocation.getLongitude();
