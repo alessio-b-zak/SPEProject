@@ -12,8 +12,8 @@ db.open(function(err, db) {
     console.log("We are connected");
 	//Create a collection if it does not exist.
 	var images = db.collection("images");	  
-	var image_1 = {comment: 'codrin is gay', loc: {long : '-2.611741', lat : '51.448787'}}
-	var image_2 = {comment: 'codrin is really gay', loc: {long : '-3.611741', lat : '52.448787'}}
+	var image_1 = {comment: 'image1', loc: {long : '-2.611741', lat : '51.448787'}}
+	var image_2 = {comment: 'image2', loc: {long : '-3.611741', lat : '52.448787'}}
 	images.insert([image_1, image_2]);
 	
 	images.find(
