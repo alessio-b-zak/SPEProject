@@ -36,6 +36,8 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
     private GoogleMap mMap;
     private FloatingActionButton mCamButton;
 
+
+
     //variables used for displaying current location
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
@@ -88,18 +90,26 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        if(marker.getTag().equals("Sample_point")) {
-            Fragment fragment = fm.findFragmentById(R.id.spdatafragment_container);
+
+        if (marker.getTag().equals("Sample_Point")) {
+            Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
             if (fragment == null) {
                 fragment = new SPDataFragment();
-                fm.beginTransaction().add(R.id.spdatafragment_container, fragment).commit();
+                fm.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
+
+                // Make buttons invisible.
+                FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
+                gpsButton.hide();
+                mCamButton.hide();
             }
-        }else{
-            //Photo marker
         }
-
-
+        else if (marker.getTag().equals("Photo")) {
+            // Stuff
+        }
+        else if (marker.getTag().equals("Current_Location")) {
+            // Stuff
+        }
 
         return false;
     }
@@ -108,6 +118,8 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+
         try {
             //This customises the google maps using the json file
             boolean success = mMap.setMapStyle(
@@ -124,7 +136,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         Marker test = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        test.setTag("Sample_point");
+        test.setTag("Sample_Point");
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.setOnMarkerClickListener(this);
@@ -194,4 +206,9 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         connected = false;
         mGoogleApiClient.connect();
     }
+
+    public FloatingActionButton getCamButton() {
+        return mCamButton;
+    }
+
 }
