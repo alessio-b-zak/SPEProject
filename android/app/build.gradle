@@ -2,11 +2,17 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
+        debugSigningConfig {
+            keyAlias 'androidDebugKey'
+            keyPassword 'android'
+            storeFile file("../Signing/debug_bitbuster.keystore")
+            storePassword 'android'
+        }
     }
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
     defaultConfig {
-        applicationId "com.example.stefan.speproject1"
+        applicationId "com.bitbusters.android.speproject"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
@@ -14,6 +20,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debugSigningConfig
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

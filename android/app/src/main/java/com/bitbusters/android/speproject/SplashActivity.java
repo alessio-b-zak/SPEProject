@@ -2,10 +2,8 @@ package com.bitbusters.android.speproject;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 public class SplashActivity extends AppCompatActivity{
 
@@ -27,7 +25,7 @@ public class SplashActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Intent intent = new Intent(SplashActivity.this, MapsActivity.class);
+            Intent intent = new Intent(SplashActivity.this, DataViewActivity.class);
             SplashActivity.this.startActivity(intent);
             SplashActivity.this.finish();
         }
