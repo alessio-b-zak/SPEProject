@@ -29,26 +29,35 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" >
 
-            <Button
-                android:text="Back"
+            <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/colorPrimary"
                 android:id="@+id/back_button"
-                android:layout_weight="1" />
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                android:layout_weight = "1"
+                android:src="@drawable/back_white" />
 
-            <Button
-                android:text="Grid"
+            <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/gridview_button"
-                android:layout_weight="1" />
-
-            <Button
-                android:text="Map"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/colorPrimary"
                 android:id="@+id/mapview_button"
-                android:layout_weight="1" />
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                android:layout_weight = "1"
+                android:src="@drawable/marker_white" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/colorPrimary"
+                android:id="@+id/gridview_button"
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                android:layout_weight = "1"
+                android:src="@drawable/grid_white" />
 
         </LinearLayout>
 

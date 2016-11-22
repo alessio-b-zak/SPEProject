@@ -31,12 +31,15 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.android.gms.R.id.test;
+
 public class DataViewActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private FloatingActionButton mCamButton;
-
-
 
     //variables used for displaying current location
     private GoogleApiClient mGoogleApiClient;
@@ -44,6 +47,8 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
     private boolean connected;
     private Marker currentLocationMarker;
     private FragmentManager fm;
+
+    private List<Marker> photoMarkers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +100,12 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
             Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
             if (fragment == null) {
+                LatLng markerPos = new LatLng(marker.getPosition().latitude + 0.05f, marker.getPosition().longitude);
+                //marker.getPosition();
+                //markerPos.latitude -= 5.0f;
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
+                //mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+
                 fragment = new SPDataFragment();
                 fm.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
@@ -102,19 +113,54 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
                 FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
                 gpsButton.hide();
                 mCamButton.hide();
+
+                // TODO: Hide all other sample point markers.
+
+                // Show all photo markers currently on screen.
+                showPhotoMarkersInView();
             }
         }
         else if (marker.getTag().equals("Photo")) {
-            // Stuff
+            Log.e("666","test photo click");
         }
         else if (marker.getTag().equals("Current_Location")) {
-            // Stuff
+            Log.e("333","test current location click");
         }
 
-        return false;
+        return true;
     }
 
-     // Manipulates the map once available when created.
+    // Shows all photo markers currently on screen.
+    private void showPhotoMarkersInView() {
+        //if (LOGIC TO TEST IF ON SCREEN) {
+
+            LatLng photoLL = new LatLng(51.451902, -2.626990);
+            Marker photo1 = mMap.addMarker(new MarkerOptions().position(photoLL).title("Photo 1").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo1.setTag("Photo");
+
+            photoLL = new LatLng(51.462598, -2.608880);
+            Marker photo2 = mMap.addMarker(new MarkerOptions().position(photoLL).title("Photo 2").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo2.setTag("Photo");
+
+            photoLL = new LatLng(51.459256, -2.595233);
+            Marker photo3 = mMap.addMarker(new MarkerOptions().position(photoLL).title("Photo 3").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo3.setTag("Photo");
+
+            photoMarkers.add(photo1);
+            photoMarkers.add(photo2);
+            photoMarkers.add(photo3);
+
+        //}
+    }
+
+    // Clear all photo markers.
+    private void clearAllPhotoMarkers() {
+        for (Marker marker : photoMarkers) {
+            marker.remove();
+        }
+    }
+
+    // Manipulates the map once available when created.
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -133,11 +179,13 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
             Log.e("MapsActivityRaw", "Can't find style.", e);
         }
 
+        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837,-3.625488), 5.0f) );
+
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        Marker test = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        LatLng bristol = new LatLng(51.455994, -2.603644);
+        Marker test = mMap.addMarker(new MarkerOptions().position(bristol).title("Bristol Sample Point").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         test.setTag("Sample_Point");
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.setOnMarkerClickListener(this);
 
@@ -148,7 +196,6 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
     public void onConnected(@Nullable Bundle bundle) {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
-            zoomToCurrentLocation();
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
@@ -164,6 +211,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
                 currentLocationMarker.remove();
             }
             currentLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.target_icon)));
+            currentLocationMarker.setTag("Current_Location");
             CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(latitude, longitude)).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
         }
@@ -207,8 +255,23 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         mGoogleApiClient.connect();
     }
 
-    public FloatingActionButton getCamButton() {
-        return mCamButton;
+    @Override
+    public void onBackPressed() {
+        // If SPDataFragment visible, pop all fragments and reshow buttons.
+        if (fm.getBackStackEntryCount() != 0) {
+            fm.popBackStack();
+            fm.popBackStack();
+
+            clearAllPhotoMarkers();
+
+            // Re-show the buttons.
+            FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
+            gpsButton.show();
+            mCamButton.show();
+        // Else do normal back button stuff.
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }
