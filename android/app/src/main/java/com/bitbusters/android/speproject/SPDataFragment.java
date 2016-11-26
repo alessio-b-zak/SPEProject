@@ -1,12 +1,9 @@
 package com.bitbusters.android.speproject;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,12 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -59,7 +52,7 @@ public class SPDataFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Pop the SPDataFragment.
-                Toast.makeText(getActivity(), "I don't want to die!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "I don't want to die!", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             }
         });
@@ -68,7 +61,7 @@ public class SPDataFragment extends Fragment {
         mMapViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Map View!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Map View!", Toast.LENGTH_SHORT).show();
 
                 // Highlight map view button.
                 mMapViewButton.setColorFilter(Color.argb(255,79,195,247));
@@ -90,7 +83,7 @@ public class SPDataFragment extends Fragment {
         mGridViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Grid View!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Grid View!", Toast.LENGTH_SHORT).show();
 
                 // Highlight grid view button.
                 mGridViewButton.setColorFilter(Color.argb(255,79,195,247));
