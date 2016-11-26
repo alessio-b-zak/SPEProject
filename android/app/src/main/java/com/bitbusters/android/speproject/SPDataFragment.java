@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class SPDataFragment extends Fragment {
     ImageButton mBackButton;
     ImageButton mGridViewButton;
     ImageButton mMapViewButton;
+    GridView mGridView;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -59,13 +61,9 @@ public class SPDataFragment extends Fragment {
                 // Unhighlight grid view button.
                 mGridViewButton.setColorFilter(Color.argb(255,255,255,255));
                 mGridViewButton.invalidate();
-                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
-                // If switching to map view from grid view, hide the grid view.
-                if (fragment instanceof PhotoGridFragment) {
-                    getActivity().getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+                mGridView.setVisibility(View.INVISIBLE);
 
-                }
             }
         });
         // Make map button highlighted as default.
@@ -84,19 +82,14 @@ public class SPDataFragment extends Fragment {
                 // Unhighlight map view button.
                 mMapViewButton.setColorFilter(Color.argb(255,255,255,255));
                 mMapViewButton.invalidate();
-                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
-                // If loading grid view for the first time, add to back stack.
-                if (fragment instanceof SPDataFragment) {
-                    fragment = new PhotoGridFragment();
-                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
-                }
-                // Else just show it again (after previously being hidden).
-                else {
-                    getActivity().getSupportFragmentManager().beginTransaction().show(fragment).commit();
-                }
+                mGridView.setVisibility(View.VISIBLE);
+
             }
         });
+
+        mGridView = (GridView) v.findViewById(R.id.grid_view);
+        mGridView.setVisibility(View.INVISIBLE);
 
         return v;
     }

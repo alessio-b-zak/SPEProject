@@ -101,10 +101,8 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
 
             if (fragment == null) {
                 LatLng markerPos = new LatLng(marker.getPosition().latitude + 0.05f, marker.getPosition().longitude);
-                //marker.getPosition();
-                //markerPos.latitude -= 5.0f;
+
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
-                //mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
                 fragment = new SPDataFragment();
                 fm.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
@@ -258,9 +256,11 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onBackPressed() {
         // If SPDataFragment visible, pop all fragments and reshow buttons.
-        if (fm.getBackStackEntryCount() != 0) {
-            fm.popBackStack();
-            fm.popBackStack();
+        int numFrags = fm.getBackStackEntryCount();
+        if (numFrags != 0) {
+            for (int i = 0; i < numFrags; i++) {
+                fm.popBackStack();
+            }
 
             clearAllPhotoMarkers();
 
@@ -268,6 +268,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
             FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
             gpsButton.show();
             mCamButton.show();
+
         // Else do normal back button stuff.
         } else {
             super.onBackPressed();
