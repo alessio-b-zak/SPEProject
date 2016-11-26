@@ -11,51 +11,55 @@
         android:layout_height="match_parent"
         android:id="@+id/textView"
         android:textSize="24sp"
-        android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color"
-        android:layout_weight="0.70" />
+        android:background="#cc4fc3f7"
+        android:layout_weight="0.70"
+        android:textColor="@color/black"
+        android:textAlignment="center"/>
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="#CC000000"
         android:theme="?attr/actionBarTheme"
         android:id="@+id/dataview_toolbar"
-        android:minHeight="?attr/actionBarSize" >
+        android:minHeight="?attr/actionBarSize"
+        android:weightSum="1">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:orientation="horizontal"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" >
+            android:layout_marginRight="16dp"
+            >
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="?attr/colorPrimary"
+                android:background="#00000000"
                 android:id="@+id/back_button"
                 android:clickable="true"
-                android:scaleType="fitCenter"
-                android:layout_weight="1"
-                android:src="@drawable/back_white" />
+                android:scaleType="center"
+                android:src="@drawable/arrow_white"
+                android:layout_weight="1.00"/>
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="?attr/colorPrimary"
+                android:background="#00000000"
                 android:id="@+id/mapview_button"
                 android:clickable="true"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
                 android:layout_weight="1"
                 android:src="@drawable/marker_white" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="?attr/colorPrimary"
+                android:background="#00000000"
                 android:id="@+id/gridview_button"
                 android:clickable="true"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
                 android:layout_weight="1"
                 android:src="@drawable/grid_white" />
 
@@ -63,16 +67,11 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <GridView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnWidth="100dp"
-        android:numColumns="auto_fit"
-        android:verticalSpacing="0dp"
-        android:horizontalSpacing="0dp"
-        android:stretchMode="spacingWidthUniform"
-        android:background="@color/colorAccent"
+        android:background="#AA000000"
         android:layout_weight="0.3"
         />
 
