@@ -1,6 +1,6 @@
-private class GetSamplingPoints extends AsyncTask<ArrayList<Float>, Void, JSONArray> {
+private class SamplingPointsAPI extends AsyncTask<ArrayList<String>, Void, JSONArray> {
     @Override
-    protected JSONArray doInBackground(ArrayList<Float>... params) {
+    protected JSONArray doInBackground(ArrayList<String>... params) {
 
         // params comes from the execute() call: params[0] is the url.
         try {
@@ -11,8 +11,8 @@ private class GetSamplingPoints extends AsyncTask<ArrayList<Float>, Void, JSONAr
                     .appendPath("water-quality")
                     .appendPath("id")
                     .appendPath("sampling-point")
-                    .appendQueryParameter("lat", params[0].)
-                    .appendQueryParameter("long", params[1])
+                    .appendQueryParameter("lat", params.get(0))
+                    .appendQueryParameter("long", params.get(1))
                     .appendQueryParameter("dist", "10")
                     .appendQueryParameter("samplingPointStatus", "open");
             String myUrl = builder.build().toString();
