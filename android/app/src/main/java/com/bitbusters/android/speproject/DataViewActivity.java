@@ -255,22 +255,23 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
 
     @Override
     public void onBackPressed() {
-        // If SPDataFragment visible, pop all fragments and reshow buttons.
-        int numFrags = fm.getBackStackEntryCount();
-        if (numFrags != 0) {
-            for (int i = 0; i < numFrags; i++) {
-                fm.popBackStack();
-            }
 
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+
+        if (fragment instanceof SPDataFragment) {
+            fm.popBackStack();
             clearAllPhotoMarkers();
 
             // Re-show the buttons.
             FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
             gpsButton.show();
             mCamButton.show();
-
+        }
+        else if (fragment instanceof PhotoViewFragment) {
+            fm.popBackStack();
+        }
         // Else do normal back button stuff.
-        } else {
+        else {
             super.onBackPressed();
         }
     }

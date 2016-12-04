@@ -1,6 +1,7 @@
 package com.bitbusters.android.speproject;
 
 import android.content.res.Resources;
+import android.view.View;
 
 /**
  * Created by toddym42 on 26/11/2016.
@@ -8,38 +9,29 @@ import android.content.res.Resources;
 
 public class GalleryItem {
 
-    private String mCaption;
-    private String mId;
-    private String mUrl;
+    private String mTag;
+    private String mComment;
     private int mResId;
 
     @Override
     public String toString() {
-        return mCaption;
+        return String.valueOf(mResId);
     }
 
-    public String getCaption() {
-        return mCaption;
+    public String getTag() {
+        return mTag;
     }
 
-    public void setCaption(String caption) {
-        mCaption = caption;
+    public void setTag(String tag) {
+        mTag = tag;
     }
 
-    public String getId() {
-        return mId;
+    public String getComment() {
+        return mComment;
     }
 
-    public void setId(String id) {
-        mId = id;
-    }
-
-    public String getUrl() {
-        return mUrl;
-    }
-
-    public void setUrl(String url) {
-        mUrl = url;
+    public void setComment(String comment) {
+        mComment = comment;
     }
 
     public int getResId() {

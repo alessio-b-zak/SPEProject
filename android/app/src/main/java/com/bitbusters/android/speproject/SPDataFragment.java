@@ -5,9 +5,11 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,6 @@ public class SPDataFragment extends Fragment {
     ImageButton mBackButton;
     ImageButton mMapViewButton;
     ImageButton mGridViewButton;
-
 
     private RecyclerView mPhotoRecyclerView;
     private List<GalleryItem> mItems = new ArrayList<>();
@@ -51,8 +52,6 @@ public class SPDataFragment extends Fragment {
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Pop the SPDataFragment.
-                //Toast.makeText(getActivity(), "I don't want to die!", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             }
         });
@@ -61,7 +60,6 @@ public class SPDataFragment extends Fragment {
         mMapViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getActivity(), "Map View!", Toast.LENGTH_SHORT).show();
 
                 // Highlight map view button.
                 mMapViewButton.setColorFilter(Color.argb(255,79,195,247));
@@ -83,7 +81,6 @@ public class SPDataFragment extends Fragment {
         mGridViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getActivity(), "Grid View!", Toast.LENGTH_SHORT).show();
 
                 // Highlight grid view button.
                 mGridViewButton.setColorFilter(Color.argb(255,79,195,247));
@@ -145,6 +142,21 @@ public class SPDataFragment extends Fragment {
         public PhotoHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             View view = inflater.inflate(R.layout.gallery_item, viewGroup, false);
+
+            // When a photo in the grid is clicked.
+            view.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    PhotoViewFragment fragment = new PhotoViewFragment();
+                    int itemPosition = mPhotoRecyclerView.getChildLayoutPosition(v);
+                    fragment.setGalleryItem(mGalleryItems.get(itemPosition));
+
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    fm.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                }
+            });
+
             return new PhotoHolder(view);
         }
 
@@ -154,9 +166,6 @@ public class SPDataFragment extends Fragment {
             Drawable itemImage = getResources().getDrawable(galleryItem.getResId());
             photoHolder.bindDrawable(itemImage);
 
-            //GalleryItem galleryItem = mGalleryItems.get(position);
-            //Drawable placeHolder = getResources().getDrawable(R.drawable.sample1);
-            //photoHolder.bindDrawable(placeHolder);
         }
 
         @Override
@@ -170,7 +179,9 @@ public class SPDataFragment extends Fragment {
 
         for (int i = 1; i <= 18; i++) {
             GalleryItem item = new GalleryItem();
+            item.setTag("Tag " + i);
             String imageName = "sample" + i;
+            item.setComment(imageName + ".jpeg");
             int resID = getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject");
             item.setResId(resID);
             mItems.add(item);

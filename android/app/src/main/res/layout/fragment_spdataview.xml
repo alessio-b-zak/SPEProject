@@ -9,6 +9,7 @@
         android:text="Sample Point Data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
         android:id="@+id/textView"
         android:textSize="24sp"
         android:background="#cc4fc3f7"
