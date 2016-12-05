@@ -146,6 +146,11 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
     //Method called when connection established with Google Play Service Location API
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        //Defining lat and long and calling the APIs
+        String[] location = new String[2];
+        location[0] = "51.450010";
+        location[1] = "-2.625455";
+        new SamplingPointsAPI().execute(location);
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
             zoomToCurrentLocation();
@@ -166,6 +171,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
             currentLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.target_icon)));
             CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(latitude, longitude)).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
+
         }
     }
 
