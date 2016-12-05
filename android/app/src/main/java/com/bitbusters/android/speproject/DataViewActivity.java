@@ -47,7 +47,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
     private boolean connected;
     private Marker currentLocationMarker;
     private FragmentManager fm;
-
+    private SPDataFragment mSPDataFragment;
     private List<Marker> photoMarkers = new ArrayList<>();
 
     @Override
@@ -105,6 +105,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
 
                 fragment = new SPDataFragment();
+                mSPDataFragment = (SPDataFragment) fragment;
                 fm.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
                 // Make buttons invisible.
@@ -119,7 +120,9 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
             }
         }
         else if (marker.getTag().equals("Photo")) {
-            Log.e("666","test photo click");
+            PhotoViewFragment fragment = new PhotoViewFragment();
+            fragment.setGalleryItem(mSPDataFragment.getItems().get(Integer.valueOf(marker.getTitle())));
+            fm.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
         }
         else if (marker.getTag().equals("Current_Location")) {
             Log.e("333","test current location click");
@@ -133,20 +136,61 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         //if (LOGIC TO TEST IF ON SCREEN) {
 
             LatLng photoLL = new LatLng(51.451902, -2.626990);
-            Marker photo1 = mMap.addMarker(new MarkerOptions().position(photoLL).title("Photo 1").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo1.setTag("Photo");
+            Marker photo0 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("0")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo0.setTag("Photo");
 
             photoLL = new LatLng(51.462598, -2.608880);
-            Marker photo2 = mMap.addMarker(new MarkerOptions().position(photoLL).title("Photo 2").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo2.setTag("Photo");
+            Marker photo1 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("1")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo1.setTag("Photo");
 
             photoLL = new LatLng(51.459256, -2.595233);
-            Marker photo3 = mMap.addMarker(new MarkerOptions().position(photoLL).title("Photo 3").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            Marker photo2 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("2")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo2.setTag("Photo");
+
+            photoLL = new LatLng(51.493915, -2.699290);
+            Marker photo3 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("3")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
             photo3.setTag("Photo");
 
+            photoLL = new LatLng(51.485578, -2.660623);
+            Marker photo4 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("4")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo4.setTag("Photo");
+
+            photoLL = new LatLng(51.461413, -2.631612);
+            Marker photo5 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("5")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo5.setTag("Photo");
+
+            photoLL = new LatLng(51.447935, -2.613073);
+            Marker photo6 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("6")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo6.setTag("Photo");
+
+            photoLL = new LatLng(51.448363, -2.594877);
+            Marker photo7 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("7")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo7.setTag("Photo");
+
+            photoMarkers.add(photo0);
             photoMarkers.add(photo1);
             photoMarkers.add(photo2);
             photoMarkers.add(photo3);
+            photoMarkers.add(photo4);
+            photoMarkers.add(photo5);
+            photoMarkers.add(photo6);
+            photoMarkers.add(photo7);
 
         //}
     }

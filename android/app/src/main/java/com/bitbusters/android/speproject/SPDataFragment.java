@@ -177,7 +177,7 @@ public class SPDataFragment extends Fragment {
 
     private void populateItems() {
 
-        for (int i = 1; i <= 18; i++) {
+        for (int i = 0; i < 18; i++) {
             GalleryItem item = new GalleryItem();
             item.setTag("Tag " + i);
             String imageName = "sample" + i;
@@ -234,6 +234,9 @@ public class SPDataFragment extends Fragment {
         }
     }
 
+    public List<GalleryItem> getItems() {
+        return mItems;
+    }
 }
 
 
