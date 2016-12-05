@@ -1,6 +1,7 @@
 package com.bitbusters.android.speproject;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,13 +10,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,8 @@ public class SPDataFragment extends Fragment {
                 mGridViewButton.invalidate();
 
                 // Hide the grid view.
-                mPhotoRecyclerView.setVisibility(View.INVISIBLE);
+                //mPhotoRecyclerView.setVisibility(View.INVISIBLE);
+                mPhotoRecyclerView.animate().translationY(mPhotoRecyclerView.getHeight());
 
             }
         });
@@ -90,14 +91,21 @@ public class SPDataFragment extends Fragment {
                 mMapViewButton.invalidate();
 
                 // Show the grid view.
-                mPhotoRecyclerView.setVisibility(View.VISIBLE);
+                mPhotoRecyclerView.animate().translationY(mPhotoRecyclerView.getHeight());
+                //mPhotoRecyclerView.setVisibility(View.VISIBLE);
+                mPhotoRecyclerView.animate().translationY(0);
+                //mPhotoRecyclerView.animate().translationY(0).setDuration(500);
 
             }
         });
 
         // Instantiating the grid view.  Hidden as default when marker first selected.
         mPhotoRecyclerView = (RecyclerView) v.findViewById(R.id.grid_view);
-        mPhotoRecyclerView.setVisibility(View.INVISIBLE);
+
+        Point size = new Point();
+        getActivity().getWindowManager().getDefaultDisplay().getSize(size);
+        mPhotoRecyclerView.setY(size.y);
+
         mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
         // Adding spaces between photos.
@@ -153,7 +161,10 @@ public class SPDataFragment extends Fragment {
                     fragment.setGalleryItem(mGalleryItems.get(itemPosition));
 
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    fm.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    fm.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
+                            .add(R.id.fragment_container, fragment)
+                            .addToBackStack(null).commit();
                 }
             });
 
@@ -195,7 +206,7 @@ public class SPDataFragment extends Fragment {
     }
 
     // from http://stackoverflow.com/questions/28531996/android-recyclerview-gridlayoutmanager-column-spacing
-    // TODO: Possibly should be made into separate class file.
+    // TODO: Possibly should be made into separate class file?
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;

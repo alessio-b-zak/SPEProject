@@ -34,8 +34,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.android.gms.R.id.test;
-
 public class DataViewActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
@@ -106,7 +104,11 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
 
                 fragment = new SPDataFragment();
                 mSPDataFragment = (SPDataFragment) fragment;
-                fm.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
+
+                fm.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                        .add(R.id.fragment_container, fragment)
+                        .addToBackStack(null).commit();
 
                 // Make buttons invisible.
                 FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
@@ -122,7 +124,10 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         else if (marker.getTag().equals("Photo")) {
             PhotoViewFragment fragment = new PhotoViewFragment();
             fragment.setGalleryItem(mSPDataFragment.getItems().get(Integer.valueOf(marker.getTitle())));
-            fm.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
+                    .add(R.id.fragment_container, fragment)
+                    .addToBackStack(null).commit();
         }
         else if (marker.getTag().equals("Current_Location")) {
             Log.e("333","test current location click");
