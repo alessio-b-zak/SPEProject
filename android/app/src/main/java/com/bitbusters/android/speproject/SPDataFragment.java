@@ -181,7 +181,11 @@ public class SPDataFragment extends Fragment {
             GalleryItem item = new GalleryItem();
             item.setTag("Tag " + i);
             String imageName = "sample" + i;
-            item.setComment(imageName + ".jpeg");
+            item.setComment(imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " +
+                    imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " +
+                    imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " +
+                    imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " +
+                    imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg ");
             int resID = getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject");
             item.setResId(resID);
             mItems.add(item);
