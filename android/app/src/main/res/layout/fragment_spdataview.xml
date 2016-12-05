@@ -27,11 +27,12 @@
         android:weightSum="1">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
             android:orientation="horizontal"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_weight="0.5"
             >
 
             <ImageButton
@@ -41,8 +42,17 @@
                 android:id="@+id/back_button"
                 android:clickable="true"
                 android:scaleType="center"
+                android:padding="16dp"
                 android:src="@drawable/arrow_white"
-                android:layout_weight="1.00"/>
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:layout_marginRight="16dp">
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -52,6 +62,8 @@
                 android:clickable="true"
                 android:scaleType="center"
                 android:layout_weight="1"
+                android:layout_toLeftOf="@+id/gridview_button"
+                android:padding="16dp"
                 android:src="@drawable/marker_white" />
 
             <ImageButton
@@ -62,9 +74,12 @@
                 android:clickable="true"
                 android:scaleType="center"
                 android:layout_weight="1"
+                android:layout_alignParentRight="true"
+                android:padding="16dp"
                 android:src="@drawable/grid_white" />
 
-        </LinearLayout>
+        </RelativeLayout>
+
 
     </android.support.v7.widget.Toolbar>
 

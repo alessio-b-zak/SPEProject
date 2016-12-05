@@ -19,8 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:orientation="horizontal"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            >
+            android:layout_marginRight="16dp">
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -30,7 +29,7 @@
                 android:clickable="true"
                 android:scaleType="center"
                 android:src="@drawable/arrow_white"
-                android:layout_gravity="left" />
+                android:padding="16dp" />
 
         </LinearLayout>
 
