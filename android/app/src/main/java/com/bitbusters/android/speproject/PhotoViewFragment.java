@@ -47,8 +47,6 @@ public class PhotoViewFragment extends Fragment {
             }
         });
 
-        //Toast.makeText(getActivity(), String.valueOf(mGalleryItem.getResId()), Toast.LENGTH_SHORT).show();
-
         ImageView iv = (ImageView) v.findViewById(R.id.photo);
         iv.setImageResource(mGalleryItem.getResId());
 

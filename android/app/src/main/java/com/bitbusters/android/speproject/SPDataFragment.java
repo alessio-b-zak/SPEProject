@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +68,6 @@ public class SPDataFragment extends Fragment {
                 mGridViewButton.invalidate();
 
                 // Hide the grid view.
-                //mPhotoRecyclerView.setVisibility(View.INVISIBLE);
                 mPhotoRecyclerView.animate().translationY(mPhotoRecyclerView.getHeight());
 
             }
@@ -92,9 +90,7 @@ public class SPDataFragment extends Fragment {
 
                 // Show the grid view.
                 mPhotoRecyclerView.animate().translationY(mPhotoRecyclerView.getHeight());
-                //mPhotoRecyclerView.setVisibility(View.VISIBLE);
                 mPhotoRecyclerView.animate().translationY(0);
-                //mPhotoRecyclerView.animate().translationY(0).setDuration(500);
 
             }
         });
