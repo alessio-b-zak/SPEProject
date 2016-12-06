@@ -14,15 +14,16 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.bitbusters.android.speproject.R.id.textView;
 //import static com.google.android.gms.internal.zznu.is;
 
-public class SamplingPointsAPI extends AsyncTask<String, Void, String> {
+public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoint>> {
     private static final String DEBUG_TAG = "SAMPLING_POINTS_API";
     @Override
-    protected String doInBackground(String...params) {
-
+    protected List<SamplingPoint> doInBackground(String...params) {
+        List<SamplingPoint> samplingPoints = new ArrayList<SamplingPoint>();
         // params comes from the execute() call: params[0] is the url.
         try {
 
@@ -50,21 +51,24 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, String> {
             int response = conn.getResponseCode();
             Log.d(DEBUG_TAG, "Url is: " + url);
             Log.d(DEBUG_TAG, "The response is: " + response);
-            InputStream is = null;
-            is = conn.getInputStream();
+            InputStream inputStream = null;
+            inputStream = conn.getInputStream();
             //len limits the input string returned. should be changed from 5000 when tested.
             int len = 5000;
             // Convert the InputStream into a string
-            String SamplingPoints = readIt(is, len);
+//            String SamplingPoints = readIt(is, len);
+            InputStreamToJSON inputStreamToJSON = new InputStreamToJSON();
+            samplingPoints = inputStreamToJSON.readJsonStream(inputStream);
 //            Log.d(DEBUG_TAG, "The result is: " + SamplingPoints);
-            return SamplingPoints;
+
         } catch (IOException e) {
-            return "Unable to retrieve web page. URL may be invalid.";
+            e.printStackTrace();
         }
+        return samplingPoints;
     }
     // onPostExecute displays the results of the AsyncTask.
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(List<SamplingPoint> result) {
         //TODO: Make sure that results are passed back to the caller;
     }
 
