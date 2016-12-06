@@ -4,4 +4,11 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="cam_toast">SWOOSH!</string>
+
+
+    <string name="choose_tag">Choose a tag</string>
+    <string-array name="tags">
+        <item>Rubbish</item>
+        <item>Oil Spill</item>
+    </string-array>
 </resources>

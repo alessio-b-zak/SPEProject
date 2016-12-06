@@ -1,9 +1,12 @@
 package com.bitbusters.android.speproject;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.location.Location;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -64,7 +67,8 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         mCamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DataViewActivity.this, R.string.cam_toast, Toast.LENGTH_SHORT).show();
+                Intent pcaintent = new Intent(v.getContext(), PhotoCommentActivity.class);
+                startActivity(pcaintent);
             }
         });
 

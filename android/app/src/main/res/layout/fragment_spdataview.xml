@@ -36,6 +36,7 @@
                 android:id="@+id/back_button"
                 android:clickable="true"
                 android:scaleType="fitCenter"
+                android:onClick="backClick"
                 android:layout_weight="1"
                 android:src="@drawable/back_white" />
 
