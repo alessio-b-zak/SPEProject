@@ -146,13 +146,13 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
             photo0.setTag("Photo");
 
-            photoLL = new LatLng(51.462598, -2.608880);
+            photoLL = new LatLng(51.480805, -2.679945);
             Marker photo1 = mMap.addMarker(new MarkerOptions()
                     .position(photoLL).title("1")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
             photo1.setTag("Photo");
 
-            photoLL = new LatLng(51.459256, -2.595233);
+            photoLL = new LatLng(51.446635, -2.606646);
             Marker photo2 = mMap.addMarker(new MarkerOptions()
                     .position(photoLL).title("2")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
@@ -176,7 +176,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
             photo5.setTag("Photo");
 
-            photoLL = new LatLng(51.447935, -2.613073);
+            photoLL = new LatLng(51.454605, -2.589866);
             Marker photo6 = mMap.addMarker(new MarkerOptions()
                     .position(photoLL).title("6")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
@@ -188,6 +188,18 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
             photo7.setTag("Photo");
 
+            photoLL = new LatLng(51.445726, -2.620722);
+            Marker photo8 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("8")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo8.setTag("Photo");
+
+            photoLL = new LatLng(51.472145, -2.647501);
+            Marker photo9 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("9")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo9.setTag("Photo");
+
             photoMarkers.add(photo0);
             photoMarkers.add(photo1);
             photoMarkers.add(photo2);
@@ -196,6 +208,8 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
             photoMarkers.add(photo5);
             photoMarkers.add(photo6);
             photoMarkers.add(photo7);
+            photoMarkers.add(photo8);
+            photoMarkers.add(photo9);
 
         //}
     }
@@ -229,10 +243,12 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837,-3.625488), 5.0f) );
 
         // Add a marker in Sydney and move the camera
-        LatLng bristol = new LatLng(51.455994, -2.603644);
-        Marker test = mMap.addMarker(new MarkerOptions().position(bristol).title("Bristol Sample Point").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        LatLng bristol = new LatLng(51.450272, -2.598052);
+        Marker test = mMap.addMarker(new MarkerOptions()
+                .position(bristol)
+                .title("Bristol Waterfront")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         test.setTag("Sample_Point");
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.setOnMarkerClickListener(this);
 

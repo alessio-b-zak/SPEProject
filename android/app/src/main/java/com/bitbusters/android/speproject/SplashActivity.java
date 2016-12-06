@@ -15,7 +15,7 @@ public class SplashActivity extends AppCompatActivity{
         task.execute();
     }
 
-    private class DataPullTask extends AsyncTask<Void, Void, Void>{
+    private class DataPullTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
             TODO: // BACK END COULD PULL DATA HERE

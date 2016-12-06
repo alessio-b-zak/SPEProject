@@ -9,6 +9,7 @@ import android.view.View;
 
 public class GalleryItem {
 
+    private String mName;
     private String mTag;
     private String mComment;
     private int mResId;
@@ -16,6 +17,14 @@ public class GalleryItem {
     @Override
     public String toString() {
         return String.valueOf(mResId);
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String name) {
+        mName = name;
     }
 
     public String getTag() {

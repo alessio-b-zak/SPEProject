@@ -190,15 +190,11 @@ public class SPDataFragment extends Fragment {
 
         for (int i = 0; i < 18; i++) {
             GalleryItem item = new GalleryItem();
-            item.setTag("Tag " + i);
             String imageName = "sample" + i;
-            item.setComment(imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " +
-                    imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " +
-                    imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " +
-                    imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " +
-                    imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg " + imageName + ".jpeg ");
-            int resID = getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject");
-            item.setResId(resID);
+            item.setName(imageName);
+            item.setTag("Tag " + i);
+            item.setComment("abcd efgh ijkl mnop qrst uvwx yz01 1234 5678 9");
+            item.setResId(getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject"));
             mItems.add(item);
         }
 

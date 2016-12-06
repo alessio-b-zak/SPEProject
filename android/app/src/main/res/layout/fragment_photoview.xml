@@ -53,15 +53,46 @@
                 android:adjustViewBounds="true" />
 
             <TextView
-                android:id="@+id/photo_tag"
+                android:id="@+id/photo_name"
                 android:textColor="@color/black"
                 android:textSize="24sp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="TAG"
+                style="?android:listSeparatorTextViewStyle"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp" />
+
+            <TextView
+                android:id="@+id/photo_tag"
+                android:textColor="@color/black"
+                android:textSize="18sp"
                 android:gravity="start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp" />
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="COMMENT"
+                style="?android:listSeparatorTextViewStyle"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp" />
 
             <TextView
                 android:id="@+id/photo_comment"
