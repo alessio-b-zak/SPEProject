@@ -70,6 +70,12 @@
                 android:background="#00000000"
                 android:id="@+id/back_button"
                 android:clickable="true"
+<<<<<<< HEAD
+                android:scaleType="fitCenter"
+                android:onClick="backClick"
+                android:layout_weight="1"
+                android:src="@drawable/back_white" />
+=======
                 android:scaleType="center"
                 android:padding="16dp"
                 android:src="@drawable/arrow_white" />
@@ -81,6 +87,7 @@
             android:layout_height="?attr/actionBarSize"
             android:orientation="horizontal"
             android:layout_marginRight="16dp">
+>>>>>>> e33f611d0c44c68e1447551cea4644ebac45a21e
 
             <ImageButton
                 android:layout_width="wrap_content"

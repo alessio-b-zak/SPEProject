@@ -37,8 +37,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.android.gms.R.id.test;
-
 public class DataViewActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
@@ -50,7 +48,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
     private boolean connected;
     private Marker currentLocationMarker;
     private FragmentManager fm;
-
+    private SPDataFragment mSPDataFragment;
     private List<Marker> photoMarkers = new ArrayList<>();
 
     @Override
@@ -109,7 +107,12 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
 
                 fragment = new SPDataFragment();
-                fm.beginTransaction().add(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                mSPDataFragment = (SPDataFragment) fragment;
+
+                fm.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                        .add(R.id.fragment_container, fragment)
+                        .addToBackStack(null).commit();
 
                 // Make buttons invisible.
                 FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
@@ -123,7 +126,12 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
             }
         }
         else if (marker.getTag().equals("Photo")) {
-            Log.e("666","test photo click");
+            PhotoViewFragment fragment = new PhotoViewFragment();
+            fragment.setGalleryItem(mSPDataFragment.getItems().get(Integer.valueOf(marker.getTitle())));
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
+                    .add(R.id.fragment_container, fragment)
+                    .addToBackStack(null).commit();
         }
         else if (marker.getTag().equals("Current_Location")) {
             Log.e("333","test current location click");
@@ -137,20 +145,75 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         //if (LOGIC TO TEST IF ON SCREEN) {
 
             LatLng photoLL = new LatLng(51.451902, -2.626990);
-            Marker photo1 = mMap.addMarker(new MarkerOptions().position(photoLL).title("Photo 1").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            Marker photo0 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("0")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo0.setTag("Photo");
+
+            photoLL = new LatLng(51.480805, -2.679945);
+            Marker photo1 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("1")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
             photo1.setTag("Photo");
 
-            photoLL = new LatLng(51.462598, -2.608880);
-            Marker photo2 = mMap.addMarker(new MarkerOptions().position(photoLL).title("Photo 2").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photoLL = new LatLng(51.446635, -2.606646);
+            Marker photo2 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("2")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
             photo2.setTag("Photo");
 
-            photoLL = new LatLng(51.459256, -2.595233);
-            Marker photo3 = mMap.addMarker(new MarkerOptions().position(photoLL).title("Photo 3").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photoLL = new LatLng(51.493915, -2.699290);
+            Marker photo3 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("3")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
             photo3.setTag("Photo");
 
+            photoLL = new LatLng(51.485578, -2.660623);
+            Marker photo4 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("4")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo4.setTag("Photo");
+
+            photoLL = new LatLng(51.461413, -2.631612);
+            Marker photo5 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("5")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo5.setTag("Photo");
+
+            photoLL = new LatLng(51.454605, -2.589866);
+            Marker photo6 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("6")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo6.setTag("Photo");
+
+            photoLL = new LatLng(51.448363, -2.594877);
+            Marker photo7 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("7")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo7.setTag("Photo");
+
+            photoLL = new LatLng(51.445726, -2.620722);
+            Marker photo8 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("8")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo8.setTag("Photo");
+
+            photoLL = new LatLng(51.472145, -2.647501);
+            Marker photo9 = mMap.addMarker(new MarkerOptions()
+                    .position(photoLL).title("9")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            photo9.setTag("Photo");
+
+            photoMarkers.add(photo0);
             photoMarkers.add(photo1);
             photoMarkers.add(photo2);
             photoMarkers.add(photo3);
+            photoMarkers.add(photo4);
+            photoMarkers.add(photo5);
+            photoMarkers.add(photo6);
+            photoMarkers.add(photo7);
+            photoMarkers.add(photo8);
+            photoMarkers.add(photo9);
 
         //}
     }
@@ -184,10 +247,12 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837,-3.625488), 5.0f) );
 
         // Add a marker in Sydney and move the camera
-        LatLng bristol = new LatLng(51.455994, -2.603644);
-        Marker test = mMap.addMarker(new MarkerOptions().position(bristol).title("Bristol Sample Point").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        LatLng bristol = new LatLng(51.450272, -2.598052);
+        Marker test = mMap.addMarker(new MarkerOptions()
+                .position(bristol)
+                .title("Bristol Waterfront")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         test.setTag("Sample_Point");
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.setOnMarkerClickListener(this);
 
@@ -259,22 +324,23 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
 
     @Override
     public void onBackPressed() {
-        // If SPDataFragment visible, pop all fragments and reshow buttons.
-        int numFrags = fm.getBackStackEntryCount();
-        if (numFrags != 0) {
-            for (int i = 0; i < numFrags; i++) {
-                fm.popBackStack();
-            }
 
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+
+        if (fragment instanceof SPDataFragment) {
+            fm.popBackStack();
             clearAllPhotoMarkers();
 
             // Re-show the buttons.
             FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
             gpsButton.show();
             mCamButton.show();
-
+        }
+        else if (fragment instanceof PhotoViewFragment) {
+            fm.popBackStack();
+        }
         // Else do normal back button stuff.
-        } else {
+        else {
             super.onBackPressed();
         }
     }
