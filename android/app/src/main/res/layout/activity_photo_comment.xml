@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.bitbusters.android.speproject.PhotoCommentActivity"
-    android:background="@android:color/holo_blue_dark"
-    android:elevation="2dp">
+    android:background="#FF4fc3f7"
+    android:elevation="2dp" >
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
@@ -17,14 +17,14 @@
         android:theme="?attr/actionBarTheme"
         android:id="@+id/dataview_toolbar"
         android:minHeight="?attr/actionBarSize"
-        android:weightSum="1">
+        android:weightSum="1" >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginRight="16dp"
-            android:layout_weight="0.88">
+            android:layout_weight="0.88" >
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -36,11 +36,10 @@
                 android:layout_gravity="left"
                 android:onClick="backClick"
                 android:padding="10dp"
-                android:src="@drawable/arrow_left_white"
-                />
+                android:src="@drawable/arrow_white" />
 
             <Button
-                android:text="Submit"
+                android:text="SUBMIT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/button3"
@@ -50,9 +49,7 @@
 
         </RelativeLayout>
 
-
     </android.support.v7.widget.Toolbar>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,20 +57,18 @@
         android:orientation="vertical"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="32dp"
-        >
+        android:layout_marginTop="32dp" >
 
         <TextView
-            android:text="Comments :"
+            android:text="Comments:"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView2"
             android:alpha="1"
             android:textColor="@color/black"
-            android:fontFamily="sans-serif"
 
             android:textSize="24sp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="4dp"
             android:textColorLink="@android:color/white" />
 
         <LinearLayout
@@ -83,15 +78,14 @@
             android:weightSum="10"
 
             android:background="@android:color/background_light"
-            android:paddingTop="10dp">
+            android:paddingTop="10dp" >
 
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView2"
-            android:layout_weight="4"
-            />
+            android:layout_weight="4" />
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -113,37 +107,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-
-        >
-
+        android:layout_marginTop="16dp" >
 
         <TextView
-            android:text="Tag : "
+            android:text="Tag: "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView3"
             android:alpha="1"
             android:textColor="@color/black"
-            android:fontFamily="sans-serif"
-            android:textSize="24sp"
-
-            />
+            android:textSize="24sp" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Light"
-            android:id="@+id/spinner"
-            android:textColor="#000000"
-            android:textSize="24sp"
-            android:fontFamily="sans-serif"
-            />
-
-
+            android:id="@+id/spinner" />
 
     </LinearLayout>
 
