@@ -24,12 +24,27 @@ public class InputStreamToJSON {
 
     public List<SamplingPoint> readMessagesArray(JsonReader reader) throws IOException {
         List<SamplingPoint> messages = new ArrayList<SamplingPoint>();
+        try {
+            reader.beginObject();
 
-        reader.beginArray();
-        while (reader.hasNext()) {
-            messages.add(readMessage(reader));
+            while (reader.hasNext()) {
+                String name = reader.nextName();
+                if (name.equals("items")) {
+                    System.out.println("Start items.");
+                    reader.beginArray();
+                    while (reader.hasNext()) {
+                        messages.add(readMessage(reader));
+//                        break;
+                    }
+                    reader.endArray();
+                } else {
+                    reader.skipValue();
+                }
+            }
+            reader.endObject();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        reader.endArray();
         return messages;
     }
 
@@ -39,37 +54,30 @@ public class InputStreamToJSON {
         double latitude = 0.0, longitude = 0.0;
         try {
             reader.beginObject();
+            System.out.println("sampling point Object began.");
             while (reader.hasNext()) {
                 String name = reader.nextName();
-                if (name.equals("items")) {
-                    reader.beginArray();
+                if (name.equals("@id")) {
+                    System.out.println("Read id.");
+                    id = reader.nextString();
+                } else if (name.equals("lat")) {
+                    System.out.println("Read lat.");
+                    latitude = reader.nextDouble();
+                } else if (name.equals("long")) {
+                    System.out.println("Read long.");
+                    longitude = reader.nextDouble();
+                } else if (name.equals("samplingPointType")) {
+                    reader.beginObject();
                     while (reader.hasNext()) {
                         name = reader.nextName();
-                        if (name.equals("@id")) {
-                            id = reader.nextString();
-                        } else if (name.equals("lat")) {
-                            latitude = reader.nextDouble();
-                        } else if (name.equals("long")) {
-                            longitude = reader.nextDouble();
-                        } else if (name.equals("samplingPointType")) {
-                            reader.beginObject();
-                            while (reader.hasNext()) {
-                                name = reader.nextName();
-                                if (name.equals("label")) {
-                                    samplingPointType = reader.nextString();
-                                }
-                            }
-                            reader.endObject();
-                        } else {
-                            reader.skipValue();
+                        if (name.equals("label")) {
+                            samplingPointType = reader.nextString();
                         }
                     }
-                    reader.endArray();
-
+                    reader.endObject();
                 } else {
                     reader.skipValue();
                 }
-
             }
             reader.endObject();
         } catch (Exception e) {
