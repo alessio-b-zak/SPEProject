@@ -34,7 +34,6 @@ public class InputStreamToJSON {
                     reader.beginArray();
                     while (reader.hasNext()) {
                         messages.add(readMessage(reader));
-//                        break;
                     }
                     reader.endArray();
                 } else {
@@ -71,10 +70,15 @@ public class InputStreamToJSON {
                     while (reader.hasNext()) {
                         name = reader.nextName();
                         if (name.equals("label")) {
+                            System.out.println("Got label");
                             samplingPointType = reader.nextString();
+                        } else {
+                            reader.skipValue();
                         }
+
                     }
                     reader.endObject();
+                    System.out.println("Read SamplingPointType.");
                 } else {
                     reader.skipValue();
                 }

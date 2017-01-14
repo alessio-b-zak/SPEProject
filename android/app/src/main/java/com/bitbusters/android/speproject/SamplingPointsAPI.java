@@ -70,6 +70,9 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
     @Override
     protected void onPostExecute(List<SamplingPoint> result) {
         //TODO: Make sure that results are passed back to the caller;
+        for (SamplingPoint r:result){
+            System.out.println(r.id + " " + r.latitude + " " + r.longitude + " " + r.samplingPointType + " ");
+        }
     }
 
     public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {

@@ -246,6 +246,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         location[0] = "51.450010";
         location[1] = "-2.625455";
         new SamplingPointsAPI().execute(location);
+        //TODO: Make sure Sampling points are returned by printing them here.
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
         } else {

@@ -5,10 +5,10 @@ package com.bitbusters.android.speproject;
  */
 
 class SamplingPoint {
-    private String id;
-    private double latitude;
-    private double longitude;
-    private String samplingPointType;
+    public String id;
+    public double latitude;
+    public double longitude;
+    public String samplingPointType;
 
     SamplingPoint(String id, double latitude, double longitude, String samplingPointType) {
         this.id = id;
@@ -16,4 +16,6 @@ class SamplingPoint {
         this.longitude = longitude;
         this.samplingPointType = samplingPointType;
     }
+
+//TODO: Tudor should write getters and setters
 }
