@@ -71,7 +71,7 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
     protected void onPostExecute(List<SamplingPoint> result) {
         //TODO: Make sure that results are passed back to the caller;
         for (SamplingPoint r:result){
-            System.out.println(r.id + " " + r.latitude + " " + r.longitude + " " + r.samplingPointType + " ");
+            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
         }
     }
 
