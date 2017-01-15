@@ -21,6 +21,12 @@ import static com.bitbusters.android.speproject.R.id.textView;
 
 public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoint>> {
     private static final String DEBUG_TAG = "SAMPLING_POINTS_API";
+    private OnTaskCompleted listener;
+
+    public SamplingPointsAPI(OnTaskCompleted listener) {
+        this.listener = listener;
+    }
+
     @Override
     protected List<SamplingPoint> doInBackground(String...params) {
         List<SamplingPoint> samplingPoints = new ArrayList<SamplingPoint>();
@@ -70,9 +76,11 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
     @Override
     protected void onPostExecute(List<SamplingPoint> result) {
         //TODO: Make sure that results are passed back to the caller;
-        for (SamplingPoint r:result){
-            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
-        }
+//        for (SamplingPoint r:result){
+//            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
+//        }
+
+        listener.onTaskCompleted(result);
     }
 
     public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {

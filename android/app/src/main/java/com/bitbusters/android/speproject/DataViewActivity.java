@@ -34,7 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataViewActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
+public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private FloatingActionButton mCamButton;
@@ -238,6 +238,14 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
 
     }
 
+    @Override
+    public void onTaskCompleted(List<SamplingPoint> result) {
+        //do something after fetching sampling points
+        for (SamplingPoint r:result){
+            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
+        }
+    }
+
     //Method called when connection established with Google Play Service Location API
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -245,7 +253,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
         String[] location = new String[2];
         location[0] = "51.450010";
         location[1] = "-2.625455";
-        new SamplingPointsAPI().execute(location);
+        new SamplingPointsAPI(this).execute(location);
         //TODO: Make sure Sampling points are returned by printing them here.
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
