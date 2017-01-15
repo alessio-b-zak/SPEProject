@@ -12,18 +12,18 @@ db.open(function(err, db) {
     console.log("We are connected");
 	//Create a collection if it does not exist.
 	var images = db.collection("images");	  
-	var image_1 = {comment: 'image1', loc: {long : '-2.611741', lat : '51.448787'}}
-	var image_2 = {comment: 'image2', loc: {long : '-3.611741', lat : '52.448787'}}
+	var image_1 = {comment: 'image1', loc: [-2.574137, 51.449208]}
+	var image_2 = {comment: 'image2', loc: [-3.611741, 52.448787]}
 	images.insert([image_1, image_2]);
-	
 	images.find(
 	   {
 		 loc: {
 		   $geoWithin: {
-			  $polygon: [ [ -2.634702, 51.469556 ], 
-						  [ -2.609305, 51.456596 ],
-						  [ -2.598833, 51.442560 ],
-						  [ -2.623243, 51.443339 ] ]
+			  $polygon: [ [ -2.577967, 51.450632 ], 
+						  [ -2.572055, 51.450672 ],
+						  [ -2.572066, 51.447911 ],
+						  [ -2.577881, 51.448018 ],
+						  [ -2.577967, 51.450632 ] ]
 			}
 		 }
 	   }
