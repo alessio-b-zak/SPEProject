@@ -13,10 +13,10 @@ router.get('/', function(req, res, next) {
 router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
- 
+
   // Define where the MongoDB server is
   var url = 'mongodb://localhost:27017/example';
- 
+
   // Connect to the server
 	MongoClient.connect(url, function (err, db) {
 		if (err) {
@@ -24,7 +24,7 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 		} else {
 			// We are connected
 			console.log('Connection established to', url);
-			
+
 			// Cast all parametters into integers
 			var lat1 = parseFloat(req.params.lat1);
 			var lon1 = parseFloat(req.params.lon1);
@@ -34,15 +34,15 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 			var lon2 = lon3;
 			var lat4 = lat3;
 			var lon4 = lon1;
-			
+
 			// Get the documents collection
 			var images = db.collection("images");
-	
+
 			// Find all images within the area
 			images.find({
 				loc: {
 					$geoWithin: {
-						$polygon: [ [ lat1, lon1 ], 
+						$polygon: [ [ lat1, lon1 ],
 												[ lat2, lon2 ],
 												[ lat3, lon3 ],
 												[ lat4, lon4 ],
@@ -65,37 +65,40 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 	});
 });
 
-/*
-router.get('/getSamplingPoints/:lat/:lon', function(req, res) {
-	var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-	var wims = new XMLHttpRequest();
+router.get('/addImage/:comment/:lat/:lon', function(req, res) {
+	// Get a Mongo client to work with the Mongo server
+  var MongoClient = mongodb.MongoClient;
 
-	wims.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point?lat=" + req.params.lat + "&long=" + req.params.lon + "&dist=10&samplingPointStatus=open", false);
-	wims.send();
+  // Define where the MongoDB server is
+  var url = 'mongodb://localhost:27017/example';
 
-	// status 200 = OK
-	console.log(wims.status);
-	console.log(wims.statusText);
+  // Connect to the server
+	MongoClient.connect(url, function (err, db) {
+		if (err) {
+			console.log('Unable to connect to the Server', err);
+		} else {
+			// We are connected
+			console.log('Connection established to', url);
 
-	var json = JSON.parse(wims.responseText);
-	delete json["@context"];
-	delete json["meta"];
-	for (var i = 0; i < json.items.length; i++){
-		delete json.items[i].area;
-		delete json.items[i].comment;
-		delete json.items[i].easting;
-		delete json.items[i].northing;
-		delete json.items[i].notation;
-		delete json.items[i].label;
-		delete json.items[i].samplingPointStatus;
-		delete json.items[i].subArea;
-		json.items[i].samplingPointType = json.items[i].samplingPointType.label;
-	}
-	//console.log(json);
-	//var count = Object.keys(json.items).length;
-	//console.log(count);
-	res.send(json);
+			// Cast all parametters into integers
+      var comm = req.params.comment;
+			var lat = parseFloat(req.params.lat);
+			var lon = parseFloat(req.params.lon);
+			// Get the documents collection
+			var images = db.collection("images");
+      var image = {comment: comm, loc: [lat, lon]}
+      images.insert([image], function(err,result) {
+        if(err) {
+          console.log(err);
+        } else {
+          res.send("Upload successful");
+        }
+      });
+
+			//Close the database connection
+			db.close();
+		}
+	});
 });
-*/
 
 module.exports = router;
