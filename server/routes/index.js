@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var fs = require('file-system');
 var router = express.Router();
 
 var mongodb = require('mongodb');
@@ -10,13 +11,67 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+
+//:lat1/:lon1/:lat3/:lon3
 router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
+
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
   var url = 'mongodb://localhost:27017/example';
 
+  // Connect to the server
+  MongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log('Unable to connect to the Server', err);
+    } else {
+      // We are connected
+      console.log('Connection established to', url);
+
+      // Cast all parametters into integers
+      var lat1 = parseFloat(req.params.lat1);
+      var lon1 = parseFloat(req.params.lon1);
+      var lat3 = parseFloat(req.params.lat3);
+      var lon3 = parseFloat(req.params.lon3);
+      var lat2 = lat1;
+      var lon2 = lon3;
+      var lat4 = lat3;
+      var lon4 = lon1;
+
+      // Get the documents collection
+      var images = db.collection("imageswithpath");
+
+      // Find all images within the area
+      images.find({
+        loc: {
+          $geoWithin: {
+            $polygon: [ [ lat1, lon1 ],
+                        [ lat2, lon2 ],
+                        [ lat3, lon3 ],
+                        [ lat4, lon4 ],
+                        [ lat1, lon1 ] ]
+          }
+        }
+      }).toArray(function (err, result) {
+      if (err) {
+          console.log(err);
+          res.send([]);
+        } else {
+          console.log('Found:', result);
+          var img = fs.readFileSync(result[0].path);
+          res.writeHead(200, {'Content-Type': 'image/jpg' });
+          res.end(img, 'binary');
+          //res.send(result);
+        }
+      });
+
+      //Close the database connection
+      db.close();
+    }
+  });
+
+});/*
   // Connect to the server
 	MongoClient.connect(url, function (err, db) {
 		if (err) {
@@ -64,7 +119,7 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 		}
 	});
 });
-
+*/
 router.get('/addImage/:comment/:lat/:lon', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
