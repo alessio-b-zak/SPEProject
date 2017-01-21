@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:id="@+id/sp_data1"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_gravity="start"
             android:layout_marginTop="8dp"
@@ -36,12 +36,12 @@
             android:layout_marginRight="16dp" />
 
         <TextView
-            android:text="pH: 7.93"
+            android:text="Pollution Levels:\n  Chemical - 4.6/10\n  Biological - 8.3/10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:id="@+id/sp_data2"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_gravity="start"
             android:layout_marginLeft="16dp"
