@@ -15,7 +15,6 @@ router.get('/', function(req, res, next) {
 //:lat1/:lon1/:lat3/:lon3
 router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
-
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
@@ -59,10 +58,12 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
           res.send([]);
         } else {
           console.log('Found:', result);
-          var img = fs.readFileSync(result[0].path);
-          res.writeHead(200, {'Content-Type': 'image/jpg' });
-          res.end(img, 'binary');
-          //res.send(result);
+        var images = [];
+        for (var i = 0; i < result.length; i++) {
+          images[i] = fs.readFileSync(result[i].path);
+        }
+        res.status(200).send(images);
+        res.end();
         }
       });
 
@@ -71,56 +72,27 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
     }
   });
 
-});/*
-  // Connect to the server
-	MongoClient.connect(url, function (err, db) {
-		if (err) {
-			console.log('Unable to connect to the Server', err);
-		} else {
-			// We are connected
-			console.log('Connection established to', url);
+});
 
-			// Cast all parametters into integers
-			var lat1 = parseFloat(req.params.lat1);
-			var lon1 = parseFloat(req.params.lon1);
-			var lat3 = parseFloat(req.params.lat3);
-			var lon3 = parseFloat(req.params.lon3);
-			var lat2 = lat1;
-			var lon2 = lon3;
-			var lat4 = lat3;
-			var lon4 = lon1;
-
-			// Get the documents collection
-			var images = db.collection("images");
-
-			// Find all images within the area
-			images.find({
-				loc: {
-					$geoWithin: {
-						$polygon: [ [ lat1, lon1 ],
-												[ lat2, lon2 ],
-												[ lat3, lon3 ],
-												[ lat4, lon4 ],
-												[ lat1, lon1 ] ]
-					}
-				}
-			}).toArray(function (err, result) {
-			if (err) {
-					console.log(err);
-					res.send([]);
-				} else {
-					console.log('Found:', result);
-					res.send(result);
-				}
-			});
-
-			//Close the database connection
-			db.close();
-		}
-	});
+/*
+app.post('/upload', function(req, res) {
+    console.log(req.files.image.originalFilename);
+    console.log(req.files.image.path);
+        fs.readFile(req.files.image.path, function (err, data){
+        var dirname = "/home/rajamalw/Node/file-upload";
+        var newPath = dirname + "/uploads/" +     req.files.image.originalFilename;
+        fs.writeFile(newPath, data, function (err) {
+        if(err){
+        res.json({'response':"Error"});
+        }else {
+        res.json({'response':"Saved"});
+}
+});
+});
 });
 */
-router.get('/addImage/:comment/:lat/:lon', function(req, res) {
+
+router.post('/addImage/:comment/:lat/:lon', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
 
