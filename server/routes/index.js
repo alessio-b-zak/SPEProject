@@ -2,6 +2,7 @@
 
 var express = require('express');
 var fs = require('file-system');
+var path = require('path');
 var router = express.Router();
 
 var mongodb = require('mongodb');
