@@ -18,7 +18,7 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://localhost:27017/example';
+  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -39,7 +39,7 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
       var lon4 = lon1;
 
       // Get the documents collection
-      var images = db.collection("imageswithpath");
+      var images = db.collection("images");
 
       // Find all images within the area
       images.find({
@@ -60,7 +60,10 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
           console.log('Found:', result);
         var images = [];
         for (var i = 0; i < result.length; i++) {
-          images[i] = fs.readFileSync(result[i].path);
+          images[i] = {};
+          images[i].comment = result[i].comment;
+          images[i].loc = result[i].loc;
+          images[i].image = fs.readFileSync(path.join(__dirname, result[i].path));
         }
         res.status(200).send(images);
         res.end();
