@@ -254,12 +254,18 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         location[0] = "51.450010";
         location[1] = "-2.625455";
         new SamplingPointsAPI(this).execute(location);
-        //TODO: Make sure Sampling points are returned by printing them here.
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+        String[] points = new String[4];
+        points[0] = "52";
+        points[1] = "-3";
+        points[2] = "50";
+        points[3] = "2";
+        new ImagesDownloader().execute(points);
+
     }
 
     //Attempts to display user current location, zooming in to LatLng if connection exists
