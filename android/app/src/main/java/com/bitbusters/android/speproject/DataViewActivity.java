@@ -253,7 +253,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         String[] location = new String[2];
         location[0] = "51.450010";
         location[1] = "-2.625455";
-        new SamplingPointsAPI(this).execute(location);
+        //new SamplingPointsAPI(this).execute(location);
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
         } else {

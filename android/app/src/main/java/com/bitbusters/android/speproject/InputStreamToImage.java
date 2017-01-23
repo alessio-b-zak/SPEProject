@@ -56,20 +56,18 @@ public class InputStreamToImage {
                                 Byte pixel = (byte) reader.nextInt();
                                 imgPixels.add(pixel);
                             }
+                            reader.endArray();
+                        } else {
+                            reader.skipValue();
                         }
                     }
+                    reader.endObject();
                 } else if (name.equals("comment")) {
                     comment = reader.nextString();
                 } else if (name.equals("loc")) {
                     reader.beginArray();
-                    while (reader.hasNext()) {
-                        name = reader.nextName();
-                        if (name.equals("long")) {
-                            longitude = reader.nextDouble();
-                        } else if (name.equals("lat")) {
-                            latitude = reader.nextDouble();
-                        }
-                    }
+                    longitude = reader.nextDouble();
+                    latitude = reader.nextDouble();
                     reader.endArray();
                 } else {
                     reader.skipValue();

@@ -32,14 +32,14 @@ public class ImagesDownloader extends AsyncTask<String, Void, List<Image>> {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("localhost:3000")
+                    .encodedAuthority("10.101.135.248:3000")
                     .appendPath("getImages")
                     .appendPath(params[0])
                     .appendPath(params[1])
                     .appendPath(params[2])
                     .appendPath(params[3]);
             String myUrl = builder.build().toString();
-
+            Log.d(DEBUG_TAG, myUrl);
             URL url = new URL(myUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
