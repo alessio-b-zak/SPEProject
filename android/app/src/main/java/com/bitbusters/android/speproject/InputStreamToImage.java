@@ -41,6 +41,7 @@ public class InputStreamToImage {
     public Image readMessage(JsonReader reader) throws IOException {
         String comment = null;
         double latitude = 0.0, longitude = 0.0;
+        /* Used to dynamically add an arbitrary number of pixels (as bytes), read from the JSON. */
         List<Byte> imgPixels = new ArrayList<Byte>();
         try {
             reader.beginObject();
@@ -77,6 +78,8 @@ public class InputStreamToImage {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        /* Because the BitmapFactory method which decodes a byte array to a bitmap requires a primitive
+        byte array, the ArrayList need to be converted to a byte array. */
         byte[] imgBytePrimitive = arrayListByteToPrimitive(imgPixels);
         Bitmap image = BitmapFactory.decodeByteArray(imgBytePrimitive, 0, imgBytePrimitive.length);
         return new Image(image, latitude, longitude, comment);
