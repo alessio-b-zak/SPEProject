@@ -264,8 +264,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         points[1] = "-3";
         points[2] = "50";
         points[3] = "2";
-        new ImagesDownloader().execute(points);
-
+        //new ImagesDownloader().execute(points);
+        new ImageUploader().execute();
     }
 
     //Attempts to display user current location, zooming in to LatLng if connection exists

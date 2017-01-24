@@ -95,7 +95,7 @@ router.post('/uploadImage', function(req, res) {
       console.log('Connection established to', url);
       var images = db.collection("images");
       var number = images.count().toString();
-      location = path.join(__dirname, uploads,'image' + number + '.bmp');
+      var location = path.join(__dirname, 'uploads','image' + number + '.bmp');
       console.log(req);
       var entry = {};
       entry.comment = req.comment;
