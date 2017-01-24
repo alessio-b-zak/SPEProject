@@ -24,7 +24,7 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
     if (err) {
-      console.log('Unable to connect to the Server', err);
+      console.log('Unable to connect to the Database Server', err);
     } else {
       // We are connected
       console.log('Connection established to', url);
@@ -89,26 +89,28 @@ router.post('/uploadImage', function(req, res) {
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
   if (err) {
-    console.log('Unable to connect to the Server', err);
+    console.log('Unable to connect to the Database Server', err);
   } else {
       // We are connected
       console.log('Connection established to', url);
       var images = db.collection("images");
-      number = images.count().toString();
+      var number = images.count().toString();
       location = path.join(__dirname, uploads,'image' + number + '.bmp');
       console.log(req);
-      // entry = {};
-      // entry.comment = req.comment;
-      // entry.loc = req.loc;
-      // entry.image = req.image;
-      // images.insert(entry);
-      // fs.writeFile(path.join(__dirname, result[i].path), data, function (err) {
-      // if(err){
-      // res.json({'response':"Error"});
-      // }else {
-      // res.json({'response':"Saved"});
-      // db.close();
-
+      var entry = {};
+      entry.comment = req.comment;
+      entry.loc = req.loc;
+      entry.path = location;
+      var data = req.image;
+      images.insert(entry);
+      fs.writeFile(location, data, function (err) {
+        if(err){
+          console.log("Problem saving image");
+        }else {
+          console.log("Image Saved");
+        }
+      });
+      db.close();
     }
   });
 });
