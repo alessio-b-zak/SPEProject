@@ -78,25 +78,54 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 
 });
 
-/*
-app.post('/upload', function(req, res) {
-    console.log(req.files.image.originalFilename);
-    console.log(req.files.image.path);
-        fs.readFile(req.files.image.path, function (err, data){
-        var dirname = "/home/rajamalw/Node/file-upload";
-        var newPath = dirname + "/uploads/" +     req.files.image.originalFilename;
-        fs.writeFile(newPath, data, function (err) {
-        if(err){
-        res.json({'response':"Error"});
-        }else {
-        res.json({'response':"Saved"});
-}
-});
-});
-});
-*/
 
-router.post('/addImage/:comment/:lat/:lon', function(req, res) {
+app.post('/uploadImage', function(req, res) {
+  // Get a Mongo client to work with the Mongo server
+  var MongoClient = mongodb.MongoClient;
+
+  // Define where the MongoDB server is
+  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+
+  // Connect to the server
+  MongoClient.connect(url, function (err, db) {
+  if (err) {
+    console.log('Unable to connect to the Server', err);
+  } else {
+      // We are connected
+      console.log('Connection established to', url);
+      var images = db.collection("images");
+      number = images.count().toString();
+      location = path.join(__dirname, uploads,'image' ++ number ++ '.bmp')
+      console.log(req);
+      // entry = {};
+      // entry.comment = req.comment;
+      // entry.loc = req.loc;
+      // entry.image = req.image;
+      // images.insert(entry);
+      // fs.writeFile(path.join(__dirname, result[i].path), data, function (err) {
+      // if(err){
+      // res.json({'response':"Error"});
+      // }else {
+      // res.json({'response':"Saved"});
+      // db.close();
+
+    }
+  });
+});
+    // console.log(req.files.image.originalFilename);
+    // console.log(req.files.image.path);
+    //     fs.readFile(req.files.image.path, function (err, data){
+    //     var dirname = "/home/rajamalw/Node/file-upload";
+    //     var newPath = dirname + "/uploads/" +     req.files.image.originalFilename;
+    //     fs.writeFile(newPath, data, function (err) {
+    //     if(err){
+    //     res.json({'response':"Error"});
+    //     }else {
+    //     res.json({'response':"Saved"});
+
+
+/*
+router.get('/addImage/:comment/:lat/:lon', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
 
@@ -131,5 +160,6 @@ router.post('/addImage/:comment/:lat/:lon', function(req, res) {
 		}
 	});
 });
+*/
 
 module.exports = router;
