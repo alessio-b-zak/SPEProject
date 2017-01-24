@@ -79,7 +79,7 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 });
 
 
-app.post('/uploadImage', function(req, res) {
+router.post('/uploadImage', function(req, res) {
   // Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
 
@@ -95,7 +95,7 @@ app.post('/uploadImage', function(req, res) {
       console.log('Connection established to', url);
       var images = db.collection("images");
       number = images.count().toString();
-      location = path.join(__dirname, uploads,'image' ++ number ++ '.bmp')
+      location = path.join(__dirname, uploads,'image' + number + '.bmp');
       console.log(req);
       // entry = {};
       // entry.comment = req.comment;
