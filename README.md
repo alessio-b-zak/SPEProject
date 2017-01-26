@@ -57,6 +57,8 @@ A custom class called InputStreamToJSON is written to convert a retrieved InputS
 
 Before explaining how the classes extending AsyncTask are implemented, it is worth mentioning that the result must be passed back to the UI thread by applying the Observer Pattern. This entails using a listener interface which signals the caller of the AsyncTask that the processing is done and the results are returned.
 
+![alt-text](https://www.lucidchart.com/publicSegments/view/3db66936-1676-4c9c-be9d-c863c9396354/image.jpeg "The Observer Pattern")
+
 ***Image handling***
 
 When dealing with images, there are two cases to consider: retrieving and posting images via GET and POST requests, respectively. In order to implement these procedures, both the Android client and the node.js web server need configuring.
