@@ -1,7 +1,4 @@
-# SPEProject
-Open-water data catchment application
-
-## Tutorial
+# Tutorial
 
 ### Motivation
 In the last decade, there has been a noticeable transition towards mobile and cloud solutions. With the exponential increase in the amount of data produced and stored by businesses, governments and individuals, grouping and accessing the data has become paramount for software developers. A wide variety of APIs has been created to accommodate the demands of the striving users of today’s fast-paced data-driven era. A common task is to store and access images or videos. For instance, in 2012, Facebook processed more than 500TB of data daily [\[1\]](https://www.cnet.com/news/facebook-processes-more-than-500-tb-of-data-daily/).
@@ -17,7 +14,7 @@ From a high-level perspective, the architecture of the system splits into four p
 |:---:|
 |`Fig. 1: System Architecture Layout`|
 
-#### Connecting to the API
+##### Connecting to the API
 
 The client will connect to the WIMS API supplied by the Water Quality Archive, which provides historic water information gathered from various sampling points. Each sampling point contains several samples, and each sample is described by multiple chemical measurements. The RESTful API sends data in a JSON format and contains a collection of extraneous parameters, such that the data needs to be filtered.
 
@@ -27,7 +24,7 @@ Depending on the data that is retrieved, a new Java class might or might not be 
 
 The next step is connecting to the API and pulling the data. To perform this, a separate class called SamplingPointsAPI extending AsyncTask is created [\[AsyncTask\]] (https://developer.android.com/reference/android/os/AsyncTask.html). An asynchronous task is prefered for this application, as communication is a bottleneck and during the time data is received in the background, the Android application can perform other tasks, such as loading UI elements. According to the official Android Developer reference guide, AsyncTask should preferably be used for short operations which last at most a few seconds; this makes it ideal for our usage, as the requested data is in the form of either JSON or compressed images, not occupying much memory and, therefore, being fast to download.
 
-A connection to the API is established through an URL built using a URI builder. The URI builder is a helper class for building and manipulating URI references. It is quite intuitive, allowing its users to input the authority, set the paths and add parameters to the queries. You can see how the WIMS API URL for the request is built using the code below [http://environment.data.gov.uk/water-quality/id/sampling-point?lat=51.45&long=-2.62&dist=4] (http://environment.data.gov.uk/water-quality/id/sampling-point?lat=51.45&long=-2.62&dist=4) is an example of an URI that returns all the sampling points within 4 miles of radius from the point with the coordinates [51.45,2.62]. Appending &samplingPointStatus=open parameter helps filter out irrelevant results (Sampling points which are no longer in use).
+A connection to the API is established through an URL built using a URI builder. The URI builder is a helper class for building and manipulating URI references. It is quite intuitive, allowing its users to input the authority, set the paths and add parameters to the queries. You can see how the WIMS API URL for the request is built using the code below [http://environment.data.gov.uk/water-quality/id/sampling-point?lat=51.45&long=-2.62&dist=4] (http://environment.data.gov.uk/water-quality/id/sampling-point?lat=51.45&long=-2.62&dist=4) is an example of an URI that returns all the sampling points within a radius of 4 miles from the point with the coordinates [51.45, 2.62]. Appending &samplingPointStatus=open parameter helps filter out irrelevant results (Sampling points which are no longer in use).
 
 ```java
 builder.scheme("http")
@@ -63,9 +60,11 @@ In the case of WIMS API data, the response of the query is an object which conta
 
 Before explaining how the classes extending AsyncTask are implemented, it is worth mentioning that the result must be passed back to the UI thread by applying the Observer Pattern. This entails using a listener interface which signals the caller of the AsyncTask that the processing is done and the results are returned.
 
-![alt-text](https://www.lucidchart.com/publicSegments/view/3db66936-1676-4c9c-be9d-c863c9396354/image.jpeg "The Observer Pattern")
+|![alt-text](https://www.lucidchart.com/publicSegments/view/3db66936-1676-4c9c-be9d-c863c9396354/image.jpeg "The Observer Pattern")|
+|:---:|
+|`Fig. 2: The Observer Pattern`|
 
-***Image handling***
+##### Image handling
 
 When dealing with images, there are two cases to consider: retrieving and posting images via GET and POST requests, respectively. In order to implement these procedures, both the Android client and the node.js web server need configuring.
 
