@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -38,7 +39,7 @@ public class SPDataFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        populateItems();
+        new PopulateItemsTask().execute();
     }
 
     @Override
@@ -182,23 +183,32 @@ public class SPDataFragment extends Fragment {
 
     }
 
-    private void populateItems() {
+    private class PopulateItemsTask extends AsyncTask<Void, Void, List<GalleryItem>> {
 
-        for (int i = 0; i < 18; i++) {
-            GalleryItem item = new GalleryItem();
-            String imageName = "sample" + i;
-            item.setName(imageName);
-            item.setTag("Tag " + i);
-            item.setComment("abcd efgh ijkl mnop qrst uvwx yz01 1234 5678 9");
-            item.setResId(getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject"));
-            mItems.add(item);
+        @Override
+        protected List<GalleryItem> doInBackground(Void... params) {
+            List<GalleryItem> items = new ArrayList<>();
+            for (int i = 0; i < 18; i++) {
+                GalleryItem item = new GalleryItem();
+                String imageName = "sample" + i;
+                item.setName(imageName);
+                item.setTag("Tag " + i);
+                item.setComment("abcd efgh ijkl mnop qrst uvwx yz01 1234 5678 9");
+                item.setResId(getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject"));
+                items.add(item);
+            }
+            return items;
         }
 
-        setupAdapter();
+        @Override
+        protected void onPostExecute(List<GalleryItem> items) {
+            mItems = items;
+            setupAdapter();
+        }
+
     }
 
     // from http://stackoverflow.com/questions/28531996/android-recyclerview-gridlayoutmanager-column-spacing
-    // TODO: Possibly should be made into separate class file?
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;
