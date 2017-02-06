@@ -247,12 +247,21 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837,-3.625488), 5.0f) );
 
         // Add a marker in Sydney and move the camera
-        LatLng bristol = new LatLng(51.450272, -2.598052);
-        Marker test = mMap.addMarker(new MarkerOptions()
-                .position(bristol)
-                .title("Bristol Waterfront")
+        LatLng bristolS = new LatLng(51.449695, -2.625872);
+        Marker test1 = mMap.addMarker(new MarkerOptions()
+                .position(bristolS)
+                .title("Walk Start")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        test.setTag("Sample_Point");
+        test1.setTag("Sample_Point");
+
+        /*
+        LatLng bristolF = new LatLng(51.479907, -2.652651);
+        Marker test2 = mMap.addMarker(new MarkerOptions()
+                .position(bristolF)
+                .title("Walk Finish")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        test2.setTag("Sample_Point");
+        */
 
         mMap.setOnMarkerClickListener(this);
 
