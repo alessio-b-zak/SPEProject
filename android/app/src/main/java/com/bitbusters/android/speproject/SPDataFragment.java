@@ -39,7 +39,8 @@ public class SPDataFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        new PopulateItemsTask().execute();
+        populateItems(); // main thread.
+        //new PopulateItemsTask().execute(); // separate thread.
     }
 
     @Override
@@ -183,6 +184,23 @@ public class SPDataFragment extends Fragment {
 
     }
 
+    // Populate items in main thread.
+    private void populateItems() {
+        List<GalleryItem> items = new ArrayList<>();
+        for (int i = 0; i < 18; i++) {
+            GalleryItem item = new GalleryItem();
+            String imageName = "sample" + i;
+            item.setName(imageName);
+            item.setTag("Tag " + i);
+            item.setComment("abcd efgh ijkl mnop qrst uvwx yz01 1234 5678 9");
+            item.setResId(getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject"));
+            items.add(item);
+        }
+        mItems = items;
+        setupAdapter();
+    }
+
+    // Populate items in separate thread.
     private class PopulateItemsTask extends AsyncTask<Void, Void, List<GalleryItem>> {
 
         @Override

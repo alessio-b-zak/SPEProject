@@ -16,7 +16,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bitbusters.android.speproject.R.id.textView;
 //import static com.google.android.gms.internal.zznu.is;
 
 public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoint>> {
