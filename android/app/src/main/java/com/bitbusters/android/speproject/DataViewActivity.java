@@ -37,7 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataViewActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
+public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private FloatingActionButton mCamButton;
@@ -258,14 +258,34 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
 
     }
 
+    @Override
+    public void onTaskCompleted(List<SamplingPoint> result) {
+        //do something after fetching sampling points
+        for (SamplingPoint r:result){
+            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
+        }
+    }
+
     //Method called when connection established with Google Play Service Location API
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        //Defining lat and long and calling the APIs
+        String[] location = new String[2];
+        location[0] = "51.450010";
+        location[1] = "-2.625455";
+        //new SamplingPointsAPI(this).execute(location);
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+        String[] points = new String[4];
+        points[0] = "52";
+        points[1] = "-3";
+        points[2] = "50";
+        points[3] = "2";
+        //new ImagesDownloader().execute(points);
+        new ImageUploader().execute();
     }
 
     //Attempts to display user current location, zooming in to LatLng if connection exists
@@ -281,6 +301,7 @@ public class DataViewActivity extends FragmentActivity implements OnMapReadyCall
             currentLocationMarker.setTag("Current_Location");
             CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(latitude, longitude)).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
+
         }
     }
 
