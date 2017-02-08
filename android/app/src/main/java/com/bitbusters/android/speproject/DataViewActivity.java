@@ -36,11 +36,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
+public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
     private FloatingActionButton mCamButton;
@@ -53,10 +54,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private Marker currentLocationMarker;
     private FragmentManager fm;
     private SPDataFragment mSPDataFragment;
-    //private List<SamplingPoint> mSamplePoints = new ArrayList<>();
-    private List<Marker> mSPMarkers = new ArrayList<>();
+    private List<SamplingPoint> mSamplePoints = new ArrayList<>();
     private Circle mRadiusCircle;
-    private List<Marker> photoMarkers = new ArrayList<>();
+    private List<PicturePoint> photoMarkers = new ArrayList<>();
+    private ClusterManager<SamplingPoint> mSampleClusterManager;
+    private ClusterManager<PicturePoint> mPictureClusterManager;
+    private MultiListener ml = new MultiListener();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public void onClick(View v) {
                 // Get sample point data from API.
-                clearAllSPMarkers();
+                mSampleClusterManager.clearItems();
                 LatLng camCentre = mMap.getCameraPosition().target;
                 String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
                 new SamplingPointsAPI(DataViewActivity.this).execute(location);
@@ -82,7 +86,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 if (mRadiusCircle != null) {
                     mRadiusCircle.remove();
                 }
-
                 mRadiusCircle = mMap.addCircle(new CircleOptions()
                         .center(camCentre)
                         .radius(10000)
@@ -126,122 +129,86 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         super.onStop();
     }
 
-    @Override
-    public boolean onMarkerClick(final Marker marker) {
 
-        if (marker.getTag().equals("Sample_Point")) {
-            Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+    public void setUpSampleManager() {
+        mSampleClusterManager.setRenderer(new SamplingPointRenderer(this, mMap, mSampleClusterManager));
+        mSampleClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<SamplingPoint>() {
+            @Override
+            public boolean onClusterItemClick(SamplingPoint point) {
+                if (point.getTitle().equals("Sample_Point")) {
+                    SamplingPoint sp = (SamplingPoint) point;
+                    Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+                    if (fragment == null) {
+                        FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
+                        gpsButton.hide();
+                        mSPVButton.hide();
+                        mCamButton.hide();
 
-            if (fragment == null) {
-                LatLng markerPos = new LatLng(marker.getPosition().latitude + 0.05f, marker.getPosition().longitude);
+                        // Hide the radius circle.
+                        mRadiusCircle.setVisible(false);
+                        LatLng markerPos = new LatLng(sp.getLatitude() + 0.05f, sp.getLongitude());
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
+                        fragment = new SPDataFragment();
+                        mSPDataFragment = (SPDataFragment) fragment;
+                        // Make buttons invisible.
 
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
+                        fm.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                                .add(R.id.fragment_container, fragment)
+                                .addToBackStack(null).commit();
 
-                fragment = new SPDataFragment();
-                mSPDataFragment = (SPDataFragment) fragment;
+                        mSampleClusterManager.clearItems();
+                        mSampleClusterManager.addItem(point);
+                        mSampleClusterManager.cluster();
+                        // Show all photo markers currently on screen.
+                        showPhotoMarkersInView();
 
-                fm.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-                        .add(R.id.fragment_container, fragment)
-                        .addToBackStack(null).commit();
-
-                // Make buttons invisible.
-                FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
-                gpsButton.hide();
-                mSPVButton.hide();
-                mCamButton.hide();
-
-                // Hide all other sample point markers.
-                for (Marker sp : mSPMarkers) {
-                    if (!sp.getTitle().equals(marker.getTitle())) {
-                        sp.setVisible(false);
                     }
                 }
-                // Hide the radius circle.
-                mRadiusCircle.setVisible(false);
 
-                // Show all photo markers currently on screen.
-                showPhotoMarkersInView();
+                return false;
             }
-        }
-        else if (marker.getTag().equals("Photo")) {
-            PhotoViewFragment fragment = new PhotoViewFragment();
-            fragment.setGalleryItem(mSPDataFragment.getItems().get(Integer.valueOf(marker.getTitle())));
-            fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
-                    .add(R.id.fragment_container, fragment)
-                    .addToBackStack(null).commit();
-        }
-        else if (marker.getTag().equals("Current_Location")) {
-            Log.e("333","test current location click");
-        }
+        });
 
-        return true;
+
     }
+
+    public void setUpPictureManager(){
+        mPictureClusterManager.setRenderer(new PicturePointRenderer(this, mMap, mPictureClusterManager));
+        mPictureClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<PicturePoint>() {
+            @Override
+            public boolean onClusterItemClick(PicturePoint point) {
+
+                if (point.getTitle().equals("Picture_Point")) {
+                    PicturePoint pp = (PicturePoint) point;
+                    PhotoViewFragment fragment = new PhotoViewFragment();
+                    fragment.setGalleryItem(mSPDataFragment.getItems().get(Integer.valueOf(pp.getId())));
+                    fm.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
+                            .add(R.id.fragment_container, fragment)
+                            .addToBackStack(null).commit();
+                }
+                return false;
+            }
+        });
+    }
+
+
 
     // Shows all photo markers currently on screen.
     private void showPhotoMarkersInView() {
         //if (LOGIC TO TEST IF ON SCREEN) {
-
-            LatLng photoLL = new LatLng(51.451902, -2.626990);
-            Marker photo0 = mMap.addMarker(new MarkerOptions()
-                    .position(photoLL).title("0")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo0.setTag("Photo");
-
-            photoLL = new LatLng(51.480805, -2.679945);
-            Marker photo1 = mMap.addMarker(new MarkerOptions()
-                    .position(photoLL).title("1")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo1.setTag("Photo");
-
-            photoLL = new LatLng(51.446635, -2.606646);
-            Marker photo2 = mMap.addMarker(new MarkerOptions()
-                    .position(photoLL).title("2")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo2.setTag("Photo");
-
-            photoLL = new LatLng(51.493915, -2.699290);
-            Marker photo3 = mMap.addMarker(new MarkerOptions()
-                    .position(photoLL).title("3")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo3.setTag("Photo");
-
-            photoLL = new LatLng(51.485578, -2.660623);
-            Marker photo4 = mMap.addMarker(new MarkerOptions()
-                    .position(photoLL).title("4")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo4.setTag("Photo");
-
-            photoLL = new LatLng(51.461413, -2.631612);
-            Marker photo5 = mMap.addMarker(new MarkerOptions()
-                    .position(photoLL).title("5")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo5.setTag("Photo");
-
-            photoLL = new LatLng(51.454605, -2.589866);
-            Marker photo6 = mMap.addMarker(new MarkerOptions()
-                    .position(photoLL).title("6")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo6.setTag("Photo");
-
-            photoLL = new LatLng(51.448363, -2.594877);
-            Marker photo7 = mMap.addMarker(new MarkerOptions()
-                    .position(photoLL).title("7")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo7.setTag("Photo");
-
-            photoLL = new LatLng(51.445726, -2.620722);
-            Marker photo8 = mMap.addMarker(new MarkerOptions()
-                    .position(photoLL).title("8")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo8.setTag("Photo");
-
-            photoLL = new LatLng(51.472145, -2.647501);
-            Marker photo9 = mMap.addMarker(new MarkerOptions()
-                    .position(photoLL).title("9")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            photo9.setTag("Photo");
+            photoMarkers.clear();
+            PicturePoint photo0 = new PicturePoint(51.451902,-2.626990,0);
+            PicturePoint photo1 = new PicturePoint(51.480805, -2.679945,1);
+            PicturePoint photo2 = new PicturePoint(51.446635, -2.606646,2);
+            PicturePoint photo3 = new PicturePoint(51.493915, -2.699290,3);
+            PicturePoint photo4 = new PicturePoint(51.485578, -2.660623,4);
+            PicturePoint photo5 = new PicturePoint(51.461413, -2.631612,5);
+            PicturePoint photo6 = new PicturePoint(51.454605, -2.589866,6);
+            PicturePoint photo7 = new PicturePoint(51.448363, -2.594877,7);
+            PicturePoint photo8 = new PicturePoint(51.445726, -2.620722,8);
+            PicturePoint photo9 = new PicturePoint(51.472145, -2.647501,9);
 
             photoMarkers.add(photo0);
             photoMarkers.add(photo1);
@@ -254,34 +221,31 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             photoMarkers.add(photo8);
             photoMarkers.add(photo9);
 
+            for(PicturePoint p : photoMarkers){
+                mPictureClusterManager.addItem(p);
+            }
+            mPictureClusterManager.cluster();
         //}
     }
 
-    // Clear all photo markers.
-    private void clearAllPhotoMarkers() {
-        for (Marker marker : photoMarkers) {
-            marker.remove();
+    public void repopulateSamplePoints(ClusterManager<SamplingPoint> mSampleClusterManager){
+        for(SamplingPoint sp : mSamplePoints){
+            mSampleClusterManager.addItem(sp);
         }
+        mSampleClusterManager.cluster();
     }
 
-    private void clearAllSPMarkers() {
-        for (Marker marker : mSPMarkers) {
-            marker.remove();
-        }
-    }
 
     // Manipulates the map once available when created.
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setMapToolbarEnabled(false);
-
         try {
             //This customises the google maps using the json file
             boolean success = mMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                             this, R.raw.style_json));
-
             if (!success) {
                 Log.e("MapsActivityRaw", "Style parsing failed.");
             }
@@ -290,23 +254,31 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
 
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837,-3.625488), 5.0f) );
-        mMap.setOnMarkerClickListener(this);
+        setUpMultiManager();
 
+    }
+
+    public void setUpMultiManager(){
+        mPictureClusterManager = new ClusterManager<PicturePoint>(this, mMap);
+        mSampleClusterManager = new ClusterManager<SamplingPoint>(this, mMap);
+        setUpSampleManager();
+        setUpPictureManager();
+        ml.addOC(mSampleClusterManager);
+        ml.addOC(mPictureClusterManager);
+        ml.addOM(mSampleClusterManager);
+        ml.addOM(mPictureClusterManager);
+        mMap.setOnMarkerClickListener(ml);
+        mMap.setOnCameraIdleListener(ml);
     }
 
     @Override
     public void onTaskCompleted(List<SamplingPoint> result) {
         //do something after fetching sampling points
-
+        mSamplePoints = result;
         for (SamplingPoint r : result) {
-            LatLng bristolSP = new LatLng(r.getLatitude(), r.getLongitude());
-            Marker spMarker = mMap.addMarker(new MarkerOptions()
-                    .position(bristolSP)
-                    .title(r.getId())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-            spMarker.setTag("Sample_Point");
-            mSPMarkers.add(spMarker);
+            mSampleClusterManager.addItem(r);
         }
+        mSampleClusterManager.cluster();
 
         /*
         for (SamplingPoint r:result){
@@ -315,21 +287,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         */
     }
 
-    private void showAllSPMarkers() {
-        for (Marker marker : mSPMarkers) {
-            marker.setVisible(true);
-        }
-    }
-
     //Method called when connection established with Google Play Service Location API
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        /* Defining lat and long and calling the APIs
-        String[] location = new String[2];
-        location[0] = "51.450010";
-        location[1] = "-2.625455";
-        //new SamplingPointsAPI(this).execute(location);
-        */
+
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
         } else {
@@ -408,9 +369,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         if (fragment instanceof SPDataFragment) {
             fm.popBackStack();
-            clearAllPhotoMarkers();
-            showAllSPMarkers();
             mRadiusCircle.setVisible(true);
+            mPictureClusterManager.clearItems();
+            mPictureClusterManager.cluster();
+            mSampleClusterManager.clearItems();
+            repopulateSamplePoints(mSampleClusterManager);
+
 
             // Re-show the buttons.
             FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
@@ -426,5 +390,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             super.onBackPressed();
         }
     }
+
+
 
 }
