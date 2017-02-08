@@ -69,9 +69,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public void onClick(View v) {
                 // Get sample point data from API.
-                String[] location = new String[2];
-                location[0] = "51.450010";
-                location[1] = "-2.625455";
+                clearAllSPMarkers();
+                LatLng camCentre = mMap.getCameraPosition().target;
+                String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
                 new SamplingPointsAPI(DataViewActivity.this).execute(location);
             }
         });

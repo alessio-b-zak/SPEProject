@@ -40,7 +40,7 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
                     .appendPath("sampling-point")
                     .appendQueryParameter("lat", params[0])
                     .appendQueryParameter("long", params[1])
-                    .appendQueryParameter("dist", "4")
+                    .appendQueryParameter("dist", "100")
                     .appendQueryParameter("samplingPointStatus", "open");
             String myUrl = builder.build().toString();
 
