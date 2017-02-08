@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Location;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -29,6 +30,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -52,6 +55,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private SPDataFragment mSPDataFragment;
     //private List<SamplingPoint> mSamplePoints = new ArrayList<>();
     private List<Marker> mSPMarkers = new ArrayList<>();
+    private Circle mRadiusCircle;
     private List<Marker> photoMarkers = new ArrayList<>();
 
     @Override
@@ -73,6 +77,17 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 LatLng camCentre = mMap.getCameraPosition().target;
                 String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
                 new SamplingPointsAPI(DataViewActivity.this).execute(location);
+
+                // Add a radius circle around sample point query area.
+                if (mRadiusCircle != null) {
+                    mRadiusCircle.remove();
+                }
+
+                mRadiusCircle = mMap.addCircle(new CircleOptions()
+                        .center(camCentre)
+                        .radius(10000)
+                        .strokeColor(0x661854E1)
+                        .fillColor(0x331854E1));
             }
         });
 
@@ -142,6 +157,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         sp.setVisible(false);
                     }
                 }
+                // Hide the radius circle.
+                mRadiusCircle.setVisible(false);
 
                 // Show all photo markers currently on screen.
                 showPhotoMarkersInView();
@@ -393,6 +410,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             fm.popBackStack();
             clearAllPhotoMarkers();
             showAllSPMarkers();
+            mRadiusCircle.setVisible(true);
 
             // Re-show the buttons.
             FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
