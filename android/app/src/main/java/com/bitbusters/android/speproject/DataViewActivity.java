@@ -41,6 +41,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     private GoogleMap mMap;
     private FloatingActionButton mCamButton;
+    private FloatingActionButton mSPVButton;
 
     //variables used for displaying current location
     private GoogleApiClient mGoogleApiClient;
@@ -49,6 +50,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private Marker currentLocationMarker;
     private FragmentManager fm;
     private SPDataFragment mSPDataFragment;
+    //private List<SamplingPoint> mSamplePoints = new ArrayList<>();
+    private List<Marker> mSPMarkers = new ArrayList<>();
     private List<Marker> photoMarkers = new ArrayList<>();
 
     @Override
@@ -59,6 +62,19 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        // The action performed when the sample point view button is pressed.
+        mSPVButton = (FloatingActionButton) findViewById(R.id.sp_view_button);
+        mSPVButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get sample point data from API.
+                String[] location = new String[2];
+                location[0] = "51.450010";
+                location[1] = "-2.625455";
+                new SamplingPointsAPI(DataViewActivity.this).execute(location);
+            }
+        });
 
         // The action performed when the camera button is pressed.
         mCamButton = (FloatingActionButton) findViewById(R.id.cam_button);
@@ -117,9 +133,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 // Make buttons invisible.
                 FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
                 gpsButton.hide();
+                mSPVButton.hide();
                 mCamButton.hide();
 
-                // TODO: Hide all other sample point markers.
+                // Hide all other sample point markers.
+                for (Marker sp : mSPMarkers) {
+                    if (!sp.getTitle().equals(marker.getTitle())) {
+                        sp.setVisible(false);
+                    }
+                }
 
                 // Show all photo markers currently on screen.
                 showPhotoMarkersInView();
@@ -225,6 +247,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
     }
 
+    private void clearAllSPMarkers() {
+        for (Marker marker : mSPMarkers) {
+            marker.remove();
+        }
+    }
+
     // Manipulates the map once available when created.
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -245,24 +273,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
 
         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837,-3.625488), 5.0f) );
-
-        // Add a marker in Sydney and move the camera
-        LatLng bristolS = new LatLng(51.449695, -2.625872);
-        Marker test1 = mMap.addMarker(new MarkerOptions()
-                .position(bristolS)
-                .title("Walk Start")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        test1.setTag("Sample_Point");
-
-        /*
-        LatLng bristolF = new LatLng(51.479907, -2.652651);
-        Marker test2 = mMap.addMarker(new MarkerOptions()
-                .position(bristolF)
-                .title("Walk Finish")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        test2.setTag("Sample_Point");
-        */
-
         mMap.setOnMarkerClickListener(this);
 
     }
@@ -270,24 +280,45 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     public void onTaskCompleted(List<SamplingPoint> result) {
         //do something after fetching sampling points
+
+        for (SamplingPoint r : result) {
+            LatLng bristolSP = new LatLng(r.getLatitude(), r.getLongitude());
+            Marker spMarker = mMap.addMarker(new MarkerOptions()
+                    .position(bristolSP)
+                    .title(r.getId())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            spMarker.setTag("Sample_Point");
+            mSPMarkers.add(spMarker);
+        }
+
+        /*
         for (SamplingPoint r:result){
             System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
+        }
+        */
+    }
+
+    private void showAllSPMarkers() {
+        for (Marker marker : mSPMarkers) {
+            marker.setVisible(true);
         }
     }
 
     //Method called when connection established with Google Play Service Location API
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        //Defining lat and long and calling the APIs
+        /* Defining lat and long and calling the APIs
         String[] location = new String[2];
         location[0] = "51.450010";
         location[1] = "-2.625455";
         //new SamplingPointsAPI(this).execute(location);
+        */
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+        /*
         String[] points = new String[4];
         points[0] = "52";
         points[1] = "-3";
@@ -295,6 +326,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         points[3] = "2";
         //new ImagesDownloader().execute(points);
         new ImageUploader().execute();
+        */
     }
 
     //Attempts to display user current location, zooming in to LatLng if connection exists
@@ -360,10 +392,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (fragment instanceof SPDataFragment) {
             fm.popBackStack();
             clearAllPhotoMarkers();
+            showAllSPMarkers();
 
             // Re-show the buttons.
             FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
             gpsButton.show();
+            mSPVButton.show();
             mCamButton.show();
         }
         else if (fragment instanceof PhotoViewFragment) {
