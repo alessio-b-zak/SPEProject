@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
@@ -132,11 +133,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void setUpSampleManager() {
         mSampleClusterManager.setRenderer(new SamplingPointRenderer(this, mMap, mSampleClusterManager));
+
         mSampleClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<SamplingPoint>() {
             @Override
             public boolean onClusterItemClick(SamplingPoint point) {
                 if (point.getTitle().equals("Sample_Point")) {
-                    SamplingPoint sp = (SamplingPoint) point;
+
                     Fragment fragment = fm.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
                         FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
@@ -146,8 +148,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
                         // Hide the radius circle.
                         mRadiusCircle.setVisible(false);
-                        LatLng markerPos = new LatLng(sp.getLatitude() + 0.05f, sp.getLongitude());
+                        LatLng markerPos = new LatLng(point.getLatitude() + 0.05f, point.getLongitude());
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
+
                         fragment = new SPDataFragment();
                         mSPDataFragment = (SPDataFragment) fragment;
                         // Make buttons invisible.
@@ -166,7 +169,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     }
                 }
 
-                return false;
+                return true;
             }
         });
 
@@ -180,7 +183,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             public boolean onClusterItemClick(PicturePoint point) {
 
                 if (point.getTitle().equals("Picture_Point")) {
-                    PicturePoint pp = (PicturePoint) point;
+                    PicturePoint pp = point;
                     PhotoViewFragment fragment = new PhotoViewFragment();
                     fragment.setGalleryItem(mSPDataFragment.getItems().get(Integer.valueOf(pp.getId())));
                     fm.beginTransaction()
@@ -188,7 +191,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                             .add(R.id.fragment_container, fragment)
                             .addToBackStack(null).commit();
                 }
-                return false;
+                return true;
             }
         });
     }
