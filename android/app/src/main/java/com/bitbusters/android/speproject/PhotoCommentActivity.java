@@ -70,6 +70,7 @@ public class PhotoCommentActivity extends AppCompatActivity {
 
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
+
             LinearLayout rlayout = (LinearLayout) findViewById(R.id.activity_photo_comment);
             ImageView image;
             image = (ImageView) findViewById(R.id.imageView2);

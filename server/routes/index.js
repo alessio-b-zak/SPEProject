@@ -19,7 +19,7 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb:///image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -84,7 +84,7 @@ router.post('/uploadImage', function(req, res) {
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb:///image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -94,23 +94,38 @@ router.post('/uploadImage', function(req, res) {
       // We are connected
       console.log('Connection established to', url);
       var images = db.collection("images");
-      var number = images.count().toString();
-      var location = path.join(__dirname, 'uploads','image' + number + '.bmp');
-      console.log(req);
-      var entry = {};
-      entry.comment = req.comment;
-      entry.loc = req.loc;
-      entry.path = location;
-      var data = req.image;
-      images.insert(entry);
-      fs.writeFile(location, data, function (err) {
-        if(err){
-          console.log("Problem saving image");
-        }else {
-          console.log("Image Saved");
+      images.count({}, function( err, count){
+        var number = count.toString();
+        var location = path.join('uploads','image' + number + '.bmp');
+        var imagepath = path.join(__dirname, location);
+        var entry = {};
+        entry.comment = req.headers.comment;
+        entry.loc = [parseFloat(req.headers.latitude),parseFloat(req.headers.longitude)];
+        entry.path = location;
+        images.insert(entry);
+
+        if (req.method == "POST") {
+          var data = "";
+          req.on("data", function(chunk) {
+            data += chunk;
+          });
+          req.on("end", function() {
+            console.log("Received posted data: " + data);
+            fs.writeFile(imagepath, data, function (err) {
+              if(err){
+                console.log("Problem saving image");
+              }else {
+                console.log("Image Saved on server");
+              }
+            });
+
+          });
+        } else {
+          console.dir(request);
         }
+
+        db.close();
       });
-      db.close();
     }
   });
 });

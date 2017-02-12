@@ -1,3 +1,4 @@
+
 package com.bitbusters.android.speproject;
 
 import android.net.Uri;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 //import static com.google.android.gms.internal.zznu.is;
 
-public class ImageUploader extends AsyncTask<String, Void, List<Image>> {
+public class ImageUploader extends AsyncTask<Image, Void, String> {
     private static final String DEBUG_TAG = "SAMPLING_POINTS_API";
 //    private OnTaskCompleted listener;
 
@@ -31,32 +32,29 @@ public class ImageUploader extends AsyncTask<String, Void, List<Image>> {
 //    }
 
     @Override
-    protected List<Image> doInBackground(String...params) {
-        List<Image> images = new ArrayList<Image>();
+    protected String doInBackground(Image...params) {
         try {
-//            int[] imgTmp = new int[]{0, 255, 255, 0};
-//            Bitmap bitmap = Bitmap.createBitmap(imgTmp, 2, 2, Bitmap.Config.ARGB_8888);
-            Bitmap bitmap = BitmapFactory.decodeFile("C:\\Users\\cp153\\Desktop\\SPE\\SPE\\server\\routes\\uploads\\pollution.bmp");
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(imgTmp, 0, imgTmp.length);
-            if (bitmap == null) {
-                System.out.println("Bitmap image is null. Aborting...");
-            }
-//            Bitmap bitmap = myView.getBitmap(); // Copy bitmap image here.
-
+            String comment = params[0].getComment();
+            Bitmap bitmap = params[0].getImage();
+            Double latitude = params[0].getLatitude();
+            Double longitude = params[0].getLongitude();
             String attachmentName = "bitmap";
             String attachmentFileName = "bitmap.bmp";
             String crlf = "\r\n";
             String twoHyphens = "--";
-            String boundary =  "*****";
+            String boundary =  "";
 
             HttpURLConnection httpUrlConnection = null;
-            URL url = new URL("http://10.101.135.248:3000/uploadImage");
+            URL url = new URL("http://172.23.106.65:3000/uploadImage");
             httpUrlConnection = (HttpURLConnection) url.openConnection();
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
 
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
+            httpUrlConnection.setRequestProperty("Comment", comment);
+            httpUrlConnection.setRequestProperty("Latitude", String.valueOf(latitude));
+            httpUrlConnection.setRequestProperty("Longitude", String.valueOf(longitude));
             httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
             httpUrlConnection.setRequestProperty(
                     "Content-Type", "multipart/form-data;boundary=" + boundary);
@@ -65,14 +63,14 @@ public class ImageUploader extends AsyncTask<String, Void, List<Image>> {
 
             DataOutputStream request = new DataOutputStream(
                     httpUrlConnection.getOutputStream());
-
+/*
             request.writeBytes(twoHyphens + boundary + crlf);
             request.writeBytes("Content-Disposition: form-data; name=\"" +
                     attachmentName + "\";filename=\"" +
                     attachmentFileName + "\"" + crlf);
             request.writeBytes(crlf);
             // Convert Bitmap to ByteBuffer:
-
+*/
             // Each pixel is a byte.
             byte[] pixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
             for (int i = 0; i < bitmap.getWidth(); ++i) {
@@ -80,6 +78,7 @@ public class ImageUploader extends AsyncTask<String, Void, List<Image>> {
                     pixels[i * bitmap.getHeight() + j] = (byte) bitmap.getPixel(i, j);
                 }
             }
+            
 
             request.write(pixels);
 
@@ -116,16 +115,13 @@ public class ImageUploader extends AsyncTask<String, Void, List<Image>> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return images;
+        return "Upload Successful";
     }
     // onPostExecute displays the results of the AsyncTask.
-    @Override
-    protected void onPostExecute(List<Image> result) {
-//        listener.onTaskCompleted(result);
+
+    protected void onPostExecute(int result) {
         System.out.println("ImageUploader onPostExecute called.");
-//        for (Image img:result) {
-//            System.out.println(img.getComment());
-//        }
+
     }
 
     public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {

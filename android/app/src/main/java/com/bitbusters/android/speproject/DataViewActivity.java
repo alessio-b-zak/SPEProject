@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -39,6 +41,7 @@ import java.util.List;
 
 public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
 
+    private static final String BITMAP_TAG = "BITMAP";
     private GoogleMap mMap;
     private FloatingActionButton mCamButton;
     private FloatingActionButton mSPVButton;
@@ -325,8 +328,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         points[2] = "50";
         points[3] = "2";
         //new ImagesDownloader().execute(points);
-        new ImageUploader().execute();
         */
+        int imageId = getResources().getIdentifier("sample1", "drawable", "com.bitbusters.android.speproject");
+        //Drawable itemImage = getResources().getDrawable(imageId);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),imageId);
+        Log.d(BITMAP_TAG, "Image width is : " + bitmap.getWidth());
+        Log.d(BITMAP_TAG, "Image height is: " + bitmap.getHeight());
+        Image image = new Image(bitmap,52.231,2.01,"Pollution over here!!!");
+        new ImageUploader().execute(image);
+
     }
 
     //Attempts to display user current location, zooming in to LatLng if connection exists
