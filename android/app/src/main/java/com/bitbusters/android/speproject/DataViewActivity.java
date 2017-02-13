@@ -89,7 +89,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 }
                 mRadiusCircle = mMap.addCircle(new CircleOptions()
                         .center(camCentre)
-                        .radius(10000)
+                        .radius(14142) // i.e. hypotenuse of 10km x 10km triangle.
                         .strokeColor(0x661854E1)
                         .fillColor(0x331854E1));
             }
