@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.BoolRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -30,6 +31,7 @@ public class SPDataFragment extends Fragment {
     ImageButton mBackButton;
     ImageButton mMapViewButton;
     ImageButton mGridViewButton;
+    Boolean mInGridView;
 
     private RecyclerView mPhotoRecyclerView;
     private List<GalleryItem> mItems = new ArrayList<>();
@@ -39,8 +41,8 @@ public class SPDataFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        populateItems(); // main thread.
-        //new PopulateItemsTask().execute(); // separate thread.
+        //populateItems(); // main thread.
+        new PopulateItemsTask().execute(); // separate thread.
     }
 
     @Override
@@ -53,6 +55,9 @@ public class SPDataFragment extends Fragment {
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!mInGridView) {
+                    mPhotoRecyclerView.setVisibility(View.INVISIBLE);
+                }
                 getActivity().onBackPressed();
             }
         });
@@ -61,6 +66,7 @@ public class SPDataFragment extends Fragment {
         mMapViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mInGridView = false;
 
                 // Highlight map view button.
                 mMapViewButton.setColorFilter(Color.argb(255,79,195,247));
@@ -74,14 +80,17 @@ public class SPDataFragment extends Fragment {
 
             }
         });
+
         // Make map button highlighted as default.
         mMapViewButton.setColorFilter(Color.argb(255,79,195,247));
         mMapViewButton.invalidate();
+        mInGridView = false;
 
         mGridViewButton = (ImageButton) v.findViewById(R.id.gridview_button);
         mGridViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mInGridView = true;
 
                 // Highlight grid view button.
                 mGridViewButton.setColorFilter(Color.argb(255,79,195,247));
@@ -93,6 +102,7 @@ public class SPDataFragment extends Fragment {
                 // Show the grid view.
                 mPhotoRecyclerView.animate().translationY(mPhotoRecyclerView.getHeight());
                 mPhotoRecyclerView.animate().translationY(0);
+
 
             }
         });
@@ -187,9 +197,9 @@ public class SPDataFragment extends Fragment {
     // Populate items in main thread.
     private void populateItems() {
         List<GalleryItem> items = new ArrayList<>();
-        for (int i = 0; i < 18; i++) {
+        for (int i = 0; i < 12; i++) {
             GalleryItem item = new GalleryItem();
-            String imageName = "sample" + i;
+            String imageName = "sample" + "7";
             item.setName(imageName);
             item.setTag("Tag " + i);
             item.setComment("abcd efgh ijkl mnop qrst uvwx yz01 1234 5678 9");
@@ -208,7 +218,7 @@ public class SPDataFragment extends Fragment {
             List<GalleryItem> items = new ArrayList<>();
             for (int i = 0; i < 18; i++) {
                 GalleryItem item = new GalleryItem();
-                String imageName = "sample" + i;
+                String imageName = "sample" + "7";
                 item.setName(imageName);
                 item.setTag("Tag " + i);
                 item.setComment("abcd efgh ijkl mnop qrst uvwx yz01 1234 5678 9");
