@@ -10,11 +10,13 @@ import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -45,7 +47,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             String boundary =  "";
 
             HttpURLConnection httpUrlConnection = null;
-            URL url = new URL("http://172.23.106.65:3000/uploadImage");
+            URL url = new URL("http://10.101.137.153:3000/uploadImage");
             httpUrlConnection = (HttpURLConnection) url.openConnection();
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
@@ -56,13 +58,17 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             httpUrlConnection.setRequestProperty("Latitude", String.valueOf(latitude));
             httpUrlConnection.setRequestProperty("Longitude", String.valueOf(longitude));
             httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
-            httpUrlConnection.setRequestProperty(
-                    "Content-Type", "multipart/form-data;boundary=" + boundary);
+            httpUrlConnection.setRequestProperty("Content-Type", "image/jpeg");
+
+            OutputStream request = httpUrlConnection.getOutputStream();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, request);
+
+            byte[] byteArray = stream.toByteArray();
+            request.write(byteArray);
 
             // Start content wrapper:
 
-            DataOutputStream request = new DataOutputStream(
-                    httpUrlConnection.getOutputStream());
 /*
             request.writeBytes(twoHyphens + boundary + crlf);
             request.writeBytes("Content-Disposition: form-data; name=\"" +
@@ -72,22 +78,24 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             // Convert Bitmap to ByteBuffer:
 */
             // Each pixel is a byte.
+            /*
             byte[] pixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
             for (int i = 0; i < bitmap.getWidth(); ++i) {
                 for (int j = 0; j < bitmap.getHeight(); ++j) {
                     pixels[i * bitmap.getHeight() + j] = (byte) bitmap.getPixel(i, j);
                 }
             }
-            
+            */
 
-            request.write(pixels);
+
+            //request.write(pixels);
 
             // End content wrapper:
+            //request.writeBytes(crlf);
+            //request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
 
-            request.writeBytes(crlf);
-            request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
-
-            request.flush();
+            //request.flush();
+            stream.close();
             request.close();
             // Get response:
 
@@ -116,6 +124,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             e.printStackTrace();
         }
         return "Upload Successful";
+
     }
     // onPostExecute displays the results of the AsyncTask.
 

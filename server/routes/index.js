@@ -19,7 +19,7 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
-  var url = 'mongodb:///image_database';
+  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -84,14 +84,13 @@ router.post('/uploadImage', function(req, res) {
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
-  var url = 'mongodb:///image_database';
+  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
   if (err) {
     console.log('Unable to connect to the Database Server', err);
   } else {
-      // We are connected
       console.log('Connection established to', url);
       var images = db.collection("images");
       images.count({}, function( err, count){

@@ -2,6 +2,7 @@ package com.bitbusters.android.speproject;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 public class PhotoCommentActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final String BITMAP_TAG = "BITMAP";
+    private Bitmap imageTaken;
 
 
     @Override
@@ -62,6 +65,8 @@ public class PhotoCommentActivity extends AppCompatActivity {
 
     public void submitClick(View v){
         onBackPressed();
+        com.bitbusters.android.speproject.Image image = new com.bitbusters.android.speproject.Image(imageTaken,52.231,2.01,"Pollution over here!!!");
+        new ImageUploader().execute(image);
     }
 
     @Override
@@ -69,12 +74,13 @@ public class PhotoCommentActivity extends AppCompatActivity {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
 
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageTaken = (Bitmap) extras.get("data");
+            //Bitmap bitmap = BitmapFactory.decodeResource(getResources(),imageId);
 
             LinearLayout rlayout = (LinearLayout) findViewById(R.id.activity_photo_comment);
             ImageView image;
             image = (ImageView) findViewById(R.id.imageView2);
-            image.setImageBitmap(imageBitmap);
+            image.setImageBitmap(imageTaken);
 
         }else{
             finish();

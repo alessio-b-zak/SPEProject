@@ -308,14 +308,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         points[3] = "2";
         //new ImagesDownloader().execute(points);
         */
+        /*
         int imageId = getResources().getIdentifier("sample1", "drawable", "com.bitbusters.android.speproject");
-        //Drawable itemImage = getResources().getDrawable(imageId);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),imageId);
         Log.d(BITMAP_TAG, "Image width is : " + bitmap.getWidth());
         Log.d(BITMAP_TAG, "Image height is: " + bitmap.getHeight());
         Image image = new Image(bitmap,52.231,2.01,"Pollution over here!!!");
         new ImageUploader().execute(image);
-
+*/
     }
 
     //Attempts to display user current location, zooming in to LatLng if connection exists
