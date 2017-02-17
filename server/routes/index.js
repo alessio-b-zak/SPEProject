@@ -159,7 +159,7 @@ router.post('/uploadImage', function(req, res) {
       var images = db.collection("images");
       images.count({}, function( err, count){
         var number = count.toString();
-        var location = path.join('uploads','image' + number + '.bmp');
+        var location = path.join('uploads','image' + number + '.jpeg');
         var imagepath = path.join(__dirname, location);
         var entry = {};
         entry.comment = req.headers.comment;
@@ -168,13 +168,14 @@ router.post('/uploadImage', function(req, res) {
         images.insert(entry);
 
         if (req.method == "POST") {
-          var data = "";
+          var data = [];
           req.on("data", function(chunk) {
-            data += chunk;
+            data.push(chunk);
           });
           req.on("end", function() {
+            var towrite = Buffer.concat(data);
             console.log("Received posted data: " + data);
-            fs.writeFile(imagepath, data, function (err) {
+            fs.writeFile(imagepath, towrite, function (err) {
               if(err){
                 console.log("Problem saving image");
               }else {
