@@ -7,6 +7,7 @@ var router = express.Router();
 var Jimp = require("jimp");
 
 var mongodb = require('mongodb');
+var ObjectId = require('mongodb').ObjectID;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -15,7 +16,53 @@ router.get('/', function(req, res, next) {
 
 
 //:lat1/:lon1/:lat3/:lon3
-router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
+router.get('/getImage/:id', function(req, res) {
+	// Get a Mongo client to work with the Mongo server
+  var MongoClient = mongodb.MongoClient;
+
+  // Define where the MongoDB server is
+  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+
+  // Connect to the server
+  MongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log('Unable to connect to the Database Server', err);
+    } else {
+      // We are connected
+      console.log('Connection established to', url);
+
+      // Cast all parametters into integers
+      var id = req.params.id;
+
+      // Get the documents collection
+      var images = db.collection("images");
+
+      // Find all images within the area
+      images.findOne({'_id': new ObjectId(id)}, {} , function (err, result) {
+      if (err) {
+          console.log(err);
+          res.send([]);
+        } else {
+        console.log('Found:', result);
+        var image = {};
+        image._id = result._id;
+        image.comment = result.comment;
+        images.loc = result.loc;
+        image.image = fs.readFileSync(path.join(__dirname, result.imagepath));
+        res.status(200).send(image);
+        res.end();
+        }
+      });
+
+      //Close the database connection
+      db.close();
+    }
+  });
+
+});
+
+//:lat1/:lon1/:lat3/:lon3
+router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
 
@@ -63,9 +110,10 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
         var images = [];
         for (var i = 0; i < result.length; i++) {
           images[i] = {};
+          images[i]._id = result[i]._id;
           images[i].comment = result[i].comment;
           images[i].loc = result[i].loc;
-          images[i].image = fs.readFileSync(path.join(__dirname, result[i].imagepath));
+          images[i].image = fs.readFileSync(path.join(__dirname, result[i].thumbnailpath));
         }
         res.status(200).send(images);
         res.end();

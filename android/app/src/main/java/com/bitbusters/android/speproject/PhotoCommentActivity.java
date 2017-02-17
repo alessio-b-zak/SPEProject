@@ -65,7 +65,7 @@ public class PhotoCommentActivity extends AppCompatActivity {
 
     public void submitClick(View v){
         onBackPressed();
-        com.bitbusters.android.speproject.Image image = new com.bitbusters.android.speproject.Image(imageTaken,52.231,2.01,"Pollution over here!!!");
+        com.bitbusters.android.speproject.Image image = new com.bitbusters.android.speproject.Image("NoId", imageTaken,52.231,2.01,"Pollution over here!!!");
         new ImageUploader().execute(image);
     }
 

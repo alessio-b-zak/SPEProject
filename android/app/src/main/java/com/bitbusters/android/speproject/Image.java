@@ -13,7 +13,8 @@ class Image {
     private double longitude;
     private String comment;
 
-    Image(Bitmap image, double latitude, double longitude, String comment) {
+    Image(String id, Bitmap image, double latitude, double longitude, String comment) {
+        this.id = id;
         this.image = image;
         this.latitude = latitude;
         this.longitude = longitude;

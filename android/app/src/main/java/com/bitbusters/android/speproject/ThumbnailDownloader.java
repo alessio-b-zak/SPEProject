@@ -1,6 +1,5 @@
 package com.bitbusters.android.speproject;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.SystemClock;
@@ -17,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 //import static com.google.android.gms.internal.zznu.is;
 
-public class ImagesDownloader extends AsyncTask<String, Void, Image> {
-    private static final String DEBUG_TAG = "IMAGES_DOWNLOADER";
+public class ThumbnailDownloader extends AsyncTask<String, Void, List<Image>> {
+    private static final String DEBUG_TAG = "THUMBNAIL_DOWNLOADER";
 //    private OnTaskCompleted listener;
 
 //    public ImagesDownloader(OnTaskCompleted listener) {
@@ -26,18 +25,19 @@ public class ImagesDownloader extends AsyncTask<String, Void, Image> {
 //    }
 
     @Override
-    protected Image doInBackground(String...params) {
-        Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-        Bitmap bmp = Bitmap.createBitmap(10, 10, conf);
-        Image image = new Image("", bmp,0, 0, "");
-        // param 0 is the id of the image
+    protected List<Image> doInBackground(String...params) {
+        List<Image> images = new ArrayList<Image>();
+        // params comes from the execute() call: params[0,1,2,3] are lat and long of points 1 and 3.
         try {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
                     .encodedAuthority("192.168.0.29:3000")
-                    .appendPath("getImage")
-                    .appendPath(params[0]);
+                    .appendPath("getThumbnails")
+                    .appendPath(params[0])
+                    .appendPath(params[1])
+                    .appendPath(params[2])
+                    .appendPath(params[3]);
             String myUrl = builder.build().toString();
             Log.d(DEBUG_TAG, myUrl);
             URL url = new URL(myUrl);
@@ -57,19 +57,22 @@ public class ImagesDownloader extends AsyncTask<String, Void, Image> {
             int len = 5000;
             // Convert the InputStream into a string
 //            String SamplingPoints = readIt(is, len);
-            InputStreamToImage inputStreamToImage = new InputStreamToImage();
-            image = inputStreamToImage.readImageStream(inputStream);
+            InputStreamToThumbnail inputStreamToThumbnail = new InputStreamToThumbnail();
+            images = inputStreamToThumbnail.readImageStream(inputStream);
 //            Log.d(DEBUG_TAG, "The result is: " + SamplingPoints);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return image;
+        return images;
     }
     // onPostExecute displays the results of the AsyncTask.
     @Override
-    protected void onPostExecute(Image result) {
-        System.out.println(result.getComment());
+    protected void onPostExecute(List<Image> result) {
+//        listener.onTaskCompleted(result);
+        for (Image img:result) {
+            System.out.println(img.getComment());
+        }
     }
 
     public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {

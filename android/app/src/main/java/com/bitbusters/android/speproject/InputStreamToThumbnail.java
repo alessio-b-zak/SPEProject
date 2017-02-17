@@ -14,14 +14,28 @@ import java.util.List;
  * Created by cp153 on 06/12/2016.
  */
 
-public class InputStreamToImage {
-    public Image readImageStream(InputStream in) throws IOException {
+public class InputStreamToThumbnail {
+    public List<Image> readImageStream(InputStream in) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {
-            return readMessage(reader);
+            return readMessagesArray(reader);
         } finally {
             reader.close();
         }
+    }
+
+    public List<Image> readMessagesArray(JsonReader reader) throws IOException {
+        List<Image> messages = new ArrayList<Image>();
+        try {
+            reader.beginArray();
+            while (reader.hasNext()) {
+                messages.add(readMessage(reader));
+            }
+            reader.endArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return messages;
     }
 
     public Image readMessage(JsonReader reader) throws IOException {
