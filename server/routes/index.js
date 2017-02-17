@@ -4,6 +4,7 @@ var express = require('express');
 var fs = require('file-system');
 var path = require('path');
 var router = express.Router();
+var Jimp = require("jimp");
 
 var mongodb = require('mongodb');
 
@@ -64,7 +65,7 @@ router.get('/getImages/:lat1/:lon1/:lat3/:lon3', function(req, res) {
           images[i] = {};
           images[i].comment = result[i].comment;
           images[i].loc = result[i].loc;
-          images[i].image = fs.readFileSync(path.join(__dirname, result[i].path));
+          images[i].image = fs.readFileSync(path.join(__dirname, result[i].imagepath));
         }
         res.status(200).send(images);
         res.end();
@@ -160,12 +161,18 @@ router.post('/uploadImage', function(req, res) {
       images.count({}, function( err, count){
         count = count + 1;
         var number = count.toString();
-        var location = path.join('uploads','image' + number + '.jpeg');
-        var imagepath = path.join(__dirname, location);
+
+        var database_image_location = path.join('uploads','image' + number + '.jpeg');
+        var imagepath = path.join(__dirname, database_image_location);
+
+        var database_thumbnail_location = path.join('thumbnails','image' + number + '.jpeg');
+        var thumbnailpath = path.join(__dirname, database_thumbnail_location);
+
         var entry = {};
         entry.comment = req.headers.comment;
         entry.loc = [parseFloat(req.headers.latitude),parseFloat(req.headers.longitude)];
-        entry.path = location;
+        entry.imagepath = database_image_location;
+        entry.thumbnailpath = database_thumbnail_location;
         images.insert(entry);
 
         if (req.method == "POST") {
@@ -174,14 +181,19 @@ router.post('/uploadImage', function(req, res) {
             data.push(chunk);
           });
           req.on("end", function() {
-            var towrite = Buffer.concat(data);
-            console.log("Received posted data: " + data);
-            fs.writeFile(imagepath, towrite, function (err) {
+            var bytes = Buffer.concat(data);
+            fs.writeFile(imagepath, bytes, function (err) {
               if(err){
                 console.log("Problem saving image");
               }else {
                 console.log("Image Saved on server");
-              }
+                Jimp.read(imagepath, function (err, fullimage) {
+                  if (err) throw err;
+                  fullimage.resize(256, 256)
+                       .quality(60)
+                       .write(thumbnailpath);
+                     });
+                   }
             });
 
           });
