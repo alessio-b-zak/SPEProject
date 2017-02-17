@@ -16,24 +16,24 @@ import java.util.ArrayList;
 import java.util.List;
 //import static com.google.android.gms.internal.zznu.is;
 
-public class ImagesDownloader extends AsyncTask<String, Void, List<Image>> {
-    private static final String DEBUG_TAG = "IMAGES_DOWNLOADER";
+public class ImagesLocationDownloader extends AsyncTask<String, Void, List<ImageLocation>> {
+    private static final String DEBUG_TAG = "IMAGES_LOC";
 //    private OnTaskCompleted listener;
 
-//    public ImagesDownloader(OnTaskCompleted listener) {
+//    public ImagesLocationDownloader(OnTaskCompleted listener) {
 //        this.listener = listener;
 //    }
 
     @Override
-    protected List<Image> doInBackground(String...params) {
-        List<Image> images = new ArrayList<Image>();
+    protected List<ImageLocation> doInBackground(String...params) {
+        List<ImageLocation> images = new ArrayList<ImageLocation>();
         // params comes from the execute() call: params[0,1,2,3] are lat and long of points 1 and 3.
         try {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
                     .encodedAuthority("192.168.0.29:3000")
-                    .appendPath("getImages")
+                    .appendPath("getImagesLocation")
                     .appendPath(params[0])
                     .appendPath(params[1])
                     .appendPath(params[2])
@@ -57,8 +57,8 @@ public class ImagesDownloader extends AsyncTask<String, Void, List<Image>> {
             int len = 5000;
             // Convert the InputStream into a string
 //            String SamplingPoints = readIt(is, len);
-            InputStreamToImage inputStreamToImage = new InputStreamToImage();
-            images = inputStreamToImage.readImageStream(inputStream);
+            InputStreamToImageLocation inputStreamToImageLoc = new InputStreamToImageLocation();
+            images = inputStreamToImageLoc.readImageLocStream(inputStream);
 //            Log.d(DEBUG_TAG, "The result is: " + SamplingPoints);
 
         } catch (IOException e) {
@@ -68,10 +68,10 @@ public class ImagesDownloader extends AsyncTask<String, Void, List<Image>> {
     }
     // onPostExecute displays the results of the AsyncTask.
     @Override
-    protected void onPostExecute(List<Image> result) {
+    protected void onPostExecute(List<ImageLocation> result) {
 //        listener.onTaskCompleted(result);
-        for (Image img:result) {
-            System.out.println(img.getComment());
+        for (ImageLocation img:result) {
+            System.out.println(img.getId());
         }
     }
 

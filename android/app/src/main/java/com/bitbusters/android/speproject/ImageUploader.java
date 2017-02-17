@@ -26,7 +26,7 @@ import java.util.List;
 //import static com.google.android.gms.internal.zznu.is;
 
 public class ImageUploader extends AsyncTask<Image, Void, String> {
-    private static final String DEBUG_TAG = "SAMPLING_POINTS_API";
+    private static final String DEBUG_TAG = "IMAGES_UPLOADER";
 //    private OnTaskCompleted listener;
 
 //    public ImagesDownloader(OnTaskCompleted listener) {
