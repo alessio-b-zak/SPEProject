@@ -127,7 +127,7 @@ router.get('/getImagesLocation/:lat1/:lon1/:lat3/:lon3', function(req, res) {
         var images = [];
         for (var i = 0; i < result.length; i++) {
           images[i] = {};
-          images[i].id = result[i].id;
+          images[i]._id = result[i]._id;
           images[i].loc = result[i].loc;
         }
         res.status(200).send(images);
@@ -158,6 +158,7 @@ router.post('/uploadImage', function(req, res) {
       console.log('Connection established to', url);
       var images = db.collection("images");
       images.count({}, function( err, count){
+        count = count + 1;
         var number = count.toString();
         var location = path.join('uploads','image' + number + '.jpeg');
         var imagepath = path.join(__dirname, location);

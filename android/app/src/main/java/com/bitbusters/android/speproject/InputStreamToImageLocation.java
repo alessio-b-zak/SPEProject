@@ -1,7 +1,5 @@
 package com.bitbusters.android.speproject;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.JsonReader;
 
 import java.io.IOException;
@@ -45,7 +43,7 @@ public class InputStreamToImageLocation {
             reader.beginObject();
             while (reader.hasNext()) {
                 String name = reader.nextName();
-                if (name.equals("id")) {
+                if (name.equals("_id")) {
                     id = reader.nextString();
                 } else if (name.equals("loc")) {
                     reader.beginArray();

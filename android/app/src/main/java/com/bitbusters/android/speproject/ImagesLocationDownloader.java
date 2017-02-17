@@ -72,6 +72,8 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
 //        listener.onTaskCompleted(result);
         for (ImageLocation img:result) {
             System.out.println(img.getId());
+            System.out.println(img.getLatitude());
+            System.out.println(img.getLongitude());
         }
     }
 

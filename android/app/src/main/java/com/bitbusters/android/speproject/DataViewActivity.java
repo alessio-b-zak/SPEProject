@@ -300,14 +300,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        /*
+
         String[] points = new String[4];
         points[0] = "52";
         points[1] = "-3";
         points[2] = "50";
         points[3] = "2";
-        //new ImagesDownloader().execute(points);
-        */
+        new ImagesLocationDownloader().execute(points);
+
         /*
         int imageId = getResources().getIdentifier("sample1", "drawable", "com.bitbusters.android.speproject");
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),imageId);

@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
  */
 
 class Image {
+    private String id;
     private Bitmap image;
     private double latitude;
     private double longitude;
@@ -17,6 +18,10 @@ class Image {
         this.latitude = latitude;
         this.longitude = longitude;
         this.comment = comment;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Bitmap getImage() {
@@ -33,6 +38,10 @@ class Image {
 
     public String getComment() {
         return comment;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setImage(Bitmap image) {
