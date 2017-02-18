@@ -13,12 +13,10 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 //import static com.google.android.gms.internal.zznu.is;
 
-public class ImagesDownloader extends AsyncTask<String, Void, Image> {
-    private static final String DEBUG_TAG = "IMAGES_DOWNLOADER";
+public class ImageDownloader extends AsyncTask<String, Void, Image> {
+    private static final String DEBUG_TAG = "IMAGE_DOWNLOADER";
 //    private OnTaskCompleted listener;
 
 //    public ImagesDownloader(OnTaskCompleted listener) {
