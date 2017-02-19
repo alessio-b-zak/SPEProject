@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 //import static com.google.android.gms.internal.zznu.is;
 
-public class ThumbnailDownloader extends AsyncTask<String, Void, List<Image>> {
+public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
     private static final String DEBUG_TAG = "THUMBNAIL_DOWNLOADER";
 //    private OnTaskCompleted listener;
 
@@ -32,7 +32,7 @@ public class ThumbnailDownloader extends AsyncTask<String, Void, List<Image>> {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("192.168.0.29:3000")
+                    .encodedAuthority("172.23.106.65:3000")
                     .appendPath("getThumbnails")
                     .appendPath(params[0])
                     .appendPath(params[1])

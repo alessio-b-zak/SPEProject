@@ -47,7 +47,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             String boundary =  "";
 
             HttpURLConnection httpUrlConnection = null;
-            URL url = new URL("http://192.168.0.29:3000/uploadImage");
+            URL url = new URL("http://172.23.106.65:3000/uploadImage");
             httpUrlConnection = (HttpURLConnection) url.openConnection();
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
@@ -67,34 +67,6 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             byte[] byteArray = stream.toByteArray();
             request.write(byteArray);
 
-            // Start content wrapper:
-
-/*
-            request.writeBytes(twoHyphens + boundary + crlf);
-            request.writeBytes("Content-Disposition: form-data; name=\"" +
-                    attachmentName + "\";filename=\"" +
-                    attachmentFileName + "\"" + crlf);
-            request.writeBytes(crlf);
-            // Convert Bitmap to ByteBuffer:
-*/
-            // Each pixel is a byte.
-            /*
-            byte[] pixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
-            for (int i = 0; i < bitmap.getWidth(); ++i) {
-                for (int j = 0; j < bitmap.getHeight(); ++j) {
-                    pixels[i * bitmap.getHeight() + j] = (byte) bitmap.getPixel(i, j);
-                }
-            }
-            */
-
-
-            //request.write(pixels);
-
-            // End content wrapper:
-            //request.writeBytes(crlf);
-            //request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
-
-            //request.flush();
             stream.close();
             request.close();
             // Get response:

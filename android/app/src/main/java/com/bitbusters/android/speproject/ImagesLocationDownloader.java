@@ -32,7 +32,7 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("192.168.0.29:3000")
+                    .encodedAuthority("172.23.106.65:3000")
                     .appendPath("getImagesLocation")
                     .appendPath(params[0])
                     .appendPath(params[1])
