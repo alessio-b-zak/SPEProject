@@ -202,6 +202,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     // Shows all photo markers currently on screen.
     private void showPhotoMarkersInView() {
         //if (LOGIC TO TEST IF ON SCREEN) {
+            String[] points = new String[4];
+            points[0] = "53";
+            points[1] = "-3";
+            points[2] = "50";
+            points[3] = "3";
+            new ImagesLocationDownloader().execute(points);
+
             photoMarkers.clear();
             PicturePoint photo0 = new PicturePoint(51.451902,-2.626990,0);
             PicturePoint photo1 = new PicturePoint(51.480805, -2.679945,1);

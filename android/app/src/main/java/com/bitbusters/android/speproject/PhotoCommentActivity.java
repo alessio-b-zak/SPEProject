@@ -28,7 +28,7 @@ public class PhotoCommentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(takePictureIntent.resolveActivity(getPackageManager()) != null)
+        if(takePictureIntent.resolveActivity(getPackageManager()) != null && savedInstanceState == null)
             startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
         setContentView(R.layout.activity_photo_comment);
         EditText sometext = (EditText)findViewById(R.id.editText);

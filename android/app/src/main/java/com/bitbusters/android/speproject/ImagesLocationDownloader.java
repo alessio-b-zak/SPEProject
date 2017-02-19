@@ -26,13 +26,17 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
 
     @Override
     protected List<ImageLocation> doInBackground(String...params) {
-        List<ImageLocation> images = new ArrayList<ImageLocation>();
+        List<ImageLocation> images = new ArrayList<>();
         // params comes from the execute() call: params[0,1,2,3] are lat and long of points 1 and 3.
+        // param[0] = lat for top left corner.
+        // param[1] = long for top left corner.
+        // param[2] = lat for bottom right corner.
+        // param[3] = long for bottom right corner.
         try {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("172.23.106.65:3000")
+                    .encodedAuthority("172.23.15.238:3000")
                     .appendPath("getImagesLocation")
                     .appendPath(params[0])
                     .appendPath(params[1])
@@ -70,7 +74,9 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
     @Override
     protected void onPostExecute(List<ImageLocation> result) {
 //        listener.onTaskCompleted(result);
+        Log.e("here!!", "1");
         for (ImageLocation img:result) {
+            Log.e("results!!", "1");
             System.out.println(img.getId());
             System.out.println(img.getLatitude());
             System.out.println(img.getLongitude());
