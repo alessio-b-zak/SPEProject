@@ -12,7 +12,8 @@ public class GalleryItem {
     private String mName;
     private String mTag;
     private String mComment;
-    private int mResId;
+    private String mId;
+    private int mResId;  // For testing.
 
     @Override
     public String toString() {
@@ -43,6 +44,15 @@ public class GalleryItem {
         mComment = comment;
     }
 
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
+    }
+
+    // For testing
     public int getResId() {
         return mResId;
     }

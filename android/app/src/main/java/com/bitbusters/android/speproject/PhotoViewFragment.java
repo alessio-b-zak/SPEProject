@@ -4,6 +4,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,8 @@ public class PhotoViewFragment extends Fragment {
         });
 
         ImageView iv = (ImageView) v.findViewById(R.id.photo);
-        iv.setImageResource(mGalleryItem.getResId());
+
+        //iv.setImageResource(mGalleryItem.getResId());
 
         mNameText = (TextView) v.findViewById(R.id.photo_name);
         mNameText.setText(mGalleryItem.getName());
@@ -68,6 +70,7 @@ public class PhotoViewFragment extends Fragment {
 
     public void setGalleryItem(GalleryItem galleryItem) {
         mGalleryItem = galleryItem;
+        Log.e(galleryItem.getName(), "1");
     }
 
 

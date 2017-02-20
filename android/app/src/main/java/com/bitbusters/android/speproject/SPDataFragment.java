@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,10 +37,14 @@ public class SPDataFragment extends Fragment {
     private RecyclerView mPhotoRecyclerView;
     private List<GalleryItem> mItems = new ArrayList<>();
 
+    private DataViewActivity mDataViewActivity;
+
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        mDataViewActivity = (DataViewActivity) getActivity();
 
         //populateItems(); // main thread.
         new PopulateItemsTask().execute(); // separate thread.
@@ -182,7 +187,8 @@ public class SPDataFragment extends Fragment {
         @Override
         public void onBindViewHolder(PhotoHolder photoHolder, int position) {
             GalleryItem galleryItem = mGalleryItems.get(position);
-            Drawable itemImage = getResources().getDrawable(galleryItem.getResId());
+            Drawable itemImage = getResources().getDrawable(R.drawable.sample0);
+            // Drawable itemImage = getResources().getDrawable(galleryItem.getResId());
             photoHolder.bindDrawable(itemImage);
 
         }
@@ -216,6 +222,19 @@ public class SPDataFragment extends Fragment {
         @Override
         protected List<GalleryItem> doInBackground(Void... params) {
             List<GalleryItem> items = new ArrayList<>();
+
+            for (PicturePoint pp : mDataViewActivity.getPhotoMarkers()) {
+                GalleryItem item = new GalleryItem();
+                //String imageName = "sample" + "7";
+                item.setName(pp.getId());
+                //item.setTag("Tag");
+                //item.setComment("abcd efgh ijkl mnop qrst uvwx yz01 1234 5678 9");
+                //item.setResId(getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject"));
+                item.setId(pp.getId());
+                items.add(item);
+            }
+
+            /*
             for (int i = 0; i < 18; i++) {
                 GalleryItem item = new GalleryItem();
                 String imageName = "sample" + "7";
@@ -225,6 +244,10 @@ public class SPDataFragment extends Fragment {
                 item.setResId(getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject"));
                 items.add(item);
             }
+            */
+
+            Log.e("items in task" + String.valueOf(items.size()), "1");
+
             return items;
         }
 
@@ -277,6 +300,18 @@ public class SPDataFragment extends Fragment {
 
     public List<GalleryItem> getItems() {
         return mItems;
+    }
+
+
+    public GalleryItem getGalleryItem(String id) {
+        for (GalleryItem gi : mItems) {
+            if (id.equals(gi.getId())) {
+                return gi;
+            }
+        }
+
+        Log.e("mItems size: " + String.valueOf(mItems.size()), "1");
+        return null; // TODO: PROPER ERROR HANDLING.
     }
 }
 

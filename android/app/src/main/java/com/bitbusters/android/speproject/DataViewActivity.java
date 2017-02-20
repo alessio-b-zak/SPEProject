@@ -131,7 +131,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         super.onStop();
     }
 
-
+    // On sample point click.
     public void setUpSampleManager() {
         mSampleClusterManager.setRenderer(new SamplingPointRenderer(this, mMap, mSampleClusterManager));
 
@@ -152,6 +152,18 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         LatLng markerPos = new LatLng(point.getLatitude() + 0.05f, point.getLongitude());
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
 
+                        mSampleClusterManager.clearItems();
+                        mSampleClusterManager.addItem(point);
+                        mSampleClusterManager.cluster();
+                        // Show all photo markers currently on screen.
+                        showPhotoMarkersInView();
+
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
                         fragment = new SPDataFragment();
                         mSPDataFragment = (SPDataFragment) fragment;
                         // Make buttons invisible.
@@ -160,12 +172,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                                 .add(R.id.fragment_container, fragment)
                                 .addToBackStack(null).commit();
-
-                        mSampleClusterManager.clearItems();
-                        mSampleClusterManager.addItem(point);
-                        mSampleClusterManager.cluster();
-                        // Show all photo markers currently on screen.
-                        showPhotoMarkersInView();
 
                     }
                 }
@@ -177,6 +183,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     }
 
+    // On Picture point click.
     public void setUpPictureManager(){
         mPictureClusterManager.setRenderer(new PicturePointRenderer(this, mMap, mPictureClusterManager));
         mPictureClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<PicturePoint>() {
@@ -184,9 +191,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             public boolean onClusterItemClick(PicturePoint point) {
 
                 if (point.getTitle().equals("Picture_Point")) {
-                    PicturePoint pp = point;
                     PhotoViewFragment fragment = new PhotoViewFragment();
-                    fragment.setGalleryItem(mSPDataFragment.getItems().get(Integer.valueOf(pp.getId())));
+                    fragment.setGalleryItem(mSPDataFragment.getGalleryItem(point.getId()));
                     fm.beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
                             .add(R.id.fragment_container, fragment)
@@ -207,8 +213,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         points[2] = "50";
         points[3] = "3";
         new ImagesLocationDownloader(this).execute(points);
-
-
 
         /*
         photoMarkers.clear();
