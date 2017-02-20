@@ -85,13 +85,13 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
         tempDVA.getPhotoMarkers().clear();
 
         Log.e("here!!", "1");
-        for (ImageLocation img:result) {
+        for (ImageLocation img : result) {
             Log.e("results!!", "1");
             System.out.println(img.getId());
             System.out.println(img.getLatitude());
             System.out.println(img.getLongitude());
 
-            PicturePoint photo = new PicturePoint(img.getLatitude(), img.getLongitude(), img.getId());
+            PicturePoint photo = new PicturePoint(img.getLongitude(), img.getLatitude(), img.getId());
             tempDVA.getPhotoMarkers().add(photo);
             tempDVA.getPictureClusterManager().addItem(photo);
 
@@ -99,12 +99,6 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
         Log.e(String.valueOf(tempDVA.getPhotoMarkers().size()),"1");
         tempDVA.getPictureClusterManager().cluster();
 
-        /*
-        for(PicturePoint p : tempDVA.getPhotoMarkers()){
-            tempDVA.getPictureClusterManager().addItem(p);
-        }
-
-        */
     }
 
     public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
