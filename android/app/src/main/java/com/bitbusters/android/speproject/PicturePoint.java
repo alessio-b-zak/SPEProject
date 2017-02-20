@@ -6,14 +6,14 @@ package com.bitbusters.android.speproject;
 
 public class PicturePoint extends Point {
 
-    private int id;
+    private String id;
 
-    public PicturePoint(double latitude, double longitude, int id){
+    public PicturePoint(double latitude, double longitude, String id){
         super(latitude,longitude,"Picture_Point", "");
         this.id = id;
     }
 
-    public int getId(){
+    public String getId(){
         return id;
     }
 }

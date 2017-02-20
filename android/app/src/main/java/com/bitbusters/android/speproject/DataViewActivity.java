@@ -201,42 +201,45 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     // Shows all photo markers currently on screen.
     private void showPhotoMarkersInView() {
-        //if (LOGIC TO TEST IF ON SCREEN) {
-            String[] points = new String[4];
-            points[0] = "53";
-            points[1] = "-3";
-            points[2] = "50";
-            points[3] = "3";
-            new ImagesLocationDownloader().execute(points);
+        String[] points = new String[4];
+        points[0] = "53";
+        points[1] = "-3";
+        points[2] = "50";
+        points[3] = "3";
+        new ImagesLocationDownloader(this).execute(points);
 
-            photoMarkers.clear();
-            PicturePoint photo0 = new PicturePoint(51.451902,-2.626990,0);
-            PicturePoint photo1 = new PicturePoint(51.480805, -2.679945,1);
-            PicturePoint photo2 = new PicturePoint(51.446635, -2.606646,2);
-            PicturePoint photo3 = new PicturePoint(51.493915, -2.699290,3);
-            PicturePoint photo4 = new PicturePoint(51.485578, -2.660623,4);
-            PicturePoint photo5 = new PicturePoint(51.461413, -2.631612,5);
-            PicturePoint photo6 = new PicturePoint(51.454605, -2.589866,6);
-            PicturePoint photo7 = new PicturePoint(51.448363, -2.594877,7);
-            PicturePoint photo8 = new PicturePoint(51.445726, -2.620722,8);
-            PicturePoint photo9 = new PicturePoint(51.472145, -2.647501,9);
 
-            photoMarkers.add(photo0);
-            photoMarkers.add(photo1);
-            photoMarkers.add(photo2);
-            photoMarkers.add(photo3);
-            photoMarkers.add(photo4);
-            photoMarkers.add(photo5);
-            photoMarkers.add(photo6);
-            photoMarkers.add(photo7);
-            photoMarkers.add(photo8);
-            photoMarkers.add(photo9);
 
-            for(PicturePoint p : photoMarkers){
-                mPictureClusterManager.addItem(p);
-            }
-            mPictureClusterManager.cluster();
-        //}
+        /*
+        photoMarkers.clear();
+
+        PicturePoint photo0 = new PicturePoint(51.451902,-2.626990,0);
+        PicturePoint photo1 = new PicturePoint(51.480805, -2.679945,1);
+        PicturePoint photo2 = new PicturePoint(51.446635, -2.606646,2);
+        PicturePoint photo3 = new PicturePoint(51.493915, -2.699290,3);
+        PicturePoint photo4 = new PicturePoint(51.485578, -2.660623,4);
+        PicturePoint photo5 = new PicturePoint(51.461413, -2.631612,5);
+        PicturePoint photo6 = new PicturePoint(51.454605, -2.589866,6);
+        PicturePoint photo7 = new PicturePoint(51.448363, -2.594877,7);
+        PicturePoint photo8 = new PicturePoint(51.445726, -2.620722,8);
+        PicturePoint photo9 = new PicturePoint(51.472145, -2.647501,9);
+
+        photoMarkers.add(photo0);
+        photoMarkers.add(photo1);
+        photoMarkers.add(photo2);
+        photoMarkers.add(photo3);
+        photoMarkers.add(photo4);
+        photoMarkers.add(photo5);
+        photoMarkers.add(photo6);
+        photoMarkers.add(photo7);
+        photoMarkers.add(photo8);
+        photoMarkers.add(photo9);
+
+        for(PicturePoint p : photoMarkers){
+            mPictureClusterManager.addItem(p);
+        }
+        mPictureClusterManager.cluster();
+        */
     }
 
     public void repopulateSamplePoints(ClusterManager<SamplingPoint> mSampleClusterManager){
@@ -411,6 +414,19 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
     }
 
+    public List<PicturePoint> getPhotoMarkers() {
+        return photoMarkers;
+    }
 
+    public void setPhotoMarkers(List<PicturePoint> photoMarkers) {
+        this.photoMarkers = photoMarkers;
+    }
 
+    public ClusterManager<PicturePoint> getPictureClusterManager() {
+        return mPictureClusterManager;
+    }
+
+    public void setPictureClusterManager(ClusterManager<PicturePoint> pictureClusterManager) {
+        mPictureClusterManager = pictureClusterManager;
+    }
 }

@@ -1,5 +1,6 @@
 package com.bitbusters.android.speproject;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.SystemClock;
@@ -18,11 +19,16 @@ import java.util.List;
 
 public class ImagesLocationDownloader extends AsyncTask<String, Void, List<ImageLocation>> {
     private static final String DEBUG_TAG = "IMAGES_LOC";
+    private Context context;
 //    private OnTaskCompleted listener;
 
 //    public ImagesLocationDownloader(OnTaskCompleted listener) {
 //        this.listener = listener;
 //    }
+
+    public ImagesLocationDownloader(Context context) {
+        this.context = context;
+    }
 
     @Override
     protected List<ImageLocation> doInBackground(String...params) {
@@ -74,13 +80,31 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
     @Override
     protected void onPostExecute(List<ImageLocation> result) {
 //        listener.onTaskCompleted(result);
+        DataViewActivity tempDVA = (DataViewActivity) context;
+
+        tempDVA.getPhotoMarkers().clear();
+
         Log.e("here!!", "1");
         for (ImageLocation img:result) {
             Log.e("results!!", "1");
             System.out.println(img.getId());
             System.out.println(img.getLatitude());
             System.out.println(img.getLongitude());
+
+            PicturePoint photo = new PicturePoint(img.getLatitude(), img.getLongitude(), img.getId());
+            tempDVA.getPhotoMarkers().add(photo);
+            tempDVA.getPictureClusterManager().addItem(photo);
+
         }
+        Log.e(String.valueOf(tempDVA.getPhotoMarkers().size()),"1");
+        tempDVA.getPictureClusterManager().cluster();
+
+        /*
+        for(PicturePoint p : tempDVA.getPhotoMarkers()){
+            tempDVA.getPictureClusterManager().addItem(p);
+        }
+
+        */
     }
 
     public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {

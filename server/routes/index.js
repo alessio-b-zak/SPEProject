@@ -21,7 +21,7 @@ router.get('/getImage/:id', function(req, res) {
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://backend_team:vCBUpm8CDLtf95YeLutMcEDFK@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -67,7 +67,7 @@ router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://backend_team:vCBUpm8CDLtf95YeLutMcEDFK@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -133,7 +133,7 @@ router.get('/getImagesLocation/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://backend_team:vCBUpm8CDLtf95YeLutMcEDFK@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -197,7 +197,7 @@ router.post('/uploadImage', function(req, res) {
   var MongoClient = mongodb.MongoClient;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://backend_team:vCBUpm8CDLtf95YeLutMcEDFK@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
