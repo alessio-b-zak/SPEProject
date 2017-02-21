@@ -237,7 +237,7 @@ router.post('/uploadImage', function(req, res) {
                 console.log("Image Saved on server");
                 Jimp.read(imagepath, function (err, fullimage) {
                   if (err) throw err;
-                  fullimage.resize(256, 256)
+                  fullimage.scaleToFit(256, 256)
                        .quality(60)
                        .write(thumbnailpath);
                      });
