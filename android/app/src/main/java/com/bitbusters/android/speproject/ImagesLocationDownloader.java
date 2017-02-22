@@ -19,19 +19,23 @@ import java.util.List;
 
 public class ImagesLocationDownloader extends AsyncTask<String, Void, List<ImageLocation>> {
     private static final String DEBUG_TAG = "IMAGES_LOC";
-    private Context context;
+    private DataViewActivity tempDVA;
+    private ImgLocDowListener imglis;
 //    private OnTaskCompleted listener;
 
 //    public ImagesLocationDownloader(OnTaskCompleted listener) {
 //        this.listener = listener;
 //    }
 
-    public ImagesLocationDownloader(Context context) {
-        this.context = context;
+    public ImagesLocationDownloader(Context context, ImgLocDowListener imglis) {
+
+        this.tempDVA = (DataViewActivity) context;
+        this.imglis = imglis;
     }
 
     @Override
     protected List<ImageLocation> doInBackground(String...params) {
+
         List<ImageLocation> images = new ArrayList<>();
         // params comes from the execute() call: params[0,1,2,3] are lat and long of points 1 and 3.
         // param[0] = lat for top left corner.
@@ -42,7 +46,7 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("172.23.15.238:3000")
+                    .encodedAuthority("172.23.4.19:3000")
                     .appendPath("getImagesLocation")
                     .appendPath(params[0])
                     .appendPath(params[1])
@@ -80,7 +84,6 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
     @Override
     protected void onPostExecute(List<ImageLocation> result) {
 //        listener.onTaskCompleted(result);
-        DataViewActivity tempDVA = (DataViewActivity) context;
 
         tempDVA.getPhotoMarkers().clear();
 
@@ -91,13 +94,15 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
             System.out.println(img.getLatitude());
             System.out.println(img.getLongitude());
 
-            PicturePoint photo = new PicturePoint(img.getLongitude(), img.getLatitude(), img.getId());
-            tempDVA.getPhotoMarkers().add(photo);
-            tempDVA.getPictureClusterManager().addItem(photo);
+            //PicturePoint photo = new PicturePoint(img.getLongitude(), img.getLatitude(), img.getId());
+            //tempDVA.getPhotoMarkers().add(photo);
+            //tempDVA.getPictureClusterManager().addItem(photo);
 
         }
         Log.e(String.valueOf(tempDVA.getPhotoMarkers().size()),"1");
         tempDVA.getPictureClusterManager().cluster();
+        imglis.imagesDownloaded();
+
 
     }
 

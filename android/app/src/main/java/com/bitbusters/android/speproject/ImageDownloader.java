@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,11 +18,12 @@ import java.net.URL;
 
 public class ImageDownloader extends AsyncTask<String, Void, Image> {
     private static final String DEBUG_TAG = "IMAGE_DOWNLOADER";
+    private ImageView iv;
 //    private OnTaskCompleted listener;
 
-//    public ImagesDownloader(OnTaskCompleted listener) {
-//        this.listener = listener;
-//    }
+    public ImageDownloader(ImageView iv) {
+        this.iv = iv;
+    }
 
     @Override
     protected Image doInBackground(String...params) {
@@ -33,7 +35,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Image> {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("172.23.15.238:3000")
+                    .encodedAuthority("172.23.4.19:3000")
                     .appendPath("getImage")
                     .appendPath(params[0]);
             String myUrl = builder.build().toString();
@@ -68,6 +70,8 @@ public class ImageDownloader extends AsyncTask<String, Void, Image> {
     @Override
     protected void onPostExecute(Image result) {
         System.out.println(result.getComment());
+
+        iv.setImageBitmap(result.getImage());
     }
 
     public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {

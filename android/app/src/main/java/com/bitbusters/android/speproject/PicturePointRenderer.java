@@ -14,21 +14,21 @@ import com.google.maps.android.ui.IconGenerator;
  * Created by Stefan on 08/02/2017.
  */
 
-public class PicturePointRenderer extends DefaultClusterRenderer<PicturePoint> {
+public class PicturePointRenderer extends DefaultClusterRenderer<GalleryItem> {
 
 
 
-    public PicturePointRenderer(Context context, GoogleMap map, ClusterManager<PicturePoint> clusterManager) {
+    public PicturePointRenderer(Context context, GoogleMap map, ClusterManager<GalleryItem> clusterManager) {
         super(context, map, clusterManager);
     }
 
     @Override
-    protected void onBeforeClusterItemRendered(PicturePoint pp, MarkerOptions markerOptions) {
+    protected void onBeforeClusterItemRendered(GalleryItem pp, MarkerOptions markerOptions) {
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
     }
 
     @Override
-    protected void onBeforeClusterRendered(Cluster<PicturePoint> cluster, MarkerOptions markerOptions) {
+    protected void onBeforeClusterRendered(Cluster<GalleryItem> cluster, MarkerOptions markerOptions) {
         super.onBeforeClusterRendered(cluster, markerOptions);
         //THIS IS WHERE TO CUSTOMISE THE PICTURE BLUSTER
 

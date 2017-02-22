@@ -50,6 +50,7 @@ public class PhotoViewFragment extends Fragment {
 
         ImageView iv = (ImageView) v.findViewById(R.id.photo);
 
+        new ImageDownloader(iv).execute(mGalleryItem.getId());
         //iv.setImageResource(mGalleryItem.getResId());
 
         mNameText = (TextView) v.findViewById(R.id.photo_name);
@@ -62,10 +63,6 @@ public class PhotoViewFragment extends Fragment {
         mCommentText.setText(mGalleryItem.getComment());
 
         return v;
-    }
-
-    public GalleryItem getGalleryItem() {
-        return mGalleryItem;
     }
 
     public void setGalleryItem(GalleryItem galleryItem) {
