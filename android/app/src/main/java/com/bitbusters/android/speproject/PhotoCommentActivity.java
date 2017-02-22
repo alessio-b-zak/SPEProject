@@ -28,7 +28,7 @@ public class PhotoCommentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(takePictureIntent.resolveActivity(getPackageManager()) != null)
+        if(takePictureIntent.resolveActivity(getPackageManager()) != null && savedInstanceState == null)
             startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
         setContentView(R.layout.activity_photo_comment);
         EditText sometext = (EditText)findViewById(R.id.editText);
@@ -65,7 +65,7 @@ public class PhotoCommentActivity extends AppCompatActivity {
 
     public void submitClick(View v){
         onBackPressed();
-        com.bitbusters.android.speproject.Image image = new com.bitbusters.android.speproject.Image("NoId", imageTaken,52.231,2.01,"Pollution over here!!!");
+        com.bitbusters.android.speproject.Image image = new com.bitbusters.android.speproject.Image("NoId", imageTaken, 51.449, -2.776, "More Pollution :O !!!");
         new ImageUploader().execute(image);
     }
 

@@ -3,15 +3,16 @@ package com.bitbusters.android.speproject;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.BoolRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ import java.util.List;
  * Created by toddym42 on 08/11/2016.
  */
 
-public class SPDataFragment extends Fragment {
+public class SPDataFragment extends Fragment implements ImgLocDowListener{
 
     Toolbar mToolbar;  // The toolbar.
     ImageButton mBackButton;
@@ -36,13 +37,15 @@ public class SPDataFragment extends Fragment {
     private RecyclerView mPhotoRecyclerView;
     private List<GalleryItem> mItems = new ArrayList<>();
 
+    private DataViewActivity mDataViewActivity;
+
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        //populateItems(); // main thread.
-        new PopulateItemsTask().execute(); // separate thread.
+        mDataViewActivity = (DataViewActivity) getActivity();
+
     }
 
     @Override
@@ -131,6 +134,11 @@ public class SPDataFragment extends Fragment {
         }
     }
 
+    @Override
+    public void imagesDownloaded() {
+        new PopulateItemsTask().execute(); // separate thread.
+    }
+
     private class PhotoHolder extends RecyclerView.ViewHolder {
         private ImageView mItemImageView;
 
@@ -182,7 +190,9 @@ public class SPDataFragment extends Fragment {
         @Override
         public void onBindViewHolder(PhotoHolder photoHolder, int position) {
             GalleryItem galleryItem = mGalleryItems.get(position);
-            Drawable itemImage = getResources().getDrawable(galleryItem.getResId());
+            //Drawable itemImage = getResources().getDrawable(R.drawable.sample0);
+            // Drawable itemImage = getResources().getDrawable(galleryItem.getResId());
+            Drawable itemImage = new BitmapDrawable(galleryItem.getThumbnail());
             photoHolder.bindDrawable(itemImage);
 
         }
@@ -194,28 +204,26 @@ public class SPDataFragment extends Fragment {
 
     }
 
-    // Populate items in main thread.
-    private void populateItems() {
-        List<GalleryItem> items = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            GalleryItem item = new GalleryItem();
-            String imageName = "sample" + "7";
-            item.setName(imageName);
-            item.setTag("Tag " + i);
-            item.setComment("abcd efgh ijkl mnop qrst uvwx yz01 1234 5678 9");
-            item.setResId(getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject"));
-            items.add(item);
-        }
-        mItems = items;
-        setupAdapter();
-    }
-
     // Populate items in separate thread.
     private class PopulateItemsTask extends AsyncTask<Void, Void, List<GalleryItem>> {
 
         @Override
         protected List<GalleryItem> doInBackground(Void... params) {
+            /*
             List<GalleryItem> items = new ArrayList<>();
+
+            for (GalleryItem pp : mDataViewActivity.getPhotoMarkers()) {
+                GalleryItem item = new GalleryItem();
+                //String imageName = "sample" + "7";
+                item.setName(pp.getId());
+                //item.setTag("Tag");
+                //item.setComment("abcd efgh ijkl mnop qrst uvwx yz01 1234 5678 9");
+                //item.setResId(getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject"));
+                item.setId(pp.getId());
+                items.add(item);
+            }
+
+
             for (int i = 0; i < 18; i++) {
                 GalleryItem item = new GalleryItem();
                 String imageName = "sample" + "7";
@@ -225,7 +233,13 @@ public class SPDataFragment extends Fragment {
                 item.setResId(getResources().getIdentifier(imageName, "drawable", "com.bitbusters.android.speproject"));
                 items.add(item);
             }
+
+
+            Log.e("items in task" + String.valueOf(items.size()), "1");
+
             return items;
+            */
+            return mDataViewActivity.getPhotoMarkers();
         }
 
         @Override
@@ -277,6 +291,18 @@ public class SPDataFragment extends Fragment {
 
     public List<GalleryItem> getItems() {
         return mItems;
+    }
+
+
+    public GalleryItem getGalleryItem(String id) {
+        for (GalleryItem gi : mItems) {
+            if (id.equals(gi.getId())) {
+                return gi;
+            }
+        }
+
+        Log.e("mItems size: " + String.valueOf(mItems.size()), "1");
+        return null; // TODO: PROPER ERROR HANDLING.
     }
 }
 

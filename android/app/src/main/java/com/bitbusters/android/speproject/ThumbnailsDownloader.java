@@ -1,5 +1,6 @@
 package com.bitbusters.android.speproject;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.SystemClock;
@@ -18,21 +19,28 @@ import java.util.List;
 
 public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
     private static final String DEBUG_TAG = "THUMBNAIL_DOWNLOADER";
+    private DataViewActivity mDataViewActivity;
+    private ImgLocDowListener mImglis;
 //    private OnTaskCompleted listener;
 
 //    public ImagesDownloader(OnTaskCompleted listener) {
 //        this.listener = listener;
 //    }
 
+    public ThumbnailsDownloader(Context context, ImgLocDowListener imglis) {
+        this.mDataViewActivity = (DataViewActivity) context;
+        this.mImglis = imglis;
+    }
+
     @Override
     protected List<Image> doInBackground(String...params) {
-        List<Image> images = new ArrayList<Image>();
+        List<Image> images = new ArrayList<>();
         // params comes from the execute() call: params[0,1,2,3] are lat and long of points 1 and 3.
         try {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("172.23.106.65:3000")
+                    .encodedAuthority("172.23.4.19:3000")
                     .appendPath("getThumbnails")
                     .appendPath(params[0])
                     .appendPath(params[1])
@@ -69,10 +77,19 @@ public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
     // onPostExecute displays the results of the AsyncTask.
     @Override
     protected void onPostExecute(List<Image> result) {
-//        listener.onTaskCompleted(result);
-        for (Image img:result) {
-            System.out.println(img.getComment());
+        mDataViewActivity.getPhotoMarkers().clear();
+        Log.e(String.valueOf(result.size()),"this2?"); // RETURNING 0.
+        for (Image img : result) {
+            GalleryItem photo = new GalleryItem(img.getLongitude(), img.getLatitude(),img.getId(), "2", img.getComment(),img.getId(), img.getImage());
+            mDataViewActivity.getPhotoMarkers().add(photo);
+            mDataViewActivity.getPictureClusterManager().addItem(photo);
+            //set image in gallery
         }
+        Log.e(String.valueOf(mDataViewActivity.getPhotoMarkers().size()),"this?"); // RETURNING 0.
+        mDataViewActivity.getPictureClusterManager().cluster();
+        mImglis.imagesDownloaded();
+
+
     }
 
     public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
