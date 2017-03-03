@@ -5,6 +5,7 @@ var fs = require('file-system');
 var path = require('path');
 var router = express.Router();
 var Jimp = require("jimp");
+var Baby = require("babyparse");
 
 var mongodb = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
@@ -15,6 +16,44 @@ router.get('/', function(req, res, next) {
 });
 
 
+router.get('/getClassification/:easting/:northing', function(req, res){
+  
+  var csv = "bristol_water_classification.csv";
+  var parsed = Baby.parseFiles(csv, {
+    header: true
+  });
+
+  var data_length = Object.keys(parsed.data).length;
+  console.log(data_length);
+
+  var easting = req.params.easting;
+  var northing = req.params.northing;
+
+  var minimum_index = 0;
+  var minimum_value = Infinity;
+
+  for (var i = 0; i < data_length; i++) {
+    var easting_dif = Math.pow(easting - parseInt(parsed.data[i].easting), 2);
+    var northing_dif = Math.pow(northing - parseInt(parsed.data[i].northing), 2);
+    var eucledean = Math.sqrt(easting_dif + northing_dif);
+
+    if (eucledean < minimum_value) {
+      minimum_value = eucledean;
+      minimum_index = i;
+    }
+  }
+
+  var classification1 = parsed.data[minimum_index].classification_item;
+  var classification2 = parsed.data[minimum_index + 1].classification_item;
+
+  var rating1 = parsed.data[minimum_index].cycle;
+  var rating2 = parsed.data[minimum_index + 1].cycle;
+  var result = {}
+  result[classification1] = rating1;
+  result[classification2] = rating2;
+  res.send(result);
+
+});
 //:lat1/:lon1/:lat3/:lon3
 router.get('/getImage/:id', function(req, res) {
 	// Get a Mongo client to work with the Mongo server

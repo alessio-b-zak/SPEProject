@@ -17,6 +17,7 @@
     "kerberos": "~0.0.22",
     "mongodb": "^2.2.11",
     "morgan": "~1.7.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "babyparse" : "~0.4.6"
   }
 }
