@@ -85,7 +85,7 @@ public class InputStreamToThumbnail {
         byte array, the ArrayList need to be converted to a byte array. */
         byte[] imgBytePrimitive = arrayListByteToPrimitive(imgPixels);
         Bitmap image = BitmapFactory.decodeByteArray(imgBytePrimitive, 0, imgBytePrimitive.length);
-        return new Image(id, image, latitude, longitude, comment);
+        return new Image(id, image, latitude, longitude, comment, PhotoTag.NA);
     }
 
     private byte[] arrayListByteToPrimitive(List<Byte> arrayListByte) {

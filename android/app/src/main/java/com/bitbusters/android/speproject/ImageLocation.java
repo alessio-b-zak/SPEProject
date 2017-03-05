@@ -10,11 +10,13 @@ class ImageLocation {
     private double latitude;
     private double longitude;
     private String id;
+    private PhotoTag tag;
 
-    ImageLocation(String id, double latitude, double longitude) {
+    ImageLocation(String id, double latitude, double longitude, PhotoTag tag) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.tag = tag;
     }
 
     public String getId() {
@@ -39,6 +41,14 @@ class ImageLocation {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public void setPhotoTag(PhotoTag tag){
+        this.tag = tag;
+    }
+
+    public PhotoTag getPhotoTag(){
+        return tag;
     }
 
 }

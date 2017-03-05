@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/getClassification/:easting/:northing', function(req, res){
-  
+
   var csv = "bristol_water_classification.csv";
   var parsed = Baby.parseFiles(csv, {
     header: true
@@ -86,7 +86,8 @@ router.get('/getImage/:id', function(req, res) {
         var image = {};
         image._id = result._id;
         image.comment = result.comment;
-        images.loc = result.loc;
+        image.loc = result.loc;
+        image.tag = result.tag;
         image.image = fs.readFileSync(path.join(__dirname, result.imagepath));
         res.status(200).send(image);
         res.end();
@@ -217,6 +218,7 @@ router.get('/getImagesLocation/:lat1/:lon1/:lat3/:lon3', function(req, res) {
           images[i] = {};
           images[i]._id = result[i]._id;
           images[i].loc = result[i].loc;
+          images[i].tag = result[i].tag;
         }
         res.status(200).send(images);
         res.end();
@@ -257,6 +259,7 @@ router.post('/uploadImage', function(req, res) {
 
         var entry = {};
         entry.comment = req.headers.comment;
+        entry.tag = req.headers.tag;
         entry.loc = [parseFloat(req.headers.latitude),parseFloat(req.headers.longitude)];
         entry.imagepath = database_image_location;
         entry.thumbnailpath = database_thumbnail_location;
