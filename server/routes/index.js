@@ -12,8 +12,6 @@ var ObjectId = require('mongodb').ObjectID;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var spe_mongodb_user = process.env.SPE_MONGODB_USER;
-  var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
   res.render('index', { title: 'Express' });
 });
 
@@ -60,7 +58,7 @@ router.get('/getClassification/:easting/:northing', function(req, res){
 router.get('/getImage/:id', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
-
+  // Get system environment variables representing the database server credentials.
   var spe_mongodb_user = process.env.SPE_MONGODB_USER;
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
   // Define where the MongoDB server is
@@ -110,7 +108,7 @@ router.get('/getImage/:id', function(req, res) {
 router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
-
+  // Get system environment variables representing the database server credentials.
   var spe_mongodb_user = process.env.SPE_MONGODB_USER;
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
   // Define where the MongoDB server is
@@ -180,8 +178,7 @@ router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 router.get('/getImagesLocation/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
-
-
+  // Get system environment variables representing the database server credentials.
   var spe_mongodb_user = process.env.SPE_MONGODB_USER;
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
 
@@ -250,7 +247,7 @@ router.get('/getImagesLocation/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 router.post('/uploadImage', function(req, res) {
   // Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
-
+  // Get system environment variables representing the database server credentials.
   var spe_mongodb_user = process.env.SPE_MONGODB_USER;
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
 

@@ -1,6 +1,8 @@
 package com.bitbusters.android.speproject;
 
+import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 import com.google.maps.android.clustering.ClusterItem;
 
 /**
@@ -10,12 +12,20 @@ import com.google.maps.android.clustering.ClusterItem;
 class SamplingPoint extends Point {
     private String id;
     private String samplingPointType;
+    private Integer easting;
+    private Integer northing;
+    private String ecologicalRating;
+    private String chemicalRating;
 
-    SamplingPoint(String id, double latitude, double longitude, String samplingPointType) {
+    SamplingPoint(String id, double latitude, double longitude, String samplingPointType,
+                  Integer easting, Integer northing) {
         super(latitude,longitude,"Sample_Point", "");
         this.id = id;
         this.samplingPointType = samplingPointType;
-
+        this.easting = easting;
+        this.northing = northing;
+        this.ecologicalRating = "N/A";
+        this.chemicalRating = "N/A";
     }
 
     public String getId() {
@@ -34,6 +44,14 @@ class SamplingPoint extends Point {
         return samplingPointType;
     }
 
+    public Integer getEasting() { return easting; }
+
+    public Integer getNorthing() { return northing; }
+
+    public String getEcologicalRating() { return ecologicalRating; }
+
+    public String getChemicalRating() { return chemicalRating; }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -50,5 +68,12 @@ class SamplingPoint extends Point {
         this.samplingPointType = samplingPointType;
     }
 
+    public void setEasting(Integer easting) { this.easting = easting; }
+
+    public void setNorthing(Integer northing) { this.northing = northing; }
+
+    public void setEcologicalRating(String ecologicalRating) { this.ecologicalRating = ecologicalRating; }
+
+    public void setChemicalRating(String chemicalRating) { this.chemicalRating = chemicalRating; }
 
 }
