@@ -29,13 +29,13 @@ public class ImageDownloader extends AsyncTask<String, Void, Image> {
     protected Image doInBackground(String...params) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
         Bitmap bmp = Bitmap.createBitmap(10, 10, conf);
-        Image image = new Image("", bmp,0, 0, "");
+        Image image = new Image("", bmp,0, 0, "",PhotoTag.NA);
         // param 0 is the id of the image
         try {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("172.23.4.19:3000")
+                    .encodedAuthority("172.23.115.174:3000")
                     .appendPath("getImage")
                     .appendPath(params[0]);
             String myUrl = builder.build().toString();

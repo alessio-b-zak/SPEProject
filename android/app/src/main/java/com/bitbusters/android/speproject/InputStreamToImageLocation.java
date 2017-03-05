@@ -62,7 +62,7 @@ public class InputStreamToImageLocation {
             e.printStackTrace();
         }
 
-        return new ImageLocation(id, latitude, longitude);
+        return new ImageLocation(id, latitude, longitude,tag);
     }
 
 }
