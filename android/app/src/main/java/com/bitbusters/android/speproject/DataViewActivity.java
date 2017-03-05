@@ -132,9 +132,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     protected void onStop() {
         super.onStop();
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        mGoogleApiClient.disconnect();
-        connected = false;
+        if(connected) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+            connected = false;
+        }
     }
 
     // On sample point click.
