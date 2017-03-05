@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/getClassification/:easting/:northing', function(req, res){
-  
+
   var csv = "bristol_water_classification.csv";
   var parsed = Baby.parseFiles(csv, {
     header: true
@@ -35,10 +35,10 @@ router.get('/getClassification/:easting/:northing', function(req, res){
   for (var i = 0; i < data_length; i++) {
     var easting_dif = Math.pow(easting - parseInt(parsed.data[i].easting), 2);
     var northing_dif = Math.pow(northing - parseInt(parsed.data[i].northing), 2);
-    var eucledean = Math.sqrt(easting_dif + northing_dif);
+    var euclidean = Math.sqrt(easting_dif + northing_dif);
 
-    if (eucledean < minimum_value) {
-      minimum_value = eucledean;
+    if (euclidean < minimum_value) {
+      minimum_value = euclidean;
       minimum_index = i;
     }
   }
