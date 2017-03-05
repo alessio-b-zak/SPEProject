@@ -159,6 +159,7 @@ router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
           images[i]._id = result[i]._id;
           images[i].comment = result[i].comment;
           images[i].loc = result[i].loc;
+          images[i].tag = result[i].tag;
           images[i].image = fs.readFileSync(path.join(__dirname, result[i].thumbnailpath));
         }
         res.status(200).send(images);

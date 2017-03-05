@@ -35,7 +35,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Image> {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("172.23.42.90:3000")
+                    .encodedAuthority("172.23.115.174:3000")
                     .appendPath("getImage")
                     .appendPath(params[0]);
             String myUrl = builder.build().toString();

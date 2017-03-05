@@ -46,7 +46,7 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("172.23.42.90:3000")
+                    .encodedAuthority("172.23.115.174:3000")
                     .appendPath("getImagesLocation")
                     .appendPath(params[0])
                     .appendPath(params[1])
@@ -91,6 +91,7 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
         for (ImageLocation img : result) {
             Log.e("results!!", "1");
             System.out.println(img.getId());
+            System.out.println(img.getPhotoTag().toString());
             System.out.println(img.getLatitude());
             System.out.println(img.getLongitude());
 
