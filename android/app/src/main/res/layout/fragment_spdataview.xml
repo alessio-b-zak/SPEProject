@@ -13,7 +13,7 @@
         android:layout_weight="0.70" >
 
         <TextView
-            android:text="Bristol Waterfront"
+            android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/sp_name"
@@ -23,7 +23,7 @@
             android:layout_marginTop="10dp" />
 
         <TextView
-            android:text="Sample Date: 13-Nov-15"
+            android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -36,7 +36,7 @@
             android:layout_marginRight="16dp" />
 
         <TextView
-            android:text="Pollution Levels:\n  Chemical - 4.6/10\n  Biological - 8.3/10"
+            android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"

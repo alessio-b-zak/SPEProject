@@ -64,7 +64,7 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
 //            String SamplingPoints = readIt(is, len);
             InputStreamToJSON inputStreamToJSON = new InputStreamToJSON();
             samplingPoints = inputStreamToJSON.readJsonStream(inputStream);
-//            Log.d(DEBUG_TAG, "The result is: " + SamplingPoints);
+            //Log.d(DEBUG_TAG, "The result is: " + samplingPoints);
 
         } catch (IOException e) {
             e.printStackTrace();

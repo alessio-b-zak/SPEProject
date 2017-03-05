@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,16 +35,17 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
     ImageButton mGridViewButton;
     Boolean mInGridView;
 
+
     private RecyclerView mPhotoRecyclerView;
     private List<GalleryItem> mItems = new ArrayList<>();
 
     private DataViewActivity mDataViewActivity;
+    private String placeHolder = "                  ";
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
         mDataViewActivity = (DataViewActivity) getActivity();
 
     }
@@ -51,6 +53,15 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_spdataview, container, false);
+        TextView pollutionText = (TextView) v.findViewById(R.id.sp_data2);
+        pollutionText.setText("Chemical Pollution Est.   --  " + mDataViewActivity.getSelectedSamplingPoint().getChemicalRating()
+                                + "\nEcological Pollution Est. --  " + mDataViewActivity.getSelectedSamplingPoint().getEcologicalRating());
+        String[] idAddress = mDataViewActivity.getSelectedSamplingPoint().getId().split("/");
+        String idNum = idAddress[idAddress.length-1];
+        TextView samplePointName = (TextView) v.findViewById(R.id.sp_name);
+        samplePointName.setText("Id: " + idNum);
+        TextView samplePointType = (TextView) v.findViewById(R.id.sp_data1);
+        samplePointType.setText(mDataViewActivity.getSelectedSamplingPoint().getSamplingPointType());
 
         mToolbar = (Toolbar) v.findViewById(R.id.dataview_toolbar);
 

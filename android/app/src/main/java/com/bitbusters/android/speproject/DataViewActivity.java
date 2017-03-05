@@ -64,6 +64,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private ClusterManager<GalleryItem> mPictureClusterManager;
     private MultiListener ml = new MultiListener();
 
+    private SamplingPoint selectedSamplingPoint;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +142,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public boolean onClusterItemClick(SamplingPoint point) {
                 if (point.getTitle().equals("Sample_Point")) {
-                    new SamplingPointRatingsAPI().execute(point);
+                    selectedSamplingPoint = point;
+                    new SamplingPointRatingsAPI().execute(selectedSamplingPoint);
                     Fragment fragment = fm.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
                         FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
@@ -163,16 +166,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         // Show all photo markers currently on screen.
                         showPhotoMarkersInView();
 
-                        /*
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        */
-
-
-                        // Make buttons invisible.
 
                         fm.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
@@ -197,7 +190,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             public boolean onClusterItemClick(GalleryItem point) {
 
                 if (point.getTitle().equals("Picture_Point")) {
-                    Log.e("BLAAAAH", "2");
                     PhotoViewFragment fragment = new PhotoViewFragment();
                     fragment.setGalleryItem(mSPDataFragment.getGalleryItem(point.getId()));
                     fm.beginTransaction()
@@ -452,5 +444,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void setImageLocationsDownloaded(Boolean imageLocationsDownloaded) {
         this.imageLocationsDownloaded = imageLocationsDownloaded;
+    }
+
+    public SamplingPoint getSelectedSamplingPoint(){
+        return selectedSamplingPoint;
     }
 }

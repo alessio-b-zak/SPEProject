@@ -5,6 +5,7 @@ package com.bitbusters.android.speproject;
  */
 
 public enum PhotoTag {
+    NA("No tag set"),
     BEC("Bank erosion (cattle poaching)"),
     BED("Bank erosion (dog sliding)"),
     OS("Overshading"),
@@ -13,8 +14,7 @@ public enum PhotoTag {
     OBSTR("Obstructions"),
     VSOP("Visible signs of pollution"),
     LOBZ("Lack of \"buffer zone\""),
-    INVS("Invasive species"),
-    NA("No tag set");
+    INVS("Invasive species");
 
     private String text;
 
