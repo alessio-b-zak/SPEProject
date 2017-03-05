@@ -6,15 +6,5 @@
     <string name="cam_toast">SWOOSH!</string>
 
     <string name="choose_tag">Choose a tag</string>
-    <string-array name="tags">
-        <item>Bank erosion (cattle poaching)</item>
-        <item>Bank erosion (dog sliding)</item>
-        <item>Overshading</item>
-        <item>Undershaded</item>
-        <item>Unfenced</item>
-        <item>Obstructions</item>
-        <item>Visible signs of pollution</item>
-        <item>Lack of "buffer zone"</item>
-        <item>Invasive species</item>
-    </string-array>
+
 </resources>

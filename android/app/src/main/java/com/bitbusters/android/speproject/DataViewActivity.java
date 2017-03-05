@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,7 +44,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final String BITMAP_TAG = "BITMAP";
     private GoogleMap mMap;
@@ -124,14 +126,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     @Override
     protected void onResume() {
-        mGoogleApiClient.connect();
         super.onResume();
     }
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
         super.onStop();
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        mGoogleApiClient.disconnect();
+        connected = false;
     }
 
     // On sample point click.
@@ -311,57 +314,53 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
+            mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            setLocationMarker(mLocation.getLatitude(),mLocation.getLongitude());
+            CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(mLocation.getLatitude(),mLocation.getLongitude())).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
+
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
 
-//        String[] location = {"51.492887", "-2.609084"};
-//        new SamplingPointsAPI(DataViewActivity.this).execute(location);
-
-        //String id = "58a6dced3305b93398348546";
-        //new ImageDownloader().execute(id);
-        /*
-        String[] points = new String[4];
-        points[0] = "52";
-        points[1] = "-3";
-        points[2] = "50";
-        points[3] = "2";
-        new ImagesLocationDownloader().execute(points);
-        */
-        /*
-        int imageId = getResources().getIdentifier("sample1", "drawable", "com.bitbusters.android.speproject");
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),imageId);
-        Log.d(BITMAP_TAG, "Image width is : " + bitmap.getWidth());
-        Log.d(BITMAP_TAG, "Image height is: " + bitmap.getHeight());
-        Image image = new Image(bitmap,52.231,2.01,"Pollution over here!!!");
-        new ImageUploader().execute(image);
-*/
     }
 
-    //Attempts to display user current location, zooming in to LatLng if connection exists
-    public void zoomToCurrentLocation() {
-        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLocation != null) {
-            double longitude = mLocation.getLongitude();
-            double latitude = mLocation.getLatitude();
-            if(currentLocationMarker != null){
-                currentLocationMarker.remove();
-            }
-            currentLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.target_icon)));
-            currentLocationMarker.setTag("Current_Location");
-            CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(latitude, longitude)).build();
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
+    public LocationRequest createLocationRequest() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        return mLocationRequest;
 
+    }
+
+    public void setLocationMarker(double latitude, double longitude){
+
+        currentLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.target_icon)));
+        currentLocationMarker.setTag("Current Location");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (currentLocationMarker != null) {
+            currentLocationMarker.remove();
         }
+        setLocationMarker(location.getLatitude(), location.getLongitude());
+
     }
 
     //Method called when location button is pressed
     public void currentLocation(View v){
-        if(connected) {
-            zoomToCurrentLocation();
-        }else{
+        if(!connected){
             mGoogleApiClient.connect();
+
+        }else{
+            CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(currentLocationMarker.getPosition().latitude,currentLocationMarker.getPosition().longitude)).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
         }
+
+
     }
 
     //Requesting permission for location information at runtime. Need for devices running Android 6 upwards
@@ -370,8 +369,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (requestCode == 1) {
             if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // We can now safely use the API we requested access to
-                connected = true;
-                zoomToCurrentLocation();
+                mGoogleApiClient.connect();
             } else {
                 connected = false;
             }
@@ -449,4 +447,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public SamplingPoint getSelectedSamplingPoint(){
         return selectedSamplingPoint;
     }
+
+
 }
