@@ -12,6 +12,8 @@ var ObjectId = require('mongodb').ObjectID;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  var spe_mongodb_user = process.env.SPE_MONGODB_USER;
+  var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
   res.render('index', { title: 'Express' });
 });
 
@@ -35,10 +37,10 @@ router.get('/getClassification/:easting/:northing', function(req, res){
   for (var i = 0; i < data_length; i++) {
     var easting_dif = Math.pow(easting - parseInt(parsed.data[i].easting), 2);
     var northing_dif = Math.pow(northing - parseInt(parsed.data[i].northing), 2);
-    var eucledean = Math.sqrt(easting_dif + northing_dif);
+    var euclidean = Math.sqrt(easting_dif + northing_dif);
 
-    if (eucledean < minimum_value) {
-      minimum_value = eucledean;
+    if (euclidean < minimum_value) {
+      minimum_value = euclidean;
       minimum_index = i;
     }
   }
@@ -59,8 +61,11 @@ router.get('/getImage/:id', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
 
+  var spe_mongodb_user = process.env.SPE_MONGODB_USER;
+  var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
   // Define where the MongoDB server is
-  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
+      '@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -106,8 +111,11 @@ router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
 
+  var spe_mongodb_user = process.env.SPE_MONGODB_USER;
+  var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
   // Define where the MongoDB server is
-  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
+      '@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -172,8 +180,13 @@ router.get('/getImagesLocation/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 	// Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
 
+
+  var spe_mongodb_user = process.env.SPE_MONGODB_USER;
+  var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
+
   // Define where the MongoDB server is
-  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://' + spe_mongodb_user +  ':' + spe_mongodb_password +
+      '@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -237,8 +250,12 @@ router.post('/uploadImage', function(req, res) {
   // Get a Mongo client to work with the Mongo server
   var MongoClient = mongodb.MongoClient;
 
+  var spe_mongodb_user = process.env.SPE_MONGODB_USER;
+  var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
+
   // Define where the MongoDB server is
-  var url = 'mongodb://<dbuser>:<dbpassword>@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
+      '@ds117209.mlab.com:17209/image_database';
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
