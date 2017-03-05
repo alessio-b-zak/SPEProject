@@ -71,6 +71,7 @@ public class InputStreamToJSON {
                         name = reader.nextName();
                         if (name.equals("label")) {
                             samplingPointType = reader.nextString();
+                        } else {
                             reader.skipValue();
                         }
                     }

@@ -28,7 +28,7 @@ public class SamplingPointRatingsAPI extends AsyncTask<SamplingPoint, Void, Void
         try {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("137.222.114.242:3000")
+                    .encodedAuthority("172.23.42.90:3000")
                     .appendPath("getClassification")
                     .appendPath(String.valueOf(easting))
                     .appendPath(String.valueOf(northing));
@@ -49,7 +49,7 @@ public class SamplingPointRatingsAPI extends AsyncTask<SamplingPoint, Void, Void
             inputStream = conn.getInputStream();
             InputStreamUpdateRatings inputStreamUpdateRatings = new InputStreamUpdateRatings();
             InputStreamUpdateRatings.readJsonStream(samplingPoint, inputStream);
-            Log.d(DEBUG_TAG, "The result is: " + samplingPoint);
+//            Log.d(DEBUG_TAG, "The result is: Chemical: " + samplingPoint.getChemicalRating() + " Ecological: " + samplingPoint.getEcologicalRating());
 
         } catch (IOException e) {
             e.printStackTrace();
