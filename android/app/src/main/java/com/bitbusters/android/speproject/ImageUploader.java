@@ -40,6 +40,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             Bitmap bitmap = params[0].getImage();
             Double latitude = params[0].getLatitude();
             Double longitude = params[0].getLongitude();
+            PhotoTag tag = params[0].getPhotoTag();
             String attachmentName = "bitmap";
             String attachmentFileName = "bitmap.bmp";
             String crlf = "\r\n";
@@ -55,6 +56,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
             httpUrlConnection.setRequestProperty("Comment", comment);
+            httpUrlConnection.setRequestProperty("Tag", tag.toString());
             httpUrlConnection.setRequestProperty("Latitude", String.valueOf(latitude));
             httpUrlConnection.setRequestProperty("Longitude", String.valueOf(longitude));
             httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");

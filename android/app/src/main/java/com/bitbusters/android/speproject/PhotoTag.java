@@ -13,12 +13,22 @@ public enum PhotoTag {
     OBSTR("Obstructions"),
     VSOP("Visible signs of pollution"),
     LOBZ("Lack of \"buffer zone\""),
-    INVS("Invasive species");
+    INVS("Invasive species"),
+    NA("No tag set");
 
     private String text;
 
     PhotoTag(String text) {
         this.text = text;
+    }
+
+    public static PhotoTag fromString(String text) {
+        for (PhotoTag pt : PhotoTag.values()) {
+            if (pt.text.equalsIgnoreCase(text)) {
+                return pt;
+            }
+        }
+        return PhotoTag.NA;
     }
     
 }
