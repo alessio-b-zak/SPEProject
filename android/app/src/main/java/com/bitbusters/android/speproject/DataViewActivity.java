@@ -308,7 +308,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         /*
         for (SamplingPoint r:result){
-            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
+            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getEasting() + " " + r.getNorthing() + " ");
         }
         */
     }
@@ -322,6 +322,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+
+        String[] location = {"51.492887", "-2.609084"};
+        new SamplingPointsAPI(DataViewActivity.this).execute(location);
+
         //String id = "58a6dced3305b93398348546";
         //new ImageDownloader().execute(id);
         /*

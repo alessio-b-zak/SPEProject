@@ -50,6 +50,7 @@ public class InputStreamToJSON {
         String id = null;
         String samplingPointType = null;
         double latitude = 0.0, longitude = 0.0;
+        Integer easting = 0, northing = 0;
         try {
             reader.beginObject();
             while (reader.hasNext()) {
@@ -60,13 +61,16 @@ public class InputStreamToJSON {
                     latitude = reader.nextDouble();
                 } else if (name.equals("long")) {
                     longitude = reader.nextDouble();
+                } else if (name.equals("easting")) {
+                    easting = reader.nextInt();
+                } else if (name.equals("northing")) {
+                    northing = reader.nextInt();
                 } else if (name.equals("samplingPointType")) {
                     reader.beginObject();
                     while (reader.hasNext()) {
                         name = reader.nextName();
                         if (name.equals("label")) {
                             samplingPointType = reader.nextString();
-                        } else {
                             reader.skipValue();
                         }
                     }
@@ -80,6 +84,6 @@ public class InputStreamToJSON {
             e.printStackTrace();
         }
 
-        return new SamplingPoint(id, latitude, longitude, samplingPointType);
+        return new SamplingPoint(id, latitude, longitude, samplingPointType, easting, northing);
     }
 }
