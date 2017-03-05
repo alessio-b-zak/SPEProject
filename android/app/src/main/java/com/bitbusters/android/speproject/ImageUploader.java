@@ -56,7 +56,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
             httpUrlConnection.setRequestProperty("Comment", comment);
-            httpUrlConnection.setRequestProperty("Tag", tag.toString());
+            httpUrlConnection.setRequestProperty("Tag", tag.name());
             httpUrlConnection.setRequestProperty("Latitude", String.valueOf(latitude));
             httpUrlConnection.setRequestProperty("Longitude", String.valueOf(longitude));
             httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");

@@ -22,20 +22,24 @@ public enum PhotoTag {
         this.text = text;
     }
 
-    public String getText() {
-        return this.text;
-    }
 
 
     public static PhotoTag fromString(String text) {
         for (PhotoTag pt : PhotoTag.values()) {
-            if (pt.toString().equalsIgnoreCase(text)) {
+            if (pt.name().equalsIgnoreCase(text)) {
                 return pt;
             }
         }
         return PhotoTag.NA;
     }
-    
+
+
+    @Override
+    public String toString() {
+        return text;
+    }
+
+
 }
 
 

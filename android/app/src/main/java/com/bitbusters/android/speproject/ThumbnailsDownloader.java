@@ -80,7 +80,7 @@ public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
         mDataViewActivity.getPhotoMarkers().clear();
         Log.e(String.valueOf(result.size()),"this2?"); // RETURNING 0.
         for (Image img : result) {
-            GalleryItem photo = new GalleryItem(img.getLongitude(), img.getLatitude(),img.getId(), img.getPhotoTag().getText(), img.getComment(),img.getId(), img.getImage());
+            GalleryItem photo = new GalleryItem(img.getLongitude(), img.getLatitude(),img.getId(), img.getPhotoTag().toString(), img.getComment(),img.getId(), img.getImage());
             mDataViewActivity.getPhotoMarkers().add(photo);
             mDataViewActivity.getPictureClusterManager().addItem(photo);
             //set image in gallery

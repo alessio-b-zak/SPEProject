@@ -22,6 +22,8 @@ public class PhotoCommentActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final String BITMAP_TAG = "BITMAP";
     private Bitmap imageTaken;
+    private EditText sometext;
+    private Spinner spinner;
 
 
     @Override
@@ -31,7 +33,7 @@ public class PhotoCommentActivity extends AppCompatActivity {
         if(takePictureIntent.resolveActivity(getPackageManager()) != null && savedInstanceState == null)
             startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
         setContentView(R.layout.activity_photo_comment);
-        EditText sometext = (EditText)findViewById(R.id.editText);
+        sometext = (EditText)findViewById(R.id.editText);
         setUpEditText(sometext);
         setUpSpinner();
 
@@ -52,11 +54,12 @@ public class PhotoCommentActivity extends AppCompatActivity {
     }
 
     protected void setUpSpinner(){
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setPrompt("Set tag");
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.tags, R.layout.spinner_format);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(new ArrayAdapter<PhotoTag>(this, R.layout.spinner_format, PhotoTag.values()));
+
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //spinner.setAdapter(adapter);
     }
 
     public void backClick(View v){
@@ -65,7 +68,7 @@ public class PhotoCommentActivity extends AppCompatActivity {
 
     public void submitClick(View v){
         onBackPressed();
-        com.bitbusters.android.speproject.Image image = new com.bitbusters.android.speproject.Image("NoId", imageTaken, 51.449, -2.776, "This has a tag :O !!!", PhotoTag.VSOP);
+        com.bitbusters.android.speproject.Image image = new com.bitbusters.android.speproject.Image("NoId", imageTaken, 51.449, -2.776, sometext.getText().toString(), (PhotoTag)spinner.getSelectedItem());
         new ImageUploader().execute(image);
     }
 
