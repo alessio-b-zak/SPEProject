@@ -36,7 +36,7 @@
             android:layout_marginRight="16dp" />
 
         <TextView
-            android:text=""
+            android:text="Loading ratings data..."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"

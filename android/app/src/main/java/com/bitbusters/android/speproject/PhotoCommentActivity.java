@@ -82,8 +82,8 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(takePictureIntent.resolveActivity(getPackageManager()) != null && savedInstanceState == null)
-            startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+        //if(takePictureIntent.resolveActivity(getPackageManager()) != null && savedInstanceState == null)
+            //startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
         setContentView(R.layout.activity_photo_comment);
         sometext = (EditText)findViewById(R.id.editText);
         setUpEditText(sometext);

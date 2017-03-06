@@ -169,12 +169,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         fragment = new SPDataFragment();
                         mSPDataFragment = (SPDataFragment) fragment;
 
-                        new SamplingPointRatingsAPI(mSPDataFragment).execute(selectedSamplingPoint);
-
-                        // Show all photo markers currently on screen.
-                        showPhotoMarkersInView();
-
-
                         fm.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                                 .add(R.id.fragment_container, fragment)
@@ -213,13 +207,29 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
 
     // Shows all photo markers currently on screen.
-    private void showPhotoMarkersInView() {
-        /*
-        LatLng center;
-        double radius;
+    public void showPhotoMarkersInView() {
 
-        LatLng northWest = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 315);
-        LatLng southEast = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 135);
+        /* Testing for creating top left and botton right points for ThumbnailsDownloader.
+        LatLng centre = new LatLng(51.455984, -2.602863); // arbitrary centre point.
+        double radius = 10000.0;  // distance (in metres) from centre of square to edge.
+
+        LatLng northWest = SphericalUtil.computeOffset(centre, radius * Math.sqrt(2.0), 315);
+        LatLng southEast = SphericalUtil.computeOffset(centre, radius * Math.sqrt(2.0), 135);
+
+        Marker centreMarker = mMap.addMarker(new MarkerOptions()
+                .position(centre).title("NW Marker")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+        centreMarker.setTag("Sample_Point");
+
+        Marker nwMarker = mMap.addMarker(new MarkerOptions()
+                .position(northWest).title("NW Marker")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        nwMarker.setTag("Sample_Point");
+
+        Marker seMarker = mMap.addMarker(new MarkerOptions()
+                .position(southEast).title("SE Marker")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        seMarker.setTag("Sample_Point");
         */
 
         String[] points = new String[4];

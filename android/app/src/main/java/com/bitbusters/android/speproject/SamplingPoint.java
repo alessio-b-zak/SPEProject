@@ -16,6 +16,7 @@ class SamplingPoint extends Point {
     private Integer northing;
     private String ecologicalRating;
     private String chemicalRating;
+    private Boolean ratingsSet;
 
     SamplingPoint(String id, double latitude, double longitude, String samplingPointType,
                   Integer easting, Integer northing) {
@@ -26,6 +27,7 @@ class SamplingPoint extends Point {
         this.northing = northing;
         this.ecologicalRating = "N/A";
         this.chemicalRating = "N/A";
+        this.ratingsSet = false;
     }
 
     public String getId() {
@@ -72,8 +74,14 @@ class SamplingPoint extends Point {
 
     public void setNorthing(Integer northing) { this.northing = northing; }
 
-    public void setEcologicalRating(String ecologicalRating) { this.ecologicalRating = ecologicalRating; }
+    public void setEcologicalRating(String ecologicalRating) {
+        this.ecologicalRating = ecologicalRating;
+        this.ratingsSet = true;
+    }
 
     public void setChemicalRating(String chemicalRating) { this.chemicalRating = chemicalRating; }
 
+    public Boolean getRatingsSet() {
+        return ratingsSet;
+    }
 }
