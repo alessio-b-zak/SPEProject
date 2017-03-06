@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -88,6 +89,7 @@ public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
             //set image in gallery
         }
         mDataViewActivity.getPictureClusterManager().cluster();
+        mDataViewActivity.getProgressSpinner().setVisibility(View.INVISIBLE);
         mImglis.imagesDownloaded();
 
     }

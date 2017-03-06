@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -49,6 +50,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     private static final String BITMAP_TAG = "BITMAP";
     private GoogleMap mMap;
+    private ProgressBar mProgressSpinner;
     private FloatingActionButton mCamButton;
     private FloatingActionButton mSPVButton;
 
@@ -78,6 +80,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        mProgressSpinner = (ProgressBar) findViewById(R.id.progressSpinner);
 
         // The action performed when the sample point view button is pressed.
         mSPVButton = (FloatingActionButton) findViewById(R.id.sp_view_button);
@@ -209,6 +213,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     // Shows all photo markers currently on screen.
     public void showPhotoMarkersInView() {
 
+        mProgressSpinner.setVisibility(View.VISIBLE);
+
         /* Testing for creating top left and botton right points for ThumbnailsDownloader.
         LatLng centre = new LatLng(51.455984, -2.602863); // arbitrary centre point.
         double radius = 10000.0;  // distance (in metres) from centre of square to edge.
@@ -303,8 +309,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void setUpMultiManager(){
-        mPictureClusterManager = new ClusterManager<GalleryItem>(this, mMap);
-        mSampleClusterManager = new ClusterManager<SamplingPoint>(this, mMap);
+        mPictureClusterManager = new ClusterManager<>(this, mMap);
+        mSampleClusterManager = new ClusterManager<>(this, mMap);
         setUpSampleManager();
         setUpPictureManager();
         ml.addOC(mSampleClusterManager);
@@ -471,5 +477,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         return selectedSamplingPoint;
     }
 
+    public ProgressBar getProgressSpinner() {
+        return mProgressSpinner;
+    }
 
 }
