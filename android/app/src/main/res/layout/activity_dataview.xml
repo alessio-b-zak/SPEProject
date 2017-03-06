@@ -28,7 +28,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="90dp"
-        android:src="@drawable/gps_icon"
+        android:src="@drawable/target_white"
         android:onClick="currentLocation"/>
 
     <android.support.design.widget.FloatingActionButton

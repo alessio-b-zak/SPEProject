@@ -34,6 +34,7 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
     ImageButton mMapViewButton;
     ImageButton mGridViewButton;
     Boolean mInGridView;
+    View mSPDataView;
 
 
     private RecyclerView mPhotoRecyclerView;
@@ -53,9 +54,12 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_spdataview, container, false);
+        mSPDataView = v;
+        /*
         TextView pollutionText = (TextView) v.findViewById(R.id.sp_data2);
         pollutionText.setText("Chemical Pollution Est.   --  " + mDataViewActivity.getSelectedSamplingPoint().getChemicalRating()
                                 + "\nEcological Pollution Est. --  " + mDataViewActivity.getSelectedSamplingPoint().getEcologicalRating());
+        */
         String[] idAddress = mDataViewActivity.getSelectedSamplingPoint().getId().split("/");
         String idNum = idAddress[idAddress.length-1];
         TextView samplePointName = (TextView) v.findViewById(R.id.sp_name);
@@ -315,6 +319,15 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
         Log.e("mItems size: " + String.valueOf(mItems.size()), "1");
         return null; // TODO: PROPER ERROR HANDLING.
     }
+
+    public void setChemBioText(SamplingPoint samplePoint) {
+        TextView pollutionText = (TextView) mSPDataView.findViewById(R.id.sp_data2);
+        pollutionText.setText("Chemical Pollution Est.   --  " + mDataViewActivity.getSelectedSamplingPoint().getChemicalRating()
+                + "\nEcological Pollution Est. --  " + mDataViewActivity.getSelectedSamplingPoint().getEcologicalRating());
+    }
+
+
+
 }
 
 

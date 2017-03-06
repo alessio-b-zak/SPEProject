@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
@@ -97,7 +98,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         .center(camCentre)
                         .radius(14142) // i.e. hypotenuse of 10km x 10km triangle.
                         .strokeColor(0x661854E1)
-                        .fillColor(0x331854E1));
+                        .fillColor(0x221854E1));
             }
         });
 
@@ -148,7 +149,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             public boolean onClusterItemClick(SamplingPoint point) {
                 if (point.getTitle().equals("Sample_Point")) {
                     selectedSamplingPoint = point;
-                    new SamplingPointRatingsAPI().execute(selectedSamplingPoint);
+
                     Fragment fragment = fm.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
                         FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
@@ -167,6 +168,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
                         fragment = new SPDataFragment();
                         mSPDataFragment = (SPDataFragment) fragment;
+
+                        new SamplingPointRatingsAPI(mSPDataFragment).execute(selectedSamplingPoint);
 
                         // Show all photo markers currently on screen.
                         showPhotoMarkersInView();
@@ -211,6 +214,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     // Shows all photo markers currently on screen.
     private void showPhotoMarkersInView() {
+        /*
+        LatLng center;
+        double radius;
+
+        LatLng northWest = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 315);
+        LatLng southEast = SphericalUtil.computeOffset(center, radius * Math.sqrt(2.0), 135);
+        */
+
         String[] points = new String[4];
         points[0] = "53";
         points[1] = "-3";

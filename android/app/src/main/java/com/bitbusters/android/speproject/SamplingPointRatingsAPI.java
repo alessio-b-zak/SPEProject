@@ -1,9 +1,11 @@
 package com.bitbusters.android.speproject;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,11 +19,17 @@ import java.util.List;
 
 //import static com.google.android.gms.internal.zznu.is;
 
-public class SamplingPointRatingsAPI extends AsyncTask<SamplingPoint, Void, Void> {
+public class SamplingPointRatingsAPI extends AsyncTask<SamplingPoint, Void, SamplingPoint> {
+
     private static final String DEBUG_TAG = "SAMPLING_POINT_RATINGS";
+    private SPDataFragment mSPDataFragment;
+
+    public SamplingPointRatingsAPI(SPDataFragment context) {
+        this.mSPDataFragment = context;
+    }
 
     @Override
-    protected Void doInBackground(SamplingPoint...params) {
+    protected SamplingPoint doInBackground(SamplingPoint...params) {
         SamplingPoint samplingPoint = params[0];
         Integer easting = samplingPoint.getEasting();
         Integer northing = samplingPoint.getNorthing();
@@ -54,13 +62,12 @@ public class SamplingPointRatingsAPI extends AsyncTask<SamplingPoint, Void, Void
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return samplingPoint;
     }
-    // onPostExecute displays the results of the AsyncTask.
-//    @Override
-//    protected void onPostExecute(List<SamplingPoint> result) {
-//        listener.onTaskCompleted(result);
-//    }
 
+    @Override
+    protected void onPostExecute(SamplingPoint samplingPoint) {
+        mSPDataFragment.setChemBioText(samplingPoint);
+    }
 
 }

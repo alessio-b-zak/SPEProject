@@ -115,10 +115,9 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
     protected void setUpSpinner(){
         spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setPrompt("Set tag");
-        spinner.setAdapter(new ArrayAdapter<PhotoTag>(this, R.layout.spinner_format, PhotoTag.values()));
-
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //spinner.setAdapter(adapter);
+        ArrayAdapter<PhotoTag> adapter = new ArrayAdapter<>(this, R.layout.spinner_format, PhotoTag.values());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
     public void backClick(View v){

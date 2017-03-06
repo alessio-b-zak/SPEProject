@@ -40,7 +40,8 @@ public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("139.59.184.70:3000")
+                    //.encodedAuthority("139.59.184.70:3000")
+                    .encodedAuthority("172.23.215.243:3000")
                     .appendPath("getThumbnails")
                     .appendPath(params[0])
                     .appendPath(params[1])
@@ -78,17 +79,15 @@ public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
     @Override
     protected void onPostExecute(List<Image> result) {
         mDataViewActivity.getPhotoMarkers().clear();
-        Log.e(String.valueOf(result.size()),"this2?"); // RETURNING 0.
+        Log.e(String.valueOf(result.size()),"no. of images returned"); // RETURNING 0.
         for (Image img : result) {
             GalleryItem photo = new GalleryItem(img.getLongitude(), img.getLatitude(),img.getId(), img.getPhotoTag().toString(), img.getComment(),img.getId(), img.getImage());
             mDataViewActivity.getPhotoMarkers().add(photo);
             mDataViewActivity.getPictureClusterManager().addItem(photo);
             //set image in gallery
         }
-        Log.e(String.valueOf(mDataViewActivity.getPhotoMarkers().size()),"this?"); // RETURNING 0.
         mDataViewActivity.getPictureClusterManager().cluster();
         mImglis.imagesDownloaded();
-
 
     }
 
