@@ -40,7 +40,7 @@ public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("172.23.115.174:3000")
+                    .encodedAuthority("139.59.184.70:3000")
                     .appendPath("getThumbnails")
                     .appendPath(params[0])
                     .appendPath(params[1])
