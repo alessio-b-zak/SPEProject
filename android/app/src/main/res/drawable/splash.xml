@@ -4,7 +4,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/background_dark"/>
+            android:src="@drawable/background_dark_resized"/>
     </item>
 
     <item>

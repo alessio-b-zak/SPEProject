@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
-        android:src="@drawable/background_orig" />
+        android:src="@drawable/background_resized" />
+
 
     <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
@@ -98,6 +99,7 @@
                 android:id="@+id/imageView2"
                 android:layout_weight="4" />
 
+
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -111,9 +113,9 @@
                         android:gravity="top"
                         android:minLines="12"/>
 
-                </LinearLayout>
+                 </LinearLayout>
 
-            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
