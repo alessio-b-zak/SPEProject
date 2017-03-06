@@ -28,7 +28,7 @@ public class SamplingPointRatingsAPI extends AsyncTask<SamplingPoint, Void, Void
         try {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("172.23.115.174:3000")
+                    .encodedAuthority("139.59.184.70:3000")
                     .appendPath("getClassification")
                     .appendPath(String.valueOf(easting))
                     .appendPath(String.valueOf(northing));
