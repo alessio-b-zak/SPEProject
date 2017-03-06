@@ -48,7 +48,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             String boundary =  "";
 
             HttpURLConnection httpUrlConnection = null;
-            URL url = new URL("http://172.23.115.174:3000/uploadImage");
+            URL url = new URL("http://139.59.184.70:3000/uploadImage");
             httpUrlConnection = (HttpURLConnection) url.openConnection();
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
