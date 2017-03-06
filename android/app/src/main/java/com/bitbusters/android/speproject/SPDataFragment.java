@@ -55,11 +55,6 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_spdataview, container, false);
         mSPDataView = v;
-        /*
-        TextView pollutionText = (TextView) v.findViewById(R.id.sp_data2);
-        pollutionText.setText("Chemical Pollution Est.   --  " + mDataViewActivity.getSelectedSamplingPoint().getChemicalRating()
-                                + "\nEcological Pollution Est. --  " + mDataViewActivity.getSelectedSamplingPoint().getEcologicalRating());
-        */
         String[] idAddress = mDataViewActivity.getSelectedSamplingPoint().getId().split("/");
         String idNum = idAddress[idAddress.length-1];
         TextView samplePointName = (TextView) v.findViewById(R.id.sp_name);
