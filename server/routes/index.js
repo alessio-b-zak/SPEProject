@@ -297,15 +297,11 @@ router.post('/uploadImage', function(req, res) {
                 console.log("Problem saving image");
               }else {
                 console.log("Image Saved on server");
-                Jimp.read(imagepath, function (err, fullimage) {
-                  if (err) throw err;
-                  fullimage.scaleToFit(256, 256) {
-                       .quality(60)
-                       .write(thumbnailpath);
-                       console.log("Thumbnail saved.");
-                  }
-                });
-            });
+                sharp(bytes)
+                  .resize(250,250)
+                  .toFile(thumbnailpath);
+                console.log("Thumbnail saved.")
+            }
 
           });
         } else {
