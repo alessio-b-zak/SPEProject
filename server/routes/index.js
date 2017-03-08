@@ -1,4 +1,5 @@
 'use strict';
+import sharp from 'sharp';
 
 var express = require('express');
 var fs = require('file-system');
@@ -298,11 +299,11 @@ router.post('/uploadImage', function(req, res) {
                 console.log("Image Saved on server");
                 Jimp.read(imagepath, function (err, fullimage) {
                   if (err) throw err;
-                  fullimage.scaleToFit(256, 256)
+                  fullimage.scaleToFit(256, 256) {
                        .quality(60)
                        .write(thumbnailpath);
                        console.log("Thumbnail saved.");
-                     }
+                  }
                 });
             });
 
