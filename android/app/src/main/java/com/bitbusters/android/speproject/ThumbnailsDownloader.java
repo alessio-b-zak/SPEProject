@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,14 +35,15 @@ public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
 
     @Override
     protected List<Image> doInBackground(String...params) {
+
         List<Image> images = new ArrayList<>();
         // params comes from the execute() call: params[0,1,2,3] are lat and long of points 1 and 3.
         try {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    //.encodedAuthority("139.59.184.70:3000")
-                    .encodedAuthority("172.23.215.243:3000")
+                    .encodedAuthority("139.59.184.70:8080")
+                    //.encodedAuthority("172.23.215.243:3000")
                     .appendPath("getThumbnails")
                     .appendPath(params[0])
                     .appendPath(params[1])
@@ -79,7 +81,7 @@ public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
     @Override
     protected void onPostExecute(List<Image> result) {
         mDataViewActivity.getPhotoMarkers().clear();
-        Log.e(String.valueOf(result.size()),"no. of images returned"); // RETURNING 0.
+        Log.e(String.valueOf(result.size()),"number of images returned"); // RETURNING 0.
         for (Image img : result) {
             GalleryItem photo = new GalleryItem(img.getLongitude(), img.getLatitude(),img.getId(), img.getPhotoTag().toString(), img.getComment(),img.getId(), img.getImage());
             mDataViewActivity.getPhotoMarkers().add(photo);
@@ -87,6 +89,7 @@ public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
             //set image in gallery
         }
         mDataViewActivity.getPictureClusterManager().cluster();
+        mDataViewActivity.getProgressSpinner().setVisibility(View.INVISIBLE);
         mImglis.imagesDownloaded();
 
     }

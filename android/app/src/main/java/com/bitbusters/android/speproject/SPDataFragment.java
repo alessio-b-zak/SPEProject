@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,12 +56,24 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_spdataview, container, false);
         mSPDataView = v;
+
+        SamplingPoint samplingPoint = mDataViewActivity.getSelectedSamplingPoint();
+        if (samplingPoint.getRatingsSet()) {
+            setChemBioText(samplingPoint);
+        }
+        else {
+            new SamplingPointRatingsAPI(this).execute(samplingPoint);
+        }
+
+        TextView samplePointName = (TextView) v.findViewById(R.id.sp_name);
         String[] idAddress = mDataViewActivity.getSelectedSamplingPoint().getId().split("/");
         String idNum = idAddress[idAddress.length-1];
-        TextView samplePointName = (TextView) v.findViewById(R.id.sp_name);
-        samplePointName.setText("Id: " + idNum);
+        String s = "<b>ID: </b>" + idNum;
+        samplePointName.setText(Html.fromHtml(s));
+
         TextView samplePointType = (TextView) v.findViewById(R.id.sp_data1);
-        samplePointType.setText(mDataViewActivity.getSelectedSamplingPoint().getSamplingPointType());
+        s = "<b>TYPE: </b>" + mDataViewActivity.getSelectedSamplingPoint().getSamplingPointType();
+        samplePointType.setText(Html.fromHtml(s));
 
         mToolbar = (Toolbar) v.findViewById(R.id.dataview_toolbar);
 
@@ -316,12 +329,39 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
     }
 
     public void setChemBioText(SamplingPoint samplePoint) {
+
         TextView pollutionText = (TextView) mSPDataView.findViewById(R.id.sp_data2);
-        pollutionText.setText("Chemical Pollution Est.   --  " + mDataViewActivity.getSelectedSamplingPoint().getChemicalRating()
-                + "\nEcological Pollution Est. --  " + mDataViewActivity.getSelectedSamplingPoint().getEcologicalRating());
+
+        String chemRating = mDataViewActivity.getSelectedSamplingPoint().getChemicalRating();
+        if (chemRating.equals("Poor")) {
+            chemRating = "<font color=\"#ff0000\">Poor</font>";      // Red
+        }
+        else if (chemRating.equals("Moderate")) {
+            chemRating = "<font color=\"#ffa500\">Moderate</font>";  // Orange
+        }
+        else if (chemRating.equals("Good")) {
+            chemRating = "<font color=\"#00ff00\">Good</font>";      // Green
+        }
+        String chemString = "<b>Chemical Pollution Est.</b> &nbsp -- " + chemRating;
+
+        String ecoRating = mDataViewActivity.getSelectedSamplingPoint().getEcologicalRating();
+        if (ecoRating.equals("Poor")) {
+            ecoRating = "<font color=\"#ff0000\">Poor</font>";      // Red
+        }
+        else if (ecoRating.equals("Moderate")) {
+            ecoRating = "<font color=\"#ffa500\">Moderate</font>";  // Orange
+        }
+        else if (ecoRating.equals("Good")) {
+            ecoRating = "<font color=\"#00ff00\">Good</font>";      // Green
+        }
+        String ecoString = "<b>Ecological Pollution Est.</b> -- " + ecoRating;
+
+        pollutionText.setText(Html.fromHtml(chemString + "<br />" + ecoString));
+
+        // Show all photo markers currently on screen.
+        mDataViewActivity.showPhotoMarkersInView();
+
     }
-
-
 
 }
 
