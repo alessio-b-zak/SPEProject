@@ -1,5 +1,4 @@
 'use strict';
-import sharp from 'sharp';
 
 var express = require('express');
 var fs = require('file-system');
@@ -7,6 +6,7 @@ var path = require('path');
 var router = express.Router();
 var Jimp = require("jimp");
 var Baby = require("babyparse");
+var sharp = require("sharp");
 
 var mongodb = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
