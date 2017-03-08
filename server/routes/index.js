@@ -6,6 +6,7 @@ var path = require('path');
 var router = express.Router();
 var Jimp = require("jimp");
 var Baby = require("babyparse");
+var sharp = require("sharp");
 
 var mongodb = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
@@ -62,9 +63,9 @@ router.get('/getImage/:id', function(req, res) {
   var spe_mongodb_user = process.env.SPE_MONGODB_USER;
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
   // Define where the MongoDB server is
-  var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
-      '@ds117209.mlab.com:17209/image_database';
-
+  // var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
+  //     '@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://localhost:27017/local'
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
     if (err) {
@@ -112,8 +113,12 @@ router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   var spe_mongodb_user = process.env.SPE_MONGODB_USER;
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
   // Define where the MongoDB server is
-  var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
-      '@ds117209.mlab.com:17209/image_database';
+
+  //*****************************//
+  // var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
+  //     '@ds117209.mlab.com:17209/image_database';
+
+  var url = 'mongodb://localhost:27017/local'
 
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
@@ -183,9 +188,9 @@ router.get('/getImagesLocation/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://' + spe_mongodb_user +  ':' + spe_mongodb_password +
-      '@ds117209.mlab.com:17209/image_database';
-
+  // var url = 'mongodb://' + spe_mongodb_user +  ':' + spe_mongodb_password +
+  //     '@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://localhost:27017/local'
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
     if (err) {
@@ -252,9 +257,9 @@ router.post('/uploadImage', function(req, res) {
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
-      '@ds117209.mlab.com:17209/image_database';
-
+  // var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
+  //     '@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://localhost:27017/local'
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
   if (err) {
@@ -292,16 +297,14 @@ router.post('/uploadImage', function(req, res) {
                 console.log("Problem saving image");
               }else {
                 console.log("Image Saved on server");
-                Jimp.read(imagepath, function (err, fullimage) {
-                  if (err) throw err;
-                  fullimage.scaleToFit(256, 256)
-                       .quality(60)
-                       .write(thumbnailpath);
-                     });
-                   }
-            });
+                sharp(bytes)
+                  .resize(250,250)
+                  .toFile(thumbnailpath);
+                console.log("Thumbnail saved.")
+              }
 
-          });
+            });
+          }
         } else {
           console.dir(request);
         }

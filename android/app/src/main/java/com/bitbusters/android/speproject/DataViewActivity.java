@@ -432,6 +432,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mPictureClusterManager.cluster();
             mSampleClusterManager.clearItems();
             repopulateSamplePoints(mSampleClusterManager);
+            mProgressSpinner.setVisibility(View.INVISIBLE);
 
 
             // Re-show the buttons.
