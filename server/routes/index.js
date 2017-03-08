@@ -120,7 +120,7 @@ router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   var url = 'mongodb://localhost:27017/local'
 
   // Connect to the server
-  MongoClient.connect(url, function (err, datb) {
+  MongoClient.connect(url, function (err, db) {
     if (err) {
       console.log('Unable to connect to the Database Server', err);
     } else {
@@ -295,7 +295,7 @@ router.post('/uploadImage', function(req, res) {
               if(err){
                 console.log("Problem saving image");
               }else {
-                console.log("Saving image on server");
+                console.log("Image Saved on server");
                 Jimp.read(imagepath, function (err, fullimage) {
                   if (err) throw err;
                   fullimage.scaleToFit(256, 256)
@@ -303,7 +303,6 @@ router.post('/uploadImage', function(req, res) {
                        .write(thumbnailpath);
                      });
                    }
-		console.log("Image saved on server")
             });
 
           });
