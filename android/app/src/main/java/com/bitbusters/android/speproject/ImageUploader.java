@@ -50,10 +50,11 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             HttpURLConnection httpUrlConnection = null;
             URL url = new URL("http://139.59.184.70:8080/uploadImage");
             //URL url = new URL("http://172.23.215.243:3000/uploadImage");
+            Log.d(DEBUG_TAG, " URL UPLOAD : " + url.toString());
             httpUrlConnection = (HttpURLConnection) url.openConnection();
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
-
+            Log.d(DEBUG_TAG, "Set request body to true");
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
             httpUrlConnection.setRequestProperty("Comment", comment);
@@ -63,13 +64,17 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
             httpUrlConnection.setRequestProperty("Content-Type", "image/jpeg");
 
+            int response = httpUrlConnection.getResponseCode();
+            Log.d(DEBUG_TAG, "Url is: " + url);
+            Log.d(DEBUG_TAG, "The response is: " + response);
+
             OutputStream request = httpUrlConnection.getOutputStream();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, request);
 
             byte[] byteArray = stream.toByteArray();
             request.write(byteArray);
-
+            Log.d(DEBUG_TAG, "Image Compressed ");
             stream.close();
             request.close();
             // Get response:
@@ -88,10 +93,8 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             }
             responseStreamReader.close();
 
-            String response = stringBuilder.toString();
-            // Close response stream:
-            Log.d(DEBUG_TAG, "Url is: " + url);
-            Log.d(DEBUG_TAG, "The response is: " + response);
+
+
             responseStream.close();
             // Close the connection:
             httpUrlConnection.disconnect();
