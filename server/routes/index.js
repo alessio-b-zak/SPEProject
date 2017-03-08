@@ -301,8 +301,9 @@ router.post('/uploadImage', function(req, res) {
                   fullimage.scaleToFit(256, 256)
                        .quality(60)
                        .write(thumbnailpath);
-                     });
-                   }
+                       console.log("Thumbnail saved.");
+                     }
+                });
             });
 
           });
