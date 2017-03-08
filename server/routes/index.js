@@ -62,9 +62,9 @@ router.get('/getImage/:id', function(req, res) {
   var spe_mongodb_user = process.env.SPE_MONGODB_USER;
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
   // Define where the MongoDB server is
-  var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
-      '@ds117209.mlab.com:17209/image_database';
-
+  // var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
+  //     '@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://localhost:27017/local'
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
     if (err) {
@@ -112,11 +112,15 @@ router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   var spe_mongodb_user = process.env.SPE_MONGODB_USER;
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
   // Define where the MongoDB server is
-  var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
-      '@ds117209.mlab.com:17209/image_database';
+
+  //*****************************//
+  // var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
+  //     '@ds117209.mlab.com:17209/image_database';
+
+  var url = 'mongodb://localhost:27017/local'
 
   // Connect to the server
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, function (err, datb) {
     if (err) {
       console.log('Unable to connect to the Database Server', err);
     } else {
@@ -183,9 +187,9 @@ router.get('/getImagesLocation/:lat1/:lon1/:lat3/:lon3', function(req, res) {
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://' + spe_mongodb_user +  ':' + spe_mongodb_password +
-      '@ds117209.mlab.com:17209/image_database';
-
+  // var url = 'mongodb://' + spe_mongodb_user +  ':' + spe_mongodb_password +
+  //     '@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://localhost:27017/local'
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
     if (err) {
@@ -252,9 +256,9 @@ router.post('/uploadImage', function(req, res) {
   var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
 
   // Define where the MongoDB server is
-  var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
-      '@ds117209.mlab.com:17209/image_database';
-
+  // var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
+  //     '@ds117209.mlab.com:17209/image_database';
+  var url = 'mongodb://localhost:27017/local'
   // Connect to the server
   MongoClient.connect(url, function (err, db) {
   if (err) {
