@@ -301,9 +301,10 @@ router.post('/uploadImage', function(req, res) {
                   .resize(250,250)
                   .toFile(thumbnailpath);
                 console.log("Thumbnail saved.")
-            }
+              }
 
-          });
+            });
+          }
         } else {
           console.dir(request);
         }
