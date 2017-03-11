@@ -99,7 +99,7 @@ router.get('/getImage/:id', function(req, res) {
       });
 
       //Close the database connection
-      db.close();
+      //db.close();
     }
   });
 
@@ -173,7 +173,7 @@ router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
       });
 
       //Close the database connection
-      db.close();
+      //db.close();
     }
   });
 
@@ -242,7 +242,7 @@ router.get('/getImagesLocation/:lat1/:lon1/:lat3/:lon3', function(req, res) {
       });
 
       //Close the database connection
-      db.close();
+      //db.close();
     }
   });
 
@@ -273,7 +273,7 @@ router.post('/uploadImage', function(req, res) {
 
         var database_image_location = path.join('uploads','image' + number + '.jpeg');
         var imagepath = path.join(__dirname, database_image_location);
-
+	console.log(imagepath);
         var database_thumbnail_location = path.join('thumbnails','image' + number + '.jpeg');
         var thumbnailpath = path.join(__dirname, database_thumbnail_location);
 
@@ -297,19 +297,21 @@ router.post('/uploadImage', function(req, res) {
                 console.log("Problem saving image");
               }else {
                 console.log("Image Saved on server");
-                sharp(bytes)
+                sharp(imagepath)
                   .resize(250,250)
+                  .toFormat(sharp.format.jpeg)
                   .toFile(thumbnailpath);
                 console.log("Thumbnail saved.")
               }
 
             });
-          }
+	    console.log("bla bla");
+          });
         } else {
           console.dir(request);
         }
-
-        db.close();
+	console.log("Closing database...");
+        //db.close();
       });
     }
   });
