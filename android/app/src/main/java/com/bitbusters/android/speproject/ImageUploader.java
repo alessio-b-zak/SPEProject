@@ -50,10 +50,11 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             HttpURLConnection httpUrlConnection = null;
             URL url = new URL("http://139.59.184.70:8080/uploadImage");
             //URL url = new URL("http://172.23.215.243:3000/uploadImage");
+            Log.d(DEBUG_TAG, " URL UPLOAD : " + url.toString());
             httpUrlConnection = (HttpURLConnection) url.openConnection();
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
-
+            Log.d(DEBUG_TAG, "Set request body to true");
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
             httpUrlConnection.setRequestProperty("Comment", comment);
@@ -63,38 +64,55 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
             httpUrlConnection.setRequestProperty("Content-Type", "image/jpeg");
 
+            // Gets stuck here, though Not being used.
+            //int response = httpUrlConnection.getResponseCode();
+
+            Log.d(DEBUG_TAG, "Url is: " + url);
+            //Log.d(DEBUG_TAG, "The response is: " + response);
+
             OutputStream request = httpUrlConnection.getOutputStream();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, request);
 
             byte[] byteArray = stream.toByteArray();
             request.write(byteArray);
-
+            Log.d(DEBUG_TAG, "Image Converted to JPEG ");
             stream.close();
+            Log.d(DEBUG_TAG, "log 1 ");
             request.close();
-            // Get response:
+            Log.d(DEBUG_TAG, "log 2 ");
 
-            InputStream responseStream = new
-                    BufferedInputStream(httpUrlConnection.getInputStream());
+            // Get response:
+            // Gets stuck here...
+            InputStream responseStream =
+                    new BufferedInputStream(httpUrlConnection.getInputStream());
+            Log.d(DEBUG_TAG, "log 3 ");
 
             BufferedReader responseStreamReader =
                     new BufferedReader(new InputStreamReader(responseStream));
+            Log.d(DEBUG_TAG, "log 4 ");
 
             String line = "";
+            Log.d(DEBUG_TAG, "log 5 ");
+
             StringBuilder stringBuilder = new StringBuilder();
+            Log.d(DEBUG_TAG, "log 6 ");
 
             while ((line = responseStreamReader.readLine()) != null) {
                 stringBuilder.append(line).append("\n");
             }
-            responseStreamReader.close();
+            Log.d(DEBUG_TAG, "log 7 ");
 
-            String response = stringBuilder.toString();
-            // Close response stream:
-            Log.d(DEBUG_TAG, "Url is: " + url);
-            Log.d(DEBUG_TAG, "The response is: " + response);
+            responseStreamReader.close();
+            Log.d(DEBUG_TAG, "log 8 ");
+
             responseStream.close();
+            Log.d(DEBUG_TAG, "log 9 ");
+
             // Close the connection:
             httpUrlConnection.disconnect();
+            Log.d(DEBUG_TAG, "log 10 ");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
