@@ -28,13 +28,14 @@ var server = http.createServer(app);
 
 mongodb = require('mongodb');
 MongoClient = mongodb.MongoClient;
-db;
+db = null;
 
 MongoClient.connect("mongodb://localhost:27017/local", function(err, database) {
 
   if (err) {
       console.log('Unable to connect to the Database Server', err);
   } else {
+      console.log('Connected to database');
       db = database
       server.listen(port);
       server.on('error', onError);
