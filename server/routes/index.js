@@ -107,26 +107,6 @@ router.get('/getImage/:id', function(req, res) {
 
 //:lat1/:lon1/:lat3/:lon3
 router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
-	// Get a Mongo client to work with the Mongo server
-  var MongoClient = mongodb.MongoClient;
-  // Get system environment variables representing the database server credentials.
-  var spe_mongodb_user = process.env.SPE_MONGODB_USER;
-  var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
-  // Define where the MongoDB server is
-
-  //*****************************//
-  // var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
-  //     '@ds117209.mlab.com:17209/image_database';
-
-  var url = 'mongodb://localhost:27017/local'
-
-  // Connect to the server
-  MongoClient.connect(url, function (err, db) {
-    if (err) {
-      console.log('Unable to connect to the Database Server', err);
-    } else {
-      // We are connected
-      console.log('Connection established to', url);
 
       // Cast all parametters into integers
       var lat1 = parseFloat(req.params.lat1);
@@ -172,10 +152,6 @@ router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
         }
       });
 
-      //Close the database connection
-      //db.close();
-    }
-  });
 
 });
 
