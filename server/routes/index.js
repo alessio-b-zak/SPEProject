@@ -213,8 +213,12 @@ router.post('/uploadImage', function(req, res) {
             sharp(imagepath)
               .resize(250,250)
               .toFormat(sharp.format.jpeg)
-              .toFile(thumbnailpath);
-            console.log("Thumbnail saved.")
+              .toFile(thumbnailpath, function(err){
+               if(err) {
+                  console.log("Problem saving thumbnail");
+                } else {
+               console.log("Thumbnail saved.");
+             });
           }
 
         });
