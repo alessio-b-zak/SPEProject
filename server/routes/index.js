@@ -57,239 +57,172 @@ router.get('/getClassification/:easting/:northing', function(req, res){
 });
 //:lat1/:lon1/:lat3/:lon3
 router.get('/getImage/:id', function(req, res) {
-	// Get a Mongo client to work with the Mongo server
-  var MongoClient = mongodb.MongoClient;
-  // Get system environment variables representing the database server credentials.
-  var spe_mongodb_user = process.env.SPE_MONGODB_USER;
-  var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
-  // Define where the MongoDB server is
-  // var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
-  //     '@ds117209.mlab.com:17209/image_database';
-  var url = 'mongodb://localhost:27017/local'
-  // Connect to the server
-  MongoClient.connect(url, function (err, db) {
-    if (err) {
-      console.log('Unable to connect to the Database Server', err);
+  // Cast all parametters into integers
+  var id = req.params.id;
+
+  // Get the documents collection
+  var images = db.collection("images");
+
+  // Find all images within the area
+  images.findOne({'_id': new ObjectId(id)}, {} , function (err, result) {
+  if (err) {
+      console.log(err);
+      res.send([]);
     } else {
-      // We are connected
-      console.log('Connection established to', url);
-
-      // Cast all parametters into integers
-      var id = req.params.id;
-
-      // Get the documents collection
-      var images = db.collection("images");
-
-      // Find all images within the area
-      images.findOne({'_id': new ObjectId(id)}, {} , function (err, result) {
-      if (err) {
-          console.log(err);
-          res.send([]);
-        } else {
-        console.log('Found:', result);
-        var image = {};
-        image._id = result._id;
-        image.comment = result.comment;
-        image.loc = result.loc;
-        image.tag = result.tag;
-        image.image = fs.readFileSync(path.join(__dirname, result.imagepath));
-        res.status(200).send(image);
-        res.end();
-        }
-      });
-
-      //Close the database connection
-      //db.close();
+    console.log('Found:', result);
+    var image = {};
+    image._id = result._id;
+    image.comment = result.comment;
+    image.loc = result.loc;
+    image.tag = result.tag;
+    image.image = fs.readFileSync(path.join(__dirname, result.imagepath));
+    res.status(200).send(image);
+    res.end();
     }
   });
-
 });
 
 //:lat1/:lon1/:lat3/:lon3
 router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 
-      // Cast all parametters into integers
-      var lat1 = parseFloat(req.params.lat1);
-      var lon1 = parseFloat(req.params.lon1);
-      var lat3 = parseFloat(req.params.lat3);
-      var lon3 = parseFloat(req.params.lon3);
-      var lat2 = lat1;
-      var lon2 = lon3;
-      var lat4 = lat3;
-      var lon4 = lon1;
+  // Cast all parametters into integers
+  var lat1 = parseFloat(req.params.lat1);
+  var lon1 = parseFloat(req.params.lon1);
+  var lat3 = parseFloat(req.params.lat3);
+  var lon3 = parseFloat(req.params.lon3);
+  var lat2 = lat1;
+  var lon2 = lon3;
+  var lat4 = lat3;
+  var lon4 = lon1;
 
-      // Get the documents collection
-      var images = db.collection("images");
+  // Get the documents collection
+  var images = db.collection("images");
 
-      // Find all images within the area
-      images.find({
-        loc: {
-          $geoWithin: {
-            $polygon: [ [ lat1, lon1 ],
-                        [ lat2, lon2 ],
-                        [ lat3, lon3 ],
-                        [ lat4, lon4 ],
-                        [ lat1, lon1 ] ]
-          }
-        }
-      }).toArray(function (err, result) {
-      if (err) {
-          console.log(err);
-          res.send([]);
-        } else {
-          console.log('Found:', result);
-        var images = [];
-        for (var i = 0; i < result.length; i++) {
-          images[i] = {};
-          images[i]._id = result[i]._id;
-          images[i].comment = result[i].comment;
-          images[i].loc = result[i].loc;
-          images[i].tag = result[i].tag;
-          images[i].image = fs.readFileSync(path.join(__dirname, result[i].thumbnailpath));
-        }
-        res.status(200).send(images);
-        res.end();
-        }
-      });
+  // Find all images within the area
+  images.find({
+    loc: {
+      $geoWithin: {
+        $polygon: [ [ lat1, lon1 ],
+                    [ lat2, lon2 ],
+                    [ lat3, lon3 ],
+                    [ lat4, lon4 ],
+                    [ lat1, lon1 ] ]
+      }
+    }
+  }).toArray(function (err, result) {
+  if (err) {
+      console.log(err);
+      res.send([]);
+    } else {
+      console.log('Found:', result);
+    var images = [];
+    for (var i = 0; i < result.length; i++) {
+      images[i] = {};
+      images[i]._id = result[i]._id;
+      images[i].comment = result[i].comment;
+      images[i].loc = result[i].loc;
+      images[i].tag = result[i].tag;
+      images[i].image = fs.readFileSync(path.join(__dirname, result[i].thumbnailpath));
+    }
+    res.status(200).send(images);
+    res.end();
+    }
+  });
 
 
 });
 
 //:lat1/:lon1/:lat3/:lon3
 router.get('/getImagesLocation/:lat1/:lon1/:lat3/:lon3', function(req, res) {
-	// Get a Mongo client to work with the Mongo server
-  var MongoClient = mongodb.MongoClient;
-  // Get system environment variables representing the database server credentials.
-  var spe_mongodb_user = process.env.SPE_MONGODB_USER;
-  var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
+  // Cast all parametters into integers
+  var lat1 = parseFloat(req.params.lat1);
+  var lon1 = parseFloat(req.params.lon1);
+  var lat3 = parseFloat(req.params.lat3);
+  var lon3 = parseFloat(req.params.lon3);
+  var lat2 = lat1;
+  var lon2 = lon3;
+  var lat4 = lat3;
+  var lon4 = lon1;
 
-  // Define where the MongoDB server is
-  // var url = 'mongodb://' + spe_mongodb_user +  ':' + spe_mongodb_password +
-  //     '@ds117209.mlab.com:17209/image_database';
-  var url = 'mongodb://localhost:27017/local'
-  // Connect to the server
-  MongoClient.connect(url, function (err, db) {
-    if (err) {
-      console.log('Unable to connect to the Database Server', err);
+  // Get the documents collection
+  var images = db.collection("images");
+
+  // Find all images within the area
+  images.find({
+    loc: {
+      $geoWithin: {
+        $polygon: [ [ lat1, lon1 ],
+                    [ lat2, lon2 ],
+                    [ lat3, lon3 ],
+                    [ lat4, lon4 ],
+                    [ lat1, lon1 ] ]
+      }
+    }
+  }).toArray(function (err, result) {
+  if (err) {
+      console.log(err);
+      res.send([]);
     } else {
-      // We are connected
-      console.log('Connection established to', url);
-
-      // Cast all parametters into integers
-      var lat1 = parseFloat(req.params.lat1);
-      var lon1 = parseFloat(req.params.lon1);
-      var lat3 = parseFloat(req.params.lat3);
-      var lon3 = parseFloat(req.params.lon3);
-      var lat2 = lat1;
-      var lon2 = lon3;
-      var lat4 = lat3;
-      var lon4 = lon1;
-
-      // Get the documents collection
-      var images = db.collection("images");
-
-      // Find all images within the area
-      images.find({
-        loc: {
-          $geoWithin: {
-            $polygon: [ [ lat1, lon1 ],
-                        [ lat2, lon2 ],
-                        [ lat3, lon3 ],
-                        [ lat4, lon4 ],
-                        [ lat1, lon1 ] ]
-          }
-        }
-      }).toArray(function (err, result) {
-      if (err) {
-          console.log(err);
-          res.send([]);
-        } else {
-          console.log('Found:', result);
-        var images = [];
-        for (var i = 0; i < result.length; i++) {
-          images[i] = {};
-          images[i]._id = result[i]._id;
-          images[i].loc = result[i].loc;
-          images[i].tag = result[i].tag;
-        }
-        res.status(200).send(images);
-        res.end();
-        }
-      });
-
-      //Close the database connection
-      //db.close();
+      console.log('Found:', result);
+    var images = [];
+    for (var i = 0; i < result.length; i++) {
+      images[i] = {};
+      images[i]._id = result[i]._id;
+      images[i].loc = result[i].loc;
+      images[i].tag = result[i].tag;
+    }
+    res.status(200).send(images);
+    res.end();
     }
   });
-
 });
 
 
 router.post('/uploadImage', function(req, res) {
-  // Get a Mongo client to work with the Mongo server
-  var MongoClient = mongodb.MongoClient;
-  // Get system environment variables representing the database server credentials.
-  var spe_mongodb_user = process.env.SPE_MONGODB_USER;
-  var spe_mongodb_password = process.env.SPE_MONGODB_PASSWORD;
+  var images = db.collection("images");
+  images.count({}, function( err, count){
+    count = count + 1;
+    var number = count.toString();
 
-  // Define where the MongoDB server is
-  // var url = 'mongodb://' + spe_mongodb_user + ':' + spe_mongodb_password +
-  //     '@ds117209.mlab.com:17209/image_database';
-  var url = 'mongodb://localhost:27017/local'
-  // Connect to the server
-  MongoClient.connect(url, function (err, db) {
-  if (err) {
-    console.log('Unable to connect to the Database Server', err);
-  } else {
-      console.log('Connection established to', url);
-      var images = db.collection("images");
-      images.count({}, function( err, count){
-        count = count + 1;
-        var number = count.toString();
+    var database_image_location = path.join('uploads','image' + number + '.jpeg');
+    var imagepath = path.join(__dirname, database_image_location);
+    console.log(imagepath);
+    var database_thumbnail_location = path.join('thumbnails','image' + number + '.jpeg');
+    var thumbnailpath = path.join(__dirname, database_thumbnail_location);
 
-        var database_image_location = path.join('uploads','image' + number + '.jpeg');
-        var imagepath = path.join(__dirname, database_image_location);
-	console.log(imagepath);
-        var database_thumbnail_location = path.join('thumbnails','image' + number + '.jpeg');
-        var thumbnailpath = path.join(__dirname, database_thumbnail_location);
+    var entry = {};
+    entry.comment = req.headers.comment;
+    entry.tag = req.headers.tag;
+    entry.loc = [parseFloat(req.headers.latitude),parseFloat(req.headers.longitude)];
+    entry.imagepath = database_image_location;
+    entry.thumbnailpath = database_thumbnail_location;
+    images.insert(entry);
 
-        var entry = {};
-        entry.comment = req.headers.comment;
-        entry.tag = req.headers.tag;
-        entry.loc = [parseFloat(req.headers.latitude),parseFloat(req.headers.longitude)];
-        entry.imagepath = database_image_location;
-        entry.thumbnailpath = database_thumbnail_location;
-        images.insert(entry);
-
-        if (req.method == "POST") {
-          var data = [];
-          req.on("data", function(chunk) {
-            data.push(chunk);
-          });
-          req.on("end", function() {
-            var bytes = Buffer.concat(data);
-            fs.writeFile(imagepath, bytes, function (err) {
-              if(err){
-                console.log("Problem saving image");
-              }else {
-                console.log("Image Saved on server");
-                sharp(imagepath)
-                  .resize(250,250)
-                  .toFormat(sharp.format.jpeg)
-                  .toFile(thumbnailpath);
-                console.log("Thumbnail saved.")
-              }
-
-            });
-	    console.log("bla bla");
-          });
-        } else {
-          console.dir(request);
-        }
-	console.log("Closing database...");
-        //db.close();
+    if (req.method == "POST") {
+      var data = [];
+      req.on("data", function(chunk) {
+        data.push(chunk);
       });
-    }
+      req.on("end", function() {
+        var bytes = Buffer.concat(data);
+        fs.writeFile(imagepath, bytes, function (err) {
+          if(err){
+            console.log("Problem saving image");
+          }else {
+            console.log("Image Saved on server");
+            sharp(imagepath)
+              .resize(250,250)
+              .toFormat(sharp.format.jpeg)
+              .toFile(thumbnailpath);
+            console.log("Thumbnail saved.")
+          }
+
+        });
+    console.log("bla bla");
+        });
+      } else {
+        console.dir(request);
+      }
   });
 });
 
