@@ -198,6 +198,7 @@ router.post('/uploadImage', function(req, res) {
     entry.thumbnailpath = database_thumbnail_location;
     images.insert(entry);
 
+    if (req.method == "POST") {
       var data = [];
       req.on("data", function(chunk) {
         data.push(chunk);
