@@ -365,18 +365,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void setLocationMarker(double latitude, double longitude){
-
+        if (currentLocationMarker != null) {
+            currentLocationMarker.remove();
+        }
         currentLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.target_icon)));
         currentLocationMarker.setTag("Current Location");
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        if (currentLocationMarker != null) {
-            currentLocationMarker.remove();
-        }
         setLocationMarker(location.getLatitude(), location.getLongitude());
-
     }
 
     //Method called when location button is pressed
