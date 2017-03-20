@@ -49,6 +49,7 @@ import java.util.List;
 public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final String BITMAP_TAG = "BITMAP";
+    private static final int REQUEST_LOCATION = 1;
     private GoogleMap mMap;
     private ProgressBar mProgressSpinner;
     private FloatingActionButton mCamButton;
@@ -344,13 +345,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
             mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            setLocationMarker(mLocation.getLatitude(),mLocation.getLongitude());
-            CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(mLocation.getLatitude(),mLocation.getLongitude())).build();
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
+            if(mLocation != null) {
+                setLocationMarker(mLocation.getLatitude(), mLocation.getLongitude());
+                CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(mLocation.getLatitude(),mLocation.getLongitude())).build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
+            }
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
 
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
 
     }
@@ -382,7 +385,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if(!connected){
             mGoogleApiClient.connect();
 
-        }else{
+        }else if(currentLocationMarker != null){
             CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(currentLocationMarker.getPosition().latitude,currentLocationMarker.getPosition().longitude)).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
         }
@@ -393,7 +396,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     //Requesting permission for location information at runtime. Need for devices running Android 6 upwards
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 1) {
+        if (requestCode == REQUEST_LOCATION) {
             if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // We can now safely use the API we requested access to
                 mGoogleApiClient.connect();
