@@ -78,40 +78,24 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             request.write(byteArray);
             Log.d(DEBUG_TAG, "Image Converted to JPEG ");
             stream.close();
-            Log.d(DEBUG_TAG, "log 1 ");
             request.close();
-            Log.d(DEBUG_TAG, "log 2 ");
 
             // Get response:
-            // Gets stuck here...
             InputStream responseStream =
                     new BufferedInputStream(httpUrlConnection.getInputStream());
-            Log.d(DEBUG_TAG, "log 3 ");
-
             BufferedReader responseStreamReader =
                     new BufferedReader(new InputStreamReader(responseStream));
-            Log.d(DEBUG_TAG, "log 4 ");
-
             String line = "";
-            Log.d(DEBUG_TAG, "log 5 ");
-
             StringBuilder stringBuilder = new StringBuilder();
-            Log.d(DEBUG_TAG, "log 6 ");
 
             while ((line = responseStreamReader.readLine()) != null) {
                 stringBuilder.append(line).append("\n");
             }
-            Log.d(DEBUG_TAG, "log 7 ");
-
             responseStreamReader.close();
-            Log.d(DEBUG_TAG, "log 8 ");
-
             responseStream.close();
-            Log.d(DEBUG_TAG, "log 9 ");
 
             // Close the connection:
             httpUrlConnection.disconnect();
-            Log.d(DEBUG_TAG, "log 10 ");
 
         } catch (IOException e) {
             e.printStackTrace();
