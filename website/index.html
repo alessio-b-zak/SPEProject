@@ -9,22 +9,17 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */
-    .login {
-      padding-top: 30px;
-      padding-bottom: 30px;
-    }
-
     .container {
       padding-top: 15px;
       padding-bottom: 15px;
     }
 
     .navbar {
-      padding-top: 15px;
-      padding-bottom: 15px;
       border: 0;
       border-radius: 0;
       margin-bottom: 0;
+      padding-top: 15px;
+      padding-bottom: 15px;
       font-size: 12px;
       letter-spacing: 5px;
     }
@@ -34,24 +29,21 @@
     }
 
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
 
-    /* Set gray background color and 100% height */
-    .sidenav {
-      padding-top: 20px;
-      background-color: #f1f1f1;
-      height: 100%;
-    }
 
     /* Set black background color, white text and some padding */
     footer {
       padding-top: 30px;
       background-color: #555;
+      box-shadow: 0px 500px 0px 500px #555;
       color: white;
     }
 
     .login {
       margin: 0, auto;
+      padding-bottom: 100px;
+      padding-top: 30px;
+      padding-bottom: 100px;
     }
 
     .bg-1 {
@@ -73,24 +65,27 @@
 
 <body>
 <nav class="navbar navbar-default">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">myRivers</a>
+  <div class="container-fill">
+    <div class="row">
+      <div class="col-sm-5">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">myRivers</a>
+        <img src="icon_green_white.png" alt = "logo.png" height="60" width="60">
+      </div>
     </div>
   </div>
 </nav>
 
 <div class="container-fluid bg-1">
-  <h2>Login</h2>
-  <div class="container row login">
-        <div class="col-sm-8">
-          <form>
-            <div class="form-group">
+  <div class="row">
+        <div class="col-sm-5 col-sm-offset-1 login ">
+          <h2>Login</h2>
+          <form action="/action_page.php" method="post">
+            <div class="form-group ">
               <label for="email">Email:</label>
               <input type="email" class="form-control" id="email" placeholder="Enter email">
             </div>
@@ -108,9 +103,9 @@
 </div>
 
 
-<footer class="navbar-fixed-bottom">
+<footer class="footer">
   <div class="container-fluid text-center">
-    <p>Footer Text</p>
+    <p>Bitbusters gonna fuck you up</p>
   </div>
 </footer>
 
