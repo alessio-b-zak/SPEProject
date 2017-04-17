@@ -1,12 +1,16 @@
 package com.bitbusters.android.speproject;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -50,6 +55,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     private static final String BITMAP_TAG = "BITMAP";
     private static final int REQUEST_LOCATION = 1;
+    private static final int REQUEST_CAMERA = 2;
     private GoogleMap mMap;
     private ProgressBar mProgressSpinner;
     private FloatingActionButton mCamButton;
@@ -89,21 +95,24 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mSPVButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get sample point data from API.
-                mSampleClusterManager.clearItems();
-                LatLng camCentre = mMap.getCameraPosition().target;
-                String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
-                new SamplingPointsAPI(DataViewActivity.this).execute(location);
+                if (haveNetworkConnection()) {
+                    mSampleClusterManager.clearItems();
+                    LatLng camCentre = mMap.getCameraPosition().target;
+                    String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
+                    new SamplingPointsAPI(DataViewActivity.this).execute(location);
 
-                // Add a radius circle around sample point query area.
-                if (mRadiusCircle != null) {
-                    mRadiusCircle.remove();
+                    // Add a radius circle around sample point query area.
+                    if (mRadiusCircle != null) {
+                        mRadiusCircle.remove();
+                    }
+                    mRadiusCircle = mMap.addCircle(new CircleOptions()
+                            .center(camCentre)
+                            .radius(14142) // i.e. hypotenuse of 10km x 10km triangle.
+                            .strokeColor(0x661854E1)
+                            .fillColor(0x221854E1));
+                } else {
+                    Toast.makeText(v.getContext(), "Sample point retrieval needs internet connection", Toast.LENGTH_LONG).show();
                 }
-                mRadiusCircle = mMap.addCircle(new CircleOptions()
-                        .center(camCentre)
-                        .radius(14142) // i.e. hypotenuse of 10km x 10km triangle.
-                        .strokeColor(0x661854E1)
-                        .fillColor(0x221854E1));
             }
         });
 
@@ -112,8 +121,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mCamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent pcaintent = new Intent(v.getContext(), PhotoCommentActivity.class);
-                startActivity(pcaintent);
+                if (ContextCompat.checkSelfPermission(DataViewActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    startCameraIntent(v);
+                }else{
+                    ActivityCompat.requestPermissions(DataViewActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+                }
             }
         });
 
@@ -128,6 +140,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         fm = getSupportFragmentManager();
 
+    }
+
+    public void startCameraIntent(View v){
+        if(haveNetworkConnection()) {
+            Intent pcaintent = new Intent(v.getContext(), PhotoCommentActivity.class);
+            startActivity(pcaintent);
+        }else{
+            Toast.makeText(v.getContext(), "Uploading image needs internet connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -341,20 +362,25 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     //Method called when connection established with Google Play Service Location API
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
-            mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if(mLocation != null) {
-                setLocationMarker(mLocation.getLatitude(), mLocation.getLongitude());
-                CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(mLocation.getLatitude(),mLocation.getLongitude())).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
-            }
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
-
+            displayLocation();
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
+    }
+
+    public void displayLocation(){
+        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if(mLocation == null){
+            Log.e("12","mLocation was null");
+        }
+        if(mLocation != null) {
+            setLocationMarker(mLocation.getLatitude(), mLocation.getLongitude());
+            CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(mLocation.getLatitude(),mLocation.getLongitude())).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
 
     }
 
@@ -382,15 +408,17 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     //Method called when location button is pressed
     public void currentLocation(View v){
-        if(!connected){
-            mGoogleApiClient.connect();
+        if(haveGPSOn(v.getContext())){
+            if(!connected){
+                mGoogleApiClient.connect();
 
-        }else if(currentLocationMarker != null){
-            CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(currentLocationMarker.getPosition().latitude,currentLocationMarker.getPosition().longitude)).build();
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
+            }else if(currentLocationMarker != null){
+                displayLocation();
+            }
+
+        }else{
+            Toast.makeText(v.getContext(), "GPS required", Toast.LENGTH_LONG).show();
         }
-
-
     }
 
     //Requesting permission for location information at runtime. Need for devices running Android 6 upwards
@@ -399,9 +427,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (requestCode == REQUEST_LOCATION) {
             if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // We can now safely use the API we requested access to
-                mGoogleApiClient.connect();
+                Log.e("1","Location request allowed");
+                connected = true;
+                displayLocation();
             } else {
                 connected = false;
+            }
+        }else if(requestCode == REQUEST_CAMERA){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Log.e("12","Photo granted");
+                mCamButton.callOnClick();
             }
         }
     }
@@ -417,6 +452,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     //Called when there is an error connecting the client to the service
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.i("LocationAPI", "Connection Failed");
+        Toast.makeText(this,"Location Connection Failed", Toast.LENGTH_SHORT).show();
         connected = false;
         mGoogleApiClient.connect();
     }
@@ -481,6 +518,29 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public ProgressBar getProgressSpinner() {
         return mProgressSpinner;
+    }
+
+    public boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
+    }
+
+    public boolean haveGPSOn(Context context){
+        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return gps_enabled;
     }
 
 }
