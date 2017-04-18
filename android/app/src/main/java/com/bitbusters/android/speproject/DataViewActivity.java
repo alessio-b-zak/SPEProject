@@ -23,6 +23,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -58,6 +61,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private static final int REQUEST_CAMERA = 2;
     private GoogleMap mMap;
     private ProgressBar mProgressSpinner;
+    private ImageButton mInfoButton;
     private FloatingActionButton mCamButton;
     private FloatingActionButton mSPVButton;
 
@@ -89,6 +93,24 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mapFragment.getMapAsync(this);
 
         mProgressSpinner = (ProgressBar) findViewById(R.id.progressSpinner);
+
+        // The action performed when the info button is pressed.
+        mInfoButton = (ImageButton) findViewById(R.id.info_button);
+        mInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                ImageButton im = (ImageButton) findViewById(R.id.info_button);
+//                //set position TranslateAnimation(float fromXDelta, float toXDelta, float fromYDelta, float toYDelta
+//                final Animation animation = new TranslateAnimation(0,0,0,100);
+//                // set Animation for 5 sec
+//                animation.setDuration(2000);
+//                //for button stops in the new position.
+//                animation.setFillAfter(true);
+//                im.startAnimation(animation);
+
+                Toast.makeText(v.getContext(), "Info Requested!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // The action performed when the sample point view button is pressed.
         mSPVButton = (FloatingActionButton) findViewById(R.id.sp_view_button);
