@@ -5,4 +5,17 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="cam_toast">SWOOSH!</string>
     <string name="choose_tag">Choose a tag</string>
+
+    <string name="info_string">
+        <b>Information</b>\n\n
+        <u>info1</u>\n
+        blardy blah blah\n\n
+        <u>info2</u>\n
+        blardy blah blah\n\n
+    </string>
 </resources>
+
+
+<!--<b> for bold text.-->
+<!--<i> for italic text.-->
+<!--<u> for underline text.-->

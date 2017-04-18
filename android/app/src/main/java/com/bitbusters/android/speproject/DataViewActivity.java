@@ -99,16 +99,46 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ImageButton im = (ImageButton) findViewById(R.id.info_button);
-//                //set position TranslateAnimation(float fromXDelta, float toXDelta, float fromYDelta, float toYDelta
-//                final Animation animation = new TranslateAnimation(0,0,0,100);
-//                // set Animation for 5 sec
-//                animation.setDuration(2000);
-//                //for button stops in the new position.
-//                animation.setFillAfter(true);
-//                im.startAnimation(animation);
-
                 Toast.makeText(v.getContext(), "Info Requested!", Toast.LENGTH_SHORT).show();
+
+                // Hide the floating action buttons.
+                FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
+                gpsButton.hide();
+                mSPVButton.hide();
+                mCamButton.hide();
+
+                // Initiate the info fragment.
+                InfoFragment fragment = new InfoFragment();
+                fm.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                        .add(R.id.fragment_container, fragment)
+                        .addToBackStack(null).commit();
+
+//                Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+//                if (fragment == null) {
+//                    FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
+//                    gpsButton.hide();
+//                    mSPVButton.hide();
+//                    mCamButton.hide();
+//
+//                    // Hide the radius circle.
+//                    mRadiusCircle.setVisible(false);
+//                    LatLng markerPos = new LatLng(point.getLatitude() + 0.05f, point.getLongitude());
+//                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
+//
+//                    mSampleClusterManager.clearItems();
+//                    mSampleClusterManager.addItem(point);
+//                    mSampleClusterManager.cluster();
+//
+//                    fragment = new SPDataFragment();
+//                    mSPDataFragment = (SPDataFragment) fragment;
+//
+//                    fm.beginTransaction()
+//                            .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+//                            .add(R.id.fragment_container, fragment)
+//                            .addToBackStack(null).commit();
+//
+//                }
             }
         });
 
@@ -495,7 +525,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             repopulateSamplePoints(mSampleClusterManager);
             mProgressSpinner.setVisibility(View.INVISIBLE);
 
-
             // Re-show the buttons.
             FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
             gpsButton.show();
@@ -504,6 +533,17 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
         else if (fragment instanceof PhotoViewFragment) {
             fm.popBackStack();
+        }
+        else if (fragment instanceof InfoFragment) {
+            fm.popBackStack();
+
+            if (fm.getBackStackEntryCount() == 1) {
+                // Re-show the buttons.
+                FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
+                gpsButton.show();
+                mSPVButton.show();
+                mCamButton.show();
+            }
         }
         // Else do normal back button stuff.
         else {
