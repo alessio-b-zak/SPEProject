@@ -96,6 +96,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public void onClick(View v) {
                 if (haveNetworkConnection()) {
+                    mProgressSpinner.setVisibility(View.VISIBLE);
                     mSampleClusterManager.clearItems();
                     LatLng camCentre = mMap.getCameraPosition().target;
                     String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
@@ -237,7 +238,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         mProgressSpinner.setVisibility(View.VISIBLE);
 
-        /* Testing for creating top left and botton right points for ThumbnailsDownloader.
+        /* Testing for creating top left and bottom right points for ThumbnailsDownloader.
         LatLng centre = new LatLng(51.455984, -2.602863); // arbitrary centre point.
         double radius = 10000.0;  // distance (in metres) from centre of square to edge.
 
