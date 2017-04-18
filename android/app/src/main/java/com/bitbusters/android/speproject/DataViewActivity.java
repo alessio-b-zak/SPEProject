@@ -23,6 +23,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -58,6 +61,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private static final int REQUEST_CAMERA = 2;
     private GoogleMap mMap;
     private ProgressBar mProgressSpinner;
+    private ImageButton mInfoButton;
     private FloatingActionButton mCamButton;
     private FloatingActionButton mSPVButton;
 
@@ -90,12 +94,33 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         mProgressSpinner = (ProgressBar) findViewById(R.id.progressSpinner);
 
+        // The action performed when the info button is pressed.
+        mInfoButton = (ImageButton) findViewById(R.id.info_button);
+        mInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hide the floating action buttons.
+                FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
+                gpsButton.hide();
+                mSPVButton.hide();
+                mCamButton.hide();
+
+                // Initiate the info fragment.
+                InfoFragment fragment = new InfoFragment();
+                fm.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                        .add(R.id.fragment_container, fragment)
+                        .addToBackStack(null).commit();
+            }
+        });
+
         // The action performed when the sample point view button is pressed.
         mSPVButton = (FloatingActionButton) findViewById(R.id.sp_view_button);
         mSPVButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (haveNetworkConnection()) {
+                    mProgressSpinner.setVisibility(View.VISIBLE);
                     mSampleClusterManager.clearItems();
                     LatLng camCentre = mMap.getCameraPosition().target;
                     String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
@@ -237,7 +262,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         mProgressSpinner.setVisibility(View.VISIBLE);
 
-        /* Testing for creating top left and botton right points for ThumbnailsDownloader.
+        /* Testing for creating top left and bottom right points for ThumbnailsDownloader.
         LatLng centre = new LatLng(51.455984, -2.602863); // arbitrary centre point.
         double radius = 10000.0;  // distance (in metres) from centre of square to edge.
 
@@ -472,7 +497,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             repopulateSamplePoints(mSampleClusterManager);
             mProgressSpinner.setVisibility(View.INVISIBLE);
 
-
             // Re-show the buttons.
             FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
             gpsButton.show();
@@ -481,6 +505,17 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
         else if (fragment instanceof PhotoViewFragment) {
             fm.popBackStack();
+        }
+        else if (fragment instanceof InfoFragment) {
+            fm.popBackStack();
+
+            if (fm.getBackStackEntryCount() == 1) {
+                // Re-show the buttons.
+                FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
+                gpsButton.show();
+                mSPVButton.show();
+                mCamButton.show();
+            }
         }
         // Else do normal back button stuff.
         else {

@@ -70,5 +70,4 @@ public class PhotoViewFragment extends Fragment {
         Log.e(galleryItem.getName(), "1");
     }
 
-
 }

@@ -3,6 +3,7 @@ package com.bitbusters.android.speproject;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import org.json.JSONArray;
 
@@ -21,9 +22,11 @@ import java.util.List;
 public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoint>> {
     private static final String DEBUG_TAG = "SAMPLING_POINTS_API";
     private OnTaskCompleted listener;
+    private DataViewActivity mDataViewActivity;
 
     public SamplingPointsAPI(OnTaskCompleted listener) {
         this.listener = listener;
+        this.mDataViewActivity = (DataViewActivity) listener;
     }
 
     @Override
@@ -74,6 +77,7 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
     // onPostExecute displays the results of the AsyncTask.
     @Override
     protected void onPostExecute(List<SamplingPoint> result) {
+        mDataViewActivity.getProgressSpinner().setVisibility(View.INVISIBLE);
         //TODO: Make sure that results are passed back to the caller;
 //        for (SamplingPoint r:result){
 //            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
