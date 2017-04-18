@@ -99,8 +99,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Info Requested!", Toast.LENGTH_SHORT).show();
-
                 // Hide the floating action buttons.
                 FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
                 gpsButton.hide();
@@ -113,32 +111,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                         .add(R.id.fragment_container, fragment)
                         .addToBackStack(null).commit();
-
-//                Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-//                if (fragment == null) {
-//                    FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
-//                    gpsButton.hide();
-//                    mSPVButton.hide();
-//                    mCamButton.hide();
-//
-//                    // Hide the radius circle.
-//                    mRadiusCircle.setVisible(false);
-//                    LatLng markerPos = new LatLng(point.getLatitude() + 0.05f, point.getLongitude());
-//                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
-//
-//                    mSampleClusterManager.clearItems();
-//                    mSampleClusterManager.addItem(point);
-//                    mSampleClusterManager.cluster();
-//
-//                    fragment = new SPDataFragment();
-//                    mSPDataFragment = (SPDataFragment) fragment;
-//
-//                    fm.beginTransaction()
-//                            .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-//                            .add(R.id.fragment_container, fragment)
-//                            .addToBackStack(null).commit();
-//
-//                }
             }
         });
 

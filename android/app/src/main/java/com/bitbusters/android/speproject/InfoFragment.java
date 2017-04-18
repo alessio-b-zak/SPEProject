@@ -28,8 +28,6 @@ public class InfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_infoview, container, false);
 
-        mToolbar = (Toolbar) v.findViewById(R.id.infoview_toolbar);
-
         mBackButton = (ImageButton) v.findViewById(R.id.back_button);
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,8 +35,6 @@ public class InfoFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
-
-        mInfoText = (TextView) v.findViewById(R.id.info_text);
 
         return v;
     }

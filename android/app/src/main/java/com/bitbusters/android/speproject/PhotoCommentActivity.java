@@ -129,20 +129,20 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
 
     public void submitClick(View v) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        
+
         // set title and dialog message
         alertDialogBuilder
                 .setTitle("Are you sure you want to submit?")
                 .setMessage("You cannot undo this action.")
                 .setCancelable(false)
                 .setPositiveButton("Submit",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
+                    public void onClick(DialogInterface dialog, int id) {
                         mGoogleApiClient.connect();
                         onBackPressed();
                     }
                 })
                 .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
+                    public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
