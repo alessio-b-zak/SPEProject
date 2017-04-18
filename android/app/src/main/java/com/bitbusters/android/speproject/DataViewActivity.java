@@ -143,11 +143,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void startCameraIntent(View v){
-        if(haveNetworkConnection()) {
+        if(haveNetworkConnection() && haveGPSOn(v.getContext())) {
             Intent pcaintent = new Intent(v.getContext(), PhotoCommentActivity.class);
             startActivity(pcaintent);
         }else{
-            Toast.makeText(v.getContext(), "Uploading image needs internet connection", Toast.LENGTH_LONG).show();
+            Toast.makeText(v.getContext(), "Uploading image needs internet connection and gps", Toast.LENGTH_LONG).show();
         }
     }
 
