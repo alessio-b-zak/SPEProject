@@ -1,6 +1,7 @@
 package com.bitbusters.android.speproject;
 
 import android.*;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -12,8 +13,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -120,13 +123,35 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
         spinner.setAdapter(adapter);
     }
 
-    public void backClick(View v){
+    public void backClick(View v) {
         onBackPressed();
     }
 
-    public void submitClick(View v){
-        mGoogleApiClient.connect();
-        onBackPressed();
+    public void submitClick(View v) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        
+        // set title and dialog message
+        alertDialogBuilder
+                .setTitle("Are you sure you want to submit?")
+                .setMessage("You cannot undo this action.")
+                .setCancelable(false)
+                .setPositiveButton("Submit",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        mGoogleApiClient.connect();
+                        onBackPressed();
+                    }
+                })
+                .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
     }
 
     @Override
