@@ -207,6 +207,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         gpsButton.hide();
                         mSPVButton.hide();
                         mCamButton.hide();
+                        mInfoButton.setVisibility(View.INVISIBLE);
 
                         // Hide the radius circle.
                         mRadiusCircle.setVisible(false);
@@ -502,6 +503,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             gpsButton.show();
             mSPVButton.show();
             mCamButton.show();
+            mInfoButton.setVisibility(View.VISIBLE);
         }
         else if (fragment instanceof PhotoViewFragment) {
             fm.popBackStack();
@@ -509,13 +511,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         else if (fragment instanceof InfoFragment) {
             fm.popBackStack();
 
-            if (fm.getBackStackEntryCount() == 1) {
-                // Re-show the buttons.
-                FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
-                gpsButton.show();
-                mSPVButton.show();
-                mCamButton.show();
-            }
+            // Re-show the buttons.
+            FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
+            gpsButton.show();
+            mSPVButton.show();
+            mCamButton.show();
+            mInfoButton.setVisibility(View.VISIBLE);
         }
         // Else do normal back button stuff.
         else {
