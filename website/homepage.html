@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>myRivers homepage</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */
+    .container {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+
+    .image-holder {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+
+    .bottom {
+      padding-top: 10px;
+      padding-bottom: 20px;
+	     border-bottom: 2px solid #ccc;
+     }
+
+     .selector {
+        padding-top: 15px;
+     }
+
+    .navbar {
+      border: 0;
+      border-radius: 0;
+      margin-bottom: 0;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      font-size: 12px;
+      letter-spacing: 5px;
+    }
+
+    .navbar-nav li a:hover {
+      color: #1abc9c !important;
+    }
+
+
+    .stylish-input-group .input-group-addon{
+      background: white !important;
+    }
+    .stylish-input-group .form-control{
+	    border-right:0;
+	    box-shadow:0 0 0;
+	    border-color:#ccc;
+    }
+    .stylish-input-group button{
+      border:0;
+      background:transparent;
+    }
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+
+    /* Set black background color, white text and some padding */
+    footer {
+      padding-top: 30px;
+      background-color: #555;
+      box-shadow: 0px 500px 0px 500px #555;
+      color: white;
+    }
+
+    .bg-1 {
+      background-color: #fb6900; /* Green */
+      color: #ffffff;
+    }
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;}
+    }
+  </style>
+
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container-fill">
+      <div class="row">
+        <div class="col-sm-3">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">myRivers</a>
+          <img src="icon_green_white.png" alt = "logo.png" height="60" width="60">
+      </div>
+      <div class="container">
+              <div class="col-sm-6">
+                      <div class="input-group stylish-input-group">
+                          <input type="text" class="form-control"  placeholder="Search" >
+                          <span class="input-group-addon">
+                              <button type="submit">
+                                  <span class="glyphicon glyphicon-search"></span>
+                              </button>
+                          </span>
+                  </div>
+              </div>
+      </div>
+      </div>
+    </div>
+  </nav>
+
+<div>
+  <div class="dropdown col-sm-offset-1 selector">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Tag
+      <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li><a href="#">HTML</a></li>
+        <li><a href="#">CSS</a></li>
+        <li><a href="#">JavaScript</a></li>
+      </ul>
+    </div>
+</div>
+
+  <div class= "container-fluid image-holder pollution" >
+    <div class = "row bottom">
+      <div class= "col-sm-2 col-sm-offset-1 ">
+        <img src="image1.jpg" alt="river_pollution.jpg" heigh="300", width="300">
+      </div>
+      <div class= "col-sm-5 col-sm-offset-1">
+        <div>
+          <p>
+            Human litter in shipping canal
+          </p>
+        </div>
+      </div>
+      <div>
+        <button type="button" class="btn btn-danger">delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class= "container-fluid image-holder pollution" >
+    <div class = "row ">
+      <div class= "col-sm-2 col-sm-offset-1 ">
+        <img src="image1.jpg" alt="river_pollution.jpg" heigh="300", width="300">
+      </div>
+      <div class= "col-sm-5 col-sm-offset-1">
+        <div>
+          <p>
+            Human litter in shipping canal
+          </p>
+        </div>
+      </div>
+      <div>
+        <button type="button" class="btn btn-danger">delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class= "container-fluid image-holder pollution" >
+    <div class = "row bottom">
+      <div class= "col-sm-2 col-sm-offset-1 ">
+        <img src="image1.jpg" alt="river_pollution.jpg" heigh="300", width="300">
+      </div>
+      <div class= "col-sm-5 col-sm-offset-1">
+        <div>
+          <p>
+            Human litter in shipping canal
+          </p>
+        </div>
+      </div>
+      <div>
+        <button type="button" class="btn btn-danger">delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class= "container-fluid image-holder pollution" >
+    <div class = "row bottom">
+      <div class= "col-sm-2 col-sm-offset-1 ">
+        <img src="image1.jpg" alt="river_pollution.jpg" heigh="300", width="300">
+      </div>
+      <div class= "col-sm-5 col-sm-offset-1">
+        <div>
+          <p>
+            Human litter in shipping canal
+          </p>
+        </div>
+      </div>
+      <div>
+        <button type="button" class="btn btn-danger">delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class= "container-fluid image-holder pollution" >
+    <div class = "row ">
+      <div class= "col-sm-2 col-sm-offset-1 ">
+        <img src="image1.jpg" alt="river_pollution.jpg" heigh="300", width="300">
+      </div>
+      <div class= "col-sm-5 col-sm-offset-1">
+        <div>
+          <p>
+            Human litter in shipping canal
+          </p>
+        </div>
+      </div>
+      <div>
+        <button type="button" class="btn btn-danger">delete</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer row">
+    <div class="container-fluid text-center">
+      <p>Bitbusters gonna fuck you up</p>
+    </div>
+  </footer>
+</body>
+</html>
