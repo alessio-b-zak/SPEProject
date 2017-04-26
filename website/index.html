@@ -8,106 +8,108 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
-    /* Remove the navbar's default margin-bottom and rounded borders */
-    .container {
-      padding-top: 15px;
-      padding-bottom: 15px;
-    }
+  /* Remove the navbar's default margin-bottom and rounded borders */
+  .container {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
 
-    .navbar {
-      border: 0;
-      border-radius: 0;
-      margin-bottom: 0;
-      padding-top: 15px;
-      padding-bottom: 15px;
-      font-size: 12px;
-      letter-spacing: 5px;
-    }
+  .navbar {
+    border: 0;
+    border-radius: 0;
+    margin-bottom: 0;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 12px;
+    letter-spacing: 5px;
+  }
 
-    .navbar-nav li a:hover {
-      color: #1abc9c !important;
-    }
+  .bottom {
+    border-bottom: 1px solid #ccc;
+  }
 
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+  .navbar-nav li a:hover {
+    color: #1abc9c !important;
+  }
+
+  /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
 
 
-    /* Set black background color, white text and some padding */
-    footer {
-      padding-top: 30px;
-      background-color: #555;
-      box-shadow: 0px 500px 0px 500px #555;
-      color: white;
-    }
+  /* Set black background color, white text and some padding */
+  footer {
+    padding-top: 30px;
+    background-color: #555;
+    box-shadow: 0px 500px 0px 500px #555;
+    color: white;
+  }
 
-    .login {
-      margin: 0, auto;
-      padding-bottom: 100px;
-      padding-top: 30px;
-      padding-bottom: 100px;
-    }
+  .login {
+    margin: 0, auto;
+    padding-bottom: 100px;
+    padding-top: 30px;
+    padding-bottom: 100px;
+  }
 
-    .bg-1 {
-      background-color: #fb6900; /* Green */
-      color: #ffffff;
+  .bg-1 {
+    background-color: #fb6900; /* Green */
+    color: #ffffff;
+  }
+  /* On small screens, set height to 'auto' for sidenav and grid */
+  @media screen and (max-width: 767px) {
+    .sidenav {
+      height: auto;
+      padding: 15px;
     }
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height:auto;}
-    }
+    .row.content {height:auto;}
+  }
   </style>
-
-
 </head>
 
 <body>
-<nav class="navbar navbar-default">
-  <div class="container-fill">
+  <nav class="navbar navbar-default">
+    <div class="container-fill">
+      <div class="row">
+        <div class="col-sm-3 col-sm-offset-1">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">myRivers</a>
+          <img src="icon_green_white.png" alt = "logo.png" height="60" width="60">
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid bg-1">
     <div class="row">
-      <div class="col-sm-5">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">myRivers</a>
-        <img src="icon_green_white.png" alt = "logo.png" height="60" width="60">
+      <div class="col-sm-5 col-sm-offset-1 login ">
+        <h2>Login</h2>
+        <form action="/action_page.php" method="post">
+          <div class="form-group ">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="pwd" placeholder="Enter password">
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox"> Remember me</label>
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
       </div>
     </div>
   </div>
-</nav>
 
-<div class="container-fluid bg-1">
-  <div class="row">
-        <div class="col-sm-5 col-sm-offset-1 login ">
-          <h2>Login</h2>
-          <form action="/action_page.php" method="post">
-            <div class="form-group ">
-              <label for="email">Email:</label>
-              <input type="email" class="form-control" id="email" placeholder="Enter email">
-            </div>
-            <div class="form-group">
-              <label for="pwd">Password:</label>
-              <input type="password" class="form-control" id="pwd" placeholder="Enter password">
-            </div>
-            <div class="checkbox">
-              <label><input type="checkbox"> Remember me</label>
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-          </form>
-        </div>
+
+  <footer class="footer">
+    <div class="container-fluid text-center">
+      <p>Bitbusters gonna fuck you up</p>
     </div>
-</div>
-
-
-<footer class="footer">
-  <div class="container-fluid text-center">
-    <p>Bitbusters gonna fuck you up</p>
-  </div>
-</footer>
+  </footer>
 
 </body>
 </html>
