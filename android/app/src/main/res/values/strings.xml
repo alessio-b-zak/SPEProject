@@ -4,4 +4,17 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="cam_toast">SWOOSH!</string>
+    <string name="choose_tag">Choose a tag</string>
+
+    <string name="info_title"><b>MyRivers™ v1.0</b></string>
+    <string name="info_subtitle">\u00A9 BitBusters 2017</string>
+    <string name="info_spvText">
+        <b>SP View Button</b>: Show all sample points within a 10km radius (it is recommended to zoom in first by clicking the GPS button)
+    </string>
+    <string name="info_gpsText">
+        <b>GPS Button</b>: Zoom in to your current location.
+    </string>
+    <string name="info_camText">
+        <b>Camera Button</b>: Take a picture and submit a new pollution incident.
+    </string>
 </resources>

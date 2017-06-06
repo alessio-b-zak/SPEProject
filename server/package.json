@@ -6,12 +6,19 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "babyparse": "~0.4.6",
     "body-parser": "~1.15.1",
+    "connect": "~3.5.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "express": "~4.13.4",
+    "file-system": "^2.2.2",
     "jade": "~1.11.0",
+    "jimp": "^0.2.27",
+    "kerberos": "~0.0.22",
+    "mongodb": "^2.2.11",
     "morgan": "~1.7.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "sharp": "^0.17.2"
   }
 }
