@@ -1,0 +1,35 @@
+Harriet
+
+- A welcome screen may make the app more 'friendly' to new users, perhaps having a short 
+  sentence on what the app is for.
+  
+- I think it could be made clearer how to get to the help page on what the icons mean.
+
+Claire
+
+I enjoyed having a go and have filled in the feedback form, but thought it would be 
+better if I sent you some feedback by email with more of an explanation. I liked the 
+layout, colour scheme and style which all looked really professional. Some things which 
+I have questions about or that need a little improvement are:
+
+- On the 'i' button it says that you can take a photo to submit a new pollution incident. 
+We would like this to not just be about pollution but also for people to report 
+interesting things, wildlife or other issues. So as well as pollution it could say and 
+other river features.
+
+- Is the data on the purple pin points from the Environment Agency? It isn't clear as to 
+what this data is, where it has come from or what it means. Maybe on the 'I' icon you 
+could briefly say what the data is, and when you click on an individual pin it would be 
+good to have more information about that the data means and when the sample was taken.
+
+- When you take a photo and click 'submit' where does it go? Is there somewhere that the 
+photos are stored, and where we can download them from? It doesn't come up as a logged 
+point on the map so how do we know where it was taken?
+
+- How do we plot points on the map? Say if we are doing a walkover survey and want to 
+record something, we take a photo, write a description and submit it, how do we make a 
+logged point appear on the map that we can look at later to see what we recorded there? 
+Could we just press and hold a location on the map to log a point?
+
+- When you tag a photo and add a tag, we need to be able to add multiple tags to one 
+photo to fully describe the land management.
