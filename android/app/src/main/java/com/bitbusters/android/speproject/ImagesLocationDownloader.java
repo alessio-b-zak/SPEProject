@@ -15,20 +15,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-//import static com.google.android.gms.internal.zznu.is;
 
 public class ImagesLocationDownloader extends AsyncTask<String, Void, List<ImageLocation>> {
-    private static final String DEBUG_TAG = "IMAGES_LOC";
+    private static final String TAG = "IMAGES_LOC";
     private DataViewActivity tempDVA;
     private ImgLocDowListener imglis;
-//    private OnTaskCompleted listener;
-
-//    public ImagesLocationDownloader(OnTaskCompleted listener) {
-//        this.listener = listener;
-//    }
 
     public ImagesLocationDownloader(Context context, ImgLocDowListener imglis) {
-
         this.tempDVA = (DataViewActivity) context;
         this.imglis = imglis;
     }
@@ -54,7 +47,7 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
                     .appendPath(params[2])
                     .appendPath(params[3]);
             String myUrl = builder.build().toString();
-            Log.d(DEBUG_TAG, myUrl);
+            Log.d(TAG, myUrl);
             URL url = new URL(myUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
@@ -64,8 +57,8 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
-            Log.d(DEBUG_TAG, "Url is: " + url);
-            Log.d(DEBUG_TAG, "The response is: " + response);
+            Log.d(TAG, "Url is: " + url);
+            Log.d(TAG, "The response is: " + response);
             InputStream inputStream = null;
             inputStream = conn.getInputStream();
             //len limits the input string returned. should be changed from 5000 when tested.
@@ -74,7 +67,7 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
 //            String SamplingPoints = readIt(is, len);
             InputStreamToImageLocation inputStreamToImageLoc = new InputStreamToImageLocation();
             images = inputStreamToImageLoc.readImageLocStream(inputStream);
-//            Log.d(DEBUG_TAG, "The result is: " + SamplingPoints);
+//            Log.d(TAG, "The result is: " + SamplingPoints);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -106,14 +99,6 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
         imglis.imagesDownloaded();
 
 
-    }
-
-    public String readIt(InputStream stream, int len) throws IOException {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
     }
 
 }

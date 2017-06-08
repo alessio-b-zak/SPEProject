@@ -49,6 +49,7 @@ import java.util.List;
 public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final String BITMAP_TAG = "BITMAP";
+    private static final String TAG = "DATA_VIEW_ACTIVITY";
     private static final int REQUEST_LOCATION = 1;
     private static final int REQUEST_CAMERA = 2;
     private GoogleMap mMap;
@@ -328,10 +329,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     MapStyleOptions.loadRawResourceStyle(
                             this, R.raw.style_json));
             if (!success) {
-                Log.e("MapsActivityRaw", "Style parsing failed.");
+                Log.e(TAG, "Style parsing failed.");
             }
         } catch (Resources.NotFoundException e) {
-            Log.e("MapsActivityRaw", "Can't find style.", e);
+            Log.e(TAG, "Can't find style.", e);
         }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837, -3.625488), 5.0f));
@@ -383,7 +384,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLocation == null) {
-                Log.e("12", "mLocation was null");
+                Log.e(TAG, "mLocation was null");
             }
             if (mLocation != null) {
                 setLocationMarker(mLocation.getLatitude(), mLocation.getLongitude());
@@ -439,7 +440,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (requestCode == REQUEST_LOCATION) {
             if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // We can now safely use the API we requested access to
-                Log.e("1","Location request allowed");
+                Log.i(TAG,"Location request allowed");
                 connected = true;
                 displayLocation();
             } else {
@@ -447,7 +448,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             }
         }else if(requestCode == REQUEST_CAMERA){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Log.e("12","Photo granted");
+                Log.i(TAG,"Photo granted");
                 mCameraButton.callOnClick();
             }
         }
@@ -457,14 +458,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     public void onConnectionSuspended(int i) {
         connected = false;
-        Log.i("LocationAPI", "Connection Suspended");
+        Log.i(TAG, "Connection Suspended");
         mGoogleApiClient.connect();
     }
 
     //Called when there is an error connecting the client to the service
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.i("LocationAPI", "Connection Failed");
+        Log.i(TAG, "Connection Failed");
         Toast.makeText(this,"Location Connection Failed", Toast.LENGTH_SHORT).show();
         connected = false;
         mGoogleApiClient.connect();
