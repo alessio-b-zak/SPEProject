@@ -1,5 +1,5 @@
 android/build/
-android/.gradle/
+android/.gradle/*
 android/.idea/workspace.xml
 android/.idea/libraries/
 android/app/.idea/workspace.xml
