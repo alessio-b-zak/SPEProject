@@ -108,7 +108,7 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
 
     }
 
-    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+    public String readIt(InputStream stream, int len) throws IOException {
         Reader reader = null;
         reader = new InputStreamReader(stream, "UTF-8");
         char[] buffer = new char[len];

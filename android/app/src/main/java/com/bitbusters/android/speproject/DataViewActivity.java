@@ -5,13 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -23,14 +20,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -47,8 +41,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.SphericalUtil;
-import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
@@ -62,15 +54,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private GoogleMap mMap;
     private ProgressBar mProgressSpinner;
     private ImageButton mInfoButton;
-    private FloatingActionButton mCamButton;
-    private FloatingActionButton mSPVButton;
+    private FloatingActionButton mCameraButton;
+    private FloatingActionButton mSamplingPointButton;
 
     //variables used for displaying current location
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
     private boolean connected;
     private Marker currentLocationMarker;
-    private FragmentManager fm;
+    private FragmentManager mFragmentManager;
     private SPDataFragment mSPDataFragment;
     private List<SamplingPoint> mSamplePoints = new ArrayList<>();
     private Circle mRadiusCircle;
@@ -78,7 +70,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private Boolean imageLocationsDownloaded;
     private ClusterManager<SamplingPoint> mSampleClusterManager;
     private ClusterManager<GalleryItem> mPictureClusterManager;
-    private MultiListener ml = new MultiListener();
+    private MultiListener mMultiListener = new MultiListener();
 
     private SamplingPoint selectedSamplingPoint;
 
@@ -86,13 +78,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dataview);
+        setContentView(R.layout.activity_data_view);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        mProgressSpinner = (ProgressBar) findViewById(R.id.progressSpinner);
+        mProgressSpinner = (ProgressBar) findViewById(R.id.progress_spinner);
 
         // The action performed when the info button is pressed.
         mInfoButton = (ImageButton) findViewById(R.id.info_button);
@@ -100,14 +92,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public void onClick(View v) {
                 // Hide the floating action buttons.
-                FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
-                gpsButton.hide();
-                mSPVButton.hide();
-                mCamButton.hide();
+                hideHomeButtons();
 
                 // Initiate the info fragment.
                 InfoFragment fragment = new InfoFragment();
-                fm.beginTransaction()
+                mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                         .add(R.id.fragment_container, fragment)
                         .addToBackStack(null).commit();
@@ -115,8 +104,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         });
 
         // The action performed when the sample point view button is pressed.
-        mSPVButton = (FloatingActionButton) findViewById(R.id.sp_view_button);
-        mSPVButton.setOnClickListener(new View.OnClickListener() {
+        mSamplingPointButton = (FloatingActionButton) findViewById(R.id.sp_view_button);
+        mSamplingPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (haveNetworkConnection()) {
@@ -142,36 +131,36 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         });
 
         // The action performed when the camera button is pressed.
-        mCamButton = (FloatingActionButton) findViewById(R.id.cam_button);
-        mCamButton.setOnClickListener(new View.OnClickListener() {
+        mCameraButton = (FloatingActionButton) findViewById(R.id.cam_button);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(DataViewActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     startCameraIntent(v);
-                }else{
+                } else {
                     ActivityCompat.requestPermissions(DataViewActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
                 }
             }
         });
 
         // Create an instance of GoogleAPIClient -> Required for the GPS Location
-         if(mGoogleApiClient == null) {
-             mGoogleApiClient = new GoogleApiClient.Builder(this)
-                     .addConnectionCallbacks(this)
-                     .addOnConnectionFailedListener(this)
-                     .addApi(LocationServices.API)
-                     .build();
-         }
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
-        fm = getSupportFragmentManager();
+        mFragmentManager = getSupportFragmentManager();
 
     }
 
-    public void startCameraIntent(View v){
-        if(haveNetworkConnection() && haveGPSOn(v.getContext())) {
-            Intent pcaintent = new Intent(v.getContext(), PhotoCommentActivity.class);
-            startActivity(pcaintent);
-        }else{
+    public void startCameraIntent(View v) {
+        if (haveNetworkConnection() && haveGPSOn(v.getContext())) {
+            Intent photoCommentActivityIntent = new Intent(v.getContext(), PhotoCommentActivity.class);
+            startActivity(photoCommentActivityIntent);
+        } else {
             Toast.makeText(v.getContext(), "Uploading image needs internet connection and gps", Toast.LENGTH_LONG).show();
         }
     }
@@ -184,7 +173,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     protected void onStop() {
         super.onStop();
-        if(connected) {
+        if (connected) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
             connected = false;
@@ -201,14 +190,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 if (point.getTitle().equals("Sample_Point")) {
                     selectedSamplingPoint = point;
 
-                    Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+                    Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
-                        FloatingActionButton gpsButton = (FloatingActionButton) findViewById(R.id.gps_button);
-                        gpsButton.hide();
-                        mSPVButton.hide();
-                        mCamButton.hide();
-                        mInfoButton.setVisibility(View.INVISIBLE);
-
+                        hideHomeButtons();
                         // Hide the radius circle.
                         mRadiusCircle.setVisible(false);
                         LatLng markerPos = new LatLng(point.getLatitude() + 0.05f, point.getLongitude());
@@ -221,7 +205,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         fragment = new SPDataFragment();
                         mSPDataFragment = (SPDataFragment) fragment;
 
-                        fm.beginTransaction()
+                        mFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                                 .add(R.id.fragment_container, fragment)
                                 .addToBackStack(null).commit();
@@ -237,7 +221,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     // On Picture point click.
-    public void setUpPictureManager(){
+    public void setUpPictureManager() {
         mPictureClusterManager.setRenderer(new PicturePointRenderer(this, mMap, mPictureClusterManager));
         mPictureClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<GalleryItem>() {
             @Override
@@ -246,7 +230,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 if (point.getTitle().equals("Picture_Point")) {
                     PhotoViewFragment fragment = new PhotoViewFragment();
                     fragment.setGalleryItem(mSPDataFragment.getGalleryItem(point.getId()));
-                    fm.beginTransaction()
+                    mFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
                             .add(R.id.fragment_container, fragment)
                             .addToBackStack(null).commit();
@@ -255,7 +239,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             }
         });
     }
-
 
 
     // Shows all photo markers currently on screen.
@@ -326,8 +309,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         */
     }
 
-    public void repopulateSamplePoints(ClusterManager<SamplingPoint> mSampleClusterManager){
-        for(SamplingPoint sp : mSamplePoints){
+    public void repopulateSamplePoints(ClusterManager<SamplingPoint> mSampleClusterManager) {
+        for (SamplingPoint sp : mSamplePoints) {
             mSampleClusterManager.addItem(sp);
         }
         mSampleClusterManager.cluster();
@@ -351,22 +334,22 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             Log.e("MapsActivityRaw", "Can't find style.", e);
         }
 
-        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837,-3.625488), 5.0f) );
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837, -3.625488), 5.0f));
         setUpMultiManager();
 
     }
 
-    public void setUpMultiManager(){
+    public void setUpMultiManager() {
         mPictureClusterManager = new ClusterManager<>(this, mMap);
         mSampleClusterManager = new ClusterManager<>(this, mMap);
         setUpSampleManager();
         setUpPictureManager();
-        ml.addOC(mSampleClusterManager);
-        ml.addOC(mPictureClusterManager);
-        ml.addOM(mSampleClusterManager);
-        ml.addOM(mPictureClusterManager);
-        mMap.setOnMarkerClickListener(ml);
-        mMap.setOnCameraIdleListener(ml);
+        mMultiListener.addOC(mSampleClusterManager);
+        mMultiListener.addOC(mPictureClusterManager);
+        mMultiListener.addOM(mSampleClusterManager);
+        mMultiListener.addOM(mPictureClusterManager);
+        mMap.setOnMarkerClickListener(mMultiListener);
+        mMap.setOnCameraIdleListener(mMultiListener);
     }
 
     @Override
@@ -396,18 +379,21 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
     }
 
-    public void displayLocation(){
-        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if(mLocation == null){
-            Log.e("12","mLocation was null");
+    public void displayLocation() {
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mLocation == null) {
+                Log.e("12", "mLocation was null");
+            }
+            if (mLocation != null) {
+                setLocationMarker(mLocation.getLatitude(), mLocation.getLongitude());
+                CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
+            }
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
-        if(mLocation != null) {
-            setLocationMarker(mLocation.getLatitude(), mLocation.getLongitude());
-            CameraPosition newcameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(mLocation.getLatitude(),mLocation.getLongitude())).build();
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newcameraPosition));
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
-
     }
 
     public LocationRequest createLocationRequest() {
@@ -449,7 +435,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     //Requesting permission for location information at runtime. Need for devices running Android 6 upwards
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_LOCATION) {
             if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // We can now safely use the API we requested access to
@@ -462,7 +448,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }else if(requestCode == REQUEST_CAMERA){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Log.e("12","Photo granted");
-                mCamButton.callOnClick();
+                mCameraButton.callOnClick();
             }
         }
     }
@@ -487,10 +473,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     public void onBackPressed() {
 
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
 
         if (fragment instanceof SPDataFragment) {
-            fm.popBackStack();
+            mFragmentManager.popBackStack();
             mRadiusCircle.setVisible(true);
             mPictureClusterManager.clearItems();
             mPictureClusterManager.cluster();
@@ -499,29 +485,35 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mProgressSpinner.setVisibility(View.INVISIBLE);
 
             // Re-show the buttons.
-            FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
-            gpsButton.show();
-            mSPVButton.show();
-            mCamButton.show();
-            mInfoButton.setVisibility(View.VISIBLE);
+            showHomeButtons();
         }
         else if (fragment instanceof PhotoViewFragment) {
-            fm.popBackStack();
+            mFragmentManager.popBackStack();
         }
         else if (fragment instanceof InfoFragment) {
-            fm.popBackStack();
-
-            // Re-show the buttons.
-            FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
-            gpsButton.show();
-            mSPVButton.show();
-            mCamButton.show();
-            mInfoButton.setVisibility(View.VISIBLE);
+            mFragmentManager.popBackStack();
+            showHomeButtons();
         }
         // Else do normal back button stuff.
         else {
             super.onBackPressed();
         }
+    }
+
+    public void showHomeButtons() {
+        FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
+        gpsButton.show();
+        mSamplingPointButton.show();
+        mCameraButton.show();
+        mInfoButton.setVisibility(View.VISIBLE);
+    }
+
+    public void hideHomeButtons() {
+        FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
+        gpsButton.hide();
+        mSamplingPointButton.hide();
+        mCameraButton.hide();
+        mInfoButton.setVisibility(View.INVISIBLE);
     }
 
     public List<GalleryItem> getPhotoMarkers() {
@@ -561,22 +553,24 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         boolean haveConnectedMobile = false;
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
-        for (NetworkInfo ni : netInfo) {
-            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
-                if (ni.isConnected())
-                    haveConnectedWifi = true;
-            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (ni.isConnected())
-                    haveConnectedMobile = true;
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) { // connected to the internet
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                // connected to wifi
+                haveConnectedWifi = true;
+            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                // connected to the mobile provider's data plan
+                haveConnectedMobile = true;
+            }
         }
+
         return haveConnectedWifi || haveConnectedMobile;
+
     }
 
     public boolean haveGPSOn(Context context){
         LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        return gps_enabled;
+        return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
 }

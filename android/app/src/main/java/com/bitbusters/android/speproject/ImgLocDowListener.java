@@ -6,5 +6,5 @@ package com.bitbusters.android.speproject;
 
 public interface ImgLocDowListener {
 
-    public void imagesDownloaded();
+    void imagesDownloaded();
 }

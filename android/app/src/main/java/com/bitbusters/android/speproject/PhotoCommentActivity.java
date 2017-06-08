@@ -64,7 +64,7 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
             if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mGoogleApiClient.connect();
             } else {
-                //TODO: SHOULD A PICTURE STILL BE SUBMITED WITH DUMMY LOCATION
+                //TODO: SHOULD A PICTURE STILL BE SUBMITTED WITH A DUMMY LOCATION?
             }
         }
     }

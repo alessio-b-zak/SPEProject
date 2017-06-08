@@ -86,7 +86,7 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
         listener.onTaskCompleted(result);
     }
 
-    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+    public String readIt(InputStream stream, int len) throws IOException {
         Reader reader = null;
         reader = new InputStreamReader(stream, "UTF-8");
         char[] buffer = new char[len];

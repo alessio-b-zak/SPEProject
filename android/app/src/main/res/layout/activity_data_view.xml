@@ -13,7 +13,7 @@
         tools:context="com.bitbusters.android.speproject.DataViewActivity" />
 
     <ProgressBar
-        android:id="@+id/progressSpinner"
+        android:id="@+id/progress_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity= "center_vertical|center_horizontal"
