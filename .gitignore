@@ -7,3 +7,4 @@ android/app/.idea/libraries/
 android/app/build/
 server/routes/thumbnails/
 server/routes/uploads/
+server/node_modules/.bin/
