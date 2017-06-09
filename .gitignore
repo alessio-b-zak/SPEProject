@@ -5,3 +5,5 @@ android/.idea/libraries/
 android/app/.idea/workspace.xml
 android/app/.idea/libraries/
 android/app/build/
+server/routes/thumbnails/
+server/routes/uploads/

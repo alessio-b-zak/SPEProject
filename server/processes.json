@@ -3,6 +3,7 @@
         "name"        : "SPE_App",
         "script"      : "bin/www",
         "watch"       : "../",
+        "ignore_watch" : ["routes/uploads", "routes/thumbnails", "node_modules"],
         "log_date_format"  : "YYYY-MM-DD HH:mm Z",
       }]
     }
