@@ -49,7 +49,6 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         mDataViewActivity = (DataViewActivity) getActivity();
-
     }
 
     @Override
@@ -140,7 +139,9 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
         getActivity().getWindowManager().getDefaultDisplay().getSize(size);
         mPhotoRecyclerView.setY(size.y);
 
-        mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        // span count is setting the columns. GridLayoutManager can then be scrolled downwards.
+        int spanCount = 3;
+        mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), spanCount));
 
         // Adding spaces between photos.
         // from http://stackoverflow.com/questions/28531996/android-recyclerview-gridlayoutmanager-column-spacing

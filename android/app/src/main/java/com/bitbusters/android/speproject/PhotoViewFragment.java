@@ -20,6 +20,7 @@ import org.w3c.dom.Text;
  */
 
 public class PhotoViewFragment extends Fragment {
+    private static final String TAG = "PHOTO_VIEW_FRAGMENT";
 
     Toolbar mToolbar;  // The toolbar.
     ImageButton mBackButton;
@@ -67,7 +68,7 @@ public class PhotoViewFragment extends Fragment {
 
     public void setGalleryItem(GalleryItem galleryItem) {
         mGalleryItem = galleryItem;
-        Log.e(galleryItem.getName(), "1");
+        Log.i(TAG, galleryItem.getName());
     }
 
 }

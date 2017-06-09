@@ -12,7 +12,7 @@ import java.util.List;
  * Created by cp153 on 06/12/2016.
  */
 
-public class InputStreamToJSON {
+public class InputStreamToSamplingPoint {
     public List<SamplingPoint> readJsonStream(InputStream in) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {

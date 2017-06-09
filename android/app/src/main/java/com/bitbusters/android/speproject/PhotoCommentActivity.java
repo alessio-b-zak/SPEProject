@@ -1,13 +1,10 @@
 package com.bitbusters.android.speproject;
 
-import android.*;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.media.Image;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,30 +13,24 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
 
 public class PhotoCommentActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final String BITMAP_TAG = "BITMAP";
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap imageTaken;
-    private EditText sometext;
+    private EditText someText;
     private Spinner spinner;
     private GoogleApiClient mGoogleApiClient;
 
@@ -49,7 +40,7 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             com.bitbusters.android.speproject.Image image = new com.bitbusters.android.speproject.Image("NoId",
-                                imageTaken, mLocation.getLatitude(), mLocation.getLongitude(), sometext.getText().toString(), (PhotoTag)spinner.getSelectedItem());
+                                imageTaken, mLocation.getLatitude(), mLocation.getLongitude(), someText.getText().toString(), (PhotoTag)spinner.getSelectedItem());
             Log.e(String.valueOf(mLocation.getLongitude()), String.valueOf(mLocation.getLatitude()));
             new ImageUploader().execute(image);
         } else {
@@ -59,7 +50,7 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
             if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mGoogleApiClient.connect();
@@ -71,13 +62,13 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(this,"Could not find location", Toast.LENGTH_LONG);
+        Toast.makeText(this,"Could not find location", Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Toast.makeText(this,"Location disconnected", Toast.LENGTH_SHORT);
+        Toast.makeText(this,"Location disconnected", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -88,8 +79,8 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
         if(takePictureIntent.resolveActivity(getPackageManager()) != null && savedInstanceState == null)
             startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
         setContentView(R.layout.activity_photo_comment);
-        sometext = (EditText)findViewById(R.id.editText);
-        setUpEditText(sometext);
+        someText = (EditText)findViewById(R.id.editText);
+        setUpEditText(someText);
         setUpSpinner();
 
         if(mGoogleApiClient == null) {
@@ -101,7 +92,7 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
         }
     }
 
-    protected  void setUpEditText(final EditText sometext){
+    protected void setUpEditText(final EditText sometext){
         sometext.setHint("Add a comment");
         sometext.clearFocus();
         sometext.setMaxHeight(sometext.getHeight());

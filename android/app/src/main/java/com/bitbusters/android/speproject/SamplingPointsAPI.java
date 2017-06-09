@@ -5,13 +5,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 
-import org.json.JSONArray;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -65,8 +62,8 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
             int len = 5000;
             // Convert the InputStream into a string
 //            String SamplingPoints = readIt(is, len);
-            InputStreamToJSON inputStreamToJSON = new InputStreamToJSON();
-            samplingPoints = inputStreamToJSON.readJsonStream(inputStream);
+            InputStreamToSamplingPoint inputStreamToSamplingPoint = new InputStreamToSamplingPoint();
+            samplingPoints = inputStreamToSamplingPoint.readJsonStream(inputStream);
             //Log.d(DEBUG_TAG, "The result is: " + samplingPoints);
 
         } catch (IOException e) {

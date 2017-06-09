@@ -23,15 +23,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-//import static com.google.android.gms.internal.zznu.is;
 
 public class ImageUploader extends AsyncTask<Image, Void, String> {
-    private static final String DEBUG_TAG = "IMAGES_UPLOADER";
-//    private OnTaskCompleted listener;
-
-//    public ImagesDownloader(OnTaskCompleted listener) {
-//        this.listener = listener;
-//    }
+    private static final String TAG = "IMAGES_UPLOADER";
 
     @Override
     protected String doInBackground(Image...params) {
@@ -41,20 +35,14 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             Double latitude = params[0].getLatitude();
             Double longitude = params[0].getLongitude();
             PhotoTag tag = params[0].getPhotoTag();
-            String attachmentName = "bitmap";
-            String attachmentFileName = "bitmap.bmp";
-            String crlf = "\r\n";
-            String twoHyphens = "--";
-            String boundary =  "";
 
             HttpURLConnection httpUrlConnection = null;
             URL url = new URL("http://139.59.184.70:8080/uploadImage");
-            //URL url = new URL("http://172.23.215.243:3000/uploadImage");
-            Log.d(DEBUG_TAG, " URL UPLOAD : " + url.toString());
+            Log.i(TAG, " URL UPLOAD : " + url.toString());
             httpUrlConnection = (HttpURLConnection) url.openConnection();
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
-            Log.d(DEBUG_TAG, "Set request body to true");
+            Log.i(TAG, "Set request body to true");
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
             httpUrlConnection.setRequestProperty("Comment", comment);
@@ -64,11 +52,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
             httpUrlConnection.setRequestProperty("Content-Type", "image/jpeg");
 
-            // Gets stuck here, though Not being used.
-            //int response = httpUrlConnection.getResponseCode();
-
-            Log.d(DEBUG_TAG, "Url is: " + url);
-            //Log.d(DEBUG_TAG, "The response is: " + response);
+            Log.i(TAG, "Url is: " + url);
 
             OutputStream request = httpUrlConnection.getOutputStream();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -76,7 +60,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
 
             byte[] byteArray = stream.toByteArray();
             request.write(byteArray);
-            Log.d(DEBUG_TAG, "Image Converted to JPEG ");
+            Log.i(TAG, "Image Converted to JPEG ");
             stream.close();
             request.close();
 
@@ -104,18 +88,9 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
 
     }
     // onPostExecute displays the results of the AsyncTask.
-
     protected void onPostExecute(int result) {
         System.out.println("ImageUploader onPostExecute called.");
-
     }
 
-    public String readIt(InputStream stream, int len) throws IOException {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
-    }
 
 }
