@@ -1,10 +1,13 @@
+android/local.properties
 android/build/
 android/.gradle/
-android/.idea/workspace.xml
-android/.idea/libraries/
-android/app/.idea/workspace.xml
-android/app/.idea/libraries/
+android/.idea/
+android/.idea/*
+android/app/.idea/
+android/app/.idea/*
 android/app/build/
 server/routes/thumbnails/
 server/routes/uploads/
 server/node_modules/.bin/
+*.iml
+*.apk
