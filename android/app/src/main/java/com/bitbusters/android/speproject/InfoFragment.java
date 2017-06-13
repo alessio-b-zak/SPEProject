@@ -28,7 +28,7 @@ public class InfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_infoview, container, false);
 
-        mBackButton = (ImageButton) v.findViewById(R.id.back_button);
+        mBackButton = (ImageButton) v.findViewById(R.id.back_button_info_view);
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

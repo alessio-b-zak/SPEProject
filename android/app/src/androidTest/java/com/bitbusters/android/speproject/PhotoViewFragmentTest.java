@@ -18,11 +18,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.Assert.assertFalse;
@@ -36,9 +34,9 @@ import static org.hamcrest.core.IsNot.not;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class SPDataViewFragmentTest {
+public class PhotoViewFragmentTest {
 
-    private static final String TAG = "SP_DATA_FRAGMENT_TEST";
+    private static final String TAG = "IMG_VIEW_FRAGMENT_TEST";
     private static final String PACKAGE = "com.bitbusters.android.speproject";
     private static final String ID = ":id/";
     private UiDevice mDevice;
@@ -59,7 +57,7 @@ public class SPDataViewFragmentTest {
         // Access the device state using UiAutomator
         mDevice = UiDevice.getInstance(getInstrumentation());
         // Search for a Single Sample Point Marker
-        UiObject samplePointMarker = mDevice.findObject(new UiSelector().descriptionContains("Sample_Point"));
+        UiObject samplePointMarker = mDevice.findObject(new UiSelector().descriptionContains("Sample_Point."));
         // Try and Click the Sampling Point Marker
         try {
             samplePointMarker.click();
@@ -67,28 +65,6 @@ public class SPDataViewFragmentTest {
         } catch(UiObjectNotFoundException e) {
             Log.e(TAG, "No Sampling Point Marker Displayed");
         }
-    }
-
-    @Test
-    public void test0_clickGridViewButton() {
-        // Click Grid View Button
-        onView(withId(R.id.grid_view_button)).perform(click());
-        // Check that Grid View Background is visible
-        onView(withId(R.id.grid_view)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void test1_clickSamplePointViewButton() {
-        // Click Grid View Button
-        onView(withId(R.id.grid_view_button)).perform(click());
-        // Click Sample Point View Button
-        onView(withId(R.id.map_view_button)).perform(click());
-        // Check that Grid View Background is NOT visible
-        onView(withId(R.id.grid_view)).check(matches(not(isDisplayed())));
-    }
-
-    @Test
-    public void test2_clickImageMarker() {
         // Search for a Single Image Marker
         UiObject imageMarker = mDevice.findObject(new UiSelector().descriptionContains("Picture_Point."));
         // Try and Click the Image Marker (TopLeft because image might overlap with current location)
@@ -98,15 +74,13 @@ public class SPDataViewFragmentTest {
         } catch(UiObjectNotFoundException e) {
             Log.e(TAG, "No Image Marker Displayed");
         }
-        // Check that Photo View is visible
-        onView(withId(R.id.photo)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void test3_clickBackButton() {
+    public void test0_clickBackButton() {
         // Click Back Button
-        onView(withId(R.id.back_button_sp_data_view)).perform(click());
-        // Check if Camera Button Reappeared
-        onView(withId(R.id.cam_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.back_button_photo_view)).perform(click());
+        // Check that Grid View Button Reappeared
+        onView(withId(R.id.grid_view_button)).check(matches(isDisplayed()));
     }
 }

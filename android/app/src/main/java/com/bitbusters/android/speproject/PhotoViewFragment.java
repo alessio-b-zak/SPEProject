@@ -1,6 +1,5 @@
 package com.bitbusters.android.speproject;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -11,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by toddym42 on 04/12/2016.
@@ -41,7 +37,7 @@ public class PhotoViewFragment extends Fragment {
 
         mToolbar = (Toolbar) v.findViewById(R.id.photoview_toolbar);
 
-        mBackButton = (ImageButton) v.findViewById(R.id.back_button);
+        mBackButton = (ImageButton) v.findViewById(R.id.back_button_photo_view);
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

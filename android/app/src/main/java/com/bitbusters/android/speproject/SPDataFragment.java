@@ -76,7 +76,7 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
 
         mToolbar = (Toolbar) v.findViewById(R.id.dataview_toolbar);
 
-        mBackButton = (ImageButton) v.findViewById(R.id.back_button);
+        mBackButton = (ImageButton) v.findViewById(R.id.back_button_sp_data_view);
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
