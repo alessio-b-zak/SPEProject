@@ -33,7 +33,7 @@ public class DataViewActivityInfoButtonTest {
     }
 
     @Test
-    public void clickInfoButton() {
+    public void test0_clickInfoButton() {
         // Click on Info Button
         onView(withId(R.id.info_button)).perform(click());
         // Check if Info Fragment is displayed

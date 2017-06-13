@@ -18,22 +18,22 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by mihajlo on 12/06/17.
  */
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class SamplingPointDataViewFragmentTest {
+public class DataViewActivitySamplingPointMarkerTest {
+
     private static final String TAG = "SAMPLING_PT_MARKER_TEST";
+    private static final String PACKAGE = "com.bitbusters.android.speproject";
+    private static final String ID = ":id/";
     private UiDevice mDevice;
 
     @Rule
@@ -55,39 +55,19 @@ public class SamplingPointDataViewFragmentTest {
 
     @Test
     public void test0_clickSamplingPointMarker() {
-        // Click on a single Marker
-        UiObject samplePointMarker = mDevice.findObject(new UiSelector().descriptionContains("Sampling_Point"));
+        // Search for a Single Sample Point Marker
+        UiObject samplePointMarker = mDevice.findObject(new UiSelector().descriptionContains("Sample_Point."));
+        // Try and Click the Sampling Point Marker
         try {
             samplePointMarker.click();
+            Log.i(TAG, "Sampling Point Marker Clicked");
         } catch(UiObjectNotFoundException e) {
             Log.e(TAG, "No Sampling Point Marker Displayed");
         }
-        // Check if SPDataFragment is displayed
-        UiObject samplePointName = mDevice.findObject(new UiSelector().resourceId("sp_name"));
-        try {
-            samplePointName.isEnabled();
-        } catch(UiObjectNotFoundException e) {
-            Log.e(TAG, "Fail to load SPDataView");
-        }
+        // Search for Sample Point Name in the Sampling Point Data View Fragment
+        UiObject samplePointName = mDevice.findObject(new UiSelector().resourceId(PACKAGE + ID + "sp_name"));
+        // Check if it exists
+        assertTrue(samplePointName.exists());
     }
 
-    @Test
-    public void test1_clickGridViewButton() {
-
-    }
-
-    @Test
-    public void test2_clickSamplePointButton() {
-
-    }
-
-    @Test
-    public void test3_clickImageMarker() {
-
-    }
-
-    @Test
-    public void test4_clickBackButton() {
-
-    }
 }

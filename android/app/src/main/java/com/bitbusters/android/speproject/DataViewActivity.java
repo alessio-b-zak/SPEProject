@@ -388,7 +388,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             }
             if (mLocation != null) {
                 setLocationMarker(mLocation.getLatitude(), mLocation.getLongitude());
-                CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(10).target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
+                CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(11).target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
             }
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);

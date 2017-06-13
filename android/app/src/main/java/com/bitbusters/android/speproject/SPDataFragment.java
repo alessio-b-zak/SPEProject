@@ -87,7 +87,7 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
             }
         });
 
-        mMapViewButton = (ImageButton) v.findViewById(R.id.mapview_button);
+        mMapViewButton = (ImageButton) v.findViewById(R.id.map_view_button);
         mMapViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +111,7 @@ public class SPDataFragment extends Fragment implements ImgLocDowListener{
         mMapViewButton.invalidate();
         mInGridView = false;
 
-        mGridViewButton = (ImageButton) v.findViewById(R.id.gridview_button);
+        mGridViewButton = (ImageButton) v.findViewById(R.id.grid_view_button);
         mGridViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
