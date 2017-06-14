@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?attr/colorPrimary"
-                    android:id="@+id/back"
+                    android:id="@+id/back_button_photo_view"
                     android:clickable="true"
                     android:scaleType="fitCenter"
                     android:layout_gravity="left"
@@ -54,7 +54,7 @@
                     android:text="SUBMIT"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button3"
+                    android:id="@+id/submit_button"
                     android:layout_alignParentRight="true"
                     android:onClick="submitClick"
                     android:background="#00000000"/>
