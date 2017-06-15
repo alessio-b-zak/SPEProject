@@ -6,6 +6,10 @@
     <string name="cam_toast">SWOOSH!</string>
     <string name="choose_tag">Choose a tag</string>
 
+    <string name="drawer_sampling_points">Plot Sampling Points</string>
+    <string name="drawer_images">Plot Images</string>
+    <string name="drawer_info">How it works</string>
+
     <string name="info_title"><b>MyRivers™ v1.0</b></string>
     <string name="info_subtitle">\u00A9 BitBusters 2017</string>
     <string name="info_spvText">

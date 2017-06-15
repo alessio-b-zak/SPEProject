@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single" android:id="@+id/group_pages">
+        <item
+            android:id="@+id/drawer_sampling_points"
+            android:checked="true"
+            android:icon="@drawable/marker_white"
+            android:title="@string/drawer_sampling_points" />
+        <item
+            android:id="@+id/drawer_images"
+            android:icon="@drawable/photo_icon"
+            android:title="@string/drawer_images" />
+    </group>
+
+    <group android:checkableBehavior="single" android:id="@+id/group_app">
+        <!--<item-->
+            <!--android:id="@+id/drawer_settings"-->
+            <!--android:icon="@drawable/ic_action_settings"-->
+            <!--android:title="@string/drawer_settings" />-->
+        <item
+            android:id="@+id/drawer_info"
+            android:icon="@drawable/info_white"
+            android:title="@string/drawer_info" />
+
+    </group>
+
+</menu>

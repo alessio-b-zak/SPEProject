@@ -12,13 +12,19 @@ import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -46,7 +52,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class DataViewActivity extends AppCompatActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final String BITMAP_TAG = "BITMAP";
     private static final String TAG = "DATA_VIEW_ACTIVITY";
@@ -72,6 +78,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private ClusterManager<SamplingPoint> mSampleClusterManager;
     private ClusterManager<GalleryItem> mPictureClusterManager;
     private MultiListener mMultiListener = new MultiListener();
+    private DrawerLayout mDrawerLayout;
 
     private SamplingPoint selectedSamplingPoint;
 
@@ -155,6 +162,54 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         mFragmentManager = getSupportFragmentManager();
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.icon_navigation_menu);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        //Initializing NavigationView
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+
+        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            // This method will trigger on item Click of navigation menu
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                //Checking if the item is in checked state or not, if not make it in checked state
+
+                //Closing drawer on item click
+                mDrawerLayout.closeDrawers();
+
+                //Check to see which item was being clicked and perform appropriate action
+                switch (menuItem.getItemId()) {
+                    case R.id.drawer_sampling_points:
+                        showSamplingPoints(navigationView);
+                        break;
+                    case R.id.drawer_images:
+                        showSamplingPoints(navigationView);
+                        break;
+                    case R.id.drawer_info:
+                        // Initiate the info fragment.
+                        InfoFragment fragment = new InfoFragment();
+                        mFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                                .add(R.id.fragment_container, fragment)
+                                .addToBackStack(null).commit();
+                        break;
+                    default:
+                        showSamplingPoints(navigationView);
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     public void startCameraIntent(View v) {
@@ -178,6 +233,34 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
             connected = false;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDrawerLayout = null;
+    }
+
+    public void showSamplingPoints(NavigationView v) {
+        if (haveNetworkConnection()) {
+            mProgressSpinner.setVisibility(View.VISIBLE);
+            mSampleClusterManager.clearItems();
+            LatLng camCentre = mMap.getCameraPosition().target;
+            String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
+            new SamplingPointsAPI(DataViewActivity.this).execute(location);
+
+            // Add a radius circle around sample point query area.
+            if (mRadiusCircle != null) {
+                mRadiusCircle.remove();
+            }
+            mRadiusCircle = mMap.addCircle(new CircleOptions()
+                    .center(camCentre)
+                    .radius(14142) // i.e. hypotenuse of 10km x 10km triangle.
+                    .strokeColor(0x661854E1)
+                    .fillColor(0x221854E1));
+        } else {
+            Toast.makeText(v.getContext(), "Sample point retrieval needs internet connection", Toast.LENGTH_LONG).show();
         }
     }
 
