@@ -38,16 +38,6 @@
         android:src="@drawable/marker_white" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/gps_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="90dp"
-        android:src="@drawable/target_white"
-        android:onClick="currentLocation" />
-
-    <android.support.design.widget.FloatingActionButton
         android:id="@+id/cam_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,5 +45,24 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/photo_icon" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/hamburger_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_menu_white_36dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/gps_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="90dp"
+        android:layout_marginRight="20dp"
+        android:onClick="currentLocation"
+        android:src="@drawable/target_white" />
 
 </FrameLayout>

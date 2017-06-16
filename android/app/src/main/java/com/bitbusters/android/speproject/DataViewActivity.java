@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -18,6 +19,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -42,9 +44,23 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.graphics.Color.BLACK;
+import static android.graphics.Color.RED;
+import static java.lang.Math.toIntExact;
 
 public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -72,6 +88,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private ClusterManager<SamplingPoint> mSampleClusterManager;
     private ClusterManager<GalleryItem> mPictureClusterManager;
     private MultiListener mMultiListener = new MultiListener();
+    private Drawer mDrawer;
 
     private SamplingPoint selectedSamplingPoint;
 
@@ -86,6 +103,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mapFragment.getMapAsync(this);
 
         mProgressSpinner = (ProgressBar) findViewById(R.id.progress_spinner);
+
+        setupDrawer();
 
         // The action performed when the info button is pressed.
         mInfoButton = (ImageButton) findViewById(R.id.info_button);
@@ -155,6 +174,111 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         mFragmentManager = getSupportFragmentManager();
 
+    }
+
+    public void setupDrawer() {
+
+        AccountHeader header = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.drawer_back)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("myRivers").withIcon(R.drawable.icon_green_blue)
+                )
+                .withTextColor(Color.BLACK)
+                .withSelectionListEnabledForSingleProfile(false)
+                .build();
+
+        //if you want to update the items at a later time it is recommended to keep it in a variable
+        final PrimaryDrawerItem drawerSamplingPoints = new PrimaryDrawerItem()
+                .withIdentifier(1)
+                .withName(R.string.drawer_sampling_point)
+                .withSelectedColor(0x0d4caf)
+                .withSelectedTextColor(Color.WHITE)
+                .withTextColor(Color.WHITE)
+                .withIcon(R.drawable.marker_white);
+
+        final PrimaryDrawerItem drawerImages = new PrimaryDrawerItem()
+                .withIdentifier(2)
+                .withName(R.string.drawer_images)
+                .withSelectedColor(0x0d4caf)
+                .withSelectedTextColor(Color.WHITE)
+                .withTextColor(Color.WHITE)
+                .withIcon(R.drawable.photo_icon);
+
+        final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
+                .withIdentifier(3)
+                .withName(R.string.drawer_info)
+                .withSelectedColor(0x0d4caf)
+                .withSelectedTextColor(Color.WHITE)
+                .withTextColor(Color.WHITE)
+                .withIcon(R.drawable.info_white);
+
+        //create the drawer and remember the `Drawer` result object
+        mDrawer = new DrawerBuilder()
+                .withActivity(this)
+                .withAccountHeader(header)
+                .withSliderBackgroundColor(Color.DKGRAY)
+                .addDrawerItems(
+                        drawerSamplingPoints,
+                        drawerImages,
+                        new DividerDrawerItem(),
+                        drawerInfo
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        mDrawer.closeDrawer();
+//                        Log.i(TAG, "identifier: " + Long.toString(drawerItem.getIdentifier()));
+                        switch ((int) drawerItem.getIdentifier()){
+                            case 1:
+                                showSamplingPoints(view);
+                                break;
+                            case 2:
+                                showSamplingPoints(view);
+                                break;
+                            case 3:
+                                showInfo(view);
+                                break;
+                            default:
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
+    }
+
+    public void showSamplingPoints(View v) {
+        if (haveNetworkConnection()) {
+            mProgressSpinner.setVisibility(View.VISIBLE);
+            mSampleClusterManager.clearItems();
+            LatLng camCentre = mMap.getCameraPosition().target;
+            String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
+            new SamplingPointsAPI(DataViewActivity.this).execute(location);
+
+            // Add a radius circle around sample point query area.
+            if (mRadiusCircle != null) {
+                mRadiusCircle.remove();
+            }
+            mRadiusCircle = mMap.addCircle(new CircleOptions()
+                    .center(camCentre)
+                    .radius(14142) // i.e. hypotenuse of 10km x 10km triangle.
+                    .strokeColor(0x661854E1)
+                    .fillColor(0x221854E1));
+        } else {
+            Toast.makeText(v.getContext(), "Sample point retrieval needs internet connection", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void showInfo(View v) {
+        // Hide the floating action buttons.
+        hideHomeButtons();
+        // Initiate the info fragment.
+        InfoFragment fragment = new InfoFragment();
+        mFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                .add(R.id.fragment_container, fragment)
+                .addToBackStack(null).commit();
     }
 
     public void startCameraIntent(View v) {
