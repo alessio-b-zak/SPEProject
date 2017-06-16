@@ -18,24 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity= "center_vertical|center_horizontal"
         android:visibility="invisible" />
-    
-    <ImageButton
-        android:id="@+id/info_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:src="@drawable/info_white"
-        android:background="@null"
-        android:layout_margin="20dp" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/sp_view_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="160dp"
-        android:src="@drawable/marker_white" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/cam_button"
@@ -45,6 +27,16 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/photo_icon" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/sp_view_button"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="160dp"
+        android:src="@drawable/marker_white" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/hamburger_button"

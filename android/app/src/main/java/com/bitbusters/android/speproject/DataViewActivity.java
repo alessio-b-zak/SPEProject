@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -73,9 +74,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private static final int REQUEST_CAMERA = 2;
     private GoogleMap mMap;
     private ProgressBar mProgressSpinner;
-    private ImageButton mInfoButton;
     private FloatingActionButton mCameraButton;
-    private FloatingActionButton mSamplingPointButton;
+    private FloatingActionButton mMenuButton;
 
     //variables used for displaying current location
     private GoogleApiClient mGoogleApiClient;
@@ -107,49 +107,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         mProgressSpinner = (ProgressBar) findViewById(R.id.progress_spinner);
 
+        // Initialises the drawer menu
         setupDrawer();
 
-        // The action performed when the info button is pressed.
-        mInfoButton = (ImageButton) findViewById(R.id.info_button);
-        mInfoButton.setOnClickListener(new View.OnClickListener() {
+        // The action performed when the menu button is pressed.
+        mMenuButton = (FloatingActionButton) findViewById(R.id.hamburger_button);
+        mMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Hide the floating action buttons.
-                hideHomeButtons();
-
-                // Initiate the info fragment.
-                InfoFragment fragment = new InfoFragment();
-                mFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-                        .add(R.id.fragment_container, fragment)
-                        .addToBackStack(null).commit();
-            }
-        });
-
-        // The action performed when the sample point view button is pressed.
-        mSamplingPointButton = (FloatingActionButton) findViewById(R.id.sp_view_button);
-        mSamplingPointButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (haveNetworkConnection()) {
-                    mProgressSpinner.setVisibility(View.VISIBLE);
-                    mSampleClusterManager.clearItems();
-                    LatLng camCentre = mMap.getCameraPosition().target;
-                    String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
-                    new SamplingPointsAPI(DataViewActivity.this).execute(location);
-
-                    // Add a radius circle around sample point query area.
-                    if (mRadiusCircle != null) {
-                        mRadiusCircle.remove();
-                    }
-                    mRadiusCircle = mMap.addCircle(new CircleOptions()
-                            .center(camCentre)
-                            .radius(14142) // i.e. hypotenuse of 10km x 10km triangle.
-                            .strokeColor(0x661854E1)
-                            .fillColor(0x221854E1));
-                } else {
-                    Toast.makeText(v.getContext(), "Sample point retrieval needs internet connection", Toast.LENGTH_LONG).show();
-                }
+                // Show the Drawer
+                mDrawer.openDrawer();
             }
         });
 
@@ -176,7 +143,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
 
         mFragmentManager = getSupportFragmentManager();
-
     }
 
     public void setupDrawer() {
@@ -234,10 +200,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 //                        Log.i(TAG, "identifier: " + Long.toString(drawerItem.getIdentifier()));
                         switch ((int) drawerItem.getIdentifier()){
                             case 1:
-                                showSamplingPoints(view);
+                                showSamplingPoints();
                                 break;
                             case 2:
-                                showSamplingPoints(view);
+                                showSamplingPoints();
                                 break;
                             case 3:
                                 showInfo(view);
@@ -251,7 +217,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .build();
     }
 
-    public void showSamplingPoints(View v) {
+    public void showSamplingPoints() {
         if (haveNetworkConnection()) {
             mProgressSpinner.setVisibility(View.VISIBLE);
             mSampleClusterManager.clearItems();
@@ -269,7 +235,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     .strokeColor(0x661854E1)
                     .fillColor(0x221854E1));
         } else {
-            Toast.makeText(v.getContext(), "Sample point retrieval needs internet connection", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Sample point retrieval needs internet connection", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -284,6 +250,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .addToBackStack(null).commit();
     }
 
+
     public void startCameraIntent(View v) {
         if (haveNetworkConnection() && haveGPSOn(v.getContext())) {
             Intent photoCommentActivityIntent = new Intent(v.getContext(), PhotoCommentActivity.class);
@@ -292,6 +259,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             Toast.makeText(v.getContext(), "Uploading image needs internet connection and gps", Toast.LENGTH_LONG).show();
         }
     }
+
 
     @Override
     protected void onResume() {
@@ -464,7 +432,20 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837, -3.625488), 5.0f));
+
         setUpMultiManager();
+
+        // Zooms in on current location
+        currentLocation(findViewById(R.id.gps_button));
+
+        // When zoom finished it populates the map with sampling points
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                showSamplingPoints();
+                mMap.setOnCameraIdleListener(null);
+            }
+        });
 
     }
 
@@ -632,17 +613,17 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void showHomeButtons() {
         FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
         gpsButton.show();
-        mSamplingPointButton.show();
         mCameraButton.show();
-        mInfoButton.setVisibility(View.VISIBLE);
+        mMenuButton.show();
+        mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     public void hideHomeButtons() {
         FloatingActionButton gpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
         gpsButton.hide();
-        mSamplingPointButton.hide();
         mCameraButton.hide();
-        mInfoButton.setVisibility(View.INVISIBLE);
+        mMenuButton.hide();
+        mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     public List<GalleryItem> getPhotoMarkers() {
