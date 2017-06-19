@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/dark_grey"
+    android:orientation="horizontal"
+    android:textColor="@color/white"
+    android:padding="5dip" >
+
+    <!--  ListRow Left sided Thumbnail image -->
+    <!--android:background="@drawable/image_bg"-->
+    <LinearLayout android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="5dip">
+
+        <ImageView
+            android:id="@+id/list_image"
+            android:contentDescription="@string/photo_item_descriptor"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/placeholder"/>
+
+    </LinearLayout>
+
+    <!-- tag holder -->
+    <TextView
+        android:id="@+id/tag_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toEndOf="@+id/thumbnail"
+        android:text="@string/photo_tag"
+        android:typeface="sans"
+        android:textSize="12sp"
+        android:textStyle="bold"/>
+
+    <!-- tag -->
+    <TextView
+        android:id="@+id/tag"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:textSize="12sp"
+        android:layout_marginTop="1dip"
+        android:layout_toEndOf="@+id/tag_title"/>
+
+    <!-- Tag holder -->
+    <TextView
+        android:id="@+id/comment_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tag"
+        android:layout_alignBottom="@+id/thumbnail"
+        android:layout_toEndOf="@+id/thumbnail"
+        android:text="@string/photo_comment"
+        android:typeface="sans"
+        android:textSize="12sp"
+        android:textStyle="bold"/>
+
+    <!-- Tag -->
+    <TextView
+        android:id="@+id/comment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tag"
+        android:layout_alignBottom="@+id/comment_title"
+        android:layout_toEndOf="@+id/comment_title"
+        android:textSize="12sp"
+        android:layout_marginTop="1dip"/>
+
+</RelativeLayout>
