@@ -22,7 +22,7 @@ public class PhotoViewFragment extends Fragment {
     ImageButton mBackButton;
 
     private GalleryItem mGalleryItem;
-    private TextView mNameText;
+//    private TextView mNameText;
     private TextView mTagText;
     private TextView mCommentText;
 
@@ -50,8 +50,8 @@ public class PhotoViewFragment extends Fragment {
         new ImageDownloader(iv).execute(mGalleryItem.getId());
         //iv.setImageResource(mGalleryItem.getResId());
 
-        mNameText = (TextView) v.findViewById(R.id.photo_name);
-        mNameText.setText(mGalleryItem.getName());
+//        mNameText = (TextView) v.findViewById(R.id.photo_name);
+//        mNameText.setText(mGalleryItem.getName());
 
         mTagText = (TextView) v.findViewById(R.id.photo_tag);
         mTagText.setText(mGalleryItem.getTag());
