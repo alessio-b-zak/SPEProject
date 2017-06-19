@@ -203,7 +203,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                                 showSamplingPoints();
                                 break;
                             case 2:
-                                showSamplingPoints();
+                                setUpSampleManager();
                                 break;
                             case 3:
                                 showInfo(view);
@@ -436,7 +436,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         setUpMultiManager();
 
         // Zooms in on current location
-        currentLocation(findViewById(R.id.gps_button));
+        currentLocation(findViewById(R.id.map));
 
         // When zoom finished it populates the map with sampling points
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
