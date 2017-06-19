@@ -81,7 +81,6 @@ public class SplashActivityTest extends TestHelper {
         takeScreenshot(mDevice, FOLDER_NAME, "SplashActivityTestLaunchApp");
 
         onView(withId(R.id.map)).check(matches(isDisplayed()));
-        onView(withId(R.id.info_button)).check(matches(isDisplayed()));
         onView(withId(R.id.gps_button)).check(matches(isDisplayed()));
     }
 }
