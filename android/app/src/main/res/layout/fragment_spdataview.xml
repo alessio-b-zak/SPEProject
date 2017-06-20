@@ -77,36 +77,6 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:orientation="horizontal"
-            android:layout_marginRight="16dp">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:id="@+id/map_view_button"
-                android:clickable="true"
-                android:scaleType="center"
-                android:layout_toLeftOf="@+id/grid_view_button"
-                android:padding="16dp"
-                android:src="@drawable/marker_white" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:id="@+id/grid_view_button"
-                android:clickable="true"
-                android:scaleType="center"
-                android:layout_alignParentRight="true"
-                android:padding="16dp"
-                android:src="@drawable/grid_white" />
-
-        </RelativeLayout>
-
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView

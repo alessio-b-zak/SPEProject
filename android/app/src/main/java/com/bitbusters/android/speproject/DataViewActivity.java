@@ -47,6 +47,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.clustering.ClusterManager;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -352,7 +353,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             public boolean onClusterItemClick(SamplingPoint point) {
                 if (point.getTitle().equals("Sample_Point")) {
                     selectedSamplingPoint = point;
-
                     Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
                         hideHomeButtons();
@@ -392,7 +392,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
                 if (point.getTitle().equals("Picture_Point")) {
                     PhotoViewFragment fragment = new PhotoViewFragment();
-                    fragment.setGalleryItem(mSPDataFragment.getGalleryItem(point.getId()));
+                    fragment.setGalleryItem(mPhotoDataFragment.getGalleryItem(point.getId()));
                     mFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
                             .add(R.id.fragment_container, fragment)
@@ -408,12 +408,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void showPhotoMarkersInView() {
 
         mProgressSpinner.setVisibility(View.VISIBLE);
-
+        VisibleRegion screen = mMap.getProjection().getVisibleRegion();
+        LatLng topLeft = screen.farLeft;
+        LatLng bottomRight = screen.nearRight;
         String[] points = new String[4];
-        points[0] = "53";
-        points[1] = "-3";
-        points[2] = "50";
-        points[3] = "3";
+        points[0] = String.valueOf(topLeft.latitude);
+        points[1] = String.valueOf(topLeft.longitude);
+        points[2] = String.valueOf(bottomRight.latitude);
+        points[3] = String.valueOf(bottomRight.longitude);
         new ThumbnailsDownloader(this, mPhotoDataFragment).execute(points);
 
     }
