@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.clustering.ClusterManager;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -69,7 +71,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private GoogleMap mMap;
     private ProgressBar mProgressSpinner;
     private FloatingActionButton mCameraButton;
-    private FloatingActionButton mMenuButton;
+    private ImageButton mMenuButton;
     private FloatingActionButton mGpsButton;
 
     //variables used for displaying current location
@@ -77,6 +79,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private Location mLocation;
     private boolean connected;
     private boolean inPhotoDataView;
+    private boolean hasMapCameraChanged;
+    private Double mPhotoDataViewLatitudeOffset;
     private Marker currentLocationMarker;
     private FragmentManager mFragmentManager;
     private SPDataFragment mSPDataFragment;
@@ -108,7 +112,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         setupDrawer();
 
         // The action performed when the menu button is pressed.
-        mMenuButton = (FloatingActionButton) findViewById(R.id.hamburger_button);
+        mMenuButton = (ImageButton) findViewById(R.id.hamburger_button);
         mMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +134,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             }
         });
 
-        FloatingActionButton mGpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
+        mGpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
 
         // Create an instance of GoogleAPIClient -> Required for the GPS Location
         if (mGoogleApiClient == null) {
@@ -144,6 +148,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mFragmentManager = getSupportFragmentManager();
         // Sampling points are first to be populated onMapReady for that reason inPhotoDataView is set to true
         inPhotoDataView = true;
+        mPhotoDataViewLatitudeOffset = 0.0;
+        hasMapCameraChanged = false;
     }
 
     public void setupDrawer() {
@@ -201,10 +207,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 //                        Log.i(TAG, "identifier: " + Long.toString(drawerItem.getIdentifier()));
                         switch ((int) drawerItem.getIdentifier()){
                             case 1:
-                                openSamplingPointView();
+                                if(inPhotoDataView) {
+                                    closePhotoView();
+                                    openSamplingPointView();
+                                }
                                 break;
                             case 2:
-                                openPhotoView();
+                                if(!inPhotoDataView) {
+                                    closeSamplingPointView();
+                                    openPhotoView();
+                                }
                                 break;
                             case 3:
                                 showInfo(view);
@@ -219,28 +231,19 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void openSamplingPointView() {
-        if(inPhotoDataView) {
-            closePhotoView();
-            if (haveNetworkConnection()) {
-                mProgressSpinner.setVisibility(View.VISIBLE);
-                mSampleClusterManager.clearItems();
-                LatLng camCentre = mMap.getCameraPosition().target;
-                String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
-                new SamplingPointsAPI(DataViewActivity.this).execute(location);
-
-                // Add a radius circle around sample point query area.
-                if (mRadiusCircle != null) {
-                    mRadiusCircle.remove();
+        // reset the center of the screen
+        updateMapCameraPosition();
+        // if there was a change in camera wait for it to be idle and then load sampling points
+        if(hasMapCameraChanged) {
+            mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                @Override
+                public void onCameraIdle() {
+                    loadSamplingPoints();
+                    mMap.setOnCameraIdleListener(null);
                 }
-                mRadiusCircle = mMap.addCircle(new CircleOptions()
-                        .center(camCentre)
-                        .radius(14142) // i.e. hypotenuse of 10km x 10km triangle.
-                        .strokeColor(0x661854E1)
-                        .fillColor(0x221854E1));
-            } else {
-                Toast.makeText(getApplicationContext(), "Sample point retrieval needs internet connection", Toast.LENGTH_LONG).show();
-            }
-            inPhotoDataView = false;
+            });
+        } else {
+            loadSamplingPoints();
         }
     }
 
@@ -251,24 +254,23 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void openPhotoView() {
-        if(!inPhotoDataView) {
-            closeSamplingPointView();
-            Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-            if (fragment == null) {
-                setHomeButtonsPhotoView();
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        if (fragment == null) {
+            setHomeButtonsPhotoView();
 
-                fragment = new PhotoDataFragment();
-                mPhotoDataFragment = (PhotoDataFragment) fragment;
+            fragment = new PhotoDataFragment();
+            mPhotoDataFragment = (PhotoDataFragment) fragment;
 
-                showPhotoMarkersInView();
+            showPhotoMarkersInView();
 
-                mFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_bottom, 0, 0, R.anim.slide_out_bottom)
-                        .add(R.id.fragment_container, fragment)
-                        .addToBackStack(null).commit();
-            }
-            inPhotoDataView = true;
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_bottom, 0, 0, R.anim.slide_out_bottom)
+                    .add(R.id.fragment_container, fragment)
+                    .addToBackStack(null).commit();
         }
+        inPhotoDataView = true;
+        mPhotoDataViewLatitudeOffset = -0.05;
+        updateMapCameraPosition();
     }
 
     public void closePhotoView() {
@@ -276,6 +278,33 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mPictureClusterManager.clearItems();
         mPictureClusterManager.cluster();
         resetHomeButtonsPhotoView();
+        inPhotoDataView = false;
+        if(mPhotoDataViewLatitudeOffset != 0.0){
+            hasMapCameraChanged = true;
+        }
+        mPhotoDataViewLatitudeOffset = 0.0;
+    }
+
+    public void loadSamplingPoints() {
+        if (haveNetworkConnection()) {
+            mProgressSpinner.setVisibility(View.VISIBLE);
+            mSampleClusterManager.clearItems();
+            LatLng camCentre = mMap.getCameraPosition().target;
+            String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
+            new SamplingPointsAPI(DataViewActivity.this).execute(location);
+
+            // Add a radius circle around sample point query area.
+            if (mRadiusCircle != null) {
+                mRadiusCircle.remove();
+            }
+            mRadiusCircle = mMap.addCircle(new CircleOptions()
+                    .center(camCentre)
+                    .radius(14142) // i.e. hypotenuse of 10km x 10km triangle.
+                    .strokeColor(0x661854E1)
+                    .fillColor(0x221854E1));
+        } else {
+            Toast.makeText(getApplicationContext(), "Sample point retrieval needs internet connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void showInfo(View v) {
@@ -324,7 +353,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             public boolean onClusterItemClick(SamplingPoint point) {
                 if (point.getTitle().equals("Sample_Point")) {
                     selectedSamplingPoint = point;
-
                     Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
                         hideHomeButtons();
@@ -364,7 +392,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
                 if (point.getTitle().equals("Picture_Point")) {
                     PhotoViewFragment fragment = new PhotoViewFragment();
-                    fragment.setGalleryItem(mSPDataFragment.getGalleryItem(point.getId()));
+                    fragment.setGalleryItem(mPhotoDataFragment.getGalleryItem(point.getId()));
                     mFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
                             .add(R.id.fragment_container, fragment)
@@ -380,12 +408,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void showPhotoMarkersInView() {
 
         mProgressSpinner.setVisibility(View.VISIBLE);
-
+        VisibleRegion screen = mMap.getProjection().getVisibleRegion();
+        LatLng topLeft = screen.farLeft;
+        LatLng bottomRight = screen.nearRight;
         String[] points = new String[4];
-        points[0] = "53";
-        points[1] = "-3";
-        points[2] = "50";
-        points[3] = "3";
+        points[0] = String.valueOf(topLeft.latitude);
+        points[1] = String.valueOf(topLeft.longitude);
+        points[2] = String.valueOf(bottomRight.latitude);
+        points[3] = String.valueOf(bottomRight.longitude);
         new ThumbnailsDownloader(this, mPhotoDataFragment).execute(points);
 
     }
@@ -426,9 +456,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                Log.i(TAG, "About to populate Sampling Points");
+                closePhotoView();
                 openSamplingPointView();
-                Log.i(TAG, "Sampling Points Populated");
                 mMap.setOnCameraIdleListener(null);
             }
         });
@@ -483,12 +512,19 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             }
             if (mLocation != null) {
                 setLocationMarker(mLocation.getLatitude(), mLocation.getLongitude());
-                CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(11).target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
+                updateMapCameraPosition();
             }
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        }
+    }
+
+    public void updateMapCameraPosition() {
+        if (mMap != null && mLocation != null) {
+            CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(11)
+                    .target(new LatLng(mLocation.getLatitude() + mPhotoDataViewLatitudeOffset, mLocation.getLongitude())).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
         }
     }
 
@@ -584,7 +620,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             showHomeButtons();
         }
         else if (fragment instanceof PhotoDataFragment) {
-            closePhotoView();
             openSamplingPointView();
         }
         else if (fragment instanceof PhotoViewFragment) {
@@ -603,48 +638,54 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void showHomeButtons() {
         mGpsButton.show();
         mCameraButton.show();
-        mMenuButton.show();
+        mMenuButton.setVisibility(View.VISIBLE);
         mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     public void hideHomeButtons() {
         mGpsButton.hide();
         mCameraButton.hide();
-        mMenuButton.hide();
+        mMenuButton.setVisibility(View.INVISIBLE);
         mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     public void setHomeButtonsPhotoView() {
-        // Move camera button
+        // Initialise camera button layout
         mCameraButton = (FloatingActionButton) this.findViewById(R.id.cam_button);
         FrameLayout.LayoutParams mCameraButtonLayoutParams =
                 (FrameLayout.LayoutParams) mCameraButton.getLayoutParams();
-        mCameraButtonLayoutParams.topMargin = 105;
-        mCameraButtonLayoutParams.gravity = Gravity.TOP | GravityCompat.END;
-        mCameraButton.setLayoutParams(mCameraButtonLayoutParams);
 
-        //Move gps button
+        // Initialise gps button layout
         mGpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
         FrameLayout.LayoutParams mGpsButtonLayoutParams =
                 (FrameLayout.LayoutParams) mGpsButton.getLayoutParams();
-        mGpsButtonLayoutParams.gravity = Gravity.TOP | GravityCompat.END;
+
+        // Set the new positions
+        mCameraButtonLayoutParams.gravity = Gravity.TOP | Gravity.END;
+        mGpsButtonLayoutParams.gravity = Gravity.TOP | Gravity.END;
+
+        //Apply the changes
+        mCameraButton.setLayoutParams(mCameraButtonLayoutParams);
         mGpsButton.setLayoutParams(mGpsButtonLayoutParams);
     }
 
     public void resetHomeButtonsPhotoView() {
-        // Move camera button
+        // Initialise camera button layout
         mCameraButton = (FloatingActionButton) this.findViewById(R.id.cam_button);
         FrameLayout.LayoutParams mCameraButtonLayoutParams =
                 (FrameLayout.LayoutParams) mCameraButton.getLayoutParams();
-        mCameraButtonLayoutParams.gravity = Gravity.BOTTOM | GravityCompat.END;
-        mCameraButton.setLayoutParams(mCameraButtonLayoutParams);
 
-        //Move gps button
+        // Initialise gps button layout
         mGpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
         FrameLayout.LayoutParams mGpsButtonLayoutParams =
                 (FrameLayout.LayoutParams) mGpsButton.getLayoutParams();
-        mGpsButtonLayoutParams.bottomMargin = 130;
-        mGpsButtonLayoutParams.gravity = Gravity.BOTTOM | GravityCompat.END;
+
+        // Set the new positions
+        mCameraButtonLayoutParams.gravity = Gravity.BOTTOM | Gravity.END;
+        mGpsButtonLayoutParams.gravity = Gravity.BOTTOM | Gravity.END;
+
+        //Apply the changes
+        mCameraButton.setLayoutParams(mCameraButtonLayoutParams);
         mGpsButton.setLayoutParams(mGpsButtonLayoutParams);
     }
 

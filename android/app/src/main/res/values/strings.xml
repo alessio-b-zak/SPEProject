@@ -14,6 +14,8 @@
     <string name="photo_tag">Tags: </string>
     <string name="photo_item_descriptor">Image of Observation</string>
 
+    <string name="button_desc_hamburger">Hamburger Button</string>
+
     <string name="info_title"><b>MyRivers™ v1.0</b></string>
     <string name="info_subtitle">\u00A9 BitBusters 2017</string>
     <string name="info_spvText">

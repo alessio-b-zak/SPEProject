@@ -28,7 +28,6 @@ public class SamplingPointRenderer extends DefaultClusterRenderer<SamplingPoint>
     @Override
     protected void onBeforeClusterItemRendered(SamplingPoint sp, MarkerOptions markerOptions) {
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-
     }
 
 
