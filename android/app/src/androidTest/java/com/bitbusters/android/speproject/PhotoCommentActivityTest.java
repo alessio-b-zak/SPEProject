@@ -66,7 +66,6 @@ public class PhotoCommentActivityTest extends TestHelper{
         takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityUnsuccessfullyTakePicture");
         onView(withId(R.id.map)).check(matches(isDisplayed()));
         onView(withId(R.id.gps_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.info_button)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -76,7 +75,6 @@ public class PhotoCommentActivityTest extends TestHelper{
         takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityClickBackButton");
         onView(withId(R.id.map)).check(matches(isDisplayed()));
         onView(withId(R.id.cam_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.sp_view_button)).check(matches(isDisplayed()));
     }
 
     @Test

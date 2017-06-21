@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -38,6 +39,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -59,8 +61,17 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import org.osgeo.proj4j.BasicCoordinateTransform;
+import org.osgeo.proj4j.CRSFactory;
+import org.osgeo.proj4j.CoordinateReferenceSystem;
+import org.osgeo.proj4j.CoordinateTransform;
+import org.osgeo.proj4j.ProjCoordinate;
+import org.osgeo.proj4j.io.Proj4FileReader;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 
 public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -411,6 +422,35 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         VisibleRegion screen = mMap.getProjection().getVisibleRegion();
         LatLng topLeft = screen.farLeft;
         LatLng bottomRight = screen.nearRight;
+
+        Log.i(TAG,"Coordinates:");
+        Log.i(TAG,String.valueOf(screen.farLeft));
+        Log.i(TAG,String.valueOf(screen.farRight));
+        Log.i(TAG,String.valueOf(screen.nearRight));
+        Log.i(TAG,String.valueOf(screen.nearLeft));
+
+//        String osgb36 = "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894 +units=m +no_defs";
+//        String wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs ";
+//
+//        CRSFactory crsFactory = new CRSFactory();
+//
+//        CoordinateReferenceSystem sourceSRS = crsFactory.createFromParameters("EPSG:27700", osgb36);
+//        CoordinateReferenceSystem targetSRS = crsFactory.createFromParameters("EPSG:4326", wgs84);
+//
+//        CoordinateTransform transformation = new BasicCoordinateTransform(sourceSRS, targetSRS);
+//
+//        ProjCoordinate result = new ProjCoordinate();
+//        ProjCoordinate input = new ProjCoordinate(354270, 167981);
+//        transformation.transform(input, result);
+
+//        Log.i(TAG, "ST5427067981 in LatLong: " + result.toShortString());
+        NGRtoWGS84Converter ngrToWGS84Converter = new NGRtoWGS84Converter();
+        LatLng position = ngrToWGS84Converter.convert("ST5427067981");
+
+        Log.i(TAG, "NGR: ST5427067981");
+        Log.i(TAG, "LatLng: " + position.toString());
+
+
         String[] points = new String[4];
         points[0] = String.valueOf(topLeft.latitude);
         points[1] = String.valueOf(topLeft.longitude);
