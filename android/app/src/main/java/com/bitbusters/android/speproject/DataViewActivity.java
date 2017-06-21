@@ -97,15 +97,18 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private SPDataFragment mSPDataFragment;
     private PhotoDataFragment mPhotoDataFragment;
     private List<SamplingPoint> mSamplePoints = new ArrayList<>();
+    private List<CDEPoint> mCDEPoints = new ArrayList<>();
     private Circle mRadiusCircle;
     private List<GalleryItem> photoMarkers = new ArrayList<>();
     private Boolean imageLocationsDownloaded;
     private ClusterManager<SamplingPoint> mSampleClusterManager;
+    private ClusterManager<CDEPoint> mCDEClusterManager;
     private ClusterManager<GalleryItem> mPictureClusterManager;
     private MultiListener mMultiListener = new MultiListener();
     private Drawer mDrawer;
 
     private SamplingPoint selectedSamplingPoint;
+    private CDEPoint selectedCDEPoint;
 
 
     @Override
@@ -260,8 +263,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void closeSamplingPointView() {
         mRadiusCircle.setVisible(false);
-        mSampleClusterManager.clearItems();
-        mSampleClusterManager.cluster();
+//        mSampleClusterManager.clearItems();
+//        mSampleClusterManager.cluster();
+        mCDEClusterManager.clearItems();
+        mCDEClusterManager.cluster();
     }
 
     public void openPhotoView() {
@@ -299,10 +304,23 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void loadSamplingPoints() {
         if (haveNetworkConnection()) {
             mProgressSpinner.setVisibility(View.VISIBLE);
-            mSampleClusterManager.clearItems();
+//            mSampleClusterManager.clearItems();
+            mCDEClusterManager.clearItems();
             LatLng camCentre = mMap.getCameraPosition().target;
-            String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
-            new SamplingPointsAPI(DataViewActivity.this).execute(location);
+//            String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
+//            new SamplingPointsAPI(DataViewActivity.this).execute(location);
+
+            VisibleRegion screen = mMap.getProjection().getVisibleRegion();
+            LatLng[] polygon = new LatLng[4];
+//            polygon[0] = new LatLng(52.0, -3.0);
+//            polygon[1] = new LatLng(52.0, -2.0);
+//            polygon[2] = new LatLng(51.0, -2.0);
+//            polygon[3] = new LatLng(51.0, -3.0);
+            polygon[0] = screen.farLeft;
+            polygon[1] = screen.farRight;
+            polygon[2] = screen.nearRight;
+            polygon[3] = screen.nearLeft;
+            new CDEAPI(DataViewActivity.this).execute(polygon);
 
             // Add a radius circle around sample point query area.
             if (mRadiusCircle != null) {
@@ -357,13 +375,18 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     // On sample point click.
     public void setUpSampleManager() {
-        mSampleClusterManager.setRenderer(new SamplingPointRenderer(this, mMap, mSampleClusterManager));
+//        mSampleClusterManager.setRenderer(new SamplingPointRenderer(this, mMap, mSampleClusterManager));
+        mCDEClusterManager.setRenderer(new CDEPointRenderer(this, mMap, mCDEClusterManager));
 
-        mSampleClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<SamplingPoint>() {
+//        mSampleClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<SamplingPoint>() {
+//            @Override
+//            public boolean onClusterItemClick(SamplingPoint point) {
+        mCDEClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<CDEPoint>() {
             @Override
-            public boolean onClusterItemClick(SamplingPoint point) {
+            public boolean onClusterItemClick(CDEPoint point) {
                 if (point.getTitle().equals("Sample_Point")) {
-                    selectedSamplingPoint = point;
+//                    selectedSamplingPoint = point;
+                    selectedCDEPoint = point;
                     Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
                         hideHomeButtons();
@@ -372,9 +395,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         LatLng markerPos = new LatLng(point.getLatitude() + 0.05f, point.getLongitude());
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
 
-                        mSampleClusterManager.clearItems();
-                        mSampleClusterManager.addItem(point);
-                        mSampleClusterManager.cluster();
+//                        mSampleClusterManager.clearItems();
+//                        mSampleClusterManager.addItem(point);
+//                        mSampleClusterManager.cluster();
+                        mCDEClusterManager.clearItems();
+                        mCDEClusterManager.addItem(point);
+                        mCDEClusterManager.cluster();
 
                         fragment = new SPDataFragment();
                         mSPDataFragment = (SPDataFragment) fragment;
@@ -429,10 +455,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 //        Log.i(TAG,String.valueOf(screen.nearRight));
 //        Log.i(TAG,String.valueOf(screen.nearLeft));
 
-
-        Log.i(TAG, "NGR: ST5427067981");
-        Log.i(TAG, "LatLng: " + position.toString());
-
         String[] points = new String[4];
         points[0] = String.valueOf(topLeft.latitude);
         points[1] = String.valueOf(topLeft.longitude);
@@ -447,6 +469,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mSampleClusterManager.addItem(sp);
         }
         mSampleClusterManager.cluster();
+    }
+
+    public void repopulateCDEPoints(ClusterManager<CDEPoint> mCDEClusterManager) {
+        for (CDEPoint cp : mCDEPoints) {
+            mCDEClusterManager.addItem(cp);
+        }
+        mCDEClusterManager.cluster();
     }
 
 
@@ -488,31 +517,43 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void setUpMultiManager() {
         mPictureClusterManager = new ClusterManager<>(this, mMap);
-        mSampleClusterManager = new ClusterManager<>(this, mMap);
+//        mSampleClusterManager = new ClusterManager<>(this, mMap);
+        mCDEClusterManager = new ClusterManager<>(this, mMap);
         setUpSampleManager();
         setUpPictureManager();
-        mMultiListener.addOC(mSampleClusterManager);
+//        mMultiListener.addOC(mSampleClusterManager);
+        mMultiListener.addOC(mCDEClusterManager);
         mMultiListener.addOC(mPictureClusterManager);
-        mMultiListener.addOM(mSampleClusterManager);
+//        mMultiListener.addOM(mSampleClusterManager);
+        mMultiListener.addOM(mCDEClusterManager);
         mMultiListener.addOM(mPictureClusterManager);
         mMap.setOnMarkerClickListener(mMultiListener);
         mMap.setOnCameraIdleListener(mMultiListener);
     }
 
     @Override
-    public void onTaskCompleted(List<SamplingPoint> result) {
+    public void onTaskCompletedSamplingPoint(List<SamplingPoint> result) {
         //do something after fetching sampling points
-        mSamplePoints = result;
-        for (SamplingPoint r : result) {
-            mSampleClusterManager.addItem(r);
-        }
-        mSampleClusterManager.cluster();
+//        mSamplePoints = result;
+//        for (SamplingPoint r : result) {
+//            mSampleClusterManager.addItem(r);
+//        }
+//        mSampleClusterManager.cluster();
 
         /*
         for (SamplingPoint r:result){
             System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getEasting() + " " + r.getNorthing() + " ");
         }
         */
+    }
+
+    @Override
+    public void onTaskCompletedCDEPoint(List<CDEPoint> result) {
+        mCDEPoints = result;
+        for (CDEPoint r : result) {
+            mCDEClusterManager.addItem(r);
+        }
+        mCDEClusterManager.cluster();
     }
 
     //Method called when connection established with Google Play Service Location API
@@ -634,8 +675,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mRadiusCircle.setVisible(true);
             mPictureClusterManager.clearItems();
             mPictureClusterManager.cluster();
-            mSampleClusterManager.clearItems();
-            repopulateSamplePoints(mSampleClusterManager);
+//            mSampleClusterManager.clearItems();
+//            repopulateSamplePoints(mSampleClusterManager);
+            mCDEClusterManager.clearItems();
+            repopulateCDEPoints(mCDEClusterManager);
             mProgressSpinner.setVisibility(View.INVISIBLE);
 
             // Re-show the buttons.

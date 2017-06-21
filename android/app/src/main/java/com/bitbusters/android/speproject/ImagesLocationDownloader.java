@@ -77,7 +77,7 @@ public class ImagesLocationDownloader extends AsyncTask<String, Void, List<Image
     // onPostExecute displays the results of the AsyncTask.
     @Override
     protected void onPostExecute(List<ImageLocation> result) {
-//        listener.onTaskCompleted(result);
+//        listener.onTaskCompletedSamplingPoint(result);
 
         tempDVA.getPhotoMarkers().clear();
 
