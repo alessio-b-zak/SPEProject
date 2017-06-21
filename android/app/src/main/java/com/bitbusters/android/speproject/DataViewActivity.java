@@ -423,33 +423,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         LatLng topLeft = screen.farLeft;
         LatLng bottomRight = screen.nearRight;
 
-        Log.i(TAG,"Coordinates:");
-        Log.i(TAG,String.valueOf(screen.farLeft));
-        Log.i(TAG,String.valueOf(screen.farRight));
-        Log.i(TAG,String.valueOf(screen.nearRight));
-        Log.i(TAG,String.valueOf(screen.nearLeft));
+//        Log.i(TAG,"Coordinates:");
+//        Log.i(TAG,String.valueOf(screen.farLeft));
+//        Log.i(TAG,String.valueOf(screen.farRight));
+//        Log.i(TAG,String.valueOf(screen.nearRight));
+//        Log.i(TAG,String.valueOf(screen.nearLeft));
 
-//        String osgb36 = "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894 +units=m +no_defs";
-//        String wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs ";
-//
-//        CRSFactory crsFactory = new CRSFactory();
-//
-//        CoordinateReferenceSystem sourceSRS = crsFactory.createFromParameters("EPSG:27700", osgb36);
-//        CoordinateReferenceSystem targetSRS = crsFactory.createFromParameters("EPSG:4326", wgs84);
-//
-//        CoordinateTransform transformation = new BasicCoordinateTransform(sourceSRS, targetSRS);
-//
-//        ProjCoordinate result = new ProjCoordinate();
-//        ProjCoordinate input = new ProjCoordinate(354270, 167981);
-//        transformation.transform(input, result);
-
-//        Log.i(TAG, "ST5427067981 in LatLong: " + result.toShortString());
-        NGRtoWGS84Converter ngrToWGS84Converter = new NGRtoWGS84Converter();
-        LatLng position = ngrToWGS84Converter.convert("ST5427067981");
 
         Log.i(TAG, "NGR: ST5427067981");
         Log.i(TAG, "LatLng: " + position.toString());
-
 
         String[] points = new String[4];
         points[0] = String.valueOf(topLeft.latitude);
@@ -660,6 +642,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             showHomeButtons();
         }
         else if (fragment instanceof PhotoDataFragment) {
+            closePhotoView();
             openSamplingPointView();
         }
         else if (fragment instanceof PhotoViewFragment) {
