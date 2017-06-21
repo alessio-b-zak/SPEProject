@@ -16,6 +16,8 @@
 
     <string name="button_desc_hamburger">Hamburger Button</string>
 
+    <string name="cde_loading_message">Loading ratings data...</string>
+
     <string name="info_title"><b>MyRivers™ v1.0</b></string>
     <string name="info_subtitle">\u00A9 BitBusters 2017</string>
     <string name="info_spvText">
