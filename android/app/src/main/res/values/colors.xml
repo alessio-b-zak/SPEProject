@@ -8,6 +8,9 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="grey">#222222</color>
-    <color name="dark_grey">#ff444444</color>
+    <color name="darkGrey">#ff444444</color>
+    <color name="darkGreyTransparent">#dd444444</color>
+    <color name="backgroundDefault">#4fc3f7</color>
+    <color name="backgroundTransparent">#cc4fc3f7</color>
 
 </resources>

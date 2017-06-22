@@ -33,6 +33,6 @@
         <b>GPS Button</b>: Zoom in to your current location.
     </string>
     <string name="info_camText">
-        <b>Camera Button</b>: Take a picture and submit a new pollution incident.
+        <b>Camera Button</b>: Take a picture of interesting wildlife observation or a pollution incident.
     </string>
 </resources>

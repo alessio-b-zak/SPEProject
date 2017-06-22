@@ -79,7 +79,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private Location mLocation;
     private boolean connected;
     private boolean inPhotoDataView;
-    private boolean hasMapCameraChanged;
     private Double mPhotoDataViewLatitudeOffset;
     private Marker currentLocationMarker;
     private FragmentManager mFragmentManager;
@@ -88,7 +87,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private PhotoDataFragment mPhotoDataFragment;
     private List<SamplingPoint> mSamplePoints = new ArrayList<>();
     private List<CDEPoint> mCDEPoints = new ArrayList<>();
-    private Circle mRadiusCircle;
     private List<GalleryItem> photoMarkers = new ArrayList<>();
     private Boolean imageLocationsDownloaded;
     private ClusterManager<SamplingPoint> mSampleClusterManager;
@@ -153,7 +151,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         // Sampling points are first to be populated onMapReady for that reason inPhotoDataView is set to true
         inPhotoDataView = true;
         mPhotoDataViewLatitudeOffset = 0.0;
-        hasMapCameraChanged = false;
     }
 
     public void setupDrawer() {
@@ -238,23 +235,20 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         // reset the center of the screen
         updateMapCameraPosition();
         // if there was a change in camera wait for it to be idle and then load sampling points
-        if(hasMapCameraChanged) {
-            mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-                @Override
-                public void onCameraIdle() {
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                if( mMap.getCameraPosition().zoom > 10 ) {
                     loadSamplingPoints();
-                    mMap.setOnCameraIdleListener(null);
                 }
-            });
-        } else {
-            loadSamplingPoints();
-        }
+            }
+        });
     }
 
     public void closeSamplingPointView() {
-        mRadiusCircle.setVisible(false);
 //        mSampleClusterManager.clearItems();
 //        mSampleClusterManager.cluster();
+        mMap.setOnCameraIdleListener(null);
         mCDEClusterManager.clearItems();
         mCDEClusterManager.cluster();
     }
@@ -267,7 +261,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             fragment = new PhotoDataFragment();
             mPhotoDataFragment = (PhotoDataFragment) fragment;
 
-            showPhotoMarkersInView();
+            mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                @Override
+                public void onCameraIdle() {
+                    if( mMap.getCameraPosition().zoom > 10 ) {
+                        mPictureClusterManager.clearItems();
+                        mPictureClusterManager.cluster();
+                        showPhotoMarkersInView();
+                    }
+                }
+            });
 
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_bottom, 0, 0, R.anim.slide_out_bottom)
@@ -280,14 +283,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void closePhotoView() {
+        mMap.setOnCameraIdleListener(null);
         mFragmentManager.popBackStack();
         mPictureClusterManager.clearItems();
         mPictureClusterManager.cluster();
         resetHomeButtonsPhotoView();
         inPhotoDataView = false;
-        if(mPhotoDataViewLatitudeOffset != 0.0){
-            hasMapCameraChanged = true;
-        }
         mPhotoDataViewLatitudeOffset = 0.0;
     }
 
@@ -297,30 +298,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 //            mSampleClusterManager.clearItems();
             mCDEClusterManager.clearItems();
             LatLng camCentre = mMap.getCameraPosition().target;
-//            String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
-//            new SamplingPointsAPI(DataViewActivity.this).execute(location);
 
             VisibleRegion screen = mMap.getProjection().getVisibleRegion();
             LatLng[] polygon = new LatLng[4];
-//            polygon[0] = new LatLng(52.0, -3.0);
-//            polygon[1] = new LatLng(52.0, -2.0);
-//            polygon[2] = new LatLng(51.0, -2.0);
-//            polygon[3] = new LatLng(51.0, -3.0);
             polygon[0] = screen.farLeft;
             polygon[1] = screen.farRight;
             polygon[2] = screen.nearRight;
             polygon[3] = screen.nearLeft;
             new CDEPointAPI(DataViewActivity.this).execute(polygon);
 
-            // Add a radius circle around sample point query area.
-            if (mRadiusCircle != null) {
-                mRadiusCircle.remove();
-            }
-            mRadiusCircle = mMap.addCircle(new CircleOptions()
-                    .center(camCentre)
-                    .radius(14142) // i.e. hypotenuse of 10km x 10km triangle.
-                    .strokeColor(0x661854E1)
-                    .fillColor(0x221854E1));
         } else {
             Toast.makeText(getApplicationContext(), "Sample point retrieval needs internet connection", Toast.LENGTH_LONG).show();
         }
@@ -380,8 +366,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
                         hideHomeButtons();
-                        // Hide the radius circle.
-                        mRadiusCircle.setVisible(false);
+
                         LatLng markerPos = new LatLng(point.getLatitude() + 0.05f, point.getLongitude());
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
 
@@ -493,13 +478,17 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         // Zooms in on current location
         currentLocation(findViewById(R.id.map));
 
+        if(!haveGPSOn(getApplicationContext())){
+            Toast.makeText(getApplicationContext(), "Please enable your GPS or zoom in to a " +
+                    "desired location", Toast.LENGTH_LONG).show();
+        }
+
         // When zoom finished it populates the map with sampling points
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
                 closePhotoView();
                 openSamplingPointView();
-                mMap.setOnCameraIdleListener(null);
             }
         });
 
@@ -614,7 +603,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             }
 
         }else{
-            Toast.makeText(v.getContext(), "GPS required", Toast.LENGTH_LONG).show();
+            Toast.makeText(v.getContext(), "GPS Required", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -662,7 +651,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         if (fragment instanceof SPDataFragment) {
             mFragmentManager.popBackStack();
-            mRadiusCircle.setVisible(true);
             mPictureClusterManager.clearItems();
             mPictureClusterManager.cluster();
 //            mSampleClusterManager.clearItems();
@@ -670,12 +658,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mCDEClusterManager.clearItems();
             repopulateCDEPoints(mCDEClusterManager);
             mProgressSpinner.setVisibility(View.INVISIBLE);
-
             // Re-show the buttons.
             showHomeButtons();
         } else if (fragment instanceof CDEDataFragment) {
             mFragmentManager.popBackStack();
-            mRadiusCircle.setVisible(true);
             mCDEClusterManager.clearItems();
             repopulateCDEPoints(mCDEClusterManager);
             mProgressSpinner.setVisibility(View.INVISIBLE);

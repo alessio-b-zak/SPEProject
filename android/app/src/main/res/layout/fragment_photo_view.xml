@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:clickable="true"
-        android:background="@color/dark_grey"
+        android:background="@color/darkGreyTransparent"
         android:layout_weight="0.50" >
 
         <android.support.v7.widget.RecyclerView

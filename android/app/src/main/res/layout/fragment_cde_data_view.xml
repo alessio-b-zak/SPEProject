@@ -9,7 +9,7 @@
     android:layout_height="166dp"
     android:orientation="vertical"
     android:clickable="true"
-    android:background="#cc4fc3f7">
+    android:background="@color/backgroundTransparent">
 
         <TextView
         android:text=""
