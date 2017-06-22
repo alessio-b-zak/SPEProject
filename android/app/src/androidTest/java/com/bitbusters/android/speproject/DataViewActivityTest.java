@@ -48,7 +48,7 @@ public class DataViewActivityTest extends TestHelper {
 
     @Test
     public void DataViewActivityClickInfoButton() {
-        onView(withId(R.id.info_button)).perform(click());
+//        onView(withId(R.id.info_button)).perform(click());
         takeScreenshot(mDevice, FOLDER_NAME, "DataViewActivityClickInfoButton");
         onView(withId(R.id.info_title)).check(matches(isDisplayed()));
         onView(withId(R.id.info_spvButton)).check(matches(isDisplayed()));
@@ -82,7 +82,7 @@ public class DataViewActivityTest extends TestHelper {
     @Test
     public void SPDataViewFragmentClickGridViewButton() {
         openSamplingPointDataViewFragment();
-        onView(withId(R.id.grid_view_button)).perform(click());
+//        onView(withId(R.id.grid_view_button)).perform(click());
         takeScreenshot(mDevice, FOLDER_NAME, "SPDataViewFragmentClickGridViewButton");
         onView(withId(R.id.grid_view)).check(matches(isDisplayed()));
         onView(withId(R.id.dataview_toolbar)).check(matches(isDisplayed()));
@@ -91,8 +91,8 @@ public class DataViewActivityTest extends TestHelper {
     @Test
     public void SPDataViewFragmentClickSamplePointViewButton() {
         openSamplingPointDataViewFragment();
-        onView(withId(R.id.grid_view_button)).perform(click());
-        onView(withId(R.id.map_view_button)).perform(click());
+//        onView(withId(R.id.grid_view_button)).perform(click());
+//        onView(withId(R.id.map_view_button)).perform(click());
         takeScreenshot(mDevice, FOLDER_NAME, "SPDataViewFragmentClickSamplePointViewButton");
         onView(withId(R.id.grid_view)).check(matches(not(isDisplayed())));
         onView(withId(R.id.dataview_toolbar)).check(matches(isDisplayed()));
@@ -112,7 +112,6 @@ public class DataViewActivityTest extends TestHelper {
         onView(withId(R.id.back_button_sp_data_view)).perform(click());
         takeScreenshot(mDevice, FOLDER_NAME, "SPDataViewFragmentClickBackButton");
         onView(withId(R.id.cam_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.info_button)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -127,7 +126,7 @@ public class DataViewActivityTest extends TestHelper {
 
     @Test
     public void InfoViewFragmentClickBackButton() {
-        onView(withId(R.id.info_button)).perform(click());
+//        onView(withId(R.id.info_button)).perform(click());
         onView(withId(R.id.back_button_info_view)).perform(click());
         takeScreenshot(mDevice, FOLDER_NAME, "InfoViewFragmentClickBackButton");
         onView(withId(R.id.cam_button)).check(matches(isDisplayed()));

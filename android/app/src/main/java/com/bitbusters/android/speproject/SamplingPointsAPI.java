@@ -49,8 +49,8 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
             conn.setRequestMethod("GET");
-            // TODO: Find out why it works only when true!
             conn.setDoInput(true);
+
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
@@ -58,6 +58,7 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
             Log.d(DEBUG_TAG, "The response is: " + response);
             InputStream inputStream = null;
             inputStream = conn.getInputStream();
+
             //len limits the input string returned. should be changed from 5000 when tested.
             int len = 5000;
             // Convert the InputStream into a string
@@ -80,7 +81,7 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
 //            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
 //        }
 
-        listener.onTaskCompleted(result);
+        listener.onTaskCompletedSamplingPoint(result);
     }
 
     public String readIt(InputStream stream, int len) throws IOException {

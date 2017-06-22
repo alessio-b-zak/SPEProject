@@ -16,9 +16,9 @@ import java.util.List;
 public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
     private static final String TAG = "THUMBNAIL_DOWNLOADER";
     private DataViewActivity mDataViewActivity;
-    private ImgLocDowListener mImagesLocationDownloadListener;
+    private ImageLocationDownloadListener mImagesLocationDownloadListener;
 
-    public ThumbnailsDownloader(Context context, ImgLocDowListener imgLocationDownloadListener) {
+    public ThumbnailsDownloader(Context context, ImageLocationDownloadListener imgLocationDownloadListener) {
         this.mDataViewActivity = (DataViewActivity) context;
         this.mImagesLocationDownloadListener = imgLocationDownloadListener;
     }

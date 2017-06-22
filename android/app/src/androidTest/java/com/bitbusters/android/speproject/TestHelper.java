@@ -31,7 +31,7 @@ public class TestHelper {
     public static final String CANCEL_PICTURE_BUTTON = "com.android.gallery3d:id/btn_cancel";
 
     public static final int GPS_BUTTON = R.id.gps_button;
-    public static final int SAMPLING_POINT_BUTTON = R.id.sp_view_button;
+    public static final int SAMPLING_POINT_BUTTON = 1;
 
     public static final String SUBMIT_FORM_BUTTON = "android:id/button1";
     public static final String CANCEL_FORM_BUTTON = "android:id/button2";

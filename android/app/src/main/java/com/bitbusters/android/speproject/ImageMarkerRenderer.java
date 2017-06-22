@@ -14,11 +14,11 @@ import com.google.maps.android.ui.IconGenerator;
  * Created by Stefan on 08/02/2017.
  */
 
-public class PicturePointRenderer extends DefaultClusterRenderer<GalleryItem> {
+public class ImageMarkerRenderer extends DefaultClusterRenderer<GalleryItem> {
 
 
 
-    public PicturePointRenderer(Context context, GoogleMap map, ClusterManager<GalleryItem> clusterManager) {
+    public ImageMarkerRenderer(Context context, GoogleMap map, ClusterManager<GalleryItem> clusterManager) {
         super(context, map, clusterManager);
     }
 

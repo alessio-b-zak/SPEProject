@@ -38,7 +38,7 @@ public class InputStreamToImageLocation {
 
     public ImageLocation readMessage(JsonReader reader) throws IOException {
         String id = null;
-        PhotoTag tag = PhotoTag.NA;
+        ImageTag tag = ImageTag.NA;
         double latitude = 0.0, longitude = 0.0;
         try {
             reader.beginObject();
@@ -47,7 +47,7 @@ public class InputStreamToImageLocation {
                 if (name.equals("_id")) {
                     id = reader.nextString();
                 } else if (name.equals("tag")) {
-                    tag = PhotoTag.fromString(reader.nextString());
+                    tag = ImageTag.fromString(reader.nextString());
                 } else if (name.equals("loc")) {
                     reader.beginArray();
                     longitude = reader.nextDouble();

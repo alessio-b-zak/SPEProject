@@ -42,7 +42,7 @@ public class InputStreamToThumbnail {
         String comment = null;
         String id = null;
         double latitude = 0.0, longitude = 0.0;
-        PhotoTag tag = PhotoTag.NA;
+        ImageTag tag = ImageTag.NA;
         /* Used to dynamically add an arbitrary number of pixels (as bytes), read from the JSON. */
         List<Byte> imgPixels = new ArrayList<Byte>();
         try {
@@ -68,7 +68,7 @@ public class InputStreamToThumbnail {
                 } else if (name.equals("_id")) {
                     id = reader.nextString();
                 } else if (name.equals("tag")) {
-                    tag = PhotoTag.fromString(reader.nextString());
+                    tag = ImageTag.fromString(reader.nextString());
                 } else if (name.equals("comment")) {
                     comment = reader.nextString();
                 } else if (name.equals("loc")) {

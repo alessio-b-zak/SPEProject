@@ -7,5 +7,6 @@ import java.util.List;
  */
 
 public interface OnTaskCompleted {
-    void onTaskCompleted(List<SamplingPoint> result);
+    void onTaskCompletedSamplingPoint(List<SamplingPoint> result);
+    void onTaskCompletedCDEPoint(List<CDEPoint> result);
 }

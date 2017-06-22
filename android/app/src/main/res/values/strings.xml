@@ -16,6 +16,14 @@
 
     <string name="button_desc_hamburger">Hamburger Button</string>
 
+    <string name="cde_loading_message">Loading ratings data...</string>
+    <string name="cde_table_classification_value">Rating</string>
+    <string name="cde_table_classification_year">Year</string>
+    <string name="cde_table_classification_certainty">Certainty</string>
+    <string name="cde_table_overall">Overall</string>
+    <string name="cde_table_ecological">Ecological</string>
+    <string name="cde_table_chemical">Chemical</string>
+
     <string name="info_title"><b>MyRivers™ v1.0</b></string>
     <string name="info_subtitle">\u00A9 BitBusters 2017</string>
     <string name="info_spvText">
@@ -25,6 +33,6 @@
         <b>GPS Button</b>: Zoom in to your current location.
     </string>
     <string name="info_camText">
-        <b>Camera Button</b>: Take a picture and submit a new pollution incident.
+        <b>Camera Button</b>: Take a picture of interesting wildlife observation or a pollution incident.
     </string>
 </resources>

@@ -3,14 +3,11 @@ package com.bitbusters.android.speproject;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -26,7 +23,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Image> {
     protected Image doInBackground(String...params) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
         Bitmap bmp = Bitmap.createBitmap(10, 10, conf);
-        Image image = new Image("", bmp,0, 0, "",PhotoTag.NA);
+        Image image = new Image("", bmp,0, 0, "", ImageTag.NA);
         // param 0 is the id of the image
         try {
 

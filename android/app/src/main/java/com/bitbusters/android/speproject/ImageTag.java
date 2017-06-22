@@ -4,7 +4,7 @@ package com.bitbusters.android.speproject;
  * Created by toddym42 on 20/02/2017.
  */
 
-public enum PhotoTag {
+public enum ImageTag {
     NA("No tag set"),
     BEC("Bank erosion (cattle poaching)"),
     BED("Bank erosion (dog sliding)"),
@@ -18,19 +18,19 @@ public enum PhotoTag {
 
     private String text;
 
-    PhotoTag(String text) {
+    ImageTag(String text) {
         this.text = text;
     }
 
 
 
-    public static PhotoTag fromString(String text) {
-        for (PhotoTag pt : PhotoTag.values()) {
+    public static ImageTag fromString(String text) {
+        for (ImageTag pt : ImageTag.values()) {
             if (pt.name().equalsIgnoreCase(text)) {
                 return pt;
             }
         }
-        return PhotoTag.NA;
+        return ImageTag.NA;
     }
 
 

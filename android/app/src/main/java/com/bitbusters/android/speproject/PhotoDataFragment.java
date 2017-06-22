@@ -25,7 +25,7 @@ import java.util.List;
  * Created by mihajlo on 08/11/2016.
  */
 
-public class PhotoDataFragment extends Fragment implements ImgLocDowListener{
+public class PhotoDataFragment extends Fragment implements ImageLocationDownloadListener{
 
     View mPhotoDataView;
 
@@ -109,6 +109,8 @@ public class PhotoDataFragment extends Fragment implements ImgLocDowListener{
                     PhotoViewFragment fragment = new PhotoViewFragment();
                     int itemPosition = mPhotoRecyclerView.getChildLayoutPosition(v);
                     fragment.setGalleryItem(mGalleryItems.get(itemPosition));
+
+                    mDataViewActivity.hideHomeButtons();
 
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     fm.beginTransaction()
