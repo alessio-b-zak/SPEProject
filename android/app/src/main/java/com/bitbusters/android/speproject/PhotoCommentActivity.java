@@ -40,7 +40,7 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             com.bitbusters.android.speproject.Image image = new com.bitbusters.android.speproject.Image("NoId",
-                                imageTaken, mLocation.getLatitude(), mLocation.getLongitude(), someText.getText().toString(), (PhotoTag)spinner.getSelectedItem());
+                                imageTaken, mLocation.getLatitude(), mLocation.getLongitude(), someText.getText().toString(), (ImageTag)spinner.getSelectedItem());
             Log.e(String.valueOf(mLocation.getLongitude()), String.valueOf(mLocation.getLatitude()));
             new ImageUploader().execute(image);
         } else {
@@ -109,7 +109,7 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
     protected void setUpSpinner(){
         spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setPrompt("Set tag");
-        ArrayAdapter<PhotoTag> adapter = new ArrayAdapter<>(this, R.layout.spinner_format, PhotoTag.values());
+        ArrayAdapter<ImageTag> adapter = new ArrayAdapter<>(this, R.layout.spinner_format, ImageTag.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }

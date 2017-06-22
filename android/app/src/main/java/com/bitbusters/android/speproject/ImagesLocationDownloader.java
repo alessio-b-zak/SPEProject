@@ -3,14 +3,10 @@ package com.bitbusters.android.speproject;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,9 +15,9 @@ import java.util.List;
 public class ImagesLocationDownloader extends AsyncTask<String, Void, List<ImageLocation>> {
     private static final String TAG = "IMAGES_LOC";
     private DataViewActivity tempDVA;
-    private ImgLocDowListener imglis;
+    private ImageLocationDownloadListener imglis;
 
-    public ImagesLocationDownloader(Context context, ImgLocDowListener imglis) {
+    public ImagesLocationDownloader(Context context, ImageLocationDownloadListener imglis) {
         this.tempDVA = (DataViewActivity) context;
         this.imglis = imglis;
     }

@@ -412,7 +412,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     // On Picture point click.
     public void setUpPictureManager() {
-        mPictureClusterManager.setRenderer(new PicturePointRenderer(this, mMap, mPictureClusterManager));
+        mPictureClusterManager.setRenderer(new ImageMarkerRenderer(this, mMap, mPictureClusterManager));
         mPictureClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<GalleryItem>() {
             @Override
             public boolean onClusterItemClick(GalleryItem point) {
@@ -673,8 +673,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
             // Re-show the buttons.
             showHomeButtons();
-        }
-        else if (fragment instanceof PhotoDataFragment) {
+        } else if (fragment instanceof CDEDataFragment) {
+            mFragmentManager.popBackStack();
+            mRadiusCircle.setVisible(true);
+            mCDEClusterManager.clearItems();
+            repopulateCDEPoints(mCDEClusterManager);
+            mProgressSpinner.setVisibility(View.INVISIBLE);
+            // Re-show the buttons.
+            showHomeButtons();
+        } else if (fragment instanceof PhotoDataFragment) {
             closePhotoView();
             openSamplingPointView();
         }

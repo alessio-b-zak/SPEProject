@@ -21,6 +21,7 @@ class CDEPoint extends Point {
 
     public static final String ECOLOGICAL = "Ecological";
     public static final String CHEMICAL = "Chemical";
+    public static final String OVERALL = "Overall Water Body";
 
     CDEPoint(String waterbodyId, String label, double latitude, double longitude) {
         super(latitude,longitude,"CDE_Point", "");
@@ -63,9 +64,10 @@ class CDEPoint extends Point {
     }
 
     public boolean isClassified() {
-        return classificationHashMap.size() == 2
+        return classificationHashMap.size() == 3
                 && classificationHashMap.containsKey(ECOLOGICAL)
-                && classificationHashMap.containsKey(CHEMICAL);
+                && classificationHashMap.containsKey(CHEMICAL)
+                && classificationHashMap.containsKey(OVERALL);
     }
 
     public void printClassification() {

@@ -1,5 +1,4 @@
 package com.bitbusters.android.speproject;
-import android.graphics.Bitmap;
 
 
 /**
@@ -10,9 +9,9 @@ class ImageLocation {
     private double latitude;
     private double longitude;
     private String id;
-    private PhotoTag tag;
+    private ImageTag tag;
 
-    ImageLocation(String id, double latitude, double longitude, PhotoTag tag) {
+    ImageLocation(String id, double latitude, double longitude, ImageTag tag) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -43,11 +42,11 @@ class ImageLocation {
         this.longitude = longitude;
     }
 
-    public void setPhotoTag(PhotoTag tag){
+    public void setPhotoTag(ImageTag tag){
         this.tag = tag;
     }
 
-    public PhotoTag getPhotoTag(){
+    public ImageTag getPhotoTag(){
         return tag;
     }
 

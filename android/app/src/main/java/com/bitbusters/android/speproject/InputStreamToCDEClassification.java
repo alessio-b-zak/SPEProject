@@ -16,12 +16,6 @@ import java.util.List;
 
 public class InputStreamToCDEClassification {
 
-    private NGRtoWGS84Converter ngRtoWGS84Converter;
-
-    InputStreamToCDEClassification() {
-        ngRtoWGS84Converter = new NGRtoWGS84Converter();
-    }
-
     public void readJsonStream(CDEPoint cdePoint, InputStream in) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         reader.setLenient(true);
@@ -84,7 +78,8 @@ public class InputStreamToCDEClassification {
         }
 
         if(item.equals(CDEPoint.ECOLOGICAL) && !cdePoint.getClassificationHashMap().containsKey(CDEPoint.ECOLOGICAL) ||
-                item.equals(CDEPoint.CHEMICAL) && !cdePoint.getClassificationHashMap().containsKey(CDEPoint.CHEMICAL)) {
+                item.equals(CDEPoint.CHEMICAL) && !cdePoint.getClassificationHashMap().containsKey(CDEPoint.CHEMICAL) ||
+                item.equals(CDEPoint.OVERALL) && !cdePoint.getClassificationHashMap().containsKey(CDEPoint.OVERALL)) {
             cdePoint.getClassificationHashMap().put(item, new Classification(value, certainty, year));
         }
     }

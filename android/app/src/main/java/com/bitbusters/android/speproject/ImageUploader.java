@@ -1,28 +1,19 @@
 
 package com.bitbusters.android.speproject;
 
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ImageUploader extends AsyncTask<Image, Void, String> {
     private static final String TAG = "IMAGES_UPLOADER";
@@ -34,7 +25,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             Bitmap bitmap = params[0].getImage();
             Double latitude = params[0].getLatitude();
             Double longitude = params[0].getLongitude();
-            PhotoTag tag = params[0].getPhotoTag();
+            ImageTag tag = params[0].getPhotoTag();
 
             HttpURLConnection httpUrlConnection = null;
             URL url = new URL("http://139.59.184.70:8080/uploadImage");

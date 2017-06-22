@@ -1,10 +1,12 @@
 package com.bitbusters.android.speproject;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,17 +43,11 @@ public class CDEDataFragment extends Fragment {
         mRecyclerView.setVisibility(View.INVISIBLE);
 
         CDEPoint cdePoint = mDataViewActivity.getSelectedCDEPoint();
-        new CDEPointRatingsAPI().execute(cdePoint);
+        new CDEPointRatingsAPI(this).execute(cdePoint);
 
-//        TextView cdePointLabel = (TextView) view.findViewById(R.id.cd_label);
-//        String idAddress = cdePoint.getLabel();
-//        String idNum = idAddress[idAddress.length-1];
-//        String s = "<b>ID: </b>" + idNum;
-//        cdePointLabel.setText(Html.fromHtml(s));
-//
-//        TextView samplePointType = (TextView) view.findViewById(R.id.sp_data1);
-//        s = "<b>TYPE: </b>" + mDataViewActivity.getSelectedSamplingPoint().getSamplingPointType();
-//        samplePointType.setText(Html.fromHtml(s));
+        TextView cdePointLabel = (TextView) view.findViewById(R.id.cd_label);
+        String label = cdePoint.getLabel();
+        cdePointLabel.setText(label);
 
         mToolbar = (Toolbar) view.findViewById(R.id.cde_toolbar);
 
@@ -66,35 +62,39 @@ public class CDEDataFragment extends Fragment {
         return view;
     }
 
-    public void setChemBioText(SamplingPoint samplePoint) {
+    public void setClassificationText(CDEPoint cdePoint) {
+        //Overall
+        TextView overallValue = (TextView) mCDEDataView.findViewById(R.id.cde_table_overall_value);
+        TextView overallCertainty = (TextView) mCDEDataView.findViewById(R.id.cde_table_overall_certainty);
+        TextView overallYear = (TextView) mCDEDataView.findViewById(R.id.cde_table_overall_year);
 
-        TextView pollutionText = (TextView) mCDEDataView.findViewById(R.id.sp_data2);
+        Classification overallClassification = cdePoint.getClassificationHashMap().get(CDEPoint.OVERALL);
 
-        String chemRating = mDataViewActivity.getSelectedSamplingPoint().getChemicalRating();
-        if (chemRating.equals("Poor")) {
-            chemRating = "<font color=\"#ff0000\">Poor</font>";      // Red
-        }
-        else if (chemRating.equals("Moderate")) {
-            chemRating = "<font color=\"#ffa500\">Moderate</font>";  // Orange
-        }
-        else if (chemRating.equals("Good")) {
-            chemRating = "<font color=\"#00ff00\">Good</font>";      // Green
-        }
-        String chemString = "<b>Chemical Pollution Est.</b> &nbsp -- " + chemRating;
+        overallValue.setText(overallClassification.getValue());
+        overallCertainty.setText(overallClassification.getCertainty());
+        overallYear.setText(overallClassification.getYear());
 
-        String ecoRating = mDataViewActivity.getSelectedSamplingPoint().getEcologicalRating();
-        if (ecoRating.equals("Poor")) {
-            ecoRating = "<font color=\"#ff0000\">Poor</font>";      // Red
-        }
-        else if (ecoRating.equals("Moderate")) {
-            ecoRating = "<font color=\"#ffa500\">Moderate</font>";  // Orange
-        }
-        else if (ecoRating.equals("Good")) {
-            ecoRating = "<font color=\"#00ff00\">Good</font>";      // Green
-        }
-        String ecoString = "<b>Ecological Pollution Est.</b> -- " + ecoRating;
+        //Ecological
+        TextView ecologicalValue = (TextView) mCDEDataView.findViewById(R.id.cde_table_ecological_value);
+        TextView ecologicalCertainty = (TextView) mCDEDataView.findViewById(R.id.cde_table_ecological_certainty);
+        TextView ecologicalYear = (TextView) mCDEDataView.findViewById(R.id.cde_table_ecological_year);
 
-        pollutionText.setText(Html.fromHtml(chemString + "<br />" + ecoString));
+        Classification ecologicalClassification = cdePoint.getClassificationHashMap().get(CDEPoint.ECOLOGICAL);
+
+        ecologicalValue.setText(ecologicalClassification.getValue());
+        ecologicalCertainty.setText(ecologicalClassification.getCertainty());
+        ecologicalYear.setText(ecologicalClassification.getYear());
+
+        //Chemical
+        TextView chemicalValue = (TextView) mCDEDataView.findViewById(R.id.cde_table_chemical_value);
+        TextView chemicalCertainty = (TextView) mCDEDataView.findViewById(R.id.cde_table_chemical_certainty);
+        TextView chemicalYear = (TextView) mCDEDataView.findViewById(R.id.cde_table_chemical_year);
+
+        Classification chemicalClassification = cdePoint.getClassificationHashMap().get(CDEPoint.CHEMICAL);
+
+        chemicalValue.setText(chemicalClassification.getValue());
+        chemicalCertainty.setText(chemicalClassification.getCertainty());
+        chemicalYear.setText(chemicalClassification.getYear());
 
     }
 

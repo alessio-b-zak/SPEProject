@@ -5,62 +5,124 @@
               android:layout_height="match_parent" >
 
     <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="166dp"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="#cc4fc3f7">
+
+        <TextView
+        android:text=""
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:background="#cc4fc3f7"
-        android:layout_weight="0.70" >
+        android:layout_height="wrap_content"
+        android:id="@+id/cd_label"
+        android:textSize="18sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textAlignment="center"
+        android:layout_marginTop="10dp" />
 
-        <TextView
-            android:text=""
+        <TableLayout
+            style="@style/TextViewParent"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/cde_table"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/cd_label"
-            android:textSize="24sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:textAlignment="center"
-            android:layout_marginTop="10dp" />
+            android:layout_height="match_parent"
+            android:stretchColumns="1,2">
+            <TableRow>
+                <TextView
+                    android:text=""/>
+                <TextView
+                    style="@style/TextViewParent"
+                    android:text="@string/cde_table_classification_value"
+                    android:gravity="center"/>
+                <TextView
+                    style="@style/TextViewParent"
+                    android:text="@string/cde_table_classification_certainty"
+                    android:gravity="center"/>
+                <TextView
+                    style="@style/TextViewParent"
+                    android:text="@string/cde_table_classification_year"
+                    android:gravity="center"/>
+            </TableRow>
 
-        <TextView
-            android:text=""
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:id="@+id/cde_classification_1"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_gravity="start"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            <TableRow
+                android:id="@+id/cde_table_overall_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/TextViewParent"
+                    android:id="@+id/cde_table_overall_name"
+                    android:text="@string/cde_table_overall"
+                    android:gravity="start"/>
+                <TextView
+                    style="@style/TextViewChild"
+                    android:id="@+id/cde_table_overall_value"
+                    android:text=""
+                    android:gravity="center"/>
+                <TextView
+                    style="@style/TextViewChild"
+                    android:id="@+id/cde_table_overall_certainty"
+                    android:text=""
+                    android:gravity="center" />
+                <TextView
+                    style="@style/TextViewChild"
+                    android:id="@+id/cde_table_overall_year"
+                    android:text=""
+                    android:gravity="center" />
+            </TableRow>
 
-        <TextView
-            android:text="@string/cde_loading_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:id="@+id/cde_classification_2"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_gravity="start"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            <TableRow
+                android:id="@+id/cde_table_ecological_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/TextViewParent"
+                    android:id="@+id/cde_table_ecological_name"
+                    android:text="@string/cde_table_ecological"
+                    android:gravity="start"/>
+                <TextView
+                    style="@style/TextViewChild"
+                    android:id="@+id/cde_table_ecological_value"
+                    android:text=""
+                    android:gravity="center"/>
+                <TextView
+                    style="@style/TextViewChild"
+                    android:id="@+id/cde_table_ecological_certainty"
+                    android:text=""
+                    android:gravity="center" />
+                <TextView
+                    style="@style/TextViewChild"
+                    android:id="@+id/cde_table_ecological_year"
+                    android:text=""
+                    android:gravity="center" />
+            </TableRow>
 
-        <TextView
-            android:text=""
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:id="@+id/cde_year"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_gravity="end"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
-
+            <TableRow
+                android:id="@+id/cde_table_chemical_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/TextViewParent"
+                    android:id="@+id/cde_table_chemical_name"
+                    android:text="@string/cde_table_chemical"
+                    android:gravity="start" />
+                <TextView
+                    style="@style/TextViewChild"
+                    android:id="@+id/cde_table_chemical_value"
+                    android:text=""
+                    android:gravity="center" />
+                <TextView
+                    style="@style/TextViewChild"
+                    android:id="@+id/cde_table_chemical_certainty"
+                    android:text=""
+                    android:gravity="center" />
+                <TextView
+                    style="@style/TextViewChild"
+                    android:id="@+id/cde_table_chemical_year"
+                    android:text=""
+                    android:gravity="center" />
+            </TableRow>
+        </TableLayout>
     </LinearLayout>
 
     <android.support.v7.widget.Toolbar

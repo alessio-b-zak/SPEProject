@@ -25,7 +25,7 @@ import java.util.List;
  * Created by mihajlo on 08/11/2016.
  */
 
-public class PhotoDataFragment extends Fragment implements ImgLocDowListener{
+public class PhotoDataFragment extends Fragment implements ImageLocationDownloadListener{
 
     View mPhotoDataView;
 

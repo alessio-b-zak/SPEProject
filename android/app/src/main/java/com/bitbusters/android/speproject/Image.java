@@ -13,9 +13,9 @@ class Image {
     private double latitude;
     private double longitude;
     private String comment;
-    private PhotoTag tag;
+    private ImageTag tag;
 
-    Image(String id, Bitmap image, double latitude, double longitude, String comment, PhotoTag tag) {
+    Image(String id, Bitmap image, double latitude, double longitude, String comment, ImageTag tag) {
         this.id = id;
         this.image = image;
         this.latitude = latitude;
@@ -64,11 +64,11 @@ class Image {
         this.comment = comment;
     }
 
-    public void setPhotoTag(PhotoTag tag){
+    public void setPhotoTag(ImageTag tag){
         this.tag = tag;
     }
 
-    public PhotoTag getPhotoTag(){
+    public ImageTag getPhotoTag(){
         return tag;
     }
 

@@ -12,10 +12,10 @@ import java.net.URL;
 public class CDEPointRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
 
     private static final String TAG = "CDE_POINT_RATINGS";
-    private SPDataFragment mSPDataFragment;
+    private CDEDataFragment mCDEDataFragment;
 
-    public CDEPointRatingsAPI() {
-
+    public CDEPointRatingsAPI(CDEDataFragment context) {
+        this.mCDEDataFragment = context;
     }
 
     @Override
@@ -33,24 +33,24 @@ public class CDEPointRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
                     .appendQueryParameter("_sort", "-classificationYear")
                     .appendQueryParameter("_sort", "-cycle");
             String myUrl = builder.build().toString();
-//            Log.i(TAG, myUrl);
+
             URL url = new URL(myUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
+
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
             Log.i(TAG, "Url is: " + url);
             Log.i(TAG, "The response is: " + response);
+
             InputStream inputStream = conn.getInputStream();
-//            inputStream = conn.getInputStream();
             InputStreamToCDEClassification inputStreamToCDEClassification = new InputStreamToCDEClassification();
             inputStreamToCDEClassification.readJsonStream(cdePoint, inputStream);
             cdePoint.printClassification();
-//            Log.i(TAG, "The result is: Chemical: " + samplingPoint.getChemicalRating() + " Ecological: " + samplingPoint.getEcologicalRating());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class CDEPointRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
 
     @Override
     protected void onPostExecute(CDEPoint cdePoint) {
-//        mSPDataFragment.setChemBioText(samplingPoint);
+        mCDEDataFragment.setClassificationText(cdePoint);
     }
 
 }
