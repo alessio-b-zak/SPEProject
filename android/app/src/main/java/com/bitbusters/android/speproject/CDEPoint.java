@@ -1,6 +1,13 @@
 package com.bitbusters.android.speproject;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cp153 on 06/12/2016.
@@ -9,19 +16,18 @@ import com.google.android.gms.maps.model.LatLng;
 class CDEPoint extends Point {
     private String waterbodyId;
     private String label;
-//    private String type;
     private LatLng location;
-    private Classification ecological;
-    private Classification chemical;
+    private HashMap<String,Classification> classificationHashMap;
+
+    public static final String ECOLOGICAL = "Ecological";
+    public static final String CHEMICAL = "Chemical";
 
     CDEPoint(String waterbodyId, String label, double latitude, double longitude) {
         super(latitude,longitude,"CDE_Point", "");
         this.waterbodyId = waterbodyId;
         this.label = label;
-//        this.type = type;
         this.location = new LatLng(latitude,longitude);
-        this.ecological = new Classification("Ecological");
-        this.chemical = new Classification("Chemical");
+        this.classificationHashMap = new HashMap<>();
     }
 
     public String getWaterbodyId() {
@@ -40,13 +46,7 @@ class CDEPoint extends Point {
         return location.longitude;
     }
 
-//    public String getType() {
-//        return type;
-//    }
-
-    public Classification getEcological() { return ecological; }
-
-    public Classification getChemical() { return chemical; }
+    public HashMap<String, Classification> getClassificationHashMap() { return classificationHashMap; }
 
     public void setWaterbodyId(String waterbodyId) {
         this.waterbodyId = waterbodyId;
@@ -62,8 +62,17 @@ class CDEPoint extends Point {
         super.setLongitude(longitude);
     }
 
-//    public void setType(String type) {
-//        this.type = type;
-//    }
+    public boolean isClassified() {
+        return classificationHashMap.size() == 2
+                && classificationHashMap.containsKey(ECOLOGICAL)
+                && classificationHashMap.containsKey(CHEMICAL);
+    }
+
+    public void printClassification() {
+        for(Map.Entry<String, Classification> entry : classificationHashMap.entrySet()){
+            Log.i("CDEPoint", entry.getKey() + " " + entry.getValue().getValue() + " "
+                    + entry.getValue().getCertainty() + " " + entry.getValue().getYear());
+        }
+    }
 
 }

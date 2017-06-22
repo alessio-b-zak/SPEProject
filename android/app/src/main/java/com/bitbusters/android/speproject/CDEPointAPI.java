@@ -18,12 +18,12 @@ import java.util.List;
 
 //import static com.google.android.gms.internal.zznu.is;
 
-public class CDEAPI extends AsyncTask<LatLng, Void, List<CDEPoint>> {
+public class CDEPointAPI extends AsyncTask<LatLng, Void, List<CDEPoint>> {
     private static final String TAG = "CDE_API";
     private OnTaskCompleted listener;
     private DataViewActivity mDataViewActivity;
 
-    public CDEAPI(OnTaskCompleted listener) {
+    public CDEPointAPI(OnTaskCompleted listener) {
         this.listener = listener;
         this.mDataViewActivity = (DataViewActivity) listener;
     }

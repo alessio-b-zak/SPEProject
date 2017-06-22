@@ -20,10 +20,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -39,7 +37,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -61,15 +58,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import org.osgeo.proj4j.BasicCoordinateTransform;
-import org.osgeo.proj4j.CRSFactory;
-import org.osgeo.proj4j.CoordinateReferenceSystem;
-import org.osgeo.proj4j.CoordinateTransform;
-import org.osgeo.proj4j.ProjCoordinate;
-import org.osgeo.proj4j.io.Proj4FileReader;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -95,6 +84,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private Marker currentLocationMarker;
     private FragmentManager mFragmentManager;
     private SPDataFragment mSPDataFragment;
+    private CDEDataFragment mCDEDataFragment;
     private PhotoDataFragment mPhotoDataFragment;
     private List<SamplingPoint> mSamplePoints = new ArrayList<>();
     private List<CDEPoint> mCDEPoints = new ArrayList<>();
@@ -320,7 +310,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             polygon[1] = screen.farRight;
             polygon[2] = screen.nearRight;
             polygon[3] = screen.nearLeft;
-            new CDEAPI(DataViewActivity.this).execute(polygon);
+            new CDEPointAPI(DataViewActivity.this).execute(polygon);
 
             // Add a radius circle around sample point query area.
             if (mRadiusCircle != null) {
@@ -384,7 +374,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mCDEClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<CDEPoint>() {
             @Override
             public boolean onClusterItemClick(CDEPoint point) {
-                if (point.getTitle().equals("Sample_Point")) {
+                if (point.getTitle().equals("CDE_Point")) {
 //                    selectedSamplingPoint = point;
                     selectedCDEPoint = point;
                     Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
@@ -402,8 +392,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         mCDEClusterManager.addItem(point);
                         mCDEClusterManager.cluster();
 
-                        fragment = new SPDataFragment();
-                        mSPDataFragment = (SPDataFragment) fragment;
+                        fragment = new CDEDataFragment();
+                        mCDEDataFragment = (CDEDataFragment) fragment;
 
                         mFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
@@ -690,6 +680,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
         else if (fragment instanceof PhotoViewFragment) {
             mFragmentManager.popBackStack();
+            showHomeButtons();
         }
         else if (fragment instanceof InfoFragment) {
             mFragmentManager.popBackStack();
@@ -781,6 +772,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public SamplingPoint getSelectedSamplingPoint(){
         return selectedSamplingPoint;
+    }
+
+    public CDEPoint getSelectedCDEPoint(){
+        return selectedCDEPoint;
     }
 
     public ProgressBar getProgressSpinner() {

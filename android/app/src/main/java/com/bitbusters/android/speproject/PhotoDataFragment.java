@@ -110,6 +110,8 @@ public class PhotoDataFragment extends Fragment implements ImgLocDowListener{
                     int itemPosition = mPhotoRecyclerView.getChildLayoutPosition(v);
                     fragment.setGalleryItem(mGalleryItems.get(itemPosition));
 
+                    mDataViewActivity.hideHomeButtons();
+
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     fm.beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
