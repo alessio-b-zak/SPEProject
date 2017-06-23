@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public class InputStreamToSamplingPoint {
-    public List<SamplingPoint> readJsonStream(InputStream in) throws IOException {
+    public List<WIMSPoint> readJsonStream(InputStream in) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {
             return readMessagesArray(reader);
@@ -22,8 +22,8 @@ public class InputStreamToSamplingPoint {
         }
     }
 
-    public List<SamplingPoint> readMessagesArray(JsonReader reader) throws IOException {
-        List<SamplingPoint> messages = new ArrayList<SamplingPoint>();
+    public List<WIMSPoint> readMessagesArray(JsonReader reader) throws IOException {
+        List<WIMSPoint> messages = new ArrayList<WIMSPoint>();
         try {
             reader.beginObject();
 
@@ -46,7 +46,7 @@ public class InputStreamToSamplingPoint {
         return messages;
     }
 
-    public SamplingPoint readMessage(JsonReader reader) throws IOException {
+    public WIMSPoint readMessage(JsonReader reader) throws IOException {
         String id = null;
         String samplingPointType = null;
         double latitude = 0.0, longitude = 0.0;
@@ -85,6 +85,6 @@ public class InputStreamToSamplingPoint {
             e.printStackTrace();
         }
 
-        return new SamplingPoint(id, latitude, longitude, samplingPointType, easting, northing);
+        return new WIMSPoint(id, latitude, longitude, samplingPointType, easting, northing);
     }
 }

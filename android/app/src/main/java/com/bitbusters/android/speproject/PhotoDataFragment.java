@@ -116,7 +116,7 @@ public class PhotoDataFragment extends Fragment implements ImageLocationDownload
                     int itemPosition = mPhotoRecyclerView.getChildLayoutPosition(v);
                     fragment.setGalleryItem(mGalleryItems.get(itemPosition));
 
-                    mDataViewActivity.hideHomeButtons();
+                    mDataViewActivity.displayHomeButtons(true);
 
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     fm.beginTransaction()

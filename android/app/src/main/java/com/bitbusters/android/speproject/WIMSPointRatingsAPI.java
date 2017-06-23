@@ -9,20 +9,20 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class SamplingPointRatingsAPI extends AsyncTask<SamplingPoint, Void, SamplingPoint> {
+public class WIMSPointRatingsAPI extends AsyncTask<WIMSPoint, Void, WIMSPoint> {
 
     private static final String TAG = "SAMPLING_POINT_RATINGS";
     private SPDataFragment mSPDataFragment;
 
-    public SamplingPointRatingsAPI(SPDataFragment context) {
+    public WIMSPointRatingsAPI(SPDataFragment context) {
         this.mSPDataFragment = context;
     }
 
     @Override
-    protected SamplingPoint doInBackground(SamplingPoint...params) {
-        SamplingPoint samplingPoint = params[0];
-        Integer easting = samplingPoint.getEasting();
-        Integer northing = samplingPoint.getNorthing();
+    protected WIMSPoint doInBackground(WIMSPoint...params) {
+        WIMSPoint wimsPoint = params[0];
+        Integer easting = wimsPoint.getEasting();
+        Integer northing = wimsPoint.getNorthing();
         try {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
@@ -47,18 +47,18 @@ public class SamplingPointRatingsAPI extends AsyncTask<SamplingPoint, Void, Samp
             InputStream inputStream = null;
             inputStream = conn.getInputStream();
             InputStreamUpdateRatings inputStreamUpdateRatings = new InputStreamUpdateRatings();
-            InputStreamUpdateRatings.readJsonStream(samplingPoint, inputStream);
-            Log.i(TAG, "The result is: Chemical: " + samplingPoint.getChemicalRating() + " Ecological: " + samplingPoint.getEcologicalRating());
+            InputStreamUpdateRatings.readJsonStream(wimsPoint, inputStream);
+            Log.i(TAG, "The result is: Chemical: " + wimsPoint.getChemicalRating() + " Ecological: " + wimsPoint.getEcologicalRating());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return samplingPoint;
+        return wimsPoint;
     }
 
     @Override
-    protected void onPostExecute(SamplingPoint samplingPoint) {
-        mSPDataFragment.setChemBioText(samplingPoint);
+    protected void onPostExecute(WIMSPoint wimsPoint) {
+        mSPDataFragment.setChemBioText(wimsPoint);
     }
 
 }

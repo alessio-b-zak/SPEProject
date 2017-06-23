@@ -16,19 +16,19 @@ import java.util.List;
 
 //import static com.google.android.gms.internal.zznu.is;
 
-public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoint>> {
+public class WIMSPointsAPI extends AsyncTask<String, Void, List<WIMSPoint>> {
     private static final String DEBUG_TAG = "SAMPLING_POINTS_API";
     private OnTaskCompleted listener;
     private DataViewActivity mDataViewActivity;
 
-    public SamplingPointsAPI(OnTaskCompleted listener) {
+    public WIMSPointsAPI(OnTaskCompleted listener) {
         this.listener = listener;
         this.mDataViewActivity = (DataViewActivity) listener;
     }
 
     @Override
-    protected List<SamplingPoint> doInBackground(String...params) {
-        List<SamplingPoint> samplingPoints = new ArrayList<SamplingPoint>();
+    protected List<WIMSPoint> doInBackground(String...params) {
+        List<WIMSPoint> wimsPoints = new ArrayList<WIMSPoint>();
         // params comes from the execute() call: params[0] is the url.
         try {
 
@@ -40,7 +40,7 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
                     .appendPath("sampling-point")
                     .appendQueryParameter("lat", params[0])
                     .appendQueryParameter("long", params[1])
-                    .appendQueryParameter("dist", "10")
+                    .appendQueryParameter("dist", "15")
                     .appendQueryParameter("samplingPointStatus", "open");
             String myUrl = builder.build().toString();
 
@@ -64,24 +64,24 @@ public class SamplingPointsAPI extends AsyncTask<String, Void, List<SamplingPoin
             // Convert the InputStream into a string
 //            String SamplingPoints = readIt(is, len);
             InputStreamToSamplingPoint inputStreamToSamplingPoint = new InputStreamToSamplingPoint();
-            samplingPoints = inputStreamToSamplingPoint.readJsonStream(inputStream);
-            //Log.d(DEBUG_TAG, "The result is: " + samplingPoints);
+            wimsPoints = inputStreamToSamplingPoint.readJsonStream(inputStream);
+            //Log.d(DEBUG_TAG, "The result is: " + wimsPoints);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return samplingPoints;
+        return wimsPoints;
     }
     // onPostExecute displays the results of the AsyncTask.
     @Override
-    protected void onPostExecute(List<SamplingPoint> result) {
+    protected void onPostExecute(List<WIMSPoint> result) {
         mDataViewActivity.getProgressSpinner().setVisibility(View.INVISIBLE);
         //TODO: Make sure that results are passed back to the caller;
-//        for (SamplingPoint r:result){
+//        for (WIMSPoint r:result){
 //            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
 //        }
 
-        listener.onTaskCompletedSamplingPoint(result);
+        listener.onTaskCompletedWIMSPoint(result);
     }
 
     public String readIt(InputStream stream, int len) throws IOException {

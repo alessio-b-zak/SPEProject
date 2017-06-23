@@ -1,28 +1,15 @@
 package com.bitbusters.android.speproject;
 
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by toddym42 on 08/11/2016.
@@ -53,22 +40,22 @@ public class SPDataFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.grid_view);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        SamplingPoint samplingPoint = mDataViewActivity.getSelectedSamplingPoint();
-        if (samplingPoint.getRatingsSet()) {
-            setChemBioText(samplingPoint);
+        WIMSPoint wimsPoint = mDataViewActivity.getSelectedWIMSPoint();
+        if (wimsPoint.getRatingsSet()) {
+            setChemBioText(wimsPoint);
         }
         else {
-            new SamplingPointRatingsAPI(this).execute(samplingPoint);
+            new WIMSPointRatingsAPI(this).execute(wimsPoint);
         }
 
         TextView samplePointName = (TextView) view.findViewById(R.id.sp_name);
-        String[] idAddress = mDataViewActivity.getSelectedSamplingPoint().getId().split("/");
+        String[] idAddress = mDataViewActivity.getSelectedWIMSPoint().getId().split("/");
         String idNum = idAddress[idAddress.length-1];
         String s = "<b>ID: </b>" + idNum;
         samplePointName.setText(Html.fromHtml(s));
 
         TextView samplePointType = (TextView) view.findViewById(R.id.sp_data1);
-        s = "<b>TYPE: </b>" + mDataViewActivity.getSelectedSamplingPoint().getSamplingPointType();
+        s = "<b>TYPE: </b>" + mDataViewActivity.getSelectedWIMSPoint().getSamplingPointType();
         samplePointType.setText(Html.fromHtml(s));
 
         mToolbar = (Toolbar) view.findViewById(R.id.dataview_toolbar);
@@ -84,11 +71,11 @@ public class SPDataFragment extends Fragment {
         return view;
     }
 
-    public void setChemBioText(SamplingPoint samplePoint) {
+    public void setChemBioText(WIMSPoint samplePoint) {
 
         TextView pollutionText = (TextView) mSPDataView.findViewById(R.id.sp_data2);
 
-        String chemRating = mDataViewActivity.getSelectedSamplingPoint().getChemicalRating();
+        String chemRating = mDataViewActivity.getSelectedWIMSPoint().getChemicalRating();
         if (chemRating.equals("Poor")) {
             chemRating = "<font color=\"#ff0000\">Poor</font>";      // Red
         }
@@ -100,7 +87,7 @@ public class SPDataFragment extends Fragment {
         }
         String chemString = "<b>Chemical Pollution Est.</b> &nbsp -- " + chemRating;
 
-        String ecoRating = mDataViewActivity.getSelectedSamplingPoint().getEcologicalRating();
+        String ecoRating = mDataViewActivity.getSelectedWIMSPoint().getEcologicalRating();
         if (ecoRating.equals("Poor")) {
             ecoRating = "<font color=\"#ff0000\">Poor</font>";      // Red
         }

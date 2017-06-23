@@ -9,7 +9,7 @@ import com.google.maps.android.clustering.ClusterItem;
  * Created by cp153 on 06/12/2016.
  */
 
-class SamplingPoint extends Point {
+class WIMSPoint extends Point {
     private String id;
     private String samplingPointType;
     private Integer easting;
@@ -18,9 +18,9 @@ class SamplingPoint extends Point {
     private String chemicalRating;
     private Boolean ratingsSet;
 
-    SamplingPoint(String id, double latitude, double longitude, String samplingPointType,
-                  Integer easting, Integer northing) {
-        super(latitude,longitude,"Sample_Point", "");
+    WIMSPoint(String id, double latitude, double longitude, String samplingPointType,
+              Integer easting, Integer northing) {
+        super(latitude,longitude,"WIMS_Point", "");
         this.id = id;
         this.samplingPointType = samplingPointType;
         this.easting = easting;
