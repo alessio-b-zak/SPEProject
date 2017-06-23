@@ -22,7 +22,7 @@
         android:layout_marginTop="10dp" />
 
         <TableLayout
-            style="@style/TextViewParent"
+            style="@style/TextViewCDETableParent"
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/cde_table"
             android:layout_width="match_parent"
@@ -32,15 +32,15 @@
                 <TextView
                     android:text=""/>
                 <TextView
-                    style="@style/TextViewParent"
+                    style="@style/TextViewCDETableParent"
                     android:text="@string/cde_table_classification_value"
                     android:gravity="center"/>
                 <TextView
-                    style="@style/TextViewParent"
+                    style="@style/TextViewCDETableParent"
                     android:text="@string/cde_table_classification_certainty"
                     android:gravity="center"/>
                 <TextView
-                    style="@style/TextViewParent"
+                    style="@style/TextViewCDETableParent"
                     android:text="@string/cde_table_classification_year"
                     android:gravity="center"/>
             </TableRow>
@@ -50,22 +50,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    style="@style/TextViewParent"
+                    style="@style/TextViewCDETableParent"
                     android:id="@+id/cde_table_overall_name"
                     android:text="@string/cde_table_overall"
                     android:gravity="start"/>
                 <TextView
-                    style="@style/TextViewChild"
+                    style="@style/TextViewCDETableChild"
                     android:id="@+id/cde_table_overall_value"
                     android:text=""
                     android:gravity="center"/>
                 <TextView
-                    style="@style/TextViewChild"
+                    style="@style/TextViewCDETableChild"
                     android:id="@+id/cde_table_overall_certainty"
                     android:text=""
                     android:gravity="center" />
                 <TextView
-                    style="@style/TextViewChild"
+                    style="@style/TextViewCDETableChild"
                     android:id="@+id/cde_table_overall_year"
                     android:text=""
                     android:gravity="center" />
@@ -76,22 +76,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    style="@style/TextViewParent"
+                    style="@style/TextViewCDETableParent"
                     android:id="@+id/cde_table_ecological_name"
                     android:text="@string/cde_table_ecological"
                     android:gravity="start"/>
                 <TextView
-                    style="@style/TextViewChild"
+                    style="@style/TextViewCDETableChild"
                     android:id="@+id/cde_table_ecological_value"
                     android:text=""
                     android:gravity="center"/>
                 <TextView
-                    style="@style/TextViewChild"
+                    style="@style/TextViewCDETableChild"
                     android:id="@+id/cde_table_ecological_certainty"
                     android:text=""
                     android:gravity="center" />
                 <TextView
-                    style="@style/TextViewChild"
+                    style="@style/TextViewCDETableChild"
                     android:id="@+id/cde_table_ecological_year"
                     android:text=""
                     android:gravity="center" />
@@ -102,22 +102,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    style="@style/TextViewParent"
+                    style="@style/TextViewCDETableParent"
                     android:id="@+id/cde_table_chemical_name"
                     android:text="@string/cde_table_chemical"
                     android:gravity="start" />
                 <TextView
-                    style="@style/TextViewChild"
+                    style="@style/TextViewCDETableChild"
                     android:id="@+id/cde_table_chemical_value"
                     android:text=""
                     android:gravity="center" />
                 <TextView
-                    style="@style/TextViewChild"
+                    style="@style/TextViewCDETableChild"
                     android:id="@+id/cde_table_chemical_certainty"
                     android:text=""
                     android:gravity="center" />
                 <TextView
-                    style="@style/TextViewChild"
+                    style="@style/TextViewCDETableChild"
                     android:id="@+id/cde_table_chemical_year"
                     android:text=""
                     android:gravity="center" />

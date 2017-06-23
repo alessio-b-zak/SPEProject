@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -40,8 +41,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -79,7 +78,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private Location mLocation;
     private boolean connected;
     private boolean inPhotoDataView;
-    private Double mPhotoDataViewLatitudeOffset;
+    private int mMapCameraPaddingBottom;
     private Marker currentLocationMarker;
     private FragmentManager mFragmentManager;
     private SPDataFragment mSPDataFragment;
@@ -148,9 +147,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
 
         mFragmentManager = getSupportFragmentManager();
-        // Sampling points are first to be populated onMapReady for that reason inPhotoDataView is set to true
-        inPhotoDataView = true;
-        mPhotoDataViewLatitudeOffset = 0.0;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        mMapCameraPaddingBottom = displayMetrics.heightPixels / 3;
     }
 
     public void setupDrawer() {
@@ -166,7 +166,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        final PrimaryDrawerItem drawerSamplingPoints = new PrimaryDrawerItem()
+        final PrimaryDrawerItem drawerCDE = new PrimaryDrawerItem()
                 .withIdentifier(1)
                 .withName(R.string.drawer_sampling_point)
                 .withSelectedColor(0x0d4caf)
@@ -174,8 +174,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withTextColor(Color.WHITE)
                 .withIcon(R.drawable.marker_white);
 
-        final PrimaryDrawerItem drawerImages = new PrimaryDrawerItem()
+        final PrimaryDrawerItem drawerWIMS = new PrimaryDrawerItem()
                 .withIdentifier(2)
+                .withName(R.string.drawer_sampling_point)
+                .withSelectedColor(0x0d4caf)
+                .withSelectedTextColor(Color.WHITE)
+                .withTextColor(Color.WHITE)
+                .withIcon(R.drawable.marker_white);
+
+        final PrimaryDrawerItem drawerImages = new PrimaryDrawerItem()
+                .withIdentifier(3)
                 .withName(R.string.drawer_images)
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
@@ -183,7 +191,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withIcon(R.drawable.photo_icon);
 
         final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
-                .withIdentifier(3)
+                .withIdentifier(4)
                 .withName(R.string.drawer_info)
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
@@ -196,7 +204,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withAccountHeader(header)
                 .withSliderBackgroundColor(Color.DKGRAY)
                 .addDrawerItems(
-                        drawerSamplingPoints,
+                        drawerCDE,
+                        drawerWIMS,
                         drawerImages,
                         new DividerDrawerItem(),
                         drawerInfo
@@ -210,16 +219,22 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                             case 1:
                                 if(inPhotoDataView) {
                                     closePhotoView();
-                                    openSamplingPointView();
+                                    openCDEView();
                                 }
                                 break;
                             case 2:
-                                if(!inPhotoDataView) {
-                                    closeSamplingPointView();
-                                    openPhotoView();
+                                if(inPhotoDataView) {
+                                    closePhotoView();
+                                    openCDEView();
                                 }
                                 break;
                             case 3:
+                                if(!inPhotoDataView) {
+                                    closeCDEView();
+                                    openPhotoView();
+                                }
+                                break;
+                            case 4:
                                 showInfo(view);
                                 break;
                             default:
@@ -231,7 +246,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .build();
     }
 
-    public void openSamplingPointView() {
+    public void openCDEView() {
         // reset the center of the screen
         updateMapCameraPosition();
         // if there was a change in camera wait for it to be idle and then load sampling points
@@ -239,13 +254,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public void onCameraIdle() {
                 if( mMap.getCameraPosition().zoom > 10 ) {
-                    loadSamplingPoints();
+                    loadCDEPoints();
+                } else {
+                    mCDEClusterManager.clearItems();
+                    mCDEClusterManager.cluster();
                 }
             }
         });
     }
 
-    public void closeSamplingPointView() {
+    public void closeCDEView() {
 //        mSampleClusterManager.clearItems();
 //        mSampleClusterManager.cluster();
         mMap.setOnCameraIdleListener(null);
@@ -254,6 +272,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void openPhotoView() {
+        inPhotoDataView = true;
+        updateMapCameraPosition();
         Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
         if (fragment == null) {
             setHomeButtonsPhotoView();
@@ -265,9 +285,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 @Override
                 public void onCameraIdle() {
                     if( mMap.getCameraPosition().zoom > 10 ) {
-                        mPictureClusterManager.clearItems();
-                        mPictureClusterManager.cluster();
-                        showPhotoMarkersInView();
+                        loadPhotoMarkers();
                     }
                 }
             });
@@ -277,9 +295,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     .add(R.id.fragment_container, fragment)
                     .addToBackStack(null).commit();
         }
-        inPhotoDataView = true;
-        mPhotoDataViewLatitudeOffset = -0.05;
-        updateMapCameraPosition();
     }
 
     public void closePhotoView() {
@@ -289,10 +304,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mPictureClusterManager.cluster();
         resetHomeButtonsPhotoView();
         inPhotoDataView = false;
-        mPhotoDataViewLatitudeOffset = 0.0;
     }
 
-    public void loadSamplingPoints() {
+    public void loadCDEPoints() {
         if (haveNetworkConnection()) {
             mProgressSpinner.setVisibility(View.VISIBLE);
 //            mSampleClusterManager.clearItems();
@@ -417,9 +431,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
 
     // Shows all photo markers currently on screen.
-    public void showPhotoMarkersInView() {
-
+    public void loadPhotoMarkers() {
         mProgressSpinner.setVisibility(View.VISIBLE);
+        mPictureClusterManager.clearItems();
+        mPictureClusterManager.cluster();
         VisibleRegion screen = mMap.getProjection().getVisibleRegion();
         LatLng topLeft = screen.farLeft;
         LatLng bottomRight = screen.nearRight;
@@ -487,8 +502,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                closePhotoView();
-                openSamplingPointView();
+                openCDEView();
             }
         });
 
@@ -565,7 +579,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void updateMapCameraPosition() {
         if (mMap != null && mLocation != null) {
             CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(11)
-                    .target(new LatLng(mLocation.getLatitude() + mPhotoDataViewLatitudeOffset, mLocation.getLongitude())).build();
+                    .target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
+            if(inPhotoDataView) {
+                mMap.setPadding(0, 0, 0, mMapCameraPaddingBottom);
+            } else {
+                mMap.setPadding(0, 0, 0, 0);
+            }
+
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
         }
     }
@@ -669,7 +689,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             showHomeButtons();
         } else if (fragment instanceof PhotoDataFragment) {
             closePhotoView();
-            openSamplingPointView();
+            openCDEView();
         }
         else if (fragment instanceof PhotoViewFragment) {
             mFragmentManager.popBackStack();

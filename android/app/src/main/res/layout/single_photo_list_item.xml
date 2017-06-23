@@ -5,7 +5,7 @@
     android:background="@color/darkGrey"
     android:orientation="horizontal"
     android:textColor="@color/white"
-    android:padding="5dip" >
+    android:padding="3dip" >
 
     <!--  ListRow Left sided Thumbnail image -->
     <!--android:background="@drawable/image_bg"-->
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:padding="3dip"
         android:layout_alignParentStart="true"
-        android:layout_marginEnd="5dip">
+        android:layout_marginEnd="3dip">
 
         <ImageView
             android:id="@+id/list_image"
@@ -25,50 +25,99 @@
 
     </LinearLayout>
 
+    <TableLayout
+        style="@style/TextViewCDETableParent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/cde_table"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@id/thumbnail"
+        android:stretchColumns="2"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_alignBottom="@+id/thumbnail">
+
+        <TableRow
+            android:id="@+id/photo_table_tag_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/TextViewPhotoTableParent"
+                android:id="@+id/tag_title"
+                android:text="@string/photo_tag"
+                android:gravity="start"/>
+            <TextView
+                style="@style/TextViewPhotoTableChild"
+                android:id="@+id/tag"
+                android:text=""
+                android:gravity="start"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/photo_table_comment_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/TextViewPhotoTableParent"
+                android:textColor="@color/white"
+                android:id="@+id/comment_title"
+                android:text="@string/photo_comment"
+                android:gravity="start"/>
+            <TextView
+                style="@style/TextViewPhotoTableChild"
+                android:textColor="@color/white"
+                android:id="@+id/comment"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:layout_weight="1"
+                android:text=""
+                android:gravity="start"/>
+        </TableRow>
+    </TableLayout>
+
     <!-- tag holder -->
-    <TextView
-        android:id="@+id/tag_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail"
-        android:text="@string/photo_tag"
-        android:typeface="sans"
-        android:textSize="12sp"
-        android:textStyle="bold"/>
+    <!--<TextView-->
+        <!--android:id="@+id/tag_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@+id/thumbnail"-->
+        <!--android:layout_toEndOf="@+id/thumbnail"-->
+        <!--android:text="@string/photo_tag"-->
+        <!--android:typeface="sans"-->
+        <!--android:textSize="12sp"-->
+        <!--android:textStyle="bold"/>-->
 
-    <!-- tag -->
-    <TextView
-        android:id="@+id/tag"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnail"
-        android:textSize="12sp"
-        android:layout_marginTop="1dip"
-        android:layout_toEndOf="@+id/tag_title"/>
+    <!--&lt;!&ndash; tag &ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:id="@+id/tag"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@+id/thumbnail"-->
+        <!--android:textSize="12sp"-->
+        <!--android:layout_marginTop="1dip"-->
+        <!--android:layout_toEndOf="@+id/tag_title"/>-->
 
-    <!-- Tag holder -->
-    <TextView
-        android:id="@+id/comment_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tag"
-        android:layout_alignBottom="@+id/thumbnail"
-        android:layout_toEndOf="@+id/thumbnail"
-        android:text="@string/photo_comment"
-        android:typeface="sans"
-        android:textSize="12sp"
-        android:textStyle="bold"/>
+    <!--&lt;!&ndash; Tag holder &ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:id="@+id/comment_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/tag"-->
+        <!--android:layout_alignBottom="@+id/thumbnail"-->
+        <!--android:layout_toEndOf="@+id/thumbnail"-->
+        <!--android:text="@string/photo_comment"-->
+        <!--android:typeface="sans"-->
+        <!--android:textSize="12sp"-->
+        <!--android:textStyle="bold"/>-->
 
-    <!-- Tag -->
-    <TextView
-        android:id="@+id/comment"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tag"
-        android:layout_alignBottom="@+id/comment_title"
-        android:layout_toEndOf="@+id/comment_title"
-        android:textSize="12sp"
-        android:layout_marginTop="1dip"/>
+    <!--&lt;!&ndash; Tag &ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:id="@+id/comment"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/tag"-->
+        <!--android:layout_alignBottom="@+id/comment_title"-->
+        <!--android:layout_toEndOf="@+id/comment_title"-->
+        <!--android:textSize="12sp"-->
+        <!--android:layout_marginTop="1dip"/>-->
 
 </RelativeLayout>

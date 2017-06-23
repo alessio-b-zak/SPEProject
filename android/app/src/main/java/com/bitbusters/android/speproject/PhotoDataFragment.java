@@ -34,6 +34,8 @@ public class PhotoDataFragment extends Fragment implements ImageLocationDownload
 
     private DataViewActivity mDataViewActivity;
 
+    private int mPhotoLayoutViewHeight;
+
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +51,11 @@ public class PhotoDataFragment extends Fragment implements ImageLocationDownload
         // Instantiating the list view and a layout manager
         mPhotoRecyclerView = (RecyclerView) view.findViewById(R.id.photo_list);
         mPhotoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        try {
+            mPhotoLayoutViewHeight = container.getChildAt(R.id.photo_list_linear).getHeight();
+        } catch (NullPointerException e) {
 
+        }
         // Hide the map holder in order to be able to use the map in the background activity
         RecyclerView mMapHolder = (RecyclerView) view.findViewById(R.id.map_holder);
         mMapHolder.animate().translationY(mMapHolder.getHeight());
@@ -170,6 +176,10 @@ public class PhotoDataFragment extends Fragment implements ImageLocationDownload
 
         Log.e("mItems size: " + String.valueOf(mItems.size()), "1");
         return null; // TODO: PROPER ERROR HANDLING.
+    }
+
+    public int getPhotoLayoutViewHeight() {
+        return mPhotoLayoutViewHeight;
     }
 }
 

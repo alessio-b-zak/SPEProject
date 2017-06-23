@@ -17,16 +17,29 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="TextViewParent" parent="@android:style/Widget.TextView">
+    <style name="TextViewCDETableParent" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/darkGrey</item>
         <item name="android:textStyle">bold</item>
         <item name="android:padding">3dip</item>
     </style>
 
-    <style name="TextViewChild" parent="@android:style/Widget.TextView">
+    <style name="TextViewCDETableChild" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textStyle">bold</item>
         <item name="android:padding">3dip</item>
+    </style>
+
+    <style name="TextViewPhotoTableParent" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:padding">1dip</item>
+    </style>
+
+    <style name="TextViewPhotoTableChild" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:padding">1dip</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
