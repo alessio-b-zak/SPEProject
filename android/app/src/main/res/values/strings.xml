@@ -6,8 +6,9 @@
     <string name="cam_toast">SWOOSH!</string>
     <string name="choose_tag">Choose a tag</string>
 
-    <string name="drawer_sampling_point">Show Sampling Points</string>
-    <string name="drawer_images">Show Images</string>
+    <string name="drawer_cde">CDE Data</string>
+    <string name="drawer_wims">WIMS Data</string>
+    <string name="drawer_images">Images</string>
     <string name="drawer_info">How it Works</string>
 
     <string name="photo_comment">Comment: </string>

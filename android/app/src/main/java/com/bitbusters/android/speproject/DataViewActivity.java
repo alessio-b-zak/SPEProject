@@ -46,6 +46,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.ClusterManager;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -174,7 +175,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         //if you want to update the items at a later time it is recommended to keep it in a variable
         final PrimaryDrawerItem drawerCDE = new PrimaryDrawerItem()
                 .withIdentifier(1)
-                .withName(R.string.drawer_sampling_point)
+                .withName(R.string.drawer_cde)
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
@@ -182,11 +183,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         final PrimaryDrawerItem drawerWIMS = new PrimaryDrawerItem()
                 .withIdentifier(2)
-                .withName(R.string.drawer_sampling_point)
+                .withName(R.string.drawer_wims)
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.marker_white);
+                .withIcon(R.drawable.ic_wims);
 
         final PrimaryDrawerItem drawerImages = new PrimaryDrawerItem()
                 .withIdentifier(3)
@@ -320,8 +321,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     new CDEPointAPI(DataViewActivity.this).execute(polygon);
                     break;
                 case WIMS:
-                    String[] location = {String.valueOf(camCentre.latitude), String.valueOf(camCentre.longitude)};
-                    new WIMSPointsAPI(DataViewActivity.this).execute(location);
+                    double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
+                    int distanceKM = (int) distanceM / 1000;
+                    String[] params = {String.valueOf(camCentre.latitude),
+                                         String.valueOf(camCentre.longitude),
+                                         String.valueOf(distanceKM)};
+                    new WIMSPointAPI(DataViewActivity.this).execute(params);
                     break;
                 case IMAGE:
                     LatLng topLeft = screen.farLeft;
@@ -384,6 +389,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             public boolean onClusterItemClick(CDEPoint point) {
                 if (point.getTitle().equals("CDE_Point")) {
                     selectedCDEPoint = point;
+
                     Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
                         displayHomeButtons(false);
@@ -444,6 +450,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 return true;
             }
         });
+
+//        mWIMSClusterManager.getMarkerCollection().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//            @Override
+//            public boolean onMarkerClick(Marker marker) {
+//                if(marker.isInfoWindowShown()) {
+//                    marker.hideInfoWindow();
+//                }
+//                return true;
+//            }
+//        });
     }
 
     // On Image point click.

@@ -16,12 +16,12 @@ import java.util.List;
 
 //import static com.google.android.gms.internal.zznu.is;
 
-public class WIMSPointsAPI extends AsyncTask<String, Void, List<WIMSPoint>> {
+public class WIMSPointAPI extends AsyncTask<String, Void, List<WIMSPoint>> {
     private static final String DEBUG_TAG = "SAMPLING_POINTS_API";
     private OnTaskCompleted listener;
     private DataViewActivity mDataViewActivity;
 
-    public WIMSPointsAPI(OnTaskCompleted listener) {
+    public WIMSPointAPI(OnTaskCompleted listener) {
         this.listener = listener;
         this.mDataViewActivity = (DataViewActivity) listener;
     }
@@ -40,7 +40,7 @@ public class WIMSPointsAPI extends AsyncTask<String, Void, List<WIMSPoint>> {
                     .appendPath("sampling-point")
                     .appendQueryParameter("lat", params[0])
                     .appendQueryParameter("long", params[1])
-                    .appendQueryParameter("dist", "15")
+                    .appendQueryParameter("dist", params[2])
                     .appendQueryParameter("samplingPointStatus", "open");
             String myUrl = builder.build().toString();
 
