@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -40,13 +41,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.ClusterManager;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -68,6 +68,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private static final String TAG = "DATA_VIEW_ACTIVITY";
     private static final int REQUEST_LOCATION = 1;
     private static final int REQUEST_CAMERA = 2;
+    private static final int CDE = 0;
+    private static final int WIMS = 1;
+    private static final int IMAGE = 2;
+    private int currentView;
     private GoogleMap mMap;
     private ProgressBar mProgressSpinner;
     private FloatingActionButton mCameraButton;
@@ -79,23 +83,23 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private Location mLocation;
     private boolean connected;
     private boolean inPhotoDataView;
-    private Double mPhotoDataViewLatitudeOffset;
+    private int mMapCameraPadding;
     private Marker currentLocationMarker;
     private FragmentManager mFragmentManager;
-    private SPDataFragment mSPDataFragment;
+    private WIMSDataFragment mWIMSDataFragment;
     private CDEDataFragment mCDEDataFragment;
     private PhotoDataFragment mPhotoDataFragment;
-    private List<SamplingPoint> mSamplePoints = new ArrayList<>();
+    private List<WIMSPoint> mWIMSPoints = new ArrayList<>();
     private List<CDEPoint> mCDEPoints = new ArrayList<>();
     private List<GalleryItem> photoMarkers = new ArrayList<>();
     private Boolean imageLocationsDownloaded;
-    private ClusterManager<SamplingPoint> mSampleClusterManager;
+    private ClusterManager<WIMSPoint> mWIMSClusterManager;
     private ClusterManager<CDEPoint> mCDEClusterManager;
     private ClusterManager<GalleryItem> mPictureClusterManager;
     private MultiListener mMultiListener = new MultiListener();
     private Drawer mDrawer;
 
-    private SamplingPoint selectedSamplingPoint;
+    private WIMSPoint selectedWIMSPoint;
     private CDEPoint selectedCDEPoint;
 
 
@@ -148,9 +152,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
 
         mFragmentManager = getSupportFragmentManager();
-        // Sampling points are first to be populated onMapReady for that reason inPhotoDataView is set to true
-        inPhotoDataView = true;
-        mPhotoDataViewLatitudeOffset = 0.0;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        mMapCameraPadding = displayMetrics.heightPixels / 3;
+
+        currentView = CDE;
     }
 
     public void setupDrawer() {
@@ -166,16 +173,24 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        final PrimaryDrawerItem drawerSamplingPoints = new PrimaryDrawerItem()
+        final PrimaryDrawerItem drawerCDE = new PrimaryDrawerItem()
                 .withIdentifier(1)
-                .withName(R.string.drawer_sampling_point)
+                .withName(R.string.drawer_cde)
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
                 .withIcon(R.drawable.marker_white);
 
-        final PrimaryDrawerItem drawerImages = new PrimaryDrawerItem()
+        final PrimaryDrawerItem drawerWIMS = new PrimaryDrawerItem()
                 .withIdentifier(2)
+                .withName(R.string.drawer_wims)
+                .withSelectedColor(0x0d4caf)
+                .withSelectedTextColor(Color.WHITE)
+                .withTextColor(Color.WHITE)
+                .withIcon(R.drawable.ic_wims);
+
+        final PrimaryDrawerItem drawerImages = new PrimaryDrawerItem()
+                .withIdentifier(3)
                 .withName(R.string.drawer_images)
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
@@ -183,7 +198,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withIcon(R.drawable.photo_icon);
 
         final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
-                .withIdentifier(3)
+                .withIdentifier(4)
                 .withName(R.string.drawer_info)
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
@@ -196,7 +211,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withAccountHeader(header)
                 .withSliderBackgroundColor(Color.DKGRAY)
                 .addDrawerItems(
-                        drawerSamplingPoints,
+                        drawerCDE,
+                        drawerWIMS,
                         drawerImages,
                         new DividerDrawerItem(),
                         drawerInfo
@@ -208,18 +224,18 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 //                        Log.i(TAG, "identifier: " + Long.toString(drawerItem.getIdentifier()));
                         switch ((int) drawerItem.getIdentifier()){
                             case 1:
-                                if(inPhotoDataView) {
-                                    closePhotoView();
-                                    openSamplingPointView();
-                                }
+                                closeView(currentView);
+                                openView(CDE);
                                 break;
                             case 2:
-                                if(!inPhotoDataView) {
-                                    closeSamplingPointView();
-                                    openPhotoView();
-                                }
+                                closeView(currentView);
+                                openView(WIMS);
                                 break;
                             case 3:
+                                closeView(currentView);
+                                openView(IMAGE);
+                                break;
+                            case 4:
                                 showInfo(view);
                                 break;
                             default:
@@ -231,90 +247,105 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .build();
     }
 
-    public void openSamplingPointView() {
-        // reset the center of the screen
-        updateMapCameraPosition();
-        // if there was a change in camera wait for it to be idle and then load sampling points
+    public void closeView(int view) {
+        mMap.setOnCameraIdleListener(null);
+        clearMarkers(view);
+        // Image View has different layout which needs to be closed.
+        if(view == IMAGE) {
+            mFragmentManager.popBackStack();
+            setHomeButtonsPhotoView(false);
+        }
+    }
+
+    public void clearMarkers(int view) {
+        switch (view) {
+            case CDE:
+                mCDEClusterManager.clearItems();
+                mCDEClusterManager.cluster();
+                break;
+            case WIMS:
+                mWIMSClusterManager.clearItems();
+                mWIMSClusterManager.cluster();
+                break;
+            case IMAGE:
+                mPictureClusterManager.clearItems();
+                mPictureClusterManager.cluster();
+                break;
+        }
+    }
+
+    public void openView(int view) {
+        currentView = view;
+        if(view == IMAGE) {
+            Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+            if (fragment == null) {
+                setHomeButtonsPhotoView(true);
+                fragment = new PhotoDataFragment();
+                mPhotoDataFragment = (PhotoDataFragment) fragment;
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_bottom, 0, 0, R.anim.slide_out_bottom)
+                        .add(R.id.fragment_container, fragment)
+                        .addToBackStack(null).commit();
+            }
+        }
+        loadMarkers(view);
+        setMapOnCameraIdleListener(view);
+    }
+
+    public void setMapOnCameraIdleListener(int view) {
+        final int view_params = view;
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
+                clearMarkers(view_params);
                 if( mMap.getCameraPosition().zoom > 10 ) {
-                    loadSamplingPoints();
+                    loadMarkers(view_params);
                 }
             }
         });
     }
 
-    public void closeSamplingPointView() {
-//        mSampleClusterManager.clearItems();
-//        mSampleClusterManager.cluster();
-        mMap.setOnCameraIdleListener(null);
-        mCDEClusterManager.clearItems();
-        mCDEClusterManager.cluster();
-    }
-
-    public void openPhotoView() {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-        if (fragment == null) {
-            setHomeButtonsPhotoView();
-
-            fragment = new PhotoDataFragment();
-            mPhotoDataFragment = (PhotoDataFragment) fragment;
-
-            mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-                @Override
-                public void onCameraIdle() {
-                    if( mMap.getCameraPosition().zoom > 10 ) {
-                        mPictureClusterManager.clearItems();
-                        mPictureClusterManager.cluster();
-                        showPhotoMarkersInView();
-                    }
-                }
-            });
-
-            mFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_bottom, 0, 0, R.anim.slide_out_bottom)
-                    .add(R.id.fragment_container, fragment)
-                    .addToBackStack(null).commit();
-        }
-        inPhotoDataView = true;
-        mPhotoDataViewLatitudeOffset = -0.05;
-        updateMapCameraPosition();
-    }
-
-    public void closePhotoView() {
-        mMap.setOnCameraIdleListener(null);
-        mFragmentManager.popBackStack();
-        mPictureClusterManager.clearItems();
-        mPictureClusterManager.cluster();
-        resetHomeButtonsPhotoView();
-        inPhotoDataView = false;
-        mPhotoDataViewLatitudeOffset = 0.0;
-    }
-
-    public void loadSamplingPoints() {
+    public void loadMarkers(int view) {
         if (haveNetworkConnection()) {
             mProgressSpinner.setVisibility(View.VISIBLE);
-//            mSampleClusterManager.clearItems();
-            mCDEClusterManager.clearItems();
             LatLng camCentre = mMap.getCameraPosition().target;
-
             VisibleRegion screen = mMap.getProjection().getVisibleRegion();
-            LatLng[] polygon = new LatLng[4];
-            polygon[0] = screen.farLeft;
-            polygon[1] = screen.farRight;
-            polygon[2] = screen.nearRight;
-            polygon[3] = screen.nearLeft;
-            new CDEPointAPI(DataViewActivity.this).execute(polygon);
-
+            switch (view) {
+                case CDE:
+                    LatLng[] polygon = new LatLng[4];
+                    polygon[0] = screen.farLeft;
+                    polygon[1] = screen.farRight;
+                    polygon[2] = screen.nearRight;
+                    polygon[3] = screen.nearLeft;
+                    new CDEPointAPI(DataViewActivity.this).execute(polygon);
+                    break;
+                case WIMS:
+                    double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
+                    int distanceKM = (int) (distanceM / 1.5) / 1000;
+                    String[] params = {String.valueOf(camCentre.latitude),
+                                         String.valueOf(camCentre.longitude),
+                                         String.valueOf(distanceKM)};
+                    new WIMSPointAPI(DataViewActivity.this).execute(params);
+                    break;
+                case IMAGE:
+                    LatLng topLeft = screen.farLeft;
+                    LatLng bottomRight = screen.nearRight;
+                    String[] points = new String[4];
+                    points[0] = String.valueOf(topLeft.latitude);
+                    points[1] = String.valueOf(topLeft.longitude);
+                    points[2] = String.valueOf(bottomRight.latitude);
+                    points[3] = String.valueOf(bottomRight.longitude);
+                    new ThumbnailsDownloader(this, mPhotoDataFragment).execute(points);
+                    break;
+            }
         } else {
-            Toast.makeText(getApplicationContext(), "Sample point retrieval needs internet connection", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Data retrieval needs internet connection", Toast.LENGTH_LONG).show();
         }
     }
 
     public void showInfo(View v) {
         // Hide the floating action buttons.
-        hideHomeButtons();
+        displayHomeButtons(false);
         // Initiate the info fragment.
         InfoFragment fragment = new InfoFragment();
         mFragmentManager.beginTransaction()
@@ -349,30 +380,24 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
 
-    // On sample point click.
-    public void setUpSampleManager() {
-//        mSampleClusterManager.setRenderer(new SamplingPointRenderer(this, mMap, mSampleClusterManager));
+    // On CDE sampling point click.
+    public void setUpCDEManager() {
         mCDEClusterManager.setRenderer(new CDEPointRenderer(this, mMap, mCDEClusterManager));
-
-//        mSampleClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<SamplingPoint>() {
-//            @Override
-//            public boolean onClusterItemClick(SamplingPoint point) {
         mCDEClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<CDEPoint>() {
             @Override
             public boolean onClusterItemClick(CDEPoint point) {
                 if (point.getTitle().equals("CDE_Point")) {
-//                    selectedSamplingPoint = point;
                     selectedCDEPoint = point;
+
                     Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
-                        hideHomeButtons();
+                        displayHomeButtons(false);
 
-                        LatLng markerPos = new LatLng(point.getLatitude() + 0.05f, point.getLongitude());
+                        LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
+                        mMap.setPadding(0, mMapCameraPadding, 0, 0);
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
+                        mMap.setOnCameraIdleListener(null);
 
-//                        mSampleClusterManager.clearItems();
-//                        mSampleClusterManager.addItem(point);
-//                        mSampleClusterManager.cluster();
                         mCDEClusterManager.clearItems();
                         mCDEClusterManager.addItem(point);
                         mCDEClusterManager.cluster();
@@ -384,24 +409,64 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                                 .add(R.id.fragment_container, fragment)
                                 .addToBackStack(null).commit();
-
                     }
                 }
+                return true;
+            }
+        });
+    }
 
+    // On WIMS sampling point click
+    public void setUpWIMSManager() {
+        mWIMSClusterManager.setRenderer(new WIMSPointRenderer(this, mMap, mWIMSClusterManager));
+        mWIMSClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<WIMSPoint>() {
+            @Override
+            public boolean onClusterItemClick(WIMSPoint point) {
+                if (point.getTitle().equals("WIMS_Point")) {
+                    selectedWIMSPoint = point;
+                    Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+                    if (fragment == null) {
+                        displayHomeButtons(false);
+
+                        LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
+                        mMap.setPadding(0, mMapCameraPadding, 0, 0);
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
+                        mMap.setOnCameraIdleListener(null);
+
+                        mWIMSClusterManager.clearItems();
+                        mWIMSClusterManager.addItem(point);
+                        mWIMSClusterManager.cluster();
+
+                        fragment = new WIMSDataFragment();
+                        mWIMSDataFragment = (WIMSDataFragment) fragment;
+
+                        mFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                                .add(R.id.fragment_container, fragment)
+                                .addToBackStack(null).commit();
+                    }
+                }
                 return true;
             }
         });
 
-
+//        mWIMSClusterManager.getMarkerCollection().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//            @Override
+//            public boolean onMarkerClick(Marker marker) {
+//                if(marker.isInfoWindowShown()) {
+//                    marker.hideInfoWindow();
+//                }
+//                return true;
+//            }
+//        });
     }
 
-    // On Picture point click.
-    public void setUpPictureManager() {
+    // On Image point click.
+    public void setUpImageManager() {
         mPictureClusterManager.setRenderer(new ImageMarkerRenderer(this, mMap, mPictureClusterManager));
         mPictureClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<GalleryItem>() {
             @Override
             public boolean onClusterItemClick(GalleryItem point) {
-
                 if (point.getTitle().equals("Picture_Point")) {
                     PhotoViewFragment fragment = new PhotoViewFragment();
                     fragment.setGalleryItem(mPhotoDataFragment.getGalleryItem(point.getId()));
@@ -415,38 +480,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         });
     }
 
-
-    // Shows all photo markers currently on screen.
-    public void showPhotoMarkersInView() {
-
-        mProgressSpinner.setVisibility(View.VISIBLE);
-        VisibleRegion screen = mMap.getProjection().getVisibleRegion();
-        LatLng topLeft = screen.farLeft;
-        LatLng bottomRight = screen.nearRight;
-
-//        Log.i(TAG,"Coordinates:");
-//        Log.i(TAG,String.valueOf(screen.farLeft));
-//        Log.i(TAG,String.valueOf(screen.farRight));
-//        Log.i(TAG,String.valueOf(screen.nearRight));
-//        Log.i(TAG,String.valueOf(screen.nearLeft));
-
-        String[] points = new String[4];
-        points[0] = String.valueOf(topLeft.latitude);
-        points[1] = String.valueOf(topLeft.longitude);
-        points[2] = String.valueOf(bottomRight.latitude);
-        points[3] = String.valueOf(bottomRight.longitude);
-        new ThumbnailsDownloader(this, mPhotoDataFragment).execute(points);
-
-    }
-
-    public void repopulateSamplePoints(ClusterManager<SamplingPoint> mSampleClusterManager) {
-        for (SamplingPoint sp : mSamplePoints) {
-            mSampleClusterManager.addItem(sp);
+    public void repopulateWIMSPoints() {
+        for (WIMSPoint sp : mWIMSPoints) {
+            mWIMSClusterManager.addItem(sp);
         }
-        mSampleClusterManager.cluster();
+        mWIMSClusterManager.cluster();
     }
 
-    public void repopulateCDEPoints(ClusterManager<CDEPoint> mCDEClusterManager) {
+    public void repopulateCDEPoints() {
         for (CDEPoint cp : mCDEPoints) {
             mCDEClusterManager.addItem(cp);
         }
@@ -474,7 +515,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837, -3.625488), 5.0f));
 
         setUpMultiManager();
-
         // Zooms in on current location
         currentLocation(findViewById(R.id.map));
 
@@ -487,8 +527,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                closePhotoView();
-                openSamplingPointView();
+                openView(CDE);
             }
         });
 
@@ -496,34 +535,32 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void setUpMultiManager() {
         mPictureClusterManager = new ClusterManager<>(this, mMap);
-//        mSampleClusterManager = new ClusterManager<>(this, mMap);
+        mWIMSClusterManager = new ClusterManager<>(this, mMap);
         mCDEClusterManager = new ClusterManager<>(this, mMap);
-        setUpSampleManager();
-        setUpPictureManager();
-//        mMultiListener.addOC(mSampleClusterManager);
+
+        setUpCDEManager();
+        setUpWIMSManager();
+        setUpImageManager();
+
+        mMultiListener.addOC(mWIMSClusterManager);
         mMultiListener.addOC(mCDEClusterManager);
         mMultiListener.addOC(mPictureClusterManager);
-//        mMultiListener.addOM(mSampleClusterManager);
+
+        mMultiListener.addOM(mWIMSClusterManager);
         mMultiListener.addOM(mCDEClusterManager);
         mMultiListener.addOM(mPictureClusterManager);
+
         mMap.setOnMarkerClickListener(mMultiListener);
         mMap.setOnCameraIdleListener(mMultiListener);
     }
 
     @Override
-    public void onTaskCompletedSamplingPoint(List<SamplingPoint> result) {
-        //do something after fetching sampling points
-//        mSamplePoints = result;
-//        for (SamplingPoint r : result) {
-//            mSampleClusterManager.addItem(r);
-//        }
-//        mSampleClusterManager.cluster();
-
-        /*
-        for (SamplingPoint r:result){
-            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getEasting() + " " + r.getNorthing() + " ");
+    public void onTaskCompletedWIMSPoint(List<WIMSPoint> result) {
+        mWIMSPoints = result;
+        for (WIMSPoint r : result) {
+            mWIMSClusterManager.addItem(r);
         }
-        */
+        mWIMSClusterManager.cluster();
     }
 
     @Override
@@ -565,7 +602,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void updateMapCameraPosition() {
         if (mMap != null && mLocation != null) {
             CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(11)
-                    .target(new LatLng(mLocation.getLatitude() + mPhotoDataViewLatitudeOffset, mLocation.getLongitude())).build();
+                    .target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
+            if(currentView == IMAGE) {
+                mMap.setPadding(0, 0, 0, mMapCameraPadding);
+            } else {
+                mMap.setPadding(0, 0, 0, 0);
+            }
+
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
         }
     }
@@ -646,60 +689,51 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     @Override
     public void onBackPressed() {
-
         Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-
-        if (fragment instanceof SPDataFragment) {
+        if (fragment instanceof WIMSDataFragment) {
             mFragmentManager.popBackStack();
-            mPictureClusterManager.clearItems();
-            mPictureClusterManager.cluster();
-//            mSampleClusterManager.clearItems();
-//            repopulateSamplePoints(mSampleClusterManager);
-            mCDEClusterManager.clearItems();
-            repopulateCDEPoints(mCDEClusterManager);
+            clearMarkers(WIMS);
+            openView(WIMS);
             mProgressSpinner.setVisibility(View.INVISIBLE);
-            // Re-show the buttons.
-            showHomeButtons();
+            displayHomeButtons(true);
         } else if (fragment instanceof CDEDataFragment) {
             mFragmentManager.popBackStack();
-            mCDEClusterManager.clearItems();
-            repopulateCDEPoints(mCDEClusterManager);
+            clearMarkers(CDE);
+            openView(CDE);
             mProgressSpinner.setVisibility(View.INVISIBLE);
-            // Re-show the buttons.
-            showHomeButtons();
+            displayHomeButtons(true);
         } else if (fragment instanceof PhotoDataFragment) {
-            closePhotoView();
-            openSamplingPointView();
+            closeView(IMAGE);
+            openView(CDE);
         }
         else if (fragment instanceof PhotoViewFragment) {
             mFragmentManager.popBackStack();
-            showHomeButtons();
+            displayHomeButtons(true);
         }
         else if (fragment instanceof InfoFragment) {
             mFragmentManager.popBackStack();
-            showHomeButtons();
+            displayHomeButtons(true);
         }
-        // Else do normal back button stuff.
         else {
             super.onBackPressed();
         }
     }
 
-    public void showHomeButtons() {
-        mGpsButton.show();
-        mCameraButton.show();
-        mMenuButton.setVisibility(View.VISIBLE);
-        mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    public void displayHomeButtons(boolean condition) {
+        if(condition) {
+            mGpsButton.show();
+            mCameraButton.show();
+            mMenuButton.setVisibility(View.VISIBLE);
+            mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        } else {
+            mGpsButton.hide();
+            mCameraButton.hide();
+            mMenuButton.setVisibility(View.INVISIBLE);
+            mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
     }
 
-    public void hideHomeButtons() {
-        mGpsButton.hide();
-        mCameraButton.hide();
-        mMenuButton.setVisibility(View.INVISIBLE);
-        mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    }
-
-    public void setHomeButtonsPhotoView() {
+    public void setHomeButtonsPhotoView(boolean condition) {
         // Initialise camera button layout
         mCameraButton = (FloatingActionButton) this.findViewById(R.id.cam_button);
         FrameLayout.LayoutParams mCameraButtonLayoutParams =
@@ -711,29 +745,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 (FrameLayout.LayoutParams) mGpsButton.getLayoutParams();
 
         // Set the new positions
-        mCameraButtonLayoutParams.gravity = Gravity.TOP | Gravity.END;
-        mGpsButtonLayoutParams.gravity = Gravity.TOP | Gravity.END;
-
-        //Apply the changes
-        mCameraButton.setLayoutParams(mCameraButtonLayoutParams);
-        mGpsButton.setLayoutParams(mGpsButtonLayoutParams);
-    }
-
-    public void resetHomeButtonsPhotoView() {
-        // Initialise camera button layout
-        mCameraButton = (FloatingActionButton) this.findViewById(R.id.cam_button);
-        FrameLayout.LayoutParams mCameraButtonLayoutParams =
-                (FrameLayout.LayoutParams) mCameraButton.getLayoutParams();
-
-        // Initialise gps button layout
-        mGpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
-        FrameLayout.LayoutParams mGpsButtonLayoutParams =
-                (FrameLayout.LayoutParams) mGpsButton.getLayoutParams();
-
-        // Set the new positions
-        mCameraButtonLayoutParams.gravity = Gravity.BOTTOM | Gravity.END;
-        mGpsButtonLayoutParams.gravity = Gravity.BOTTOM | Gravity.END;
-
+        if(condition) {
+            mCameraButtonLayoutParams.gravity = Gravity.TOP | Gravity.END;
+            mGpsButtonLayoutParams.gravity = Gravity.TOP | Gravity.END;
+        } else {
+            mCameraButtonLayoutParams.gravity = Gravity.BOTTOM | Gravity.END;
+            mGpsButtonLayoutParams.gravity = Gravity.BOTTOM | Gravity.END;
+        }
         //Apply the changes
         mCameraButton.setLayoutParams(mCameraButtonLayoutParams);
         mGpsButton.setLayoutParams(mGpsButtonLayoutParams);
@@ -763,8 +781,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         this.imageLocationsDownloaded = imageLocationsDownloaded;
     }
 
-    public SamplingPoint getSelectedSamplingPoint(){
-        return selectedSamplingPoint;
+    public WIMSPoint getSelectedWIMSPoint(){
+        return selectedWIMSPoint;
     }
 
     public CDEPoint getSelectedCDEPoint(){

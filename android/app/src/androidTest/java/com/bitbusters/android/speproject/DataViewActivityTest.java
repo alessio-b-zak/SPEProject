@@ -75,7 +75,7 @@ public class DataViewActivityTest extends TestHelper {
         clickButtonAndPause(SAMPLING_POINT_BUTTON);
         clickMarker(mDevice, SAMPLING_POINT_MARKER);
         takeScreenshot(mDevice, FOLDER_NAME, "DataViewActivityClickSamplingPointMarker");
-        onView(withId(R.id.sp_name)).check(matches(isDisplayed()));
+        onView(withId(R.id.wims_name)).check(matches(isDisplayed()));
         onView(withId(R.id.dataview_toolbar)).check(matches(isDisplayed()));
     }
 
@@ -120,7 +120,7 @@ public class DataViewActivityTest extends TestHelper {
         clickMarker(mDevice, PICTURE_MARKER);
         onView(withId(R.id.back_button_photo_view)).perform(click());
         takeScreenshot(mDevice, FOLDER_NAME, "PhotoViewFragmentClickBackButton");
-        onView(withId(R.id.sp_name)).check(matches(isDisplayed()));
+        onView(withId(R.id.wims_name)).check(matches(isDisplayed()));
         onView(withId(R.id.dataview_toolbar)).check(matches(isDisplayed()));
     }
 
