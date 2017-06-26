@@ -63,8 +63,8 @@ public class WIMSPointAPI extends AsyncTask<String, Void, List<WIMSPoint>> {
             int len = 5000;
             // Convert the InputStream into a string
 //            String SamplingPoints = readIt(is, len);
-            InputStreamToSamplingPoint inputStreamToSamplingPoint = new InputStreamToSamplingPoint();
-            wimsPoints = inputStreamToSamplingPoint.readJsonStream(inputStream);
+            InputStreamToWIMSPoint inputStreamToWIMSPoint = new InputStreamToWIMSPoint();
+            wimsPoints = inputStreamToWIMSPoint.readJsonStream(inputStream);
             //Log.d(DEBUG_TAG, "The result is: " + wimsPoints);
 
         } catch (IOException e) {

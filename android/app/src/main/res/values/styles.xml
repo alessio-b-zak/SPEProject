@@ -17,16 +17,18 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="TextViewCDETableParent" parent="@android:style/Widget.TextView">
+    <style name="TextViewDataTableParent" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/darkGrey</item>
         <item name="android:textStyle">bold</item>
         <item name="android:padding">3dip</item>
+        <item name="android:gravity">center</item>
     </style>
 
-    <style name="TextViewCDETableChild" parent="@android:style/Widget.TextView">
+    <style name="TextViewDataTableChild" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textStyle">bold</item>
         <item name="android:padding">3dip</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="TextViewPhotoTableParent" parent="@android:style/Widget.TextView">

@@ -12,43 +12,46 @@ import java.net.URL;
 public class WIMSPointRatingsAPI extends AsyncTask<WIMSPoint, Void, WIMSPoint> {
 
     private static final String TAG = "SAMPLING_POINT_RATINGS";
-    private SPDataFragment mSPDataFragment;
+    private WIMSDataFragment mWIMSDataFragment;
 
-    public WIMSPointRatingsAPI(SPDataFragment context) {
-        this.mSPDataFragment = context;
+    public WIMSPointRatingsAPI(WIMSDataFragment context) {
+        this.mWIMSDataFragment = context;
     }
 
     @Override
     protected WIMSPoint doInBackground(WIMSPoint...params) {
         WIMSPoint wimsPoint = params[0];
-        Integer easting = wimsPoint.getEasting();
-        Integer northing = wimsPoint.getNorthing();
         try {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .encodedAuthority("139.59.184.70:8080")
-                    //.encodedAuthority("172.23.215.243:3000")
-                    .appendPath("getClassification")
-                    .appendPath(String.valueOf(easting))
-                    .appendPath(String.valueOf(northing));
+                    .authority("environment.data.gov.uk")
+                    .appendPath("water-quality")
+                    .appendPath("data")
+                    .appendPath("measurement")
+                    .appendQueryParameter("samplingPoint", wimsPoint.getId())
+                    .appendQueryParameter("_sort", "-sample");
             String myUrl = builder.build().toString();
-            Log.i(TAG, myUrl);
             URL url = new URL(myUrl);
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
+
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
             Log.i(TAG, "Url is: " + url);
             Log.i(TAG, "The response is: " + response);
-            InputStream inputStream = null;
-            inputStream = conn.getInputStream();
-            InputStreamUpdateRatings inputStreamUpdateRatings = new InputStreamUpdateRatings();
-            InputStreamUpdateRatings.readJsonStream(wimsPoint, inputStream);
-            Log.i(TAG, "The result is: Chemical: " + wimsPoint.getChemicalRating() + " Ecological: " + wimsPoint.getEcologicalRating());
+
+            InputStream inputStream = conn.getInputStream();
+            InputStreamToWIMSMeasurements inputStreamToWIMSMeasurements = new InputStreamToWIMSMeasurements();
+            inputStreamToWIMSMeasurements.readJsonStream(wimsPoint, inputStream);
+
+//            for(Measurement m : wimsPoint.getMeasurementList()) {
+//                Log.i(TAG, "Measurement: " + m.getDeterminand() + " Result: " + m.getResult() + " Date: " + m.getDateTime().toLocalDate());
+//            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,7 +61,7 @@ public class WIMSPointRatingsAPI extends AsyncTask<WIMSPoint, Void, WIMSPoint> {
 
     @Override
     protected void onPostExecute(WIMSPoint wimsPoint) {
-        mSPDataFragment.setChemBioText(wimsPoint);
+        mWIMSDataFragment.setMeasurementsText(wimsPoint);
     }
 
 }

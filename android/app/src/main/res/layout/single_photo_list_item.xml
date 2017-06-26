@@ -26,7 +26,7 @@
     </LinearLayout>
 
     <TableLayout
-        style="@style/TextViewCDETableParent"
+        style="@style/TextViewDataTableParent"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/cde_table"
         android:layout_width="match_parent"

@@ -1,9 +1,7 @@
 package com.bitbusters.android.speproject;
 
-import com.google.android.gms.appinvite.AppInviteInvitation;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
-import com.google.maps.android.clustering.ClusterItem;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by cp153 on 06/12/2016.
@@ -11,23 +9,21 @@ import com.google.maps.android.clustering.ClusterItem;
 
 class WIMSPoint extends Point {
     private String id;
-    private String samplingPointType;
+    private String type;
+    private String label;
     private Integer easting;
     private Integer northing;
-    private String ecologicalRating;
-    private String chemicalRating;
-    private Boolean ratingsSet;
+    private List<Measurement> measurementList;
 
-    WIMSPoint(String id, double latitude, double longitude, String samplingPointType,
-              Integer easting, Integer northing) {
+    WIMSPoint(String id, double latitude, double longitude, String type,
+              String label, Integer easting, Integer northing) {
         super(latitude,longitude,"WIMS_Point", "");
         this.id = id;
-        this.samplingPointType = samplingPointType;
+        this.type = type;
+        this.label = label;
         this.easting = easting;
         this.northing = northing;
-        this.ecologicalRating = "N/A";
-        this.chemicalRating = "N/A";
-        this.ratingsSet = false;
+        this.measurementList = new ArrayList<>();
     }
 
     public String getId() {
@@ -42,17 +38,17 @@ class WIMSPoint extends Point {
         return this.getPosition().longitude;
     }
 
-    public String getSamplingPointType() {
-        return samplingPointType;
+    public String getType() {
+        return type;
     }
 
     public Integer getEasting() { return easting; }
 
     public Integer getNorthing() { return northing; }
 
-    public String getEcologicalRating() { return ecologicalRating; }
+    public List<Measurement> getMeasurementList() { return measurementList; }
 
-    public String getChemicalRating() { return chemicalRating; }
+    public String getLabel() { return label; }
 
     public void setId(String id) {
         this.id = id;
@@ -66,22 +62,17 @@ class WIMSPoint extends Point {
         super.setLongitude(longitude);
     }
 
-    public void setSamplingPointType(String samplingPointType) {
-        this.samplingPointType = samplingPointType;
+    public void setType(String type) {
+        this.type = type;
     }
+
+    public void setLabel(String label) { this.label = label; }
 
     public void setEasting(Integer easting) { this.easting = easting; }
 
     public void setNorthing(Integer northing) { this.northing = northing; }
 
-    public void setEcologicalRating(String ecologicalRating) {
-        this.ecologicalRating = ecologicalRating;
-        this.ratingsSet = true;
-    }
-
-    public void setChemicalRating(String chemicalRating) { this.chemicalRating = chemicalRating; }
-
-    public Boolean getRatingsSet() {
-        return ratingsSet;
+    public boolean measurementsPopulated() {
+        return measurementList.size() == 3;
     }
 }

@@ -6,28 +6,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:clickable="true"
-        android:background="#cc4fc3f7"
-        android:layout_weight="0.70" >
+        android:background="#cc4fc3f7">
 
         <TextView
             android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/sp_name"
-            android:textSize="24sp"
+            android:id="@+id/wims_name"
+            android:textSize="18sp"
             android:textColor="@color/colorPrimaryDark"
             android:textAlignment="center"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"/>
 
         <TextView
             android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:id="@+id/sp_data1"
+            android:id="@+id/wims_type"
             android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_gravity="start"
@@ -35,18 +34,29 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" />
 
-        <TextView
-            android:text="Loading ratings data..."
+        <TableLayout
+            style="@style/TextViewDataTableParent"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/wims_table"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:id="@+id/sp_data2"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_gravity="start"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_height="match_parent"
+            android:stretchColumns="0,1,2">
+            <TableRow>
+                <TextView
+                    style="@style/TextViewDataTableParent"
+                    android:text="@string/wims_table_determinand"
+                    android:gravity="start"/>
+                <TextView
+                    style="@style/TextViewDataTableParent"
+                    android:text="@string/wims_table_result"
+                    android:gravity="start"/>
+                <TextView
+                    style="@style/TextViewDataTableParent"
+                    android:text="@string/wims_table_date"
+                    android:gravity="start"/>
+            </TableRow>
+
+        </TableLayout>
 
     </LinearLayout>
 

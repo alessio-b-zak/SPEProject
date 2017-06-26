@@ -25,6 +25,11 @@
     <string name="cde_table_ecological">Ecological</string>
     <string name="cde_table_chemical">Chemical</string>
 
+    <string name="wims_table_determinand">Determinand</string>
+    <string name="wims_table_result">Result</string>
+    <string name="wims_table_date">Date</string>
+    <string name="wims_table_type">Type</string>
+
     <string name="info_title"><b>MyRivers™ v1.0</b></string>
     <string name="info_subtitle">\u00A9 BitBusters 2017</string>
     <string name="info_spvText">

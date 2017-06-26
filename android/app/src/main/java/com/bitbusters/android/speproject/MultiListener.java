@@ -19,8 +19,9 @@ public class MultiListener implements GoogleMap.OnMarkerClickListener, GoogleMap
     public boolean onMarkerClick(Marker marker) {
         for(GoogleMap.OnMarkerClickListener m : onClickListeners){
             m.onMarkerClick(marker);
+            marker.hideInfoWindow();
         }
-        return false;
+        return true;
     }
 
     public void addOM(GoogleMap.OnMarkerClickListener l){

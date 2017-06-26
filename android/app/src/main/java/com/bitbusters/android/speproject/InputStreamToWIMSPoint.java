@@ -12,7 +12,7 @@ import java.util.List;
  * Created by cp153 on 06/12/2016.
  */
 
-public class InputStreamToSamplingPoint {
+public class InputStreamToWIMSPoint {
     public List<WIMSPoint> readJsonStream(InputStream in) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {
@@ -49,13 +49,14 @@ public class InputStreamToSamplingPoint {
     public WIMSPoint readMessage(JsonReader reader) throws IOException {
         String id = null;
         String samplingPointType = null;
+        String label = null;
         double latitude = 0.0, longitude = 0.0;
         Integer easting = 0, northing = 0;
         try {
             reader.beginObject();
             while (reader.hasNext()) {
                 String name = reader.nextName();
-                if (name.equals("@id")) {
+                if (name.equals("notation")) {
                     id = reader.nextString();
                 } else if (name.equals("lat")) {
                     latitude = reader.nextDouble();
@@ -65,6 +66,8 @@ public class InputStreamToSamplingPoint {
                     easting = reader.nextInt();
                 } else if (name.equals("northing")) {
                     northing = reader.nextInt();
+                } else if (name.equals("label")) {
+                    label = reader.nextString();
                 } else if (name.equals("samplingPointType")) {
                     reader.beginObject();
                     while (reader.hasNext()) {
@@ -85,6 +88,6 @@ public class InputStreamToSamplingPoint {
             e.printStackTrace();
         }
 
-        return new WIMSPoint(id, latitude, longitude, samplingPointType, easting, northing);
+        return new WIMSPoint(id, latitude, longitude, samplingPointType, label, easting, northing);
     }
 }

@@ -86,7 +86,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private int mMapCameraPadding;
     private Marker currentLocationMarker;
     private FragmentManager mFragmentManager;
-    private SPDataFragment mSPDataFragment;
+    private WIMSDataFragment mWIMSDataFragment;
     private CDEDataFragment mCDEDataFragment;
     private PhotoDataFragment mPhotoDataFragment;
     private List<WIMSPoint> mWIMSPoints = new ArrayList<>();
@@ -287,9 +287,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         .add(R.id.fragment_container, fragment)
                         .addToBackStack(null).commit();
             }
-        } else {
-            loadMarkers(view);
         }
+        loadMarkers(view);
         setMapOnCameraIdleListener(view);
     }
 
@@ -322,7 +321,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     break;
                 case WIMS:
                     double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
-                    int distanceKM = (int) distanceM / 1000;
+                    int distanceKM = (int) (distanceM / 1.5) / 1000;
                     String[] params = {String.valueOf(camCentre.latitude),
                                          String.valueOf(camCentre.longitude),
                                          String.valueOf(distanceKM)};
@@ -395,8 +394,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         displayHomeButtons(false);
 
                         LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
                         mMap.setPadding(0, mMapCameraPadding, 0, 0);
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
                         mMap.setOnCameraIdleListener(null);
 
                         mCDEClusterManager.clearItems();
@@ -430,16 +429,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         displayHomeButtons(false);
 
                         LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
                         mMap.setPadding(0, mMapCameraPadding, 0, 0);
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
                         mMap.setOnCameraIdleListener(null);
 
                         mWIMSClusterManager.clearItems();
                         mWIMSClusterManager.addItem(point);
                         mWIMSClusterManager.cluster();
 
-                        fragment = new SPDataFragment();
-                        mSPDataFragment = (SPDataFragment) fragment;
+                        fragment = new WIMSDataFragment();
+                        mWIMSDataFragment = (WIMSDataFragment) fragment;
 
                         mFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
@@ -691,7 +690,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     public void onBackPressed() {
         Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-        if (fragment instanceof SPDataFragment) {
+        if (fragment instanceof WIMSDataFragment) {
             mFragmentManager.popBackStack();
             clearMarkers(WIMS);
             openView(WIMS);
