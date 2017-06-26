@@ -71,4 +71,20 @@
         android:onClick="currentLocation"
         android:src="@drawable/target_white"/>
 
+    <TextView
+        android:id="@+id/layer_name"
+        android:text=""
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:shadowColor="#000000"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:padding="6dp"
+        android:layout_gravity="top|end"/>
+
 </FrameLayout>

@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -47,6 +48,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.SphericalUtil;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -77,6 +79,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private FloatingActionButton mCameraButton;
     private ImageButton mMenuButton;
     private FloatingActionButton mGpsButton;
+    private TextView mLayerName;
 
     //variables used for displaying current location
     private GoogleApiClient mGoogleApiClient;
@@ -141,6 +144,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         });
 
         mGpsButton = (FloatingActionButton) this.findViewById(R.id.gps_button);
+
+        mLayerName = (TextView) this.findViewById(R.id.layer_name);
 
         // Create an instance of GoogleAPIClient -> Required for the GPS Location
         if (mGoogleApiClient == null) {
@@ -232,8 +237,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                                 openView(WIMS);
                                 break;
                             case 3:
-                                closeView(currentView);
-                                openView(IMAGE);
+                                if(currentView != IMAGE) {
+                                    closeView(currentView);
+                                    openView(IMAGE);
+                                }
                                 break;
                             case 4:
                                 showInfo(view);
@@ -290,6 +297,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
         loadMarkers(view);
         setMapOnCameraIdleListener(view);
+        updateLayerName(view);
     }
 
     public void setMapOnCameraIdleListener(int view) {
@@ -340,6 +348,23 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             }
         } else {
             Toast.makeText(getApplicationContext(), "Data retrieval needs internet connection", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void updateLayerName(int view) {
+        switch (view) {
+            case CDE:
+                mLayerName.setText(R.string.layer_cde);
+                mLayerName.setTextColor(Color.GREEN);
+                break;
+            case WIMS:
+                mLayerName.setText(R.string.layer_wims);
+                mLayerName.setTextColor(Color.BLUE);
+                break;
+            case IMAGE:
+                mLayerName.setText(R.string.layer_image);
+                mLayerName.setTextColor(Color.RED);
+                break;
         }
     }
 
@@ -395,7 +420,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
                         LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
                         mMap.setPadding(0, mMapCameraPadding, 0, 0);
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, mMap.getCameraPosition().zoom));
                         mMap.setOnCameraIdleListener(null);
 
                         mCDEClusterManager.clearItems();
@@ -411,6 +436,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                                 .addToBackStack(null).commit();
                     }
                 }
+                return true;
+            }
+        });
+        mCDEClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<CDEPoint>() {
+            @Override
+            public boolean onClusterClick(Cluster<CDEPoint> cluster) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
+                        (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300, null);
                 return true;
             }
         });
@@ -430,7 +463,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
                         LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
                         mMap.setPadding(0, mMapCameraPadding, 0, 0);
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, 11.0f));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, mMap.getCameraPosition().zoom));
                         mMap.setOnCameraIdleListener(null);
 
                         mWIMSClusterManager.clearItems();
@@ -450,15 +483,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             }
         });
 
-//        mWIMSClusterManager.getMarkerCollection().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//                if(marker.isInfoWindowShown()) {
-//                    marker.hideInfoWindow();
-//                }
-//                return true;
-//            }
-//        });
+        mWIMSClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<WIMSPoint>() {
+            @Override
+            public boolean onClusterClick(Cluster<WIMSPoint> cluster) {
+                mMap.setPadding(0, mMapCameraPadding, 0, 0);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
+                        (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300, null);
+                return true;
+            }
+        });
     }
 
     // On Image point click.
@@ -475,6 +508,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                             .add(R.id.fragment_container, fragment)
                             .addToBackStack(null).commit();
                 }
+                return true;
+            }
+        });
+        mPictureClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<GalleryItem>() {
+            @Override
+            public boolean onClusterClick(Cluster<GalleryItem> cluster) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
+                        (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300, null);
                 return true;
             }
         });

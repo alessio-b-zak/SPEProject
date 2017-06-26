@@ -4,7 +4,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/background_dark_resized"/>
+            android:src="@drawable/background_dark_resized_named"/>
     </item>
 
     <item>
@@ -13,10 +13,10 @@
             android:src="@mipmap/icon_green_blue"/>
     </item>
 
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@mipmap/name"/>
-    </item>
+    <!--<item>-->
+        <!--<bitmap-->
+            <!--android:gravity="center"-->
+            <!--android:src="@mipmap/name"/>-->
+    <!--</item>-->
 
 </layer-list>

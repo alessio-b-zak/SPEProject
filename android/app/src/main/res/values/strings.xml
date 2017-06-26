@@ -11,6 +11,10 @@
     <string name="drawer_images">Images</string>
     <string name="drawer_info">How it Works</string>
 
+    <string name="layer_cde">CDE Layer</string>
+    <string name="layer_wims">WIMS Layer</string>
+    <string name="layer_image">Images Layer</string>
+
     <string name="photo_comment">Comment: </string>
     <string name="photo_tag">Tags: </string>
     <string name="photo_item_descriptor">Image of Observation</string>
