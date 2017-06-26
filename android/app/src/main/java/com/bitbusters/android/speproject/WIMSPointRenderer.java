@@ -23,7 +23,7 @@ public class WIMSPointRenderer extends DefaultClusterRenderer<WIMSPoint>{
 
     @Override
     protected void onBeforeClusterItemRendered(WIMSPoint sp, MarkerOptions markerOptions) {
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_wims_marker));
     }
 
 

@@ -24,7 +24,7 @@ public class ImageMarkerRenderer extends DefaultClusterRenderer<GalleryItem> {
 
     @Override
     protected void onBeforeClusterItemRendered(GalleryItem pp, MarkerOptions markerOptions) {
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_photo_marker));
     }
 
     @Override

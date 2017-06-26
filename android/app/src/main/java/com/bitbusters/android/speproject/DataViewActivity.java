@@ -184,7 +184,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.marker_white);
+                .withIcon(R.drawable.ic_cde_marker);
 
         final PrimaryDrawerItem drawerWIMS = new PrimaryDrawerItem()
                 .withIdentifier(2)
@@ -192,7 +192,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.ic_wims);
+                .withIcon(R.drawable.ic_wims_marker);
 
         final PrimaryDrawerItem drawerImages = new PrimaryDrawerItem()
                 .withIdentifier(3)
@@ -200,7 +200,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.photo_icon);
+                .withIcon(R.drawable.ic_photo_marker);
 
         final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
                 .withIdentifier(4)
@@ -355,15 +355,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         switch (view) {
             case CDE:
                 mLayerName.setText(R.string.layer_cde);
-                mLayerName.setTextColor(Color.GREEN);
+                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cde));
                 break;
             case WIMS:
                 mLayerName.setText(R.string.layer_wims);
-                mLayerName.setTextColor(Color.BLUE);
+                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.wims));
                 break;
             case IMAGE:
                 mLayerName.setText(R.string.layer_image);
-                mLayerName.setTextColor(Color.RED);
+                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.photo));
                 break;
         }
     }

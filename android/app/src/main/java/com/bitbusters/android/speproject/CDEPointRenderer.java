@@ -24,7 +24,7 @@ public class CDEPointRenderer extends DefaultClusterRenderer<CDEPoint>{
 
     @Override
     protected void onBeforeClusterItemRendered(CDEPoint cp, MarkerOptions markerOptions) {
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cde_marker));
     }
 
 }
