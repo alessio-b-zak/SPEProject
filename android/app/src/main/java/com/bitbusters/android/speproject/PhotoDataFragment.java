@@ -113,7 +113,7 @@ public class PhotoDataFragment extends Fragment implements ThumbnailsDownloadLis
                     int itemPosition = mPhotoRecyclerView.getChildLayoutPosition(v);
                     fragment.setGalleryItem(mGalleryItems.get(itemPosition));
 
-                    mDataViewActivity.displayHomeButtons(true);
+                    mDataViewActivity.displayHomeButtons(false);
 
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     fm.beginTransaction()
