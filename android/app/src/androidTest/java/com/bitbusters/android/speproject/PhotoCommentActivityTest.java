@@ -82,7 +82,7 @@ public class PhotoCommentActivityTest extends TestHelper{
         shootAndConfirmPicture();
         enterCommentAndTag();
         takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityCheckRightTagDisplayed");
-        onView(withId(R.id.spinner)).check(matches(withSpinnerText(is("Overshading"))));
+        onView(withId(R.id.multi_spinner)).check(matches(withSpinnerText(is("Overshading"))));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class PhotoCommentActivityTest extends TestHelper{
 
     public void enterCommentAndTag() {
         onView(withId(R.id.editText)).perform(typeText(TEST_COMMENT), closeSoftKeyboard());
-        onView(withId(R.id.spinner)).perform(click());
+        onView(withId(R.id.multi_spinner)).perform(click());
         onData(hasToString(is("Overshading"))).perform(click());
     }
 

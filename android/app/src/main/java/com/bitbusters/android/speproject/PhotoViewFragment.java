@@ -25,6 +25,7 @@ public class PhotoViewFragment extends Fragment {
 //    private TextView mNameText;
     private TextView mTagText;
     private TextView mCommentText;
+    private TextView mDateText;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -54,10 +55,13 @@ public class PhotoViewFragment extends Fragment {
 //        mNameText.setText(mGalleryItem.getName());
 
         mTagText = (TextView) v.findViewById(R.id.photo_tag);
-        mTagText.setText(mGalleryItem.getTag());
+        mTagText.setText(mGalleryItem.printTags());
 
         mCommentText = (TextView) v.findViewById(R.id.photo_comment);
         mCommentText.setText(mGalleryItem.getComment());
+
+        mDateText = (TextView) v.findViewById(R.id.photo_date);
+        mDateText.setText(mGalleryItem.getDate());
 
         return v;
     }

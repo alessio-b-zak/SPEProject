@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.view.View;
 
+import java.util.List;
+
 /**
  * Created by toddym42 on 26/11/2016.
  */
@@ -11,18 +13,20 @@ import android.view.View;
 public class GalleryItem extends Point {
 
     private String mName;
-    private String mTag;
+    private List<ImageTag> mTags;
     private String mComment;
     private String mId;
     private Bitmap mThumbnail;
+    private String mDate;
 
-    public GalleryItem(double latitude, double longitude, String name, String tag, String comment, String id,Bitmap thumbnail) {
+    public GalleryItem(double latitude, double longitude, String name, List<ImageTag> tags, String comment, String id, Bitmap thumbnail, String date) {
         super(latitude, longitude, "Picture_Point", "");
         mName = name;
-        mTag = tag;
+        mTags = tags;
         mComment = comment;
         mId = id;
         mThumbnail = thumbnail;
+        mDate = date;
     }
 
     @Override
@@ -38,16 +42,31 @@ public class GalleryItem extends Point {
         mName = name;
     }
 
-    public String getTag() {
-        return mTag;
+    public List<ImageTag> getTags() {
+        return mTags;
     }
 
-    public void setTag(String tag) {
-        mTag = tag;
+    public String printTags() {
+        String result = "";
+        for(int i = 0; i < mTags.size(); i++) {
+            result = result.concat(mTags.get(i).text);
+            if (i != mTags.size() - 1) {
+                result = result.concat(", ");
+            }
+        }
+        return result;
     }
+
+//    public void setTag(String tag) {
+//        mTag = tag;
+//    }
 
     public String getComment() {
         return mComment;
+    }
+
+    public String getDate() {
+        return mDate;
     }
 
     public void setComment(String comment) {

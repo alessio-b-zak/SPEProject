@@ -16,11 +16,11 @@ import java.util.List;
 public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
     private static final String TAG = "THUMBNAIL_DOWNLOADER";
     private DataViewActivity mDataViewActivity;
-    private ImageLocationDownloadListener mImagesLocationDownloadListener;
+    private ThumbnailsDownloadListener mThumbnailsDownloadListener;
 
-    public ThumbnailsDownloader(Context context, ImageLocationDownloadListener imgLocationDownloadListener) {
+    public ThumbnailsDownloader(Context context, ThumbnailsDownloadListener imgLocationDownloadListener) {
         this.mDataViewActivity = (DataViewActivity) context;
-        this.mImagesLocationDownloadListener = imgLocationDownloadListener;
+        this.mThumbnailsDownloadListener = imgLocationDownloadListener;
     }
 
     @Override
@@ -69,14 +69,14 @@ public class ThumbnailsDownloader extends AsyncTask<String, Void, List<Image>> {
         mDataViewActivity.getPhotoMarkers().clear();
         Log.i(TAG,"Number of images returned: " + String.valueOf(result.size())); // RETURNING 0.
         for (Image img : result) {
-            GalleryItem photo = new GalleryItem(img.getLongitude(), img.getLatitude(),img.getId(), img.getPhotoTag().toString(), img.getComment(),img.getId(), img.getImage());
+            GalleryItem photo = new GalleryItem(img.getLongitude(), img.getLatitude(),img.getId(), img.getTags(), img.getComment(),img.getId(), img.getImage(), img.getDate());
             mDataViewActivity.getPhotoMarkers().add(photo);
             mDataViewActivity.getPictureClusterManager().addItem(photo);
             //set image in gallery
         }
         mDataViewActivity.getPictureClusterManager().cluster();
         mDataViewActivity.getProgressSpinner().setVisibility(View.INVISIBLE);
-        mImagesLocationDownloadListener.imagesDownloaded();
+        mThumbnailsDownloadListener.imagesDownloaded();
 
     }
 

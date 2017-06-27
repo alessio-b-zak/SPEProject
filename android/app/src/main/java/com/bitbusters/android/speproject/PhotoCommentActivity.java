@@ -26,12 +26,17 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
-public class PhotoCommentActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+import java.util.ArrayList;
+import java.util.List;
 
+public class PhotoCommentActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, MultiSpinner.MultiSpinnerListener {
+
+    private static final String TAG = "PHOTO_COMMENT_ACTIVITY";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap imageTaken;
     private EditText someText;
-    private Spinner spinner;
+    private MultiSpinner multiSpinner;
+//    private Spinner spinner;
     private GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -40,7 +45,7 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             com.bitbusters.android.speproject.Image image = new com.bitbusters.android.speproject.Image("NoId",
-                                imageTaken, mLocation.getLatitude(), mLocation.getLongitude(), someText.getText().toString(), (ImageTag)spinner.getSelectedItem());
+                                imageTaken, mLocation.getLatitude(), mLocation.getLongitude(), someText.getText().toString(), getSelectedTags());
             Log.e(String.valueOf(mLocation.getLongitude()), String.valueOf(mLocation.getLatitude()));
             new ImageUploader().execute(image);
         } else {
@@ -107,11 +112,13 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
     }
 
     protected void setUpSpinner(){
-        spinner = (Spinner) findViewById(R.id.spinner);
-        spinner.setPrompt("Set tag");
-        ArrayAdapter<ImageTag> adapter = new ArrayAdapter<>(this, R.layout.spinner_format, ImageTag.values());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        multiSpinner = (MultiSpinner) findViewById(R.id.multi_spinner);
+        multiSpinner.setItems(ImageTag.getAllTags(), "Set tags", this);
+//        spinner = (Spinner) findViewById(R.id.spinner);
+//        spinner.setPrompt("Set tag");
+//        ArrayAdapter<ImageTag> adapter = new ArrayAdapter<>(this, R.layout.spinner_format, ImageTag.values());
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner.setAdapter(adapter);
     }
 
     public void backClick(View v) {
@@ -161,6 +168,28 @@ public class PhotoCommentActivity extends AppCompatActivity implements GoogleApi
         }else{
             finish();
         }
+    }
+
+    public List<ImageTag> getSelectedTags() {
+        List<ImageTag> result = new ArrayList<>();
+        List<String> selectedStrings = multiSpinner.getSelectedItems();
+        for (String selected : selectedStrings) {
+//            Log.e(TAG, "Input String: " + selected);
+//            Log.e(TAG, "Output Tag: " + ImageTag.fromString(selected).toString());
+            result.add(ImageTag.fromString(selected));
+        }
+        return result;
+    }
+
+    @Override
+    public void onItemsSelected(boolean[] selected) {
+//        for (String item : multiSpinner.getSelectedItems()) {
+//            Log.e(TAG, "Selected: " + item);
+//        }
+//        for (ImageTag tag : getSelectedTags()) {
+//            Log.e(TAG, "Selected TAG: " + tag.toString());
+//        }
+//        List<ImageTag> tags = getSelectedTags();
     }
 
 }

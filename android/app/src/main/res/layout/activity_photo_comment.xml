@@ -134,10 +134,15 @@
                 android:textColor="@color/black"
                 android:textSize="24sp" />
 
-            <Spinner
+            <com.bitbusters.android.speproject.MultiSpinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner" />
+                android:id="@+id/multi_spinner"/>
+
+            <!--<Spinner-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/spinner" />-->
 
         </LinearLayout>
 

@@ -51,7 +51,6 @@ public class DataViewActivityTest extends TestHelper {
 //        onView(withId(R.id.info_button)).perform(click());
         takeScreenshot(mDevice, FOLDER_NAME, "DataViewActivityClickInfoButton");
         onView(withId(R.id.info_title)).check(matches(isDisplayed()));
-        onView(withId(R.id.info_spvButton)).check(matches(isDisplayed()));
     }
 
     @Test

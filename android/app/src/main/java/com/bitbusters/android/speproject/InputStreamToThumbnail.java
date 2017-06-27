@@ -41,8 +41,10 @@ public class InputStreamToThumbnail {
     public Image readMessage(JsonReader reader) throws IOException {
         String comment = null;
         String id = null;
+        String date = null;
         double latitude = 0.0, longitude = 0.0;
         ImageTag tag = ImageTag.NA;
+        List<ImageTag> tags = new ArrayList<>();
         /* Used to dynamically add an arbitrary number of pixels (as bytes), read from the JSON. */
         List<Byte> imgPixels = new ArrayList<Byte>();
         try {
@@ -67,10 +69,17 @@ public class InputStreamToThumbnail {
                     reader.endObject();
                 } else if (name.equals("_id")) {
                     id = reader.nextString();
-                } else if (name.equals("tag")) {
-                    tag = ImageTag.fromString(reader.nextString());
+                } else if (name.equals("tags")) {
+                    reader.beginArray();
+                    while(reader.hasNext()) {
+                        tag = ImageTag.fromKey(reader.nextString());
+                        tags.add(tag);
+                    }
+                    reader.endArray();
                 } else if (name.equals("comment")) {
                     comment = reader.nextString();
+                } else if (name.equals("date")) {
+                    date = reader.nextString();
                 } else if (name.equals("loc")) {
                     reader.beginArray();
                     longitude = reader.nextDouble();
@@ -88,7 +97,7 @@ public class InputStreamToThumbnail {
         byte array, the ArrayList need to be converted to a byte array. */
         byte[] imgBytePrimitive = arrayListByteToPrimitive(imgPixels);
         Bitmap image = BitmapFactory.decodeByteArray(imgBytePrimitive, 0, imgBytePrimitive.length);
-        return new Image(id, image, latitude, longitude, comment, tag);
+        return new Image(id, image, latitude, longitude, comment, tags, date);
     }
 
     private byte[] arrayListByteToPrimitive(List<Byte> arrayListByte) {

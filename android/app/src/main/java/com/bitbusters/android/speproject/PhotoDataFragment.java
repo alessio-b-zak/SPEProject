@@ -8,14 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,7 +22,7 @@ import java.util.List;
  * Created by mihajlo on 08/11/2016.
  */
 
-public class PhotoDataFragment extends Fragment implements ImageLocationDownloadListener{
+public class PhotoDataFragment extends Fragment implements ThumbnailsDownloadListener {
 
     View mPhotoDataView;
 
@@ -135,7 +132,7 @@ public class PhotoDataFragment extends Fragment implements ImageLocationDownload
             Drawable itemImage = new BitmapDrawable(galleryItem.getThumbnail());
             dataHolder.bindDrawable(itemImage);
             dataHolder.mComment.setText(galleryItem.getComment());
-            dataHolder.mTag.setText(galleryItem.getTag());
+            dataHolder.mTag.setText(galleryItem.printTags());
 
         }
 

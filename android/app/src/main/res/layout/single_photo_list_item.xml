@@ -66,9 +66,6 @@
                 style="@style/TextViewPhotoTableChild"
                 android:textColor="@color/white"
                 android:id="@+id/comment"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:layout_weight="1"
                 android:text=""
                 android:gravity="start"/>
         </TableRow>

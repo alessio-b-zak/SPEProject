@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class ImageUploader extends AsyncTask<Image, Void, String> {
     private static final String TAG = "IMAGES_UPLOADER";
@@ -25,11 +26,13 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             Bitmap bitmap = params[0].getImage();
             Double latitude = params[0].getLatitude();
             Double longitude = params[0].getLongitude();
-            ImageTag tag = params[0].getPhotoTag();
+            List<ImageTag> tags = params[0].getTags();
+            String sendTags = params[0].getTagsString();
+
+            Log.e(TAG, "Tags Sent: " + sendTags);
 
             HttpURLConnection httpUrlConnection = null;
             URL url = new URL("http://139.59.184.70:8080/uploadImage");
-            Log.i(TAG, " URL UPLOAD : " + url.toString());
             httpUrlConnection = (HttpURLConnection) url.openConnection();
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
@@ -37,7 +40,7 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
             httpUrlConnection.setRequestProperty("Comment", comment);
-            httpUrlConnection.setRequestProperty("Tag", tag.name());
+            httpUrlConnection.setRequestProperty("Tags", sendTags);
             httpUrlConnection.setRequestProperty("Latitude", String.valueOf(latitude));
             httpUrlConnection.setRequestProperty("Longitude", String.valueOf(longitude));
             httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
@@ -47,11 +50,11 @@ public class ImageUploader extends AsyncTask<Image, Void, String> {
 
             OutputStream request = httpUrlConnection.getOutputStream();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, request);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, request);
 
             byte[] byteArray = stream.toByteArray();
             request.write(byteArray);
-            Log.i(TAG, "Image Converted to JPEG ");
+            Log.i(TAG, "Image Compressed");
             stream.close();
             request.close();
 

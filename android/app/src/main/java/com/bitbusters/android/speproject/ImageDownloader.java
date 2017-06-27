@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImageDownloader extends AsyncTask<String, Void, Image> {
     private static final String TAG = "IMAGE_DOWNLOADER";
@@ -23,10 +25,11 @@ public class ImageDownloader extends AsyncTask<String, Void, Image> {
     protected Image doInBackground(String...params) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
         Bitmap bmp = Bitmap.createBitmap(10, 10, conf);
-        Image image = new Image("", bmp,0, 0, "", ImageTag.NA);
+        List<ImageTag> tags = new ArrayList<>();
+        tags.add(ImageTag.NA);
+        Image image = new Image("", bmp,0, 0, "", tags, "");
         // param 0 is the id of the image
         try {
-
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
                     .encodedAuthority("139.59.184.70:8080")

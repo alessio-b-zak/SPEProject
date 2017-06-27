@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:text="TAG"
+                android:text="@string/photo_tag"
                 style="?android:listSeparatorTextViewStyle"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp" />
@@ -77,7 +77,7 @@
             <TextView
                 android:id="@+id/photo_tag"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:gravity="start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:text="COMMENT"
+                android:text="@string/photo_comment"
                 style="?android:listSeparatorTextViewStyle"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp" />
@@ -98,7 +98,28 @@
             <TextView
                 android:id="@+id/photo_comment"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
+                android:gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="@string/photo_date"
+                style="?android:listSeparatorTextViewStyle"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp" />
+
+            <TextView
+                android:id="@+id/photo_date"
+                android:textColor="@color/black"
+                android:textSize="16sp"
                 android:gravity="start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

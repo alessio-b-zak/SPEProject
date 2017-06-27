@@ -17,6 +17,7 @@
 
     <string name="photo_comment">Comment: </string>
     <string name="photo_tag">Tags: </string>
+    <string name="photo_date">Date Taken: </string>
     <string name="photo_item_descriptor">Image of Observation</string>
 
     <string name="button_desc_hamburger">Hamburger Button</string>
