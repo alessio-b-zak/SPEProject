@@ -74,7 +74,8 @@ router.get('/getImage/:id', function(req, res) {
     image._id = result._id;
     image.comment = result.comment;
     image.loc = result.loc;
-    image.tag = result.tag;
+    image.tags = result.tags;
+    image.date = result.date;
     image.image = fs.readFileSync(path.join(__dirname, result.imagepath));
     res.status(200).send(image);
     res.end();
@@ -121,7 +122,8 @@ router.get('/getThumbnails/:lat1/:lon1/:lat3/:lon3', function(req, res) {
       images[i]._id = result[i]._id;
       images[i].comment = result[i].comment;
       images[i].loc = result[i].loc;
-      images[i].tag = result[i].tag;
+      images[i].tags = result[i].tags;
+      images[i].date = result[i].date;
       images[i].image = fs.readFileSync(path.join(__dirname, result[i].thumbnailpath));
     }
     res.status(200).send(images);
@@ -184,7 +186,7 @@ router.post('/uploadImage', function(req, res) {
     count = count + 1;
     var number = count.toString();
 
-    var database_image_location = path.join('uploads','image' + number + '.jpeg');
+    var database_image_location = path.join('uploads','image' + number + '.png');
     var imagepath = path.join(__dirname, database_image_location);
     console.log(imagepath);
     var database_thumbnail_location = path.join('thumbnails','image' + number + '.jpeg');
@@ -192,10 +194,14 @@ router.post('/uploadImage', function(req, res) {
 
     var entry = {};
     entry.comment = req.headers.comment;
-    entry.tag = req.headers.tag;
+    entry.tags = req.headers.tags.split(",");
     entry.loc = [parseFloat(req.headers.latitude),parseFloat(req.headers.longitude)];
     entry.imagepath = database_image_location;
     entry.thumbnailpath = database_thumbnail_location;
+
+    var date = new Date();
+    entry.date = date.getDate() + "/" +  (date.getMonth() + 1) + "/" + date.getFullYear() + " " + new Date(new Date().getTime() + 60*60*1000).toLocaleTimeString();
+
     images.insert(entry);
 
     if (req.method == "POST") {
@@ -225,7 +231,6 @@ router.post('/uploadImage', function(req, res) {
           }
 
         });
-        console.log("bla bla");
       });
     } else {
       console.dir(request);
