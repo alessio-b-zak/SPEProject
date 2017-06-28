@@ -35,8 +35,13 @@
     <string name="wims_table_date">Date</string>
     <string name="wims_table_type">Type</string>
 
-    <string name="info_title"><b>MyRivers™ v1.0</b></string>
+    <string name="info_title"><b>myRivers™ v1.0</b></string>
+    <string name="info_description">myRivers allows anyone to submit and browse photos of
+        interesting wildlife observations and pollution incidents. It also provides useful
+        information about river pollution found in two Environment Agency data sets.</string>
     <string name="info_subtitle">\u00A9 BitBusters 2017</string>
+    <string name="info_home_buttons">Home Buttons: </string>
+    <string name="info_layers">Layers: </string>
     <string name="info_spvText">
         <b>SP View Button</b>: Show all sample points within a 10km radius (it is recommended to zoom in first by clicking the GPS button)
     </string>
@@ -45,5 +50,14 @@
     </string>
     <string name="info_camText">
         <b>Camera Button</b>: Take a picture of interesting wildlife observation or a pollution incident.
+    </string>
+    <string name="info_cde_description">
+        <b>CDE Layer</b>: Displays sampling points from Catchment Data Explorer data set along with pollution levels.
+    </string>
+    <string name="info_wims_description">
+        <b>WIMS Layer</b>: Displays sampling points from Water Quality Archive with the latest three measurements.
+    </string>
+    <string name="info_image_description">
+        <b>Image Layer</b>: Displays images of wildlife and pollution incidents submitted by the app users.
     </string>
 </resources>
