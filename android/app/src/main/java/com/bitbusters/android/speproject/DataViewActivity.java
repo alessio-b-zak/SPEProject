@@ -334,12 +334,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     new CDEPointAPI(DataViewActivity.this).execute(polygon);
                     break;
                 case WIMS:
-                    double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
-                    int distanceKM = (int) (distanceM / 1.5) / 1000;
-                    String[] params = {String.valueOf(camCentre.latitude),
-                                         String.valueOf(camCentre.longitude),
-                                         String.valueOf(distanceKM)};
-                    new WIMSPointAPI(DataViewActivity.this).execute(params);
+//                    double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
+//                    int distanceKM = (int) (distanceM / 1.5) / 1000;
+//                    String[] params = {String.valueOf(camCentre.latitude),
+//                                         String.valueOf(camCentre.longitude),
+//                                         String.valueOf(distanceKM)};
+//                    new WIMSPointAPI(DataViewActivity.this).execute(params);
+                    new WIMSPointAPIDatabase(this, mDbHelper);
                     break;
                 case IMAGE:
                     LatLng topLeft = screen.farLeft;

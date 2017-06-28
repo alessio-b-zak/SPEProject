@@ -26,6 +26,16 @@ class WIMSPoint extends Point {
         this.measurementList = new ArrayList<>();
     }
 
+    WIMSPoint(String id, double latitude, double longitude) {
+        super(latitude,longitude,"WIMS_Point", "");
+        this.id = id;
+        this.type = null;
+        this.label = null;
+        this.easting = null;
+        this.northing = null;
+        this.measurementList = new ArrayList<>();
+    }
+
     public String getId() {
         return id;
     }

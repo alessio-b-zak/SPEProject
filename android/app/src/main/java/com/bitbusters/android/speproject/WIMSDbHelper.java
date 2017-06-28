@@ -7,6 +7,10 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.provider.BaseColumns._ID;
 
@@ -15,6 +19,8 @@ import static android.provider.BaseColumns._ID;
  */
 
 public class WIMSDbHelper extends SQLiteOpenHelper {
+
+    private static final String TAG = "WIMS_DATABASE_HELPER";
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "WIMS.db";
@@ -80,6 +86,50 @@ public class WIMSDbHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return true;
+    }
+
+    public List<WIMSPoint> getWIMSPointsWithin(double latitude1, double longitude1,
+                                              double latitude3, double longitude3) {
+
+        List<WIMSPoint> wimsPointList = new ArrayList<>();
+        WIMSPoint wimsPoint;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] projection = { WIMSTable.COLUMN_NAME_ID,
+                                WIMSTable.COLUMN_NAME_LATITUDE,
+                                WIMSTable.COLUMN_NAME_LONGITUDE};
+
+        String selection = WIMSTable.COLUMN_NAME_LATITUDE + " >= ? AND " +
+                           WIMSTable.COLUMN_NAME_LATITUDE + " <= ? AND " +
+                           WIMSTable.COLUMN_NAME_LONGITUDE + " >= ? AND " +
+                           WIMSTable.COLUMN_NAME_LONGITUDE + " <= ?";
+
+        String[] selectionArgs = { String.valueOf(latitude3),
+                                   String.valueOf(latitude1),
+                                   String.valueOf(longitude1),
+                                   String.valueOf(longitude3) };
+
+        Cursor cursor = db.query(
+                WIMSTable.TABLE_NAME,                     // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            wimsPointList.add(new WIMSPoint(cursor.getString(cursor.getColumnIndex(WIMSTable.COLUMN_NAME_ID)),
+                                            cursor.getDouble(cursor.getColumnIndex(WIMSTable.COLUMN_NAME_LATITUDE)),
+                                            cursor.getDouble(cursor.getColumnIndex(WIMSTable.COLUMN_NAME_LONGITUDE))));
+            Log.i(TAG,cursor.getString(cursor.getColumnIndex(WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE)));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return wimsPointList;
     }
 
     public void updateRecord(String tableName, String searchField, String searchValue,

@@ -122,8 +122,10 @@ public class WIMSPopulateDatabase extends AsyncTask<Void, Void, Void> {
                             WIMSDbHelper.WIMSTable.COLUMN_NAME_ID, id,
                             WIMSDbHelper.WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE, year);
 
-                    Log.e(TAG, "Latest Measurement Updated!");
-                    Log.e(TAG, DatabaseUtils.dumpCursorToString(cursor));
+                    if(cursor.isFirst()) {
+                        Log.e(TAG, "Latest Measurement Updated!");
+                        Log.e(TAG, DatabaseUtils.dumpCursorToString(cursor));
+                    }
 
                 } catch (IOException e) {
                     e.printStackTrace();
