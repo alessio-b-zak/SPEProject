@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -101,6 +102,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private ClusterManager<GalleryItem> mPictureClusterManager;
     private MultiListener mMultiListener = new MultiListener();
     private Drawer mDrawer;
+    private WIMSDbHelper mDbHelper;
 
     private WIMSPoint selectedWIMSPoint;
     private CDEPoint selectedCDEPoint;
@@ -163,6 +165,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMapCameraPadding = displayMetrics.heightPixels / 3;
 
         currentView = CDE;
+
+        mDbHelper = new WIMSDbHelper(getApplicationContext());
+
+//        new WIMSPopulateDatabase(getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void setupDrawer() {

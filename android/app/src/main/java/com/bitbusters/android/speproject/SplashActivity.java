@@ -11,7 +11,6 @@ public class SplashActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DataPullTask task = new DataPullTask();
-
         task.execute();
     }
 

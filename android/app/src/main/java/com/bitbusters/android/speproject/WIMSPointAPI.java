@@ -41,6 +41,7 @@ public class WIMSPointAPI extends AsyncTask<String, Void, List<WIMSPoint>> {
                     .appendQueryParameter("lat", params[0])
                     .appendQueryParameter("long", params[1])
                     .appendQueryParameter("dist", params[2])
+                    .appendQueryParameter("_limit", "1000")
                     .appendQueryParameter("samplingPointStatus", "open");
             String myUrl = builder.build().toString();
 
