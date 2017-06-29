@@ -84,6 +84,8 @@ public class InputStreamToWIMSMeasurementsDatabase {
 
         populated = true;
 
+        dateTimeString = dateTimeString.substring(0,4);
+
         return dateTimeString;
     }
 }

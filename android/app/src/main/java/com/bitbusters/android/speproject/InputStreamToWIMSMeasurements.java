@@ -53,8 +53,8 @@ public class InputStreamToWIMSMeasurements {
     public void readMessage(WIMSPoint wimsPoint, JsonReader reader) throws IOException {
         String determinand = null;
         String dateTimeString = null;
-        DateTime dateTime = null;
-        Date date = null;
+        String year = null;
+        String label = null;
         Double result = 0.0;
         try {
             reader.beginObject();
@@ -79,7 +79,19 @@ public class InputStreamToWIMSMeasurements {
                         name = reader.nextName();
                         if (name.equals("sampleDateTime")) {
                             dateTimeString = reader.nextString();
-                            dateTime = new DateTime(dateTimeString);
+                            year = dateTimeString.substring(0, 4);
+                        } else if (name.equals("samplingPoint")) {
+                            reader.beginObject();
+                            while (reader.hasNext()) {
+                                name = reader.nextName();
+                                if (name.equals("label")) {
+                                    label = reader.nextString();
+                                } else {
+                                    reader.skipValue();
+                                }
+                            }
+                            reader.endObject();
+
                         } else {
                             reader.skipValue();
                         }
@@ -94,6 +106,7 @@ public class InputStreamToWIMSMeasurements {
             e.printStackTrace();
         }
 
-        wimsPoint.getMeasurementList().add(new Measurement(determinand, result, dateTime));
+        wimsPoint.getMeasurementList().add(new Measurement(determinand, result, year));
+        wimsPoint.setLabel(label);
     }
 }

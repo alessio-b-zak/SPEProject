@@ -166,9 +166,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         currentView = CDE;
 
-        mDbHelper = new WIMSDbHelper(getApplicationContext());
+//        mDbHelper = new WIMSDbHelper(getApplicationContext());
 
-//        new WIMSPopulateDatabase(getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new WIMSPopulateDatabase(getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void setupDrawer() {
@@ -340,7 +340,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 //                                         String.valueOf(camCentre.longitude),
 //                                         String.valueOf(distanceKM)};
 //                    new WIMSPointAPI(DataViewActivity.this).execute(params);
-                    new WIMSPointAPIDatabase(this, mDbHelper);
+                    String[] pt = new String[5];
+                    pt[0] = String.valueOf(screen.farLeft.latitude);
+                    pt[1] = String.valueOf(screen.farLeft.longitude);
+                    pt[2] = String.valueOf(screen.nearRight.latitude);
+                    pt[3] = String.valueOf(screen.nearRight.longitude);
+                    pt[4] = "2016";
+                    Log.i(TAG, "Total Rows: " + mDbHelper.numberOfRows());
+                    Log.i(TAG, "Total Nulls: " + mDbHelper.numberOfNulls());
+                    new WIMSPointAPIDatabase(this, mDbHelper).execute(pt);
                     break;
                 case IMAGE:
                     LatLng topLeft = screen.farLeft;
@@ -743,12 +751,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             clearMarkers(WIMS);
             openView(WIMS);
             mProgressSpinner.setVisibility(View.INVISIBLE);
+            mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
         } else if (fragment instanceof CDEDataFragment) {
             mFragmentManager.popBackStack();
             clearMarkers(CDE);
             openView(CDE);
             mProgressSpinner.setVisibility(View.INVISIBLE);
+            mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
         } else if (fragment instanceof PhotoDataFragment) {
             closeView(IMAGE);

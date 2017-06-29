@@ -17,7 +17,7 @@ import java.util.List;
 //import static com.google.android.gms.internal.zznu.is;
 
 public class WIMSPointAPIDatabase extends AsyncTask<String, Void, List<WIMSPoint>> {
-    private static final String DEBUG_TAG = "SAMPLING_POINTS_API";
+    private static final String TAG = "WIMS_POINTS_DB_API";
     private WIMSDbHelper mDbHelper;
     private OnTaskCompleted listener;
     private DataViewActivity mDataViewActivity;
@@ -30,8 +30,13 @@ public class WIMSPointAPIDatabase extends AsyncTask<String, Void, List<WIMSPoint
 
     @Override
     protected List<WIMSPoint> doInBackground(String...params) {
+        Log.i(TAG, params[0]);
+        Log.i(TAG, params[1]);
+        Log.i(TAG, params[2]);
+        Log.i(TAG, params[3]);
         return mDbHelper.getWIMSPointsWithin(Double.valueOf(params[0]), Double.valueOf(params[1]),
-                                                   Double.valueOf(params[2]), Double.valueOf(params[3]));
+                                             Double.valueOf(params[2]), Double.valueOf(params[3]),
+                                             Integer.valueOf(params[4]));
     }
     // onPostExecute displays the results of the AsyncTask.
     @Override

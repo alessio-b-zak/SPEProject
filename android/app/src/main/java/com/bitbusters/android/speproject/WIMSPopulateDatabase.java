@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,10 @@ public class WIMSPopulateDatabase extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void...params) {
-        writeSamplingPointsToDatabase();
+//        writeSamplingPointsToDatabase();
+        Log.i(TAG, "WIMS Point Added to the Database!");
         setLatestMeasurementInDatabase();
+        Log.i(TAG, "Latest Measurements Updated!");
         return null;
     }
     // onPostExecute displays the results of the AsyncTask.
@@ -86,54 +89,57 @@ public class WIMSPopulateDatabase extends AsyncTask<Void, Void, Void> {
         Cursor cursor = db.rawQuery(Query, null);
 
         cursor.moveToFirst();
+        int i = 0;
         while(!cursor.isAfterLast()) {
             String latestMeasurement = cursor.getString(
                     cursor.getColumnIndex(WIMSDbHelper.WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE));
             if (latestMeasurement == null) {
                 try {
-                    String id = cursor.getString(cursor.getColumnIndex(WIMSDbHelper.WIMSTable.COLUMN_NAME_ID));
-                    Uri.Builder builder = new Uri.Builder();
-                    builder.scheme("http")
-                            .authority("environment.data.gov.uk")
-                            .appendPath("water-quality")
-                            .appendPath("data")
-                            .appendPath("measurement")
-                            .appendQueryParameter("samplingPoint", id)
-                            .appendQueryParameter("_sort", "-sample")
-                            .appendQueryParameter("_limit", "1");
+                    try {
+                        String id = cursor.getString(cursor.getColumnIndex(WIMSDbHelper.WIMSTable.COLUMN_NAME_ID));
+                        Uri.Builder builder = new Uri.Builder();
+                        builder.scheme("http")
+                                .authority("environment.data.gov.uk")
+                                .appendPath("water-quality")
+                                .appendPath("data")
+                                .appendPath("measurement")
+                                .appendQueryParameter("samplingPoint", id)
+                                .appendQueryParameter("_sort", "-sample")
+                                .appendQueryParameter("_limit", "1");
 
-                    String myUrl = builder.build().toString();
-                    URL url = new URL(myUrl);
+                        String myUrl = builder.build().toString();
+                        URL url = new URL(myUrl);
 
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setReadTimeout(10000 /* milliseconds */);
-                    conn.setConnectTimeout(15000 /* milliseconds */);
-                    conn.setRequestMethod("GET");
-                    conn.setDoInput(true);
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setReadTimeout(10000 /* milliseconds */);
+                        conn.setConnectTimeout(15000 /* milliseconds */);
+                        conn.setRequestMethod("GET");
+                        conn.setDoInput(true);
 
-                    conn.connect();
-                    int response = conn.getResponseCode();
+                        conn.connect();
+    //                    int response = conn.getResponseCode();
 
-                    InputStream inputStream = conn.getInputStream();
-                    InputStreamToWIMSMeasurementsDatabase inputStreamToWIMSMeasurementsDatabase = new InputStreamToWIMSMeasurementsDatabase();
-                    String year = inputStreamToWIMSMeasurementsDatabase.readJsonStream(inputStream);
+                        InputStream inputStream = conn.getInputStream();
+                        InputStreamToWIMSMeasurementsDatabase inputStreamToWIMSMeasurementsDatabase = new InputStreamToWIMSMeasurementsDatabase();
+                        String year = inputStreamToWIMSMeasurementsDatabase.readJsonStream(inputStream);
 
-                    mDbHelper.updateRecord(WIMSDbHelper.WIMSTable.TABLE_NAME,
-                            WIMSDbHelper.WIMSTable.COLUMN_NAME_ID, id,
-                            WIMSDbHelper.WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE, year);
+                        Log.i(TAG, i + ":" + year);
 
-                    if(cursor.isFirst()) {
-                        Log.e(TAG, "Latest Measurement Updated!");
-                        Log.e(TAG, DatabaseUtils.dumpCursorToString(cursor));
+                        mDbHelper.updateRecord(db, WIMSDbHelper.WIMSTable.TABLE_NAME,
+                                WIMSDbHelper.WIMSTable.COLUMN_NAME_ID, id,
+                                WIMSDbHelper.WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE, year);
+                    } catch (SocketTimeoutException e ){
+                        e.printStackTrace();
                     }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
             cursor.moveToNext();
+            i++;
         }
         cursor.close();
+        db.close();
     }
 
 }

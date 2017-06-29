@@ -1,14 +1,21 @@
 package com.bitbusters.android.speproject;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.provider.BaseColumns;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,27 +95,14 @@ public class WIMSDbHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public List<WIMSPoint> getWIMSPointsWithin(double latitude1, double longitude1,
-                                              double latitude3, double longitude3) {
-
-        List<WIMSPoint> wimsPointList = new ArrayList<>();
-        WIMSPoint wimsPoint;
-
+    public int numberOfNulls() {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String[] projection = { WIMSTable.COLUMN_NAME_ID,
-                                WIMSTable.COLUMN_NAME_LATITUDE,
-                                WIMSTable.COLUMN_NAME_LONGITUDE};
+        String[] projection = { WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE };
 
-        String selection = WIMSTable.COLUMN_NAME_LATITUDE + " >= ? AND " +
-                           WIMSTable.COLUMN_NAME_LATITUDE + " <= ? AND " +
-                           WIMSTable.COLUMN_NAME_LONGITUDE + " >= ? AND " +
-                           WIMSTable.COLUMN_NAME_LONGITUDE + " <= ?";
+        String selection = WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE + " is null";
 
-        String[] selectionArgs = { String.valueOf(latitude3),
-                                   String.valueOf(latitude1),
-                                   String.valueOf(longitude1),
-                                   String.valueOf(longitude3) };
+        String[] selectionArgs = { };
 
         Cursor cursor = db.query(
                 WIMSTable.TABLE_NAME,                     // The table to query
@@ -117,7 +111,47 @@ public class WIMSDbHelper extends SQLiteOpenHelper {
                 selectionArgs,                            // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
-                null                                 // The sort order
+                null                                      // The sort order
+        );
+
+        int result = cursor.getCount();
+        cursor.close();
+        return result;
+    }
+
+    public List<WIMSPoint> getWIMSPointsWithin(double latitude1, double longitude1, double latitude3,
+                                               double longitude3, Integer year) {
+
+        List<WIMSPoint> wimsPointList = new ArrayList<>();
+        WIMSPoint wimsPoint;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] projection = { WIMSTable.COLUMN_NAME_ID,
+                                WIMSTable.COLUMN_NAME_LATITUDE,
+                                WIMSTable.COLUMN_NAME_LONGITUDE,
+                                WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE };
+
+        String selection = WIMSTable.COLUMN_NAME_LATITUDE + " >= ? AND " +
+                           WIMSTable.COLUMN_NAME_LATITUDE + " <= ? AND " +
+                           WIMSTable.COLUMN_NAME_LONGITUDE + " >= ? AND " +
+                           WIMSTable.COLUMN_NAME_LONGITUDE + " <= ? AND " +
+                           WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE + " = ?";
+
+        String[] selectionArgs = { String.valueOf(latitude3),
+                                   String.valueOf(latitude1),
+                                   String.valueOf(longitude1),
+                                   String.valueOf(longitude3),
+                                   String.valueOf(year)};
+
+        Cursor cursor = db.query(
+                WIMSTable.TABLE_NAME,                     // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                      // The sort order
         );
 
         cursor.moveToFirst();
@@ -125,17 +159,16 @@ public class WIMSDbHelper extends SQLiteOpenHelper {
             wimsPointList.add(new WIMSPoint(cursor.getString(cursor.getColumnIndex(WIMSTable.COLUMN_NAME_ID)),
                                             cursor.getDouble(cursor.getColumnIndex(WIMSTable.COLUMN_NAME_LATITUDE)),
                                             cursor.getDouble(cursor.getColumnIndex(WIMSTable.COLUMN_NAME_LONGITUDE))));
-            Log.i(TAG,cursor.getString(cursor.getColumnIndex(WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE)));
+//            Log.i(TAG,cursor.getString(cursor.getColumnIndex(WIMSTable.COLUMN_NAME_LATEST_MEASURE_DATE)));
             cursor.moveToNext();
         }
         cursor.close();
         return wimsPointList;
     }
 
-    public void updateRecord(String tableName, String searchField, String searchValue,
-                             String updateField, String updateValue) {
+    public void updateRecord(SQLiteDatabase db, String tableName, String searchField,
+                             String searchValue, String updateField, String updateValue) {
 
-        SQLiteDatabase db = this.getReadableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(updateField, updateValue);
@@ -149,6 +182,34 @@ public class WIMSDbHelper extends SQLiteOpenHelper {
                 values,
                 selection,
                 selectionArgs);
+
+    }
+
+    public void exportDatabase(String packageName) {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                Log.i(TAG, "Exporting Database");
+                String currentDBPath = "//data//"+  packageName +"//databases//"+DATABASE_NAME+"";
+                String backupDBPath = DATABASE_NAME;
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+
+                Log.i(TAG, "Database Exported to : " + backupDB.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static class WIMSTable implements BaseColumns{
