@@ -51,6 +51,11 @@ import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.data.Feature;
+import com.google.maps.android.data.Layer;
+import com.google.maps.android.data.geojson.GeoJsonFeature;
+import com.google.maps.android.data.geojson.GeoJsonLayer;
+import com.google.maps.android.data.geojson.GeoJsonLineStringStyle;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -60,6 +65,8 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +105,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private List<GalleryItem> photoMarkers = new ArrayList<>();
     private Boolean imageLocationsDownloaded;
     private ClusterManager<WIMSPoint> mWIMSClusterManager;
-    private ClusterManager<CDEPoint> mCDEClusterManager;
+//    private ClusterManager<CDEPoint> mCDEClusterManager;
+    private GeoJsonLayer mGeoJsonLayer;
     private ClusterManager<GalleryItem> mPictureClusterManager;
     private MultiListener mMultiListener = new MultiListener();
     private Drawer mDrawer;
@@ -166,7 +174,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         currentView = CDE;
 
-        mDbHelper = new WIMSDbHelper(getApplicationContext());
+
+//        mDbHelper = new WIMSDbHelper(getApplicationContext());
 
 //        new WIMSPopulateDatabase(getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -260,33 +269,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .build();
     }
 
-    public void closeView(int view) {
-        mMap.setOnCameraIdleListener(null);
-        clearMarkers(view);
-        // Image View has different layout which needs to be closed.
-        if(view == IMAGE) {
-            mFragmentManager.popBackStack();
-            setHomeButtonsPhotoView(false);
-        }
-    }
-
-    public void clearMarkers(int view) {
-        switch (view) {
-            case CDE:
-                mCDEClusterManager.clearItems();
-                mCDEClusterManager.cluster();
-                break;
-            case WIMS:
-                mWIMSClusterManager.clearItems();
-                mWIMSClusterManager.cluster();
-                break;
-            case IMAGE:
-                mPictureClusterManager.clearItems();
-                mPictureClusterManager.cluster();
-                break;
-        }
-    }
-
     public void openView(int view) {
         currentView = view;
         if(view == IMAGE) {
@@ -306,17 +288,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         updateLayerName(view);
     }
 
-    public void setMapOnCameraIdleListener(int view) {
-        final int view_params = view;
-        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                clearMarkers(view_params);
-                if( mMap.getCameraPosition().zoom > 10 ) {
-                    loadMarkers(view_params);
-                }
-            }
-        });
+    public void closeView(int view) {
+        mMap.setOnCameraIdleListener(null);
+        clearMarkers(view);
+        // Image View has different layout which needs to be closed.
+        if(view == IMAGE) {
+            mFragmentManager.popBackStack();
+            setHomeButtonsPhotoView(false);
+        }
     }
 
     public void loadMarkers(int view) {
@@ -334,21 +313,21 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     new CDEPointAPI(DataViewActivity.this).execute(polygon);
                     break;
                 case WIMS:
-//                    double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
-//                    int distanceKM = (int) (distanceM / 1.5) / 1000;
-//                    String[] params = {String.valueOf(camCentre.latitude),
-//                                         String.valueOf(camCentre.longitude),
-//                                         String.valueOf(distanceKM)};
-//                    new WIMSPointAPI(DataViewActivity.this).execute(params);
-                    String[] pt = new String[5];
-                    pt[0] = String.valueOf(screen.farLeft.latitude);
-                    pt[1] = String.valueOf(screen.farLeft.longitude);
-                    pt[2] = String.valueOf(screen.nearRight.latitude);
-                    pt[3] = String.valueOf(screen.nearRight.longitude);
-                    pt[4] = "2016";
-                    Log.i(TAG, "Total Rows: " + mDbHelper.numberOfRows());
-                    Log.i(TAG, "Total Nulls: " + mDbHelper.numberOfNulls());
-                    new WIMSPointAPIDatabase(this, mDbHelper).execute(pt);
+                    double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
+                    int distanceKM = (int) (distanceM / 1.5) / 1000;
+                    String[] params = {String.valueOf(camCentre.latitude),
+                            String.valueOf(camCentre.longitude),
+                            String.valueOf(distanceKM)};
+                    new WIMSPointAPI(DataViewActivity.this).execute(params);
+//                    String[] pt = new String[5];
+//                    pt[0] = String.valueOf(screen.farLeft.latitude);
+//                    pt[1] = String.valueOf(screen.farLeft.longitude);
+//                    pt[2] = String.valueOf(screen.nearRight.latitude);
+//                    pt[3] = String.valueOf(screen.nearRight.longitude);
+//                    pt[4] = "2016";
+//                    Log.i(TAG, "Total Rows: " + mDbHelper.numberOfRows());
+//                    Log.i(TAG, "Total Nulls: " + mDbHelper.numberOfNulls());
+//                    new WIMSPointAPIDatabase(this, mDbHelper).execute(pt);
                     break;
                 case IMAGE:
                     LatLng topLeft = screen.farLeft;
@@ -364,6 +343,45 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         } else {
             Toast.makeText(getApplicationContext(), "Data retrieval needs internet connection", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void clearMarkers(int view) {
+        switch (view) {
+            case CDE:
+//                mCDEClusterManager.clearItems();
+//                mCDEClusterManager.cluster();
+//                mGeoJsonLayer.removeLayerFromMap();
+//                Log.i(TAG, "GeoJsonLayerFeatures : " + mGeoJsonLayer.getFeatures().toString());
+                List<GeoJsonFeature> featuresToRemove = new ArrayList<>();
+                for(GeoJsonFeature feature : mGeoJsonLayer.getFeatures()) {
+                    featuresToRemove.add(feature);
+                }
+                for(GeoJsonFeature feature : featuresToRemove) {
+                    mGeoJsonLayer.removeFeature(feature);
+                }
+                break;
+            case WIMS:
+                mWIMSClusterManager.clearItems();
+                mWIMSClusterManager.cluster();
+                break;
+            case IMAGE:
+                mPictureClusterManager.clearItems();
+                mPictureClusterManager.cluster();
+                break;
+        }
+    }
+
+    public void setMapOnCameraIdleListener(int view) {
+        final int view_params = view;
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                clearMarkers(view_params);
+                if( mMap.getCameraPosition().zoom > 10 ) {
+                    loadMarkers(view_params);
+                }
+            }
+        });
     }
 
     public void updateLayerName(int view) {
@@ -422,46 +440,70 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     // On CDE sampling point click.
     public void setUpCDEManager() {
-        mCDEClusterManager.setRenderer(new CDEPointRenderer(this, mMap, mCDEClusterManager));
-        mCDEClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<CDEPoint>() {
+        mGeoJsonLayer = new GeoJsonLayer(mMap, new JSONObject());
+        mGeoJsonLayer.setOnFeatureClickListener(new Layer.OnFeatureClickListener() {
             @Override
-            public boolean onClusterItemClick(CDEPoint point) {
-                if (point.getTitle().equals("CDE_Point")) {
-                    selectedCDEPoint = point;
+            public void onFeatureClick(Feature feature) {
+                setSelectedCDEPoint(feature);
+                Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+                if (fragment == null) {
+                    displayHomeButtons(false);
 
-                    Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-                    if (fragment == null) {
-                        displayHomeButtons(false);
+                    mMap.setOnCameraIdleListener(null);
 
-                        LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
-                        mMap.setPadding(0, mMapCameraPadding, 0, 0);
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, mMap.getCameraPosition().zoom));
-                        mMap.setOnCameraIdleListener(null);
+                    clearMarkers(CDE);
+                    mGeoJsonLayer.addFeature((GeoJsonFeature) feature);
 
-                        mCDEClusterManager.clearItems();
-                        mCDEClusterManager.addItem(point);
-                        mCDEClusterManager.cluster();
+                    fragment = new CDEDataFragment();
+                    mCDEDataFragment = (CDEDataFragment) fragment;
 
-                        fragment = new CDEDataFragment();
-                        mCDEDataFragment = (CDEDataFragment) fragment;
-
-                        mFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-                                .add(R.id.fragment_container, fragment)
-                                .addToBackStack(null).commit();
-                    }
+                    mFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                            .add(R.id.fragment_container, fragment)
+                            .addToBackStack(null).commit();
                 }
-                return true;
             }
         });
-        mCDEClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<CDEPoint>() {
-            @Override
-            public boolean onClusterClick(Cluster<CDEPoint> cluster) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
-                        (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300, null);
-                return true;
-            }
-        });
+//        mCDEClusterManager.setRenderer(new CDEPointRenderer(this, mMap, mCDEClusterManager));
+//        mCDEClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<CDEPoint>() {
+//            @Override
+//            public boolean onClusterItemClick(CDEPoint point) {
+//                if (point.getTitle().equals("CDE_Point")) {
+//                    selectedCDEPoint = point;
+//
+//                    Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+//                    if (fragment == null) {
+//                        displayHomeButtons(false);
+//
+//                        LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
+//                        mMap.setPadding(0, mMapCameraPadding, 0, 0);
+//                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, mMap.getCameraPosition().zoom));
+//                        mMap.setOnCameraIdleListener(null);
+//
+//                        mCDEClusterManager.clearItems();
+//                        mCDEClusterManager.addItem(point);
+//                        mCDEClusterManager.cluster();
+//
+//                        fragment = new CDEDataFragment();
+//                        mCDEDataFragment = (CDEDataFragment) fragment;
+//
+//                        mFragmentManager.beginTransaction()
+//                                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+//                                .add(R.id.fragment_container, fragment)
+//                                .addToBackStack(null).commit();
+//                    }
+//                }
+//                return true;
+//            }
+//        });
+//        mCDEClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<CDEPoint>() {
+//            @Override
+//            public boolean onClusterClick(Cluster<CDEPoint> cluster) {
+//                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
+//                        (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300, null);
+//                return true;
+//            }
+//        });
     }
 
     // On WIMS sampling point click
@@ -542,13 +584,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         }
         mWIMSClusterManager.cluster();
     }
-
-    public void repopulateCDEPoints() {
-        for (CDEPoint cp : mCDEPoints) {
-            mCDEClusterManager.addItem(cp);
-        }
-        mCDEClusterManager.cluster();
-    }
+//
+//    public void repopulateCDEPoints() {
+//        for (CDEPoint cp : mCDEPoints) {
+//            mCDEClusterManager.addItem(cp);
+//        }
+//        mCDEClusterManager.cluster();
+//    }
 
 
     // Manipulates the map once available when created.
@@ -592,18 +634,18 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void setUpMultiManager() {
         mPictureClusterManager = new ClusterManager<>(this, mMap);
         mWIMSClusterManager = new ClusterManager<>(this, mMap);
-        mCDEClusterManager = new ClusterManager<>(this, mMap);
+//        mCDEClusterManager = new ClusterManager<>(this, mMap);
 
         setUpCDEManager();
         setUpWIMSManager();
         setUpImageManager();
 
         mMultiListener.addOC(mWIMSClusterManager);
-        mMultiListener.addOC(mCDEClusterManager);
+//        mMultiListener.addOC(mCDEClusterManager);
         mMultiListener.addOC(mPictureClusterManager);
 
         mMultiListener.addOM(mWIMSClusterManager);
-        mMultiListener.addOM(mCDEClusterManager);
+//        mMultiListener.addOM(mCDEClusterManager);
         mMultiListener.addOM(mPictureClusterManager);
 
         mMap.setOnMarkerClickListener(mMultiListener);
@@ -623,9 +665,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void onTaskCompletedCDEPoint(List<CDEPoint> result) {
         mCDEPoints = result;
         for (CDEPoint r : result) {
-            mCDEClusterManager.addItem(r);
+            new CDEPointRatingsAPI(this).execute(r);
         }
-        mCDEClusterManager.cluster();
+    }
+
+    public void showGeoJsonData(CDEPoint cdePoint) {
+        cdePoint.getGeoJSONFeature().setPolygonStyle(GeoJsonStyles.geoJsonPolygonStyle(cdePoint));
+        cdePoint.getGeoJSONFeature().setLineStringStyle(GeoJsonStyles.geoJsonLineStringStyle(cdePoint));
+        mGeoJsonLayer.addFeature(cdePoint.getGeoJSONFeature());
+        mGeoJsonLayer.addLayerToMap();
     }
 
     //Method called when connection established with Google Play Service Location API
@@ -845,6 +893,24 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public CDEPoint getSelectedCDEPoint(){
         return selectedCDEPoint;
+    }
+
+    public void setSelectedCDEPoint(Feature feature) {
+        for (CDEPoint cdePoint : mCDEPoints) {
+            if (cdePoint.getGeoJSONFeature() == feature) {
+                selectedCDEPoint = cdePoint;
+            }
+        }
+    }
+
+    public GeoJsonFeature getGeoJSONFeature(Feature feature) {
+        GeoJsonFeature result = null;
+        for (CDEPoint cdePoint : mCDEPoints) {
+            if (cdePoint.getGeoJSONFeature() == feature) {
+                result = cdePoint.getGeoJSONFeature();
+            }
+        }
+        return result;
     }
 
     public ProgressBar getProgressSpinner() {

@@ -43,7 +43,7 @@ public class CDEDataFragment extends Fragment {
         mRecyclerView.setVisibility(View.INVISIBLE);
 
         CDEPoint cdePoint = mDataViewActivity.getSelectedCDEPoint();
-        new CDEPointRatingsAPI(this).execute(cdePoint);
+//        new CDEPointRatingsAPI(this).execute(cdePoint);
 
         TextView cdePointLabel = (TextView) view.findViewById(R.id.cd_label);
         String label = cdePoint.getLabel();
@@ -58,6 +58,8 @@ public class CDEDataFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+
+        setClassificationText(cdePoint);
 
         return view;
     }

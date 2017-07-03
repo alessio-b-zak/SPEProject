@@ -38,7 +38,7 @@ public class CDEPointAPI extends AsyncTask<LatLng, Void, List<CDEPoint>> {
                     .authority("ea-cde-pub.epimorphics.net")
                     .appendPath("catchment-planning")
                     .appendPath("so")
-                    .appendPath("WaterBody.json")
+                    .appendPath("WaterBody.geojson")
                     .appendQueryParameter("polygon", "{\"type\":\"Polygon\",\"coordinates\":[[["
                                           + params[0].longitude + "," + params[0].latitude +"],["
                                           + params[1].longitude + "," + params[1].latitude +"],["

@@ -3,6 +3,8 @@ package com.bitbusters.android.speproject;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.data.Feature;
+import com.google.maps.android.data.geojson.GeoJsonFeature;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,18 +19,24 @@ class CDEPoint extends Point {
     private String waterbodyId;
     private String label;
     private LatLng location;
+    private GeoJsonFeature geoJSONFeature;
     private HashMap<String,Classification> classificationHashMap;
 
     public static final String ECOLOGICAL = "Ecological";
     public static final String CHEMICAL = "Chemical";
     public static final String OVERALL = "Overall Water Body";
 
-    CDEPoint(String waterbodyId, String label, double latitude, double longitude) {
+    public static final String POOR = "Poor";
+    public static final String GOOD = "Good";
+    public static final String MODERATE = "Moderate";
+
+    CDEPoint(String waterbodyId, String label, double latitude, double longitude, GeoJsonFeature geoJSONFeature) {
         super(latitude,longitude,"CDE_Point", "");
         this.waterbodyId = waterbodyId;
         this.label = label;
         this.location = new LatLng(latitude,longitude);
         this.classificationHashMap = new HashMap<>();
+        this.geoJSONFeature = geoJSONFeature;
     }
 
     public String getWaterbodyId() {
@@ -45,6 +53,10 @@ class CDEPoint extends Point {
 
     public double getLongitude() {
         return location.longitude;
+    }
+
+    public GeoJsonFeature getGeoJSONFeature() {
+        return geoJSONFeature;
     }
 
     public HashMap<String, Classification> getClassificationHashMap() { return classificationHashMap; }
