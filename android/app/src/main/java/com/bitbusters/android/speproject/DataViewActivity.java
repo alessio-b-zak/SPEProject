@@ -166,9 +166,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         currentView = CDE;
 
-//        mDbHelper = new WIMSDbHelper(getApplicationContext());
+        mDbHelper = new WIMSDbHelper(getApplicationContext());
 
-        new WIMSPopulateDatabase(getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        new WIMSPopulateDatabase(getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void setupDrawer() {
