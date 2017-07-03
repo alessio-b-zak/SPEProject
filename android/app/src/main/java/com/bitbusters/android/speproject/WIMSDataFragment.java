@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ public class WIMSDataFragment extends Fragment {
 
     Toolbar mToolbar;  // The toolbar.
     ImageButton mBackButton;
-    View mSPDataView;
+    View mWIMSDataView;
     private RecyclerView mRecyclerView;
 
     private DataViewActivity mDataViewActivity;
@@ -36,7 +35,7 @@ public class WIMSDataFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wims_data_view, container, false);
-        mSPDataView = view;
+        mWIMSDataView = view;
 
         // Initialise Recycler View and hide it
         mRecyclerView = (RecyclerView) view.findViewById(R.id.grid_view);
@@ -53,8 +52,8 @@ public class WIMSDataFragment extends Fragment {
         TextView wimsName = (TextView) view.findViewById(R.id.wims_name);
         wimsName.setText(wimsPoint.getLabel());
 
-        TextView wimsType = (TextView) view.findViewById(R.id.wims_type);
-        wimsType.setText(wimsPoint.getType());
+//        TextView wimsType = (TextView) view.findViewById(R.id.wims_type);
+//        wimsType.setText(wimsPoint.getType());
 
         mToolbar = (Toolbar) view.findViewById(R.id.dataview_toolbar);
 
@@ -70,7 +69,10 @@ public class WIMSDataFragment extends Fragment {
     }
 
     public void setMeasurementsText(WIMSPoint wimsPoint) {
-        TableLayout tableLayout = (TableLayout) mSPDataView.findViewById(R.id.wims_table);
+        TableLayout tableLayout = (TableLayout) mWIMSDataView.findViewById(R.id.wims_table);
+
+        TextView wimsName = (TextView) mWIMSDataView.findViewById(R.id.wims_name);
+        wimsName.setText(wimsPoint.getLabel());
 
         for (Measurement measurement : wimsPoint.getMeasurementList()) {
             TableRow row = new TableRow(getContext());
@@ -83,7 +85,7 @@ public class WIMSDataFragment extends Fragment {
 
             determinand.setText(measurement.getDeterminand());
             result.setText(String.valueOf(measurement.getResult()));
-            date.setText(measurement.getDateTime().toLocalDate().toString());
+            date.setText(measurement.getYear());
 
             determinand.setPadding(3,0,0,0);
             determinand.setTextAppearance(getContext(), R.style.TextViewDataTableChild);

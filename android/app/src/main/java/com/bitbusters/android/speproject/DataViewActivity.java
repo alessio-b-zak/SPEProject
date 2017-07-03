@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -101,6 +102,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private ClusterManager<GalleryItem> mPictureClusterManager;
     private MultiListener mMultiListener = new MultiListener();
     private Drawer mDrawer;
+    private WIMSDbHelper mDbHelper;
 
     private WIMSPoint selectedWIMSPoint;
     private CDEPoint selectedCDEPoint;
@@ -163,6 +165,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMapCameraPadding = displayMetrics.heightPixels / 3;
 
         currentView = CDE;
+
+        mDbHelper = new WIMSDbHelper(getApplicationContext());
+
+//        new WIMSPopulateDatabase(getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void setupDrawer() {
@@ -328,12 +334,21 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     new CDEPointAPI(DataViewActivity.this).execute(polygon);
                     break;
                 case WIMS:
-                    double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
-                    int distanceKM = (int) (distanceM / 1.5) / 1000;
-                    String[] params = {String.valueOf(camCentre.latitude),
-                                         String.valueOf(camCentre.longitude),
-                                         String.valueOf(distanceKM)};
-                    new WIMSPointAPI(DataViewActivity.this).execute(params);
+//                    double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
+//                    int distanceKM = (int) (distanceM / 1.5) / 1000;
+//                    String[] params = {String.valueOf(camCentre.latitude),
+//                                         String.valueOf(camCentre.longitude),
+//                                         String.valueOf(distanceKM)};
+//                    new WIMSPointAPI(DataViewActivity.this).execute(params);
+                    String[] pt = new String[5];
+                    pt[0] = String.valueOf(screen.farLeft.latitude);
+                    pt[1] = String.valueOf(screen.farLeft.longitude);
+                    pt[2] = String.valueOf(screen.nearRight.latitude);
+                    pt[3] = String.valueOf(screen.nearRight.longitude);
+                    pt[4] = "2016";
+                    Log.i(TAG, "Total Rows: " + mDbHelper.numberOfRows());
+                    Log.i(TAG, "Total Nulls: " + mDbHelper.numberOfNulls());
+                    new WIMSPointAPIDatabase(this, mDbHelper).execute(pt);
                     break;
                 case IMAGE:
                     LatLng topLeft = screen.farLeft;
@@ -736,12 +751,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             clearMarkers(WIMS);
             openView(WIMS);
             mProgressSpinner.setVisibility(View.INVISIBLE);
+            mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
         } else if (fragment instanceof CDEDataFragment) {
             mFragmentManager.popBackStack();
             clearMarkers(CDE);
             openView(CDE);
             mProgressSpinner.setVisibility(View.INVISIBLE);
+            mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
         } else if (fragment instanceof PhotoDataFragment) {
             closeView(IMAGE);
