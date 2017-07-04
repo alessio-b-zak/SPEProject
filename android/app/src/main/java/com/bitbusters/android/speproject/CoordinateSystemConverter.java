@@ -1,5 +1,6 @@
 package com.bitbusters.android.speproject;
 
+import android.util.Log;
 import android.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -18,35 +19,52 @@ import org.osgeo.proj4j.ProjCoordinate;
  * (c) Chris Veness 2011-2014 / MIT Licence
  *****************************************************************/
 
-public class NGRtoWGS84Converter {
+public class CoordinateSystemConverter {
 
-    private CoordinateTransform transformation;
+    private final String osgb36 = "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 " +
+                                  "+y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.060,0.1502," +
+                                  "0.2470,0.8421,-20.4894 +units=m +no_defs";
 
-    public NGRtoWGS84Converter() {
+    private final String wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs ";
 
-        String osgb36 = "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 " +
-                        "+y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.060,0.1502," +
-                        "0.2470,0.8421,-20.4894 +units=m +no_defs";
+    private final CRSFactory crsFactory = new CRSFactory();
 
-        String wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs ";
+    private final CoordinateReferenceSystem crsOSGB = crsFactory.createFromParameters("EPSG:27700", osgb36);
+    private final CoordinateReferenceSystem crsWGS84 = crsFactory.createFromParameters("EPSG:4326", wgs84);
 
-        CRSFactory crsFactory = new CRSFactory();
-
-        CoordinateReferenceSystem sourceSRS = crsFactory.createFromParameters("EPSG:27700", osgb36);
-        CoordinateReferenceSystem targetSRS = crsFactory.createFromParameters("EPSG:4326", wgs84);
-
-        transformation = new BasicCoordinateTransform(sourceSRS, targetSRS);
-
-
-    }
-
-    public LatLng convert(String ngrGridRef) {
+    public LatLng convertNgrToLatLng(String ngrGridRef) {
         Pair<Double,Double> eastNorth = parse(ngrGridRef);
+
         ProjCoordinate output = new ProjCoordinate();
         ProjCoordinate input = new ProjCoordinate(eastNorth.first,eastNorth.second);
+
+        CoordinateTransform transformation = new BasicCoordinateTransform(crsOSGB, crsWGS84);
         transformation.transform(input, output);
+
         return new LatLng(output.y,output.x);
     }
+
+    public LatLng convertEastNorthToLatLng(Double easting, Double northing) {
+        ProjCoordinate output = new ProjCoordinate();
+        ProjCoordinate input = new ProjCoordinate(easting, northing);
+
+        CoordinateTransform transformation = new BasicCoordinateTransform(crsOSGB, crsWGS84);
+        transformation.transform(input, output);
+
+        return new LatLng(output.y,output.x);
+    }
+
+    public Pair<Double,Double> convertLatLngToEastNorth(Double latitude, Double longitude) {
+        ProjCoordinate output = new ProjCoordinate();
+        ProjCoordinate input = new ProjCoordinate(longitude, latitude);
+
+        CoordinateTransform transformation = new BasicCoordinateTransform(crsWGS84, crsOSGB);
+        transformation.transform(input, output);
+
+        return new Pair<Double, Double>(output.x,output.y);
+    }
+
+
     /**
      * Parse grid reference to easting/northing form
      */

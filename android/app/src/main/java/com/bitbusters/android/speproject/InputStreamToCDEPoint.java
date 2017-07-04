@@ -1,18 +1,8 @@
 package com.bitbusters.android.speproject;
 
-import android.util.JsonReader;
-import android.util.Log;
-
-import com.cocoahero.android.geojson.Feature;
-import com.cocoahero.android.geojson.GeoJSON;
-import com.cocoahero.android.geojson.GeoJSONObject;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.maps.android.data.Geometry;
 import com.google.maps.android.data.geojson.GeoJsonFeature;
-import com.google.maps.android.data.geojson.GeoJsonMultiPolygon;
-import com.google.maps.android.data.geojson.GeoJsonPolygon;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,10 +21,10 @@ public class InputStreamToCDEPoint {
 
     private static final String TAG = "IN_STREAM_TO_CDE";
 
-    private NGRtoWGS84Converter ngRtoWGS84Converter;
+    private CoordinateSystemConverter coordinateSystemConverter;
 
     InputStreamToCDEPoint() {
-        ngRtoWGS84Converter = new NGRtoWGS84Converter();
+        coordinateSystemConverter = new CoordinateSystemConverter();
     }
 
     public List<CDEPoint> readJsonStream(InputStream in) throws IOException {
@@ -51,7 +41,7 @@ public class InputStreamToCDEPoint {
                 String label = properties.getString("label");
                 String ngr = properties.getString("ngr");
 
-                LatLng location = ngRtoWGS84Converter.convert(ngr);
+                LatLng location = coordinateSystemConverter.convertNgrToLatLng(ngr);
 
                 messages.add(new CDEPoint(waterbodyId, label, location.latitude, location.longitude, geoJsonFeature));
 //                Log.i(TAG,"WaterbodyID : " + waterbodyId);
@@ -129,7 +119,7 @@ public class InputStreamToCDEPoint {
 //            e.printStackTrace();
 //        }
 //
-//        LatLng location = ngRtoWGS84Converter.convert(ngr);
+//        LatLng location = coordinateSystemConverter.convertNgrToLatLng(ngr);
 //
 //        return new CDEPoint(waterbodyId, label, location.latitude, location.longitude, geoJsonFeature);
 //    }

@@ -8,4 +8,5 @@ import java.util.List;
 public interface OnTaskCompleted {
     void onTaskCompletedWIMSPoint(List<WIMSPoint> result);
     void onTaskCompletedCDEPoint(List<CDEPoint> result);
+    void onTaskCompletedDischargePermitPoint(List<DischargePermitPoint> result);
 }

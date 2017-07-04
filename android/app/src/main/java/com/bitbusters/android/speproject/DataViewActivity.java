@@ -10,7 +10,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -55,7 +55,6 @@ import com.google.maps.android.data.Feature;
 import com.google.maps.android.data.Layer;
 import com.google.maps.android.data.geojson.GeoJsonFeature;
 import com.google.maps.android.data.geojson.GeoJsonLayer;
-import com.google.maps.android.data.geojson.GeoJsonLineStringStyle;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -80,7 +79,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private static final int REQUEST_CAMERA = 2;
     private static final int CDE = 0;
     private static final int WIMS = 1;
-    private static final int IMAGE = 2;
+    private static final int PERMIT = 2;
     private int currentView;
     private GoogleMap mMap;
     private ProgressBar mProgressSpinner;
@@ -103,14 +102,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private List<WIMSPoint> mWIMSPoints = new ArrayList<>();
     private List<CDEPoint> mCDEPoints = new ArrayList<>();
     private List<GalleryItem> photoMarkers = new ArrayList<>();
+    private List<DischargePermitPoint> mDischargePermitPoints = new ArrayList<>();
     private Boolean imageLocationsDownloaded;
     private ClusterManager<WIMSPoint> mWIMSClusterManager;
-//    private ClusterManager<CDEPoint> mCDEClusterManager;
+    private ClusterManager<DischargePermitPoint> mPermitClusterManager;
     private GeoJsonLayer mGeoJsonLayer;
     private ClusterManager<GalleryItem> mPictureClusterManager;
     private MultiListener mMultiListener = new MultiListener();
     private Drawer mDrawer;
     private WIMSDbHelper mDbHelper;
+    private CoordinateSystemConverter coordinateSystemConverter;
 
     private WIMSPoint selectedWIMSPoint;
     private CDEPoint selectedCDEPoint;
@@ -174,6 +175,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         currentView = CDE;
 
+        coordinateSystemConverter = new CoordinateSystemConverter();
 
 //        mDbHelper = new WIMSDbHelper(getApplicationContext());
 
@@ -252,9 +254,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                                 openView(WIMS);
                                 break;
                             case 3:
-                                if(currentView != IMAGE) {
+                                if(currentView != PERMIT) {
                                     closeView(currentView);
-                                    openView(IMAGE);
+                                    openView(PERMIT);
                                 }
                                 break;
                             case 4:
@@ -271,18 +273,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void openView(int view) {
         currentView = view;
-        if(view == IMAGE) {
-            Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-            if (fragment == null) {
-                setHomeButtonsPhotoView(true);
-                fragment = new PhotoDataFragment();
-                mPhotoDataFragment = (PhotoDataFragment) fragment;
-                mFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_bottom, 0, 0, R.anim.slide_out_bottom)
-                        .add(R.id.fragment_container, fragment)
-                        .addToBackStack(null).commit();
-            }
-        }
         loadMarkers(view);
         setMapOnCameraIdleListener(view);
         updateLayerName(view);
@@ -291,11 +281,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void closeView(int view) {
         mMap.setOnCameraIdleListener(null);
         clearMarkers(view);
-        // Image View has different layout which needs to be closed.
-        if(view == IMAGE) {
-            mFragmentManager.popBackStack();
-            setHomeButtonsPhotoView(false);
-        }
     }
 
     public void loadMarkers(int view) {
@@ -329,19 +314,31 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 //                    Log.i(TAG, "Total Nulls: " + mDbHelper.numberOfNulls());
 //                    new WIMSPointAPIDatabase(this, mDbHelper).execute(pt);
                     break;
-                case IMAGE:
-                    LatLng topLeft = screen.farLeft;
-                    LatLng bottomRight = screen.nearRight;
-                    String[] points = new String[4];
-                    points[0] = String.valueOf(topLeft.latitude);
-                    points[1] = String.valueOf(topLeft.longitude);
-                    points[2] = String.valueOf(bottomRight.latitude);
-                    points[3] = String.valueOf(bottomRight.longitude);
-                    new ThumbnailsDownloader(this, mPhotoDataFragment).execute(points);
+                case PERMIT:
+                    mDischargePermitPoints = new ArrayList<>();
+                    double distM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
+                    int distKM = (int) (distM / 1.5) / 1000;
+                    Pair<Double,Double> eastNorth =
+                            coordinateSystemConverter.convertLatLngToEastNorth(camCentre.latitude, camCentre.longitude);
+                    getDischargePermitData(eastNorth.first, eastNorth.second, distKM);
                     break;
             }
         } else {
             Toast.makeText(getApplicationContext(), "Data retrieval needs internet connection", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void getDischargePermitData(Double easting, Double northing, int distance) {
+        List<String> effluentTypes = new ArrayList<>();
+        effluentTypes.add("waste-site");
+        effluentTypes.add("agriculture");
+//        effluentTypes.add("sewage-not-water-company");
+        for (String effluentType : effluentTypes) {
+            String[] parameters = {String.valueOf(easting.intValue()),
+                                   String.valueOf(northing.intValue()),
+                                   String.valueOf(distance),
+                                   effluentType};
+            new DischargePermitPointAPI(this).execute(parameters);
         }
     }
 
@@ -364,9 +361,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 mWIMSClusterManager.clearItems();
                 mWIMSClusterManager.cluster();
                 break;
-            case IMAGE:
-                mPictureClusterManager.clearItems();
-                mPictureClusterManager.cluster();
+            case PERMIT:
+                mPermitClusterManager.clearItems();
+                mPermitClusterManager.cluster();
                 break;
         }
     }
@@ -377,7 +374,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public void onCameraIdle() {
                 clearMarkers(view_params);
-                if( mMap.getCameraPosition().zoom > 10 ) {
+                if( mMap.getCameraPosition().zoom > 1 ) {
                     loadMarkers(view_params);
                 }
             }
@@ -394,7 +391,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 mLayerName.setText(R.string.layer_wims);
                 mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.wims));
                 break;
-            case IMAGE:
+            case PERMIT:
                 mLayerName.setText(R.string.layer_image);
                 mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.photo));
                 break;
@@ -464,46 +461,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 }
             }
         });
-//        mCDEClusterManager.setRenderer(new CDEPointRenderer(this, mMap, mCDEClusterManager));
-//        mCDEClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<CDEPoint>() {
-//            @Override
-//            public boolean onClusterItemClick(CDEPoint point) {
-//                if (point.getTitle().equals("CDE_Point")) {
-//                    selectedCDEPoint = point;
-//
-//                    Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-//                    if (fragment == null) {
-//                        displayHomeButtons(false);
-//
-//                        LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
-//                        mMap.setPadding(0, mMapCameraPadding, 0, 0);
-//                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, mMap.getCameraPosition().zoom));
-//                        mMap.setOnCameraIdleListener(null);
-//
-//                        mCDEClusterManager.clearItems();
-//                        mCDEClusterManager.addItem(point);
-//                        mCDEClusterManager.cluster();
-//
-//                        fragment = new CDEDataFragment();
-//                        mCDEDataFragment = (CDEDataFragment) fragment;
-//
-//                        mFragmentManager.beginTransaction()
-//                                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-//                                .add(R.id.fragment_container, fragment)
-//                                .addToBackStack(null).commit();
-//                    }
-//                }
-//                return true;
-//            }
-//        });
-//        mCDEClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<CDEPoint>() {
-//            @Override
-//            public boolean onClusterClick(Cluster<CDEPoint> cluster) {
-//                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
-//                        (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300, null);
-//                return true;
-//            }
-//        });
     }
 
     // On WIMS sampling point click
@@ -552,25 +509,41 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     // On Image point click.
-    public void setUpImageManager() {
-        mPictureClusterManager.setRenderer(new ImageMarkerRenderer(this, mMap, mPictureClusterManager));
-        mPictureClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<GalleryItem>() {
+    public void setUpPermitManager() {
+        mPermitClusterManager.setRenderer(new DischargePermitPointRenderer(this, mMap, mPermitClusterManager));
+        mPermitClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<DischargePermitPoint>() {
             @Override
-            public boolean onClusterItemClick(GalleryItem point) {
-                if (point.getTitle().equals("Picture_Point")) {
-                    PhotoViewFragment fragment = new PhotoViewFragment();
-                    fragment.setGalleryItem(mPhotoDataFragment.getGalleryItem(point.getId()));
-                    mFragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_left, 0, 0, R.anim.slide_out_left)
-                            .add(R.id.fragment_container, fragment)
-                            .addToBackStack(null).commit();
+            public boolean onClusterItemClick(DischargePermitPoint point) {
+                if (point.getTitle().equals("Waste_Point")) {
+
+                    Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+                    if (fragment == null) {
+                        displayHomeButtons(false);
+
+                        LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
+                        mMap.setPadding(0, mMapCameraPadding, 0, 0);
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerPos, mMap.getCameraPosition().zoom));
+                        mMap.setOnCameraIdleListener(null);
+
+                        mPermitClusterManager.clearItems();
+                        mPermitClusterManager.addItem(point);
+                        mPermitClusterManager.cluster();
+
+                        fragment = new CDEDataFragment();
+                        mCDEDataFragment = (CDEDataFragment) fragment;
+
+                        mFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                                .add(R.id.fragment_container, fragment)
+                                .addToBackStack(null).commit();
+                    }
                 }
                 return true;
             }
         });
-        mPictureClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<GalleryItem>() {
+        mPermitClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<DischargePermitPoint>() {
             @Override
-            public boolean onClusterClick(Cluster<GalleryItem> cluster) {
+            public boolean onClusterClick(Cluster<DischargePermitPoint> cluster) {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
                         (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300, null);
                 return true;
@@ -625,7 +598,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                openView(CDE);
+                openView(PERMIT);
             }
         });
 
@@ -634,18 +607,18 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void setUpMultiManager() {
         mPictureClusterManager = new ClusterManager<>(this, mMap);
         mWIMSClusterManager = new ClusterManager<>(this, mMap);
-//        mCDEClusterManager = new ClusterManager<>(this, mMap);
+        mPermitClusterManager = new ClusterManager<>(this, mMap);
 
-        setUpCDEManager();
+        setUpPermitManager();
         setUpWIMSManager();
-        setUpImageManager();
+        setUpCDEManager();
 
         mMultiListener.addOC(mWIMSClusterManager);
-//        mMultiListener.addOC(mCDEClusterManager);
+        mMultiListener.addOC(mPermitClusterManager);
         mMultiListener.addOC(mPictureClusterManager);
 
         mMultiListener.addOM(mWIMSClusterManager);
-//        mMultiListener.addOM(mCDEClusterManager);
+        mMultiListener.addOM(mPermitClusterManager);
         mMultiListener.addOM(mPictureClusterManager);
 
         mMap.setOnMarkerClickListener(mMultiListener);
@@ -667,6 +640,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         for (CDEPoint r : result) {
             new CDEPointRatingsAPI(this).execute(r);
         }
+    }
+
+    @Override
+    public void onTaskCompletedDischargePermitPoint(List<DischargePermitPoint> result) {
+        mDischargePermitPoints.addAll(result);
+        mPermitClusterManager.addItems(result);
+        mPermitClusterManager.cluster();
     }
 
     public void showGeoJsonData(CDEPoint cdePoint) {
@@ -707,7 +687,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (mMap != null && mLocation != null) {
             CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(11)
                     .target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
-            if(currentView == IMAGE) {
+            if(currentView == PERMIT) {
                 mMap.setPadding(0, 0, 0, mMapCameraPadding);
             } else {
                 mMap.setPadding(0, 0, 0, 0);
@@ -809,7 +789,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
         } else if (fragment instanceof PhotoDataFragment) {
-            closeView(IMAGE);
+            closeView(PERMIT);
             openView(CDE);
         }
         else if (fragment instanceof PhotoViewFragment) {
