@@ -587,7 +587,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void onTaskCompletedCDEPoint(List<CDEPoint> result) {
         mCDEPoints = result;
         for (CDEPoint r : result) {
-            new CDEPointRatingsAPI(this).execute(r);
+            showGeoJsonData(r);
+//            new CDEPointRatingsAPI(this).execute(r);
         }
     }
 

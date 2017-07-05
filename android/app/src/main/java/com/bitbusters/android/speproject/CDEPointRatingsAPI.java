@@ -12,10 +12,10 @@ import java.net.URL;
 public class CDEPointRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
 
     private static final String TAG = "CDE_POINT_RATINGS";
-    private DataViewActivity mDataViewActivity;
+    private CDEDataFragment mCDEDataFragment;
 
-    public CDEPointRatingsAPI(DataViewActivity context) {
-        this.mDataViewActivity = context;
+    public CDEPointRatingsAPI(CDEDataFragment context) {
+        this.mCDEDataFragment = context;
     }
 
     @Override
@@ -60,8 +60,7 @@ public class CDEPointRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
 
     @Override
     protected void onPostExecute(CDEPoint cdePoint) {
-
-        mDataViewActivity.showGeoJsonData(cdePoint);
+        mCDEDataFragment.setClassificationText(cdePoint);
     }
 
 }
