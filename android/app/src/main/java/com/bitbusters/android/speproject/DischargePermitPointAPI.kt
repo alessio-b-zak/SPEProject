@@ -26,7 +26,6 @@ open class DischargePermitPointAPI(private val listener: OnTaskCompleted) :
         val northing = params[1]
         val distance = params[2]
         val effluentType = EFFLUENT_TYPE_URI + params[3]
-        var dischargePermitPointList: List<DischargePermitPoint> = arrayListOf()
 
         val builder = Uri.Builder()
         builder.scheme("http")
@@ -60,7 +59,7 @@ open class DischargePermitPointAPI(private val listener: OnTaskCompleted) :
 
         val inputStream = conn.inputStream
         val inputStreamToWaterDischargePermit = InputStreamToWaterDischargePermit()
-        dischargePermitPointList = inputStreamToWaterDischargePermit.readJsonStream(inputStream)
+        val dischargePermitPointList = inputStreamToWaterDischargePermit.readJsonStream(inputStream)
 
         conn.disconnect()
 
