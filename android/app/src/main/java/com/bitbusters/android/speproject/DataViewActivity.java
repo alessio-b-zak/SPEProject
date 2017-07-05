@@ -215,11 +215,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         final PrimaryDrawerItem drawerImages = new PrimaryDrawerItem()
                 .withIdentifier(3)
-                .withName(R.string.drawer_images)
+                .withName(R.string.drawer_permit)
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.ic_photo_marker);
+                .withIcon(R.drawable.marker_white);
 
         final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
                 .withIdentifier(4)
@@ -256,10 +256,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                                 openView(WIMS);
                                 break;
                             case 3:
-                                if(currentView != PERMIT) {
-                                    closeView(currentView);
-                                    openView(PERMIT);
-                                }
+                                closeView(currentView);
+                                openView(PERMIT);
                                 break;
                             case 4:
                                 showInfo(view);
@@ -394,8 +392,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.wims));
                 break;
             case PERMIT:
-                mLayerName.setText(R.string.layer_image);
-                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.photo));
+                mLayerName.setText(R.string.layer_permit);
+                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.permit));
                 break;
         }
     }
@@ -630,9 +628,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     public void onTaskCompletedWIMSPoint(List<WIMSPoint> result) {
         mWIMSPoints = result;
-        for (WIMSPoint r : result) {
-            mWIMSClusterManager.addItem(r);
-        }
+        mWIMSClusterManager.addItems(result);
         mWIMSClusterManager.cluster();
     }
 
@@ -689,11 +685,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (mMap != null && mLocation != null) {
             CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(11)
                     .target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
-            if(currentView == PERMIT) {
-                mMap.setPadding(0, 0, 0, mMapCameraPadding);
-            } else {
-                mMap.setPadding(0, 0, 0, 0);
-            }
+//            if(currentView == PERMIT) {
+//                mMap.setPadding(0, 0, 0, mMapCameraPadding);
+//            } else {
+//                mMap.setPadding(0, 0, 0, 0);
+//            }
 
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
         }
