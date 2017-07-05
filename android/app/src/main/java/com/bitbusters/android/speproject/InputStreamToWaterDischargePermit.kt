@@ -58,6 +58,7 @@ class InputStreamToWaterDischargePermit {
     fun readMessage(reader: JsonReader): DischargePermitPoint {
         var holderName: String = ""
         var siteType: String = ""
+        var effectiveDate: String = ""
         var revocationDate: String? = null
         var easting: Double = 0.0
         var northing: Double = 0.0
@@ -111,6 +112,8 @@ class InputStreamToWaterDischargePermit {
                     reader.endObject()
                 } else if (name == "revocationDate") {
                     revocationDate = reader.nextString()
+                } else if (name == "effectiveDate") {
+                    effectiveDate = reader.nextString()
                 } else {
                     reader.skipValue()
                 }
@@ -120,11 +123,13 @@ class InputStreamToWaterDischargePermit {
             e.printStackTrace()
         }
 
+//        Log.i("FIND ME", "$holderName $siteType $effectiveDate");
+
         if (revocationDate == null) {
             val location : LatLng = converterCoordinateSystem.convertEastNorthToLatLng(easting,northing)
-            return DischargePermitPoint(holderName, siteType, location.latitude, location.longitude)
+            return DischargePermitPoint(holderName, siteType, effectiveDate,location.latitude, location.longitude)
         } else {
-            return DischargePermitPoint("","",0.0,0.0)
+            return DischargePermitPoint("", "", "", 0.0, 0.0)
         }
     }
 }
