@@ -13,7 +13,8 @@ import java.net.URL
 open class DischargePermitPointAPI(private val listener: OnTaskCompleted) :
         AsyncTask<String, Void, List<DischargePermitPoint>>() {
 
-    val mDataViewActivity = listener as DataViewActivity;
+    val mDataViewActivity = listener as DataViewActivity
+    lateinit var conn : HttpURLConnection
 
     companion object {
         private val TAG = "WATER_DISCHARGE_API"
@@ -41,22 +42,23 @@ open class DischargePermitPointAPI(private val listener: OnTaskCompleted) :
         val myUrl = builder.build().toString()
         var url = URL(myUrl)
 
-        var conn = openConnection(url)
-        var response = conn!!.responseCode
+        conn = openConnection(url)
+        var response = conn.responseCode
 
         while (response in 300..399) {
-            val redirectUrl = conn!!.getHeaderField("Location")
+            val redirectUrl = conn.getHeaderField("Location")
             Log.i(TAG, "Redirect URL: " + redirectUrl)
             url = URL(redirectUrl)
-            // open the new connection again
+            conn.disconnect()
+            conn.inputStream.close()
             conn = openConnection(url)
-            response = conn!!.responseCode
+            response = conn.responseCode
         }
 
         Log.i(TAG, "Url is: " + url)
         Log.i(TAG, "The response is: " + response)
 
-        val inputStream = conn!!.inputStream
+        val inputStream = conn.inputStream
         val inputStreamToWaterDischargePermit = InputStreamToWaterDischargePermit()
         dischargePermitPointList = inputStreamToWaterDischargePermit.readJsonStream(inputStream)
 
@@ -70,8 +72,7 @@ open class DischargePermitPointAPI(private val listener: OnTaskCompleted) :
         listener.onTaskCompletedDischargePermitPoint(result)
     }
 
-    private fun openConnection(url: URL): HttpURLConnection? {
-        var conn: HttpURLConnection? = null
+    private fun openConnection(url: URL): HttpURLConnection {
         try {
             conn = url.openConnection() as HttpURLConnection
             conn.readTimeout = 10000
