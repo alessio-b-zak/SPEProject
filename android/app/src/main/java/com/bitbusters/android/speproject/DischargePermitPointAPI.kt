@@ -32,7 +32,7 @@ open class DischargePermitPointAPI(private val listener: OnTaskCompleted) :
                 .authority("environment.data.gov.uk")
                 .appendPath("public-register")
                 .appendPath("water-discharges")
-                .appendPath("registration")
+                .appendPath("registration.json")
                 .appendQueryParameter("easting", easting)
                 .appendQueryParameter("northing", northing)
                 .appendQueryParameter("dist", distance)
