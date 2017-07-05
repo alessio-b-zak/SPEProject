@@ -38,6 +38,10 @@
                 <TextView
                     style="@style/TextViewDataTableChild"
                     android:id="@+id/permit_table_type"
+                    android:gravity="start"
+                    android:ellipsize="end"
+                    android:maxLines="4"
+                    android:layout_weight="1"
                     android:text=""/>
             </TableRow>
 
@@ -51,6 +55,7 @@
                 <TextView
                     style="@style/TextViewDataTableChild"
                     android:id="@+id/permit_table_date"
+                    android:gravity="start"
                     android:text=""/>
             </TableRow>
         </TableLayout>
@@ -61,7 +66,7 @@
         android:layout_height="wrap_content"
         android:background="#CC000000"
         android:theme="?attr/actionBarTheme"
-        android:id="@+id/cde_toolbar"
+        android:id="@+id/permit_toolbar"
         android:minHeight="?attr/actionBarSize">
 
         <LinearLayout
@@ -75,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="#00000000"
-                android:id="@+id/back_button_cde_data_view"
+                android:id="@+id/back_button_permit_data_view"
                 android:clickable="true"
                 android:scaleType="center"
                 android:padding="16dp"
@@ -86,7 +91,7 @@
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/cde_grid_view"
+        android:id="@+id/permit_grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#AA000000"

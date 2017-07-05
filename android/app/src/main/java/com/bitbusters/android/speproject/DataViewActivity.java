@@ -98,6 +98,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private FragmentManager mFragmentManager;
     private WIMSDataFragment mWIMSDataFragment;
     private CDEDataFragment mCDEDataFragment;
+    private DischargePermitDataFragment mDischargePermitDataFragment;
     private PhotoDataFragment mPhotoDataFragment;
     private List<WIMSPoint> mWIMSPoints = new ArrayList<>();
     private List<CDEPoint> mCDEPoints = new ArrayList<>();
@@ -115,6 +116,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     private WIMSPoint selectedWIMSPoint;
     private CDEPoint selectedCDEPoint;
+    private DischargePermitPoint selectedPermitPoint;
 
 
     @Override
@@ -374,7 +376,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public void onCameraIdle() {
                 clearMarkers(view_params);
-                if( mMap.getCameraPosition().zoom > 1 ) {
+                if( mMap.getCameraPosition().zoom > 10 ) {
                     loadMarkers(view_params);
                 }
             }
@@ -515,7 +517,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public boolean onClusterItemClick(DischargePermitPoint point) {
                 if (point.getTitle().equals("Waste_Point")) {
-
+                    selectedPermitPoint = point;
                     Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
                         displayHomeButtons(false);
@@ -529,8 +531,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         mPermitClusterManager.addItem(point);
                         mPermitClusterManager.cluster();
 
-                        fragment = new CDEDataFragment();
-                        mCDEDataFragment = (CDEDataFragment) fragment;
+                        fragment = new DischargePermitDataFragment();
+                        mDischargePermitDataFragment = (DischargePermitDataFragment) fragment;
 
                         mFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
@@ -788,6 +790,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mProgressSpinner.setVisibility(View.INVISIBLE);
             mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
+        } else if (fragment instanceof DischargePermitDataFragment) {
+            mFragmentManager.popBackStack();
+            clearMarkers(PERMIT);
+            openView(PERMIT);
+            mProgressSpinner.setVisibility(View.INVISIBLE);
+            mMap.setPadding(0, 0, 0, 0);
+            displayHomeButtons(true);
         } else if (fragment instanceof PhotoDataFragment) {
             closeView(PERMIT);
             openView(CDE);
@@ -869,6 +878,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public WIMSPoint getSelectedWIMSPoint(){
         return selectedWIMSPoint;
+    }
+
+    public DischargePermitPoint getSelectedPermitPoint(){
+        return selectedPermitPoint;
     }
 
     public CDEPoint getSelectedCDEPoint(){

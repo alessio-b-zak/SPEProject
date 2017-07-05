@@ -36,7 +36,7 @@
     <string name="wims_table_type">Type</string>
 
     <string name="permit_table_type">Permit Type: </string>
-    <string name="permit_table_date">Effective Date: </string>
+    <string name="permit_table_date">Effective Since: </string>
 
     <string name="info_title"><b>myRivers™ v1.1</b></string>
     <string name="info_description">myRivers allows anyone to submit and browse photos of
