@@ -22,9 +22,19 @@ class CDEPoint extends Point {
     private GeoJsonFeature geoJSONFeature;
     private HashMap<String,Classification> classificationHashMap;
 
-    public static final String ECOLOGICAL = "Ecological";
-    public static final String CHEMICAL = "Chemical";
     public static final String OVERALL = "Overall Water Body";
+
+    public static final String ECOLOGICAL = "Ecological";
+    public static final String SUPPORTING_ELEMENTS = "Supporting elements (Surface Water)";
+    public static final String BIOLOGICAL_ELEMENTS = "Biological quality elements";
+    public static final String HYDROMORPHOLOGICAL_ELEMENTS = "Hydromorphological Supporting Elements";
+    public static final String PHYSICO_CHEMICAL_ELEMENTS = "Physico-chemical quality elements";
+    public static final String SPECIFIC_POLLUTANTS = "Specific pollutants";
+
+    public static final String CHEMICAL = "Chemical";
+    public static final String PRIORITY_SUBSTANCES = "Priority substances";
+    public static final String OTHER_POLLUTANTS = "Other Pollutants";
+    public static final String HAZARDOUS_SUBSTANCES = " Priority hazardous substances";
 
     public static final String POOR = "Poor";
     public static final String GOOD = "Good";
@@ -73,13 +83,6 @@ class CDEPoint extends Point {
 
     public void setLongitude(double longitude) {
         super.setLongitude(longitude);
-    }
-
-    public boolean isClassified() {
-        return classificationHashMap.size() == 3
-                && classificationHashMap.containsKey(ECOLOGICAL)
-                && classificationHashMap.containsKey(CHEMICAL)
-                && classificationHashMap.containsKey(OVERALL);
     }
 
     public void printClassification() {

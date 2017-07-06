@@ -36,7 +36,7 @@ public class WIMSPointAPI extends AsyncTask<String, Void, List<WIMSPoint>> {
             builder.scheme("http")
                     .encodedAuthority("139.59.184.70:8080")
                     //.encodedAuthority("172.23.215.243:3000")
-                    .appendPath("getThumbnails")
+                    .appendPath("getWIMSPoints")
                     .appendPath(params[0])
                     .appendPath(params[1])
                     .appendPath(params[2])

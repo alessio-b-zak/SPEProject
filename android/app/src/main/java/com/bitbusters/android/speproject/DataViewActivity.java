@@ -279,9 +279,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 case WIMS:
                     double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
                     int distanceKM = (int) (distanceM / 1.5) / 1000;
-                    String[] params = {String.valueOf(camCentre.latitude),
-                            String.valueOf(camCentre.longitude),
-                            String.valueOf(distanceKM)};
+                    String[] params = {String.valueOf(screen.farLeft.latitude),
+                                       String.valueOf(screen.farLeft.longitude),
+                                       String.valueOf(screen.nearRight.latitude),
+                                       String.valueOf(screen.nearRight.longitude),
+                                       String.valueOf(2017)};
                     new WIMSPointAPI(DataViewActivity.this).execute(params);
 //                    String[] pt = new String[5];
 //                    pt[0] = String.valueOf(screen.farLeft.latitude);
@@ -552,7 +554,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                openView(PERMIT);
+                openView(WIMS);
             }
         });
 

@@ -6,10 +6,15 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CDEPointRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
+import static com.bitbusters.android.speproject.CDEPoint.OVERALL;
+
+public class CDEPointRatingsAPI extends AsyncTask<Object, Void, List<Object>> {
 
     private static final String TAG = "CDE_POINT_RATINGS";
     private CDEDataFragment mCDEDataFragment;
@@ -19,22 +24,13 @@ public class CDEPointRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
     }
 
     @Override
-    protected CDEPoint doInBackground(CDEPoint...params) {
-        CDEPoint cdePoint = params[0];
-        String waterbodyId = cdePoint.getWaterbodyId();
+    protected List<Object> doInBackground(Object...params) {
+        CDEPoint cdePoint = (CDEPoint) params[0];
+        String group = (String) params[1];
         try {
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http")
-                    .authority("ea-cde-pub.epimorphics.net")
-                    .appendPath("catchment-planning")
-                    .appendPath("data")
-                    .appendPath("classification.json")
-                    .appendQueryParameter("waterBody", waterbodyId)
-                    .appendQueryParameter("_sort", "-classificationYear")
-                    .appendQueryParameter("_sort", "-cycle");
-            String myUrl = builder.build().toString();
-
+            String myUrl = buildUrl(group, cdePoint.getWaterbodyId());
             URL url = new URL(myUrl);
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
@@ -49,18 +45,67 @@ public class CDEPointRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
 
             InputStream inputStream = conn.getInputStream();
             InputStreamToCDEClassification inputStreamToCDEClassification = new InputStreamToCDEClassification();
-            inputStreamToCDEClassification.readJsonStream(cdePoint, inputStream);
+            inputStreamToCDEClassification.readJsonStream(cdePoint, inputStream, group);
             cdePoint.printClassification();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return cdePoint;
+
+        List<Object> result = new ArrayList<Object>();
+        result.add(cdePoint);
+        result.add(group);
+
+        return result;
     }
 
     @Override
-    protected void onPostExecute(CDEPoint cdePoint) {
-        mCDEDataFragment.setClassificationText(cdePoint);
+    protected void onPostExecute(List<Object> result) {
+        CDEPoint cdePoint = (CDEPoint) result.get(0);
+        String group = (String) result.get(1);
+        if (group.equals(OVERALL)){
+            mCDEDataFragment.setClassificationText(cdePoint);
+        } else {
+            mCDEDataFragment.setSubClassificationText(cdePoint);
+        }
+
+    }
+
+    private String buildUrl(String group, String waterbodyId) {
+        Uri.Builder builder = new Uri.Builder();
+        switch (group) {
+            case (CDEPoint.CHEMICAL):
+                builder.scheme("http")
+                        .authority("ea-cde-pub.epimorphics.net")
+                        .appendPath("catchment-planning")
+                        .appendPath("data")
+                        .appendPath("classification.json")
+                        .appendQueryParameter("waterBody", waterbodyId)
+                        .appendQueryParameter("classificationItem", "wbc_13")
+                        .appendQueryParameter("classificationItem", "wbc_5")
+                        .appendQueryParameter("classificationItem", "wbc_228")
+                        .appendQueryParameter("classificationItem", "wbc_6")
+                        .appendQueryParameter("classificationItem", "wbc_7")
+                        .appendQueryParameter("classificationItem", "wbc_8")
+                        .appendQueryParameter("_sort", "-classificationYear")
+                        .appendQueryParameter("_sort", "-cycle");
+                break;
+            case (CDEPoint.ECOLOGICAL):
+                builder.scheme("http")
+                        .authority("ea-cde-pub.epimorphics.net")
+                        .appendPath("catchment-planning")
+                        .appendPath("data")
+                        .appendPath("classification.json")
+                        .appendQueryParameter("waterBody", waterbodyId)
+                        .appendQueryParameter("classificationItem", "wbc_10")
+                        .appendQueryParameter("classificationItem", "wbc_229")
+                        .appendQueryParameter("classificationItem", "wbc_9")
+                        .appendQueryParameter("_sort", "-classificationYear")
+                        .appendQueryParameter("_sort", "-cycle");
+                break;
+        }
+
+        return builder.build().toString();
     }
 
 }

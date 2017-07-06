@@ -11,7 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TableRow;
 import android.widget.TextView;
+
+import static com.bitbusters.android.speproject.CDEPoint.ECOLOGICAL;
+import static com.bitbusters.android.speproject.CDEPoint.OVERALL;
 
 /**
  * Created by toddym42 on 08/11/2016.
@@ -23,7 +27,7 @@ public class CDEDataFragment extends Fragment {
     ImageButton mBackButton;
     View mCDEDataView;
     private RecyclerView mRecyclerView;
-
+    private CDEDataFragment mCDEDataFragment;
     private DataViewActivity mDataViewActivity;
 
     @Override
@@ -37,13 +41,14 @@ public class CDEDataFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cde_data_view, container, false);
         mCDEDataView = view;
+        mCDEDataFragment = this;
 
         // Initialise Recycler View and hide it
         mRecyclerView = (RecyclerView) view.findViewById(R.id.cde_grid_view);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
         CDEPoint cdePoint = mDataViewActivity.getSelectedCDEPoint();
-        new CDEPointRatingsAPI(this).execute(cdePoint);
+        new CDEPointRatingsAPI(this).execute(cdePoint, OVERALL);
 
         TextView cdePointLabel = (TextView) view.findViewById(R.id.cd_label);
         String label = cdePoint.getLabel();
@@ -64,19 +69,29 @@ public class CDEDataFragment extends Fragment {
         return view;
     }
 
-    public void setClassificationText(CDEPoint cdePoint) {
+    public void setClassificationText(final CDEPoint cdePoint) {
         //Overall
         TextView overallValue = (TextView) mCDEDataView.findViewById(R.id.cde_table_overall_value);
         TextView overallCertainty = (TextView) mCDEDataView.findViewById(R.id.cde_table_overall_certainty);
         TextView overallYear = (TextView) mCDEDataView.findViewById(R.id.cde_table_overall_year);
 
-        Classification overallClassification = cdePoint.getClassificationHashMap().get(CDEPoint.OVERALL);
+        Classification overallClassification = cdePoint.getClassificationHashMap().get(OVERALL);
 
         overallValue.setText(overallClassification.getValue());
         overallCertainty.setText(overallClassification.getCertainty());
         overallYear.setText(overallClassification.getYear());
 
         //Ecological
+        TableRow ecologicalRow = (TableRow) mCDEDataView.findViewById(R.id.cde_table_ecological_row);
+        ecologicalRow.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view)
+            {
+                view.setBackgroundColor(Color.YELLOW);
+                new CDEPointRatingsAPI(mCDEDataFragment).execute(cdePoint, ECOLOGICAL);
+            }
+        });
+
         TextView ecologicalValue = (TextView) mCDEDataView.findViewById(R.id.cde_table_ecological_value);
         TextView ecologicalCertainty = (TextView) mCDEDataView.findViewById(R.id.cde_table_ecological_certainty);
         TextView ecologicalYear = (TextView) mCDEDataView.findViewById(R.id.cde_table_ecological_year);
@@ -98,6 +113,10 @@ public class CDEDataFragment extends Fragment {
         chemicalCertainty.setText(chemicalClassification.getCertainty());
         chemicalYear.setText(chemicalClassification.getYear());
 
+    }
+
+    public void setSubClassificationText(final CDEPoint cdePoint) {
+        // Set table rows for subset
     }
 
 }
