@@ -22,7 +22,7 @@ MongoClient.connect("mongodb://localhost:27017/local", function(err, database) {
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point.json?lat=54.483784&long=-2.114319&dist=750&_limit=100&samplingPointStatus=open", false);
+    xhr.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point.json?lat=54.483784&long=-2.114319&dist=750&_limit=50000&samplingPointStatus=open", false);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.send();
 
@@ -61,7 +61,7 @@ MongoClient.connect("mongodb://localhost:27017/local", function(err, database) {
         }
         entry.lastActive = lastActiveEntry
 
-        console.log(entry);
+        console.log(i);
         wimsPoints.insert(entry); // add to database
     }
 });

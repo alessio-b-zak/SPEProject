@@ -11,11 +11,59 @@ var sharp = require("sharp");
 var mongodb = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
 
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express' });    
 });
 
+router.get('/populateWIMSDatabase', function(req, res) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point.json?lat=54.483784&long=-2.114319&dist=750&_limit=50000&samplingPointStatus=open", false);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.send();
+
+    console.log("Status: " + xhr.status);
+
+    var result = JSON.parse(xhr.responseText);
+    console.log("Result: " + result["items"].length);
+
+    var wimsPoints = db.collection("wimsPoints");  
+
+    for(var i = 0; i < result["items"].length; i++){
+        var item = result["items"][i];
+
+        var entry = {}
+        entry.id = item["notation"];
+        var latitude = item["lat"];
+        var longitude = item["long"];
+        entry.loc = [latitude, longitude]
+
+        var xhr1 = new XMLHttpRequest();
+        xhr1.open("GET", "http://environment.data.gov.uk/water-quality/data/measurement.json?samplingPoint=" + entry.id + "&_sort=-sample&_limit=1", false);
+        xhr1.setRequestHeader("Accept", "application/json");
+        xhr1.send();
+
+        var result1 = JSON.parse(xhr1.responseText);
+        var lastActiveEntry = null;
+        var items = result1["items"];
+        if (items != null){
+            var firstItem = items[0];
+            if (firstItem != null) {
+                var sample = firstItem["sample"];
+                if (sample != null) {
+                    lastActiveEntry = sample["sampleDateTime"]; 
+                }
+            }
+        }
+        entry.lastActive = lastActiveEntry
+
+        console.log(i);
+        wimsPoints.insert(entry); // add to database
+    }
+    res.status(200).send("Done");
+});
 
 router.get('/getClassification/:easting/:northing', function(req, res){
 
@@ -205,7 +253,7 @@ router.get('/getWIMSPoints/:lat1/:lon1/:lat3/:lon3/:lastActive', function(req, r
                             [ lat1, lon1 ] ]
             }
         },
-        lastUpdated: {
+        lastActive: {
             $regex : lastActiveYear
         }
     }).toArray(function (err, result) {
