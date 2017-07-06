@@ -25,21 +25,11 @@ public class InputStreamToWIMSPoint {
     public List<WIMSPoint> readMessagesArray(JsonReader reader) throws IOException {
         List<WIMSPoint> messages = new ArrayList<WIMSPoint>();
         try {
-            reader.beginObject();
-
+            reader.beginArray();
             while (reader.hasNext()) {
-                String name = reader.nextName();
-                if (name.equals("items")) {
-                    reader.beginArray();
-                    while (reader.hasNext()) {
-                        messages.add(readMessage(reader));
-                    }
-                    reader.endArray();
-                } else {
-                    reader.skipValue();
-                }
+                messages.add(readMessage(reader));
             }
-            reader.endObject();
+            reader.endArray();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,37 +38,17 @@ public class InputStreamToWIMSPoint {
 
     public WIMSPoint readMessage(JsonReader reader) throws IOException {
         String id = null;
-        String samplingPointType = null;
-        String label = null;
         double latitude = 0.0, longitude = 0.0;
-        Integer easting = 0, northing = 0;
         try {
             reader.beginObject();
             while (reader.hasNext()) {
                 String name = reader.nextName();
-                if (name.equals("notation")) {
+                if (name.equals("id")) {
                     id = reader.nextString();
-                } else if (name.equals("lat")) {
+                } else if (name.equals("latitude")) {
                     latitude = reader.nextDouble();
-                } else if (name.equals("long")) {
+                } else if (name.equals("longitude")) {
                     longitude = reader.nextDouble();
-                } else if (name.equals("easting")) {
-                    easting = reader.nextInt();
-                } else if (name.equals("northing")) {
-                    northing = reader.nextInt();
-                } else if (name.equals("label")) {
-                    label = reader.nextString();
-                } else if (name.equals("samplingPointType")) {
-                    reader.beginObject();
-                    while (reader.hasNext()) {
-                        name = reader.nextName();
-                        if (name.equals("label")) {
-                            samplingPointType = reader.nextString();
-                        } else {
-                            reader.skipValue();
-                        }
-                    }
-                    reader.endObject();
                 } else {
                     reader.skipValue();
                 }
@@ -87,7 +57,6 @@ public class InputStreamToWIMSPoint {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return new WIMSPoint(id, latitude, longitude, samplingPointType, label, easting, northing);
+        return new WIMSPoint(id, latitude, longitude);
     }
 }

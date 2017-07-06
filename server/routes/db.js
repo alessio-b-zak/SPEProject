@@ -9,32 +9,62 @@ var ObjectId = require('mongodb').ObjectID;
 
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-var xhr = new XMLHttpRequest();
-xhr.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point.json?lat=54.483784&long=-2.114319&dist=750&_limit=5&samplingPointStatus=open", false);
-xhr.setRequestHeader("Accept", "application/json");
-xhr.send();
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
 
-console.log("Status: " + xhr.status);
-console.log("Response: " + xhr.responseText);
+MongoClient.connect("mongodb://localhost:27017/local", function(err, database) {
 
-var result = JSON.parse(xhr.responseText);
-console.log("Result: " + result["items"].length);
+    if (err) {
+        console.log('Unable to connect to the Database Server', err);
+    } else {
+        console.log('Connected to database');
+        var db = database
+    }
 
-var wimsPoints = db.collection("wimsPoints");
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://environment.data.gov.uk/water-quality/id/sampling-point.json?lat=54.483784&long=-2.114319&dist=750&_limit=100&samplingPointStatus=open", false);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.send();
 
-for(i = 0; i < result["items"].length; i++){
-  var item = result["items"][i];
-  
-  var entry = {}
-  entry.id = item["notation"];
-  entry.latitude = item["lat"];
-  entry.longitude = item["long"];
-  
-  wimsPoints.insert(entry);
-  console.log("id: " + entry.id + ", latitude: " + entry.latitude + ", longitude: " + entry.longitude);
-}
+    console.log("Status: " + xhr.status);
 
+    var result = JSON.parse(xhr.responseText);
+    console.log("Result: " + result["items"].length);
 
+    var wimsPoints = db.collection("wimsPoints");  
+
+    for(var i = 0; i < result["items"].length; i++){
+        var item = result["items"][i];
+        
+        var entry = {}
+        entry.id = item["notation"];
+        var latitude = item["lat"];
+        var longitude = item["long"];
+        entry.loc = [latitude, longitude]
+
+        var xhr1 = new XMLHttpRequest();
+        xhr1.open("GET", "http://environment.data.gov.uk/water-quality/data/measurement.json?samplingPoint=" + entry.id + "&_sort=-sample&_limit=1", false);
+        xhr1.setRequestHeader("Accept", "application/json");
+        xhr1.send();
+        
+        var result1 = JSON.parse(xhr1.responseText);
+        var lastActiveEntry = null;
+        var items = result1["items"];
+        if (items != null){
+            var firstItem = items[0];
+            if (firstItem != null) {
+                var sample = firstItem["sample"];
+                if (sample != null) {
+                    lastActiveEntry = sample["sampleDateTime"]; 
+                }
+            }
+        }
+        entry.lastActive = lastActiveEntry
+
+        console.log(entry);
+        wimsPoints.insert(entry); // add to database
+    }
+});
 
 // db.open(function(err, db) {
 //   if(err) {

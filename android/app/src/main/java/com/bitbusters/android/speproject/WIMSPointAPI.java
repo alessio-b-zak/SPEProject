@@ -30,20 +30,18 @@ public class WIMSPointAPI extends AsyncTask<String, Void, List<WIMSPoint>> {
     @Override
     protected List<WIMSPoint> doInBackground(String...params) {
         List<WIMSPoint> wimsPoints = new ArrayList<WIMSPoint>();
-        // params comes from the execute() call: params[0] is the url.
         try {
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .authority("environment.data.gov.uk")
-                    .appendPath("water-quality")
-                    .appendPath("id")
-                    .appendPath("sampling-point")
-                    .appendQueryParameter("lat", params[0])
-                    .appendQueryParameter("long", params[1])
-                    .appendQueryParameter("dist", params[2])
-                    .appendQueryParameter("_limit", "1000")
-                    .appendQueryParameter("samplingPointStatus", "open");
+                    .encodedAuthority("139.59.184.70:8080")
+                    //.encodedAuthority("172.23.215.243:3000")
+                    .appendPath("getThumbnails")
+                    .appendPath(params[0])
+                    .appendPath(params[1])
+                    .appendPath(params[2])
+                    .appendPath(params[3])
+                    .appendPath(params[4]);
             String myUrl = builder.build().toString();
 
             URL url = new URL(myUrl);
@@ -58,31 +56,21 @@ public class WIMSPointAPI extends AsyncTask<String, Void, List<WIMSPoint>> {
             int response = conn.getResponseCode();
             Log.d(DEBUG_TAG, "Url is: " + url);
             Log.d(DEBUG_TAG, "The response is: " + response);
-            InputStream inputStream = null;
-            inputStream = conn.getInputStream();
+            InputStream inputStream = conn.getInputStream();
 
-            //len limits the input string returned. should be changed from 5000 when tested.
-            int len = 5000;
-            // Convert the InputStream into a string
-//            String SamplingPoints = readIt(is, len);
             InputStreamToWIMSPoint inputStreamToWIMSPoint = new InputStreamToWIMSPoint();
             wimsPoints = inputStreamToWIMSPoint.readJsonStream(inputStream);
-            //Log.d(DEBUG_TAG, "The result is: " + wimsPoints);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         return wimsPoints;
     }
+
     // onPostExecute displays the results of the AsyncTask.
     @Override
     protected void onPostExecute(List<WIMSPoint> result) {
         mDataViewActivity.getProgressSpinner().setVisibility(View.INVISIBLE);
-        //TODO: Make sure that results are passed back to the caller;
-//        for (WIMSPoint r:result){
-//            System.out.println(r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + " " + r.getSamplingPointType() + " ");
-//        }
-
         listener.onTaskCompletedWIMSPoint(result);
     }
 
