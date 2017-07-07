@@ -110,6 +110,7 @@
                     android:id="@+id/cde_table_chemical_year"
                     android:text=""/>
             </TableRow>
+
         </TableLayout>
     </LinearLayout>
 

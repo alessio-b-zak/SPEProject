@@ -15,7 +15,7 @@ import java.util.Map;
  * Created by cp153 on 06/12/2016.
  */
 
-class CDEPoint extends Point {
+public class CDEPoint extends Point {
     private String waterbodyId;
     private String label;
     private LatLng location;

@@ -103,6 +103,18 @@ public class CDEPointRatingsAPI extends AsyncTask<Object, Void, List<Object>> {
                         .appendQueryParameter("_sort", "-classificationYear")
                         .appendQueryParameter("_sort", "-cycle");
                 break;
+            case(CDEPoint.OVERALL):
+                builder.scheme("http")
+                        .authority("ea-cde-pub.epimorphics.net")
+                        .appendPath("catchment-planning")
+                        .appendPath("data")
+                        .appendPath("classification.json")
+                        .appendQueryParameter("waterBody", waterbodyId)
+                        .appendQueryParameter("classificationItem", "wbc_1")
+                        .appendQueryParameter("classificationItem", "wbc_2")
+                        .appendQueryParameter("classificationItem", "wbc_106")
+                        .appendQueryParameter("_sort", "-classificationYear")
+                        .appendQueryParameter("_sort", "-cycle");
         }
 
         return builder.build().toString();
