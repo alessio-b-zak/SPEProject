@@ -4,6 +4,49 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent" >
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#CC000000"
+        android:theme="?attr/actionBarTheme"
+        android:id="@+id/cde_toolbar"
+        android:minHeight="?attr/actionBarSize">
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:layout_marginRight="16dp" >-->
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                android:id="@+id/back_button_cde_data_view"
+                android:clickable="true"
+                android:scaleType="center"
+                android:src="@drawable/arrow_white" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                android:id="@+id/info_button_cde_data_view"
+                android:clickable="true"
+                android:scaleType="center"
+                android:layout_gravity="end"
+                android:padding="16dp"
+                android:text="@string/cde_info_button"
+                android:textAllCaps="false"
+                android:textAlignment="textEnd"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/info_white" />
+
+        <!--</LinearLayout>-->
+
+    </android.support.v7.widget.Toolbar>
+
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +58,7 @@
         android:text=""
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cd_label"
+        android:id="@+id/cde_label"
         android:textSize="18sp"
         android:textColor="@color/colorPrimaryDark"
         android:textAlignment="center"
@@ -111,37 +154,84 @@
                     android:text=""/>
             </TableRow>
 
+            <!--<TableRow-->
+                <!--android:id="@+id/cde_table_priority_substances_row"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:visibility="invisible">-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableParent"-->
+                    <!--android:id="@+id/cde_table_priority_substances_name"-->
+                    <!--android:text=""-->
+                    <!--android:gravity="start"-->
+                    <!--android:visibility="invisible"/>-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableChild"-->
+                    <!--android:id="@+id/cde_table_priority_substances_value"-->
+                    <!--android:text=""-->
+                    <!--android:visibility="invisible"/>-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableChild"-->
+                    <!--android:id="@+id/cde_table_priority_substances_certainty"-->
+                    <!--android:text=""-->
+                    <!--android:visibility="invisible"/>-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableChild"-->
+                    <!--android:id="@+id/cde_table_priority_substances_year"-->
+                    <!--android:text=""-->
+                    <!--android:visibility="invisible"/>-->
+            <!--</TableRow>-->
+
+            <!--<TableRow-->
+                <!--android:id="@+id/cde_table_hazardous_substances_row"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:visibility="invisible">-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableParent"-->
+                    <!--android:id="@+id/cde_table_hazardous_substances_name"-->
+                    <!--android:text=""-->
+                    <!--android:gravity="start" />-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableChild"-->
+                    <!--android:id="@+id/cde_table_hazardous_substances_value"-->
+                    <!--android:text=""/>-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableChild"-->
+                    <!--android:id="@+id/cde_table_hazardous_substances_certainty"-->
+                    <!--android:text=""/>-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableChild"-->
+                    <!--android:id="@+id/cde_table_hazardous_substances_year"-->
+                    <!--android:text=""/>-->
+            <!--</TableRow>-->
+
+            <!--<TableRow-->
+                <!--android:id="@+id/cde_table_other_pollutants_row"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:visibility="invisible">-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableParent"-->
+                    <!--android:id="@+id/cde_table_other_pollutants_name"-->
+                    <!--android:text=""-->
+                    <!--android:gravity="start" />-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableChild"-->
+                    <!--android:id="@+id/cde_table_other_pollutants_value"-->
+                    <!--android:text=""/>-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableChild"-->
+                    <!--android:id="@+id/cde_table_other_pollutants_certainty"-->
+                    <!--android:text=""/>-->
+                <!--<TextView-->
+                    <!--style="@style/TextViewDataTableChild"-->
+                    <!--android:id="@+id/cde_table_other_pollutants_year"-->
+                    <!--android:text=""/>-->
+            <!--</TableRow>-->
+
         </TableLayout>
     </LinearLayout>
-
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#CC000000"
-        android:theme="?attr/actionBarTheme"
-        android:id="@+id/cde_toolbar"
-        android:minHeight="?attr/actionBarSize">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:orientation="horizontal"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" >
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:id="@+id/back_button_cde_data_view"
-                android:clickable="true"
-                android:scaleType="center"
-                android:padding="16dp"
-                android:src="@drawable/arrow_white" />
-
-        </LinearLayout>
-
-    </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cde_grid_view"

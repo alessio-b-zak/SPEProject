@@ -18,7 +18,7 @@ import java.util.List;
 //import static com.google.android.gms.internal.zznu.is;
 
 public class WIMSPointAPI extends AsyncTask<String, Void, List<WIMSPoint>> {
-    private static final String DEBUG_TAG = "SAMPLING_POINTS_API";
+    private static final String DEBUG_TAG = "WIMS_POINTS_API";
     private OnTaskCompleted listener;
     private DataViewActivity mDataViewActivity;
 

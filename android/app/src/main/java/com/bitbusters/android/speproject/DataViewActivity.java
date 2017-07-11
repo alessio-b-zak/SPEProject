@@ -95,6 +95,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private FragmentManager mFragmentManager;
     private WIMSDataFragment mWIMSDataFragment;
     private CDEDataFragment mCDEDataFragment;
+    private CDEDetailsFragment mCDEDetailsFragment;
     private DischargePermitDataFragment mDischargePermitDataFragment;
     private List<WIMSPoint> mWIMSPoints = new ArrayList<>();
     private List<CDEPoint> mCDEPoints = new ArrayList<>();
@@ -104,7 +105,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private GeoJsonLayer mGeoJsonLayer;
     private MultiListener mMultiListener = new MultiListener();
     private Drawer mDrawer;
-    private WIMSDbHelper mDbHelper;
     private CoordinateSystemConverter coordinateSystemConverter;
 
     private WIMSPoint selectedWIMSPoint;
@@ -522,6 +522,32 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         });
     }
 
+    public void openCDEDetailsFragment() {
+        mFragmentManager.popBackStack();
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+
+        fragment = new CDEDetailsFragment();
+        mCDEDetailsFragment = (CDEDetailsFragment) fragment;
+
+        mFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null).commit();
+    }
+
+    public void closeCDEDetailsFragment() {
+        mFragmentManager.popBackStack();
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+
+        fragment = new CDEDataFragment();
+        mCDEDataFragment = (CDEDataFragment) fragment;
+
+        mFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null).commit();
+    }
+
     // Manipulates the map once available when created.
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -590,7 +616,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mCDEPoints = result;
         for (CDEPoint r : result) {
             showGeoJsonData(r);
-//            new CDEPointRatingsAPI(this).execute(r);
+//            new CDEPointGeneralRatingsAPI(this).execute(r);
         }
     }
 
@@ -729,6 +755,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mProgressSpinner.setVisibility(View.INVISIBLE);
             mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
+        } else if (fragment instanceof CDEDetailsFragment) {
+            closeCDEDetailsFragment();
         } else if (fragment instanceof DischargePermitDataFragment) {
             mFragmentManager.popBackStack();
             clearMarkers(PERMIT);

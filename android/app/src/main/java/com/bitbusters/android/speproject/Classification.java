@@ -4,7 +4,7 @@ package com.bitbusters.android.speproject;
  * Created by mihajlo on 21/06/2017.
  */
 
-class Classification {
+public class Classification {
     private String value;
     private String certainty;
     private String year;

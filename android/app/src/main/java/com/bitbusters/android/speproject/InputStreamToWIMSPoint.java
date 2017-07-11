@@ -1,6 +1,7 @@
 package com.bitbusters.android.speproject;
 
 import android.util.JsonReader;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +14,9 @@ import java.util.List;
  */
 
 public class InputStreamToWIMSPoint {
+
+    private static final String TAG = "WIMS_POINTS_READER";
+
     public List<WIMSPoint> readJsonStream(InputStream in) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {

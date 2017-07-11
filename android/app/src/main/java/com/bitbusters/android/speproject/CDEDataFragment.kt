@@ -11,9 +11,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.*
+
 
 /**
  * Created by mihajlo on 07/07/17.
@@ -22,10 +21,12 @@ import android.widget.TextView
 open class CDEDataFragment : Fragment() {
     private lateinit var mToolbar: Toolbar  // The toolbar.
     private lateinit var mBackButton: ImageButton
+    private lateinit var mMoreInfoButton: Button
     private lateinit var mCDEDataView: View
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mCDEDataFragment : CDEDataFragment
     private lateinit var mDataViewActivity: DataViewActivity
+    private lateinit var mTableLayout: TableLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +43,12 @@ open class CDEDataFragment : Fragment() {
         mRecyclerView = view.bind(R.id.cde_grid_view)
         mRecyclerView.visibility = View.INVISIBLE
 
-        val cdePoint = mDataViewActivity.selectedCDEPoint
-        CDEPointRatingsAPI(this).execute(cdePoint, CDEPoint.OVERALL)
+        mTableLayout = view.bind(R.id.cde_table)
 
-        val cdePointLabel : TextView = view.bind(R.id.cd_label)
+        val cdePoint = mDataViewActivity.selectedCDEPoint
+        CDEPointGeneralRatingsAPI(this).execute(cdePoint)
+
+        val cdePointLabel : TextView = view.bind(R.id.cde_label)
         val label = cdePoint.label
         cdePointLabel.text = label
 
@@ -54,7 +57,8 @@ open class CDEDataFragment : Fragment() {
         mBackButton = view.bind(R.id.back_button_cde_data_view)
         mBackButton.setOnClickListener { activity.onBackPressed() }
 
-        //        setClassificationText(cdePoint);
+        mMoreInfoButton = view.bind(R.id.info_button_cde_data_view)
+        mMoreInfoButton.setOnClickListener { mDataViewActivity.openCDEDetailsFragment() }
 
         return view
     }
@@ -76,9 +80,9 @@ open class CDEDataFragment : Fragment() {
             var classification : Classification? = null
 
             when(rating){
-                "overall" -> classification = cdePoint.classificationHashMap[CDEPoint.OVERALL]
-                "chemical" -> classification = cdePoint.classificationHashMap[CDEPoint.CHEMICAL]
-                "ecological" -> classification = cdePoint.classificationHashMap[CDEPoint.ECOLOGICAL]
+                "overall" -> classification = cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.OVERALL]
+                "chemical" -> classification = cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.CHEMICAL]
+                "ecological" -> classification = cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.ECOLOGICAL]
                 else -> {
                     Log.i("FAIL","FAILED TO CONVERT RATING")
                 }
@@ -89,11 +93,16 @@ open class CDEDataFragment : Fragment() {
             certainty.text = classification.certainty
         }
 
-        val ecologicalRow : TableRow = mCDEDataView.bind(R.id.cde_table_ecological_row)
-        ecologicalRow.setOnClickListener { view ->
-            view.setBackgroundColor(Color.YELLOW)
-            CDEPointRatingsAPI(mCDEDataFragment).execute(cdePoint, CDEPoint.ECOLOGICAL)
-        }
+//        val ecologicalRow : TableRow = mCDEDataView.bind(R.id.cde_table_ecological_row)
+//        ecologicalRow.setOnClickListener { view ->
+//            mDataViewActivity.openCDEDetailsFragment()
+//        }
+//
+//        val chemicalRow : TableRow = mCDEDataView.bind(R.id.cde_table_chemical_row)
+//        chemicalRow.setOnClickListener { view ->
+//            view.setBackgroundColor(Color.YELLOW)
+//            CDEPointGeneralRatingsAPI(mCDEDataFragment).execute(cdePoint, CDEPoint.CHEMICAL)
+//        }
 
     }
 
@@ -106,19 +115,15 @@ open class CDEDataFragment : Fragment() {
         @Suppress("UNCHECKED_CAST")
         return findViewById(res) as T
     }
-
-    fun getResId(resName: String, c: Class<*>): Int {
-        try {
-            val idField = c.getDeclaredField(resName)
-            return idField.getInt(idField)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return -1
-        }
-
-    }
-
-    fun setSubClassificationText(cdePoint: CDEPoint) {
-        // Set table rows for subset
-    }
+//
+//    fun getResId(resName: String, c: Class<*>): Int {
+//        try {
+//            val idField = c.getDeclaredField(resName)
+//            return idField.getInt(idField)
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            return -1
+//        }
+//
+//    }
 }

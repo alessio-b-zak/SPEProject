@@ -51,79 +51,79 @@ public class PhotoCommentActivityTest extends TestHelper{
         mDevice = UiDevice.getInstance(getInstrumentation());
     }
 
-    @Test
-    public void PhotoCommentActivitySuccessfullyTakePicture() {
-        shootAndConfirmPicture();
-        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivitySuccessfullyTakePicture");
-        onView(withId(R.id.editText)).check(matches(isDisplayed()));
-        onView(withId(R.id.submit_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.back_button_photo_view)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void PhotoCommentActivityUnsuccessfullyTakePicture() {
-        shootAndCancelPicture();
-        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityUnsuccessfullyTakePicture");
-        onView(withId(R.id.map)).check(matches(isDisplayed()));
-        onView(withId(R.id.gps_button)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void PhotoCommentActivityClickBackButton() {
-        shootAndConfirmPicture();
-        onView(withId(R.id.back_button_photo_view)).perform(click());
-        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityClickBackButton");
-        onView(withId(R.id.map)).check(matches(isDisplayed()));
-        onView(withId(R.id.cam_button)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void PhotoCommentActivityCheckRightTagDisplayed() {
-        shootAndConfirmPicture();
-        enterCommentAndTag();
-        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityCheckRightTagDisplayed");
-        onView(withId(R.id.multi_spinner)).check(matches(withSpinnerText(is("Overshading"))));
-    }
-
-    @Test
-    public void PhotoCommentActivityCancelSubmission() {
-        shootAndConfirmPicture();
-        enterCommentAndTag();
-        onView(withId(R.id.submit_button)).perform(click());
-        clickUiObject(mDevice, CANCEL_FORM_BUTTON);
-        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityCancelSubmission");
-        onView(withId(R.id.editText)).check(matches(isDisplayed()));
-        onView(withId(R.id.submit_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.textView2)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void PhotoCommentActivityConfirmSubmission() {
-        shootAndConfirmPicture();
-        enterCommentAndTag();
-        onView(withId(R.id.submit_button)).perform(click());
-        clickUiObject(mDevice, SUBMIT_FORM_BUTTON);
-        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityConfirmSubmission");
-        onView(withId(R.id.map)).check(matches(isDisplayed()));
-        onView(withId(R.id.cam_button)).check(matches(isDisplayed()));
-    }
-
-    public void enterCommentAndTag() {
-        onView(withId(R.id.editText)).perform(typeText(TEST_COMMENT), closeSoftKeyboard());
-        onView(withId(R.id.multi_spinner)).perform(click());
-        onData(hasToString(is("Overshading"))).perform(click());
-    }
-
-    public void shootAndConfirmPicture() {
-        onView(withId(R.id.cam_button)).perform(click());
-        clickUiObject(mDevice, SHUTTER_BUTTON);
-        clickUiObject(mDevice, CONFIRM_PICTURE_BUTTON);
-    }
-
-    public void shootAndCancelPicture() {
-        onView(withId(R.id.cam_button)).perform(click());
-        clickUiObject(mDevice, SHUTTER_BUTTON);
-        clickUiObject(mDevice, CANCEL_PICTURE_BUTTON);
-    }
+//    @Test
+//    public void PhotoCommentActivitySuccessfullyTakePicture() {
+//        shootAndConfirmPicture();
+//        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivitySuccessfullyTakePicture");
+//        onView(withId(R.id.editText)).check(matches(isDisplayed()));
+//        onView(withId(R.id.submit_button)).check(matches(isDisplayed()));
+//        onView(withId(R.id.back_button_photo_view)).check(matches(isDisplayed()));
+//    }
+//
+//    @Test
+//    public void PhotoCommentActivityUnsuccessfullyTakePicture() {
+//        shootAndCancelPicture();
+//        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityUnsuccessfullyTakePicture");
+//        onView(withId(R.id.map)).check(matches(isDisplayed()));
+//        onView(withId(R.id.gps_button)).check(matches(isDisplayed()));
+//    }
+//
+//    @Test
+//    public void PhotoCommentActivityClickBackButton() {
+//        shootAndConfirmPicture();
+//        onView(withId(R.id.back_button_photo_view)).perform(click());
+//        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityClickBackButton");
+//        onView(withId(R.id.map)).check(matches(isDisplayed()));
+//        onView(withId(R.id.cam_button)).check(matches(isDisplayed()));
+//    }
+//
+//    @Test
+//    public void PhotoCommentActivityCheckRightTagDisplayed() {
+//        shootAndConfirmPicture();
+//        enterCommentAndTag();
+//        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityCheckRightTagDisplayed");
+//        onView(withId(R.id.multi_spinner)).check(matches(withSpinnerText(is("Overshading"))));
+//    }
+//
+//    @Test
+//    public void PhotoCommentActivityCancelSubmission() {
+//        shootAndConfirmPicture();
+//        enterCommentAndTag();
+//        onView(withId(R.id.submit_button)).perform(click());
+//        clickUiObject(mDevice, CANCEL_FORM_BUTTON);
+//        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityCancelSubmission");
+//        onView(withId(R.id.editText)).check(matches(isDisplayed()));
+//        onView(withId(R.id.submit_button)).check(matches(isDisplayed()));
+//        onView(withId(R.id.textView2)).check(matches(isDisplayed()));
+//    }
+//
+//    @Test
+//    public void PhotoCommentActivityConfirmSubmission() {
+//        shootAndConfirmPicture();
+//        enterCommentAndTag();
+//        onView(withId(R.id.submit_button)).perform(click());
+//        clickUiObject(mDevice, SUBMIT_FORM_BUTTON);
+//        takeScreenshot(mDevice, FOLDER_NAME, "PhotoCommentActivityConfirmSubmission");
+//        onView(withId(R.id.map)).check(matches(isDisplayed()));
+//        onView(withId(R.id.cam_button)).check(matches(isDisplayed()));
+//    }
+//
+//    public void enterCommentAndTag() {
+//        onView(withId(R.id.editText)).perform(typeText(TEST_COMMENT), closeSoftKeyboard());
+//        onView(withId(R.id.multi_spinner)).perform(click());
+//        onData(hasToString(is("Overshading"))).perform(click());
+//    }
+//
+//    public void shootAndConfirmPicture() {
+//        onView(withId(R.id.cam_button)).perform(click());
+//        clickUiObject(mDevice, SHUTTER_BUTTON);
+//        clickUiObject(mDevice, CONFIRM_PICTURE_BUTTON);
+//    }
+//
+//    public void shootAndCancelPicture() {
+//        onView(withId(R.id.cam_button)).perform(click());
+//        clickUiObject(mDevice, SHUTTER_BUTTON);
+//        clickUiObject(mDevice, CANCEL_PICTURE_BUTTON);
+//    }
 
 }
