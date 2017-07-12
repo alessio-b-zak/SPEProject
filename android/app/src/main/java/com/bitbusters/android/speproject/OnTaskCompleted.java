@@ -9,4 +9,5 @@ public interface OnTaskCompleted {
     void onTaskCompletedWIMSPoint(List<WIMSPoint> result);
     void onTaskCompletedCDEPoint(List<CDEPoint> result);
     void onTaskCompletedDischargePermitPoint(List<DischargePermitPoint> result);
+    void onTaskCompletedCDEPointRatings(CDEPoint result);
 }

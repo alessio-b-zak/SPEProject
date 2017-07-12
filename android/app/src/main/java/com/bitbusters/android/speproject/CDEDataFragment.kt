@@ -46,7 +46,7 @@ open class CDEDataFragment : Fragment() {
         mTableLayout = view.bind(R.id.cde_table)
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
-        CDEPointGeneralRatingsAPI(this).execute(cdePoint)
+        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.REAL)
 
         val cdePointLabel : TextView = view.bind(R.id.cde_label)
         val label = cdePoint.label
@@ -80,9 +80,9 @@ open class CDEDataFragment : Fragment() {
             var classification : Classification? = null
 
             when(rating){
-                "overall" -> classification = cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.OVERALL]
-                "chemical" -> classification = cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.CHEMICAL]
-                "ecological" -> classification = cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.ECOLOGICAL]
+                "overall" -> classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.OVERALL]
+                "chemical" -> classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.CHEMICAL]
+                "ecological" -> classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.ECOLOGICAL]
                 else -> {
                     Log.i("FAIL","FAILED TO CONVERT RATING")
                 }
@@ -92,18 +92,6 @@ open class CDEDataFragment : Fragment() {
             value.text     = classification.value
             certainty.text = classification.certainty
         }
-
-//        val ecologicalRow : TableRow = mCDEDataView.bind(R.id.cde_table_ecological_row)
-//        ecologicalRow.setOnClickListener { view ->
-//            mDataViewActivity.openCDEDetailsFragment()
-//        }
-//
-//        val chemicalRow : TableRow = mCDEDataView.bind(R.id.cde_table_chemical_row)
-//        chemicalRow.setOnClickListener { view ->
-//            view.setBackgroundColor(Color.YELLOW)
-//            CDEPointGeneralRatingsAPI(mCDEDataFragment).execute(cdePoint, CDEPoint.CHEMICAL)
-//        }
-
     }
 
     fun <T : View> Activity.bind(@IdRes res : Int) : T {
@@ -115,15 +103,5 @@ open class CDEDataFragment : Fragment() {
         @Suppress("UNCHECKED_CAST")
         return findViewById(res) as T
     }
-//
-//    fun getResId(resName: String, c: Class<*>): Int {
-//        try {
-//            val idField = c.getDeclaredField(resName)
-//            return idField.getInt(idField)
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            return -1
-//        }
-//
-//    }
+
 }

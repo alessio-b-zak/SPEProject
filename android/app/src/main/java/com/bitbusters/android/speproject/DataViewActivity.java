@@ -406,7 +406,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
 
-    // On CDE sampling point click.
+    // On CDE feature click.
     public void setUpCDEManager() {
         mGeoJsonLayer = new GeoJsonLayer(mMap, new JSONObject());
         mGeoJsonLayer.setOnFeatureClickListener(new Layer.OnFeatureClickListener() {
@@ -616,7 +616,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mCDEPoints = result;
         for (CDEPoint r : result) {
             showGeoJsonData(r);
-//            new CDEPointGeneralRatingsAPI(this).execute(r);
+        }
+    }
+
+    @Override
+    public void onTaskCompletedCDEPointRatings(CDEPoint result) {
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        if (fragment instanceof CDEDetailsFragment) {
+            mCDEDetailsFragment.setClassificationText(result);
+        } else if (fragment instanceof CDEDataFragment) {
+            mCDEDataFragment.setClassificationText(result);
         }
     }
 

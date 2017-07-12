@@ -9,26 +9,34 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class CDEPointDetailRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
+import static com.bitbusters.android.speproject.CDEPoint.OBJECTIVE;
+import static com.bitbusters.android.speproject.CDEPoint.PREDICTED;
 
-    private static final String TAG = "CDE_DETAIL_RATINGS";
-    private CDEDetailsFragment mCDEDetailsFragment;
+public class CDEPointRatingsAPI extends AsyncTask<Object, Void, CDEPoint> {
 
-    public CDEPointDetailRatingsAPI(CDEDetailsFragment context) {
-        this.mCDEDetailsFragment = context;
+    private static final String TAG = "CDE_GENERAL_RATINGS";
+    private OnTaskCompleted listener;
+
+    public CDEPointRatingsAPI(OnTaskCompleted listener) {
+        this.listener = listener;
     }
 
     @Override
-    protected CDEPoint doInBackground(CDEPoint...params) {
-        CDEPoint cdePoint = params[0];
+    protected CDEPoint doInBackground(Object...params) {
+        CDEPoint cdePoint = (CDEPoint) params[0];
+        String group = (String) params[1];
+        String linkExtension = setLinkExtension(group);
         try {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
                     .authority("ea-cde-pub.epimorphics.net")
                     .appendPath("catchment-planning")
                     .appendPath("data")
-                    .appendPath("classification.json")
+                    .appendPath("classification" + linkExtension + ".json")
                     .appendQueryParameter("waterBody", cdePoint.getWaterbodyId())
+                    .appendQueryParameter("classificationItem", "wbc_1")
+                    .appendQueryParameter("classificationItem", "wbc_2")
+                    .appendQueryParameter("classificationItem", "wbc_106")
                     .appendQueryParameter("classificationItem", "wbc_13")
                     .appendQueryParameter("classificationItem", "wbc_5")
                     .appendQueryParameter("classificationItem", "wbc_228")
@@ -58,18 +66,31 @@ public class CDEPointDetailRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint
 
             InputStream inputStream = conn.getInputStream();
             InputStreamToCDEClassification inputStreamToCDEClassification = new InputStreamToCDEClassification();
-            inputStreamToCDEClassification.readJsonStream(cdePoint, inputStream, CDEPoint.DETAIL);
+            inputStreamToCDEClassification.readJsonStream(cdePoint, inputStream, group);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return cdePoint;
     }
 
     @Override
     protected void onPostExecute(CDEPoint cdePoint) {
-        mCDEDetailsFragment.setClassificationText(cdePoint);
+        listener.onTaskCompletedCDEPointRatings(cdePoint);
     }
 
+    private String setLinkExtension(String group) {
+        String linkExtension = "";
+        switch (group) {
+            case OBJECTIVE:
+                linkExtension = "-objective-outcome";
+                break;
+            case PREDICTED:
+                linkExtension = "-predicted-outcome";
+                break;
+            default:
+                break;
+        }
+        return linkExtension;
+    }
 }

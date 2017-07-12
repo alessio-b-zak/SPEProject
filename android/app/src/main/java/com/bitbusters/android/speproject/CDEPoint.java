@@ -25,8 +25,9 @@ public class CDEPoint extends Point {
 
     private static final String TAG = "CDE_POINT";
 
-    public static final String GENERAL = "General";
-    public static final String DETAIL = "Detail";
+    public static final String REAL = "Real";
+    public static final String OBJECTIVE = "Objective";
+    public static final String PREDICTED = "Predicted";
 
     // Classifications
     public static final String OVERALL = "Overall Water Body";
@@ -38,10 +39,28 @@ public class CDEPoint extends Point {
     public static final String PHYSICO_CHEMICAL_ELEMENTS = "Physico-chemical quality elements";
     public static final String SPECIFIC_POLLUTANTS = "Specific pollutants";
 
+    public static final List<String> ecologicalGroup;
+    static {
+        ecologicalGroup = new ArrayList<>();
+        ecologicalGroup.add(SUPPORTING_ELEMENTS);
+        ecologicalGroup.add(BIOLOGICAL_ELEMENTS);
+        ecologicalGroup.add(HYDROMORPHOLOGICAL_ELEMENTS);
+        ecologicalGroup.add(PHYSICO_CHEMICAL_ELEMENTS);
+        ecologicalGroup.add(SPECIFIC_POLLUTANTS);
+    }
+
     public static final String CHEMICAL = "Chemical";
     public static final String PRIORITY_SUBSTANCES = "Priority substances";
     public static final String OTHER_POLLUTANTS = "Other Pollutants";
     public static final String HAZARDOUS_SUBSTANCES = " Priority hazardous substances";
+
+    public static final List<String> chemicalGroup;
+    static {
+        chemicalGroup = new ArrayList<>();
+        chemicalGroup.add(PRIORITY_SUBSTANCES);
+        chemicalGroup.add(OTHER_POLLUTANTS);
+        chemicalGroup.add(HAZARDOUS_SUBSTANCES);
+    }
 
     // Ratings
     public static final String FAIL = "Fail";
@@ -107,9 +126,9 @@ public class CDEPoint extends Point {
         this.label = label;
         this.location = new LatLng(latitude,longitude);
         this.classificationHashMap = new HashMap<String, HashMap<String, Classification>>();
-        this.classificationHashMap.put(GENERAL, new HashMap<String, Classification>());
-        this.classificationHashMap.put(ECOLOGICAL, new HashMap<String, Classification>());
-        this.classificationHashMap.put(CHEMICAL, new HashMap<String, Classification>());
+        this.classificationHashMap.put(REAL, new HashMap<String, Classification>());
+        this.classificationHashMap.put(OBJECTIVE, new HashMap<String, Classification>());
+        this.classificationHashMap.put(PREDICTED, new HashMap<String, Classification>());
         this.geoJSONFeature = geoJSONFeature;
         this.rnagList = new ArrayList<>();
     }

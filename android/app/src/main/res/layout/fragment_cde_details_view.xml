@@ -66,25 +66,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="top">
+            </TableLayout>
 
-                <!--<TableRow-->
-                    <!--android:layout_width="match_parent">-->
-                    <!--<TextView-->
-                        <!--android:text=""-->
-                        <!--android:layout_weight="0.4"/>-->
-                    <!--<TextView-->
-                        <!--style="@style/TextViewDataTableParent"-->
-                        <!--android:text="@string/cde_table_classification_value"-->
-                        <!--android:layout_weight="0.25"/>-->
-                    <!--<TextView-->
-                        <!--style="@style/TextViewDataTableParent"-->
-                        <!--android:text="@string/cde_table_classification_certainty"-->
-                        <!--android:layout_weight="0.25"/>-->
-                    <!--<TextView-->
-                        <!--style="@style/TextViewDataTableParent"-->
-                        <!--android:text="@string/cde_table_classification_year"-->
-                        <!--android:layout_weight="0.1"/>-->
-                <!--</TableRow>-->
+            <TextView
+                android:id="@+id/cde_objectives_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="16dp"
+                android:gravity="start"
+                android:text="@string/cde_objectives_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/cde_objectives_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
             </TableLayout>
 
             <TextView
@@ -106,17 +107,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="top">
             </TableLayout>
-
-            <TextView
-                android:id="@+id/cde_objectives_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:layout_marginTop="16dp"
-                android:gravity="start"
-                android:text="@string/cde_objectives_title"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
 
         </LinearLayout>
     </ScrollView>

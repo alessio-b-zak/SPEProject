@@ -47,7 +47,8 @@ open class CDEDetailsFragment : Fragment() {
         mCDEDetailsFragment = this
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
-        CDEPointDetailRatingsAPI(this).execute(cdePoint)
+//        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.PREDICTED)
+//        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.OBJECTIVE)
         CDERnagAPI(this).execute(cdePoint)
 
         val cdePointLabel : TextView = view.bind(R.id.cde_details_title)
@@ -61,10 +62,12 @@ open class CDEDetailsFragment : Fragment() {
         mBackButton = view.bind(R.id.back_button_cde_details_view)
         mBackButton.setOnClickListener { activity.onBackPressed() }
 
+        setRealClassificationText(cdePoint)
+
         return view
     }
 
-    fun setClassificationText(cdePoint: CDEPoint) {
+    fun setRealClassificationText(cdePoint: CDEPoint) {
         // Set Header Row
         val tableHeaderRow = newTableRow()
 
@@ -76,17 +79,20 @@ open class CDEDetailsFragment : Fragment() {
         mCDEDetailsTable.addView(tableHeaderRow)
 
         // Add the data
-        addClassificationRow(CDEPoint.OVERALL, cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.OVERALL], true)
+        addClassificationRow(CDEPoint.OVERALL, cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.OVERALL], true)
 
-        addClassificationRow(CDEPoint.ECOLOGICAL, cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.ECOLOGICAL], true)
-        for (item in cdePoint.getClassificationHashMap(CDEPoint.ECOLOGICAL)) {
-            addClassificationRow(item.key, item.value)
+        addClassificationRow(CDEPoint.ECOLOGICAL, cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.ECOLOGICAL], true)
+        for (item in CDEPoint.ecologicalGroup) {
+            addClassificationRow(item, cdePoint.getClassificationHashMap(CDEPoint.REAL)[item])
         }
 
-        addClassificationRow(CDEPoint.CHEMICAL, cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.CHEMICAL], true)
-        for (item in cdePoint.getClassificationHashMap(CDEPoint.CHEMICAL)) {
-            addClassificationRow(item.key, item.value)
+        addClassificationRow(CDEPoint.CHEMICAL, cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.CHEMICAL], true)
+        for (item in CDEPoint.chemicalGroup) {
+            addClassificationRow(item, cdePoint.getClassificationHashMap(CDEPoint.REAL)[item])
         }
+    }
+
+    fun setClassificationText(cdePoint: CDEPoint) {
     }
 
     fun setRNAGText(cdePoint: CDEPoint) {
