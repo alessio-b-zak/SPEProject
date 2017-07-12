@@ -623,7 +623,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void onTaskCompletedCDEPointRatings(CDEPoint result) {
         Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
         if (fragment instanceof CDEDetailsFragment) {
-            mCDEDetailsFragment.setClassificationText(result);
+            if(!result.getClassificationHashMap(CDEPoint.OBJECTIVE).isEmpty() &&
+                    !result.getClassificationHashMap(CDEPoint.PREDICTED).isEmpty()) {
+                mCDEDetailsFragment.setObjectivePredictedClassificationText(result);
+            }
         } else if (fragment instanceof CDEDataFragment) {
             mCDEDataFragment.setClassificationText(result);
         }

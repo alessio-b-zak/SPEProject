@@ -11,10 +11,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.*
 
 
 /**
@@ -26,7 +23,9 @@ open class CDEDetailsFragment : Fragment() {
     private lateinit var mBackButton: ImageButton
     private lateinit var mCDEDetailsView: View
     private lateinit var mCDEDetailsTable: TableLayout
+    private lateinit var mObjectivesTable: TableLayout
     private lateinit var mRNAGTable: TableLayout
+    private lateinit var mLinearLayout: LinearLayout
     private lateinit var mCDEDetailsFragment: CDEDetailsFragment
     private lateinit var mDataViewActivity: DataViewActivity
 
@@ -38,7 +37,6 @@ open class CDEDetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         retainInstance = true
         mDataViewActivity = activity as DataViewActivity
-
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,8 +45,8 @@ open class CDEDetailsFragment : Fragment() {
         mCDEDetailsFragment = this
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
-//        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.PREDICTED)
-//        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.OBJECTIVE)
+        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.PREDICTED)
+        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.OBJECTIVE)
         CDERnagAPI(this).execute(cdePoint)
 
         val cdePointLabel : TextView = view.bind(R.id.cde_details_title)
@@ -58,6 +56,9 @@ open class CDEDetailsFragment : Fragment() {
 
         mCDEDetailsTable = view.bind(R.id.cde_details_table)
         mRNAGTable = view.bind(R.id.cde_rnag_table)
+        mObjectivesTable = view.bind(R.id.cde_objectives_table)
+
+        mLinearLayout = view.bind(R.id.cde_details_linear_layout)
 
         mBackButton = view.bind(R.id.back_button_cde_details_view)
         mBackButton.setOnClickListener { activity.onBackPressed() }
@@ -92,7 +93,27 @@ open class CDEDetailsFragment : Fragment() {
         }
     }
 
-    fun setClassificationText(cdePoint: CDEPoint) {
+    fun setObjectivePredictedClassificationText(cdePoint: CDEPoint) {
+        // Set Header Rows
+        var tableHeaderRow = newTableRow()
+
+        addTextView(tableHeaderRow,"", 0.4, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Objective", 0.3, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Predicted", 0.3, R.style.TextViewDataTableParent)
+
+        mObjectivesTable.addView(tableHeaderRow)
+
+        tableHeaderRow = newTableRow()
+
+        addTextView(tableHeaderRow,"", 0.4, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Rating", 0.2, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Year", 0.1, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Rating", 0.2, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Year", 0.1, R.style.TextViewDataTableParent)
+
+        mObjectivesTable.addView(tableHeaderRow)
+
+
     }
 
     fun setRNAGText(cdePoint: CDEPoint) {
@@ -106,7 +127,7 @@ open class CDEDetailsFragment : Fragment() {
 
         mRNAGTable.addView(tableHeaderRow)
 
-        for(rnag in cdePoint.rnagList) {
+        for (rnag in cdePoint.rnagList) {
 
             val tableRow = newTableRow()
 
