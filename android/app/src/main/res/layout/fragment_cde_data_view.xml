@@ -7,7 +7,7 @@
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#CC000000"
+        android:background="#000000"
         android:theme="?attr/actionBarTheme"
         android:id="@+id/cde_toolbar"
         android:minHeight="?attr/actionBarSize">
@@ -52,7 +52,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:clickable="true"
-    android:background="@color/backgroundTransparent">
+    android:background="@color/backgroundDefault">
 
         <TextView
         android:text=""

@@ -21,6 +21,7 @@ public class CDEPoint extends Point {
     private LatLng location;
     private GeoJsonFeature geoJSONFeature;
     private HashMap<String, HashMap<String, Classification>> classificationHashMap;
+    private List<RNAG> rnagList;
 
     private static final String TAG = "CDE_POINT";
 
@@ -106,10 +107,11 @@ public class CDEPoint extends Point {
         this.label = label;
         this.location = new LatLng(latitude,longitude);
         this.classificationHashMap = new HashMap<String, HashMap<String, Classification>>();
-        classificationHashMap.put(GENERAL, new HashMap<String, Classification>());
-        classificationHashMap.put(ECOLOGICAL, new HashMap<String, Classification>());
-        classificationHashMap.put(CHEMICAL, new HashMap<String, Classification>());
+        this.classificationHashMap.put(GENERAL, new HashMap<String, Classification>());
+        this.classificationHashMap.put(ECOLOGICAL, new HashMap<String, Classification>());
+        this.classificationHashMap.put(CHEMICAL, new HashMap<String, Classification>());
         this.geoJSONFeature = geoJSONFeature;
+        this.rnagList = new ArrayList<>();
     }
 
     public String getWaterbodyId() {
@@ -134,6 +136,14 @@ public class CDEPoint extends Point {
 
     public HashMap<String, Classification> getClassificationHashMap(String group) {
         return classificationHashMap.get(group);
+    }
+
+    public List<RNAG> getRnagList() {
+        return rnagList;
+    }
+
+    public void addRNAG(RNAG rnag) {
+        rnagList.add(rnag);
     }
 
     public void setWaterbodyId(String waterbodyId) {

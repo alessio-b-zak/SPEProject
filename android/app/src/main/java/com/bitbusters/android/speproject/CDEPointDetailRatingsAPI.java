@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CDEPointDetailRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
 
@@ -71,7 +69,7 @@ public class CDEPointDetailRatingsAPI extends AsyncTask<CDEPoint, Void, CDEPoint
 
     @Override
     protected void onPostExecute(CDEPoint cdePoint) {
-        mCDEDetailsFragment.setSubClassificationText(cdePoint);
+        mCDEDetailsFragment.setClassificationText(cdePoint);
     }
 
 }

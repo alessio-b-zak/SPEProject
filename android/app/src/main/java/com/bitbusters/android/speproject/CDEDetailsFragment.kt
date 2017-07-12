@@ -1,11 +1,11 @@
 package com.bitbusters.android.speproject
 
 import android.app.Activity
-import android.graphics.Color
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
+import android.transition.Transition
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -26,8 +26,13 @@ open class CDEDetailsFragment : Fragment() {
     private lateinit var mBackButton: ImageButton
     private lateinit var mCDEDetailsView: View
     private lateinit var mCDEDetailsTable: TableLayout
+    private lateinit var mRNAGTable: TableLayout
     private lateinit var mCDEDetailsFragment: CDEDetailsFragment
     private lateinit var mDataViewActivity: DataViewActivity
+
+    companion object {
+        private val TAG = "CDE_DETAILS_FRAGMENT"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +48,7 @@ open class CDEDetailsFragment : Fragment() {
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
         CDEPointDetailRatingsAPI(this).execute(cdePoint)
+        CDERnagAPI(this).execute(cdePoint)
 
         val cdePointLabel : TextView = view.bind(R.id.cde_details_title)
         cdePointLabel.text = cdePoint.label
@@ -50,6 +56,7 @@ open class CDEDetailsFragment : Fragment() {
         mToolbar = view.bind(R.id.cde_details_toolbar)
 
         mCDEDetailsTable = view.bind(R.id.cde_details_table)
+        mRNAGTable = view.bind(R.id.cde_rnag_table)
 
         mBackButton = view.bind(R.id.back_button_cde_details_view)
         mBackButton.setOnClickListener { activity.onBackPressed() }
@@ -57,60 +64,98 @@ open class CDEDetailsFragment : Fragment() {
         return view
     }
 
-    fun setSubClassificationText(cdePoint: CDEPoint) {
-        var i: Int = 1
-        for (entry in cdePoint.getClassificationHashMap(CDEPoint.CHEMICAL)) {
-            i = addRow(cdePoint, entry.key, entry.value, i)
+    fun setClassificationText(cdePoint: CDEPoint) {
+        // Set Header Row
+        val tableHeaderRow = newTableRow()
+
+        addTextView(tableHeaderRow,"", 0.4, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Rating", 0.25, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Certainty", 0.25, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Year", 0.1, R.style.TextViewDataTableParent)
+
+        mCDEDetailsTable.addView(tableHeaderRow)
+
+        // Add the data
+        addClassificationRow(CDEPoint.OVERALL, cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.OVERALL], true)
+
+        addClassificationRow(CDEPoint.ECOLOGICAL, cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.ECOLOGICAL], true)
+        for (item in cdePoint.getClassificationHashMap(CDEPoint.ECOLOGICAL)) {
+            addClassificationRow(item.key, item.value)
         }
-        i = addRow(cdePoint, CDEPoint.CHEMICAL,
-                cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.CHEMICAL], i, true)
-        for (entry in cdePoint.getClassificationHashMap(CDEPoint.ECOLOGICAL)) {
-            i = addRow(cdePoint, entry.key, entry.value, i)
+
+        addClassificationRow(CDEPoint.CHEMICAL, cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.CHEMICAL], true)
+        for (item in cdePoint.getClassificationHashMap(CDEPoint.CHEMICAL)) {
+            addClassificationRow(item.key, item.value)
         }
-        i = addRow(cdePoint, CDEPoint.ECOLOGICAL,
-                cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.ECOLOGICAL], i, true)
-        i = addRow(cdePoint, CDEPoint.OVERALL,
-                cdePoint.getClassificationHashMap(CDEPoint.GENERAL)[CDEPoint.OVERALL], i, true)
     }
 
-    fun addRow(cdePoint: CDEPoint, label: String, classification: Classification?, _i: Int, isParent : Boolean = false): Int {
-        var i = _i
-        val tableRow: TableRow = TableRow(mDataViewActivity)
-        val lp = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT)
-        tableRow.layoutParams = lp
+    fun setRNAGText(cdePoint: CDEPoint) {
+        // Adds header row
+        val tableHeaderRow = newTableRow()
 
-        val classificationView : TextView = TextView(mDataViewActivity)
-        classificationView.text = CDEPoint.classificationPrintValues[label]
-        classificationView.setTextAppearance(context, R.style.TextViewDataTableParent)
-        if(!isParent) {
-            classificationView.setPadding(40, 0, 0, 0)
+        addTextView(tableHeaderRow, "Element", 0.25, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Rating", 0.25, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Activity", 0.4, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Year", 0.1, R.style.TextViewDataTableParent)
+
+        mRNAGTable.addView(tableHeaderRow)
+
+        for(rnag in cdePoint.rnagList) {
+
+            val tableRow = newTableRow()
+
+            addTextView(tableRow, rnag.element, 0.25)
+            addTextView(tableRow, rnag.rating, 0.25)
+            addTextView(tableRow, rnag.activity, 0.4)
+            addTextView(tableRow, rnag.year.toString(), 0.1)
+
+            mRNAGTable.addView(tableRow)
         }
 
-        tableRow.addView(classificationView)
+    }
 
-        val ratingView : TextView = TextView(mDataViewActivity)
-        ratingView.text = CDEPoint.ratingPrintValues[classification!!.value]
-        ratingView.setTextAppearance(context, R.style.TextViewDataTableChild)
-        ratingView.gravity = Gravity.CENTER
-        ratingView.setPadding(10, 0, 10, 0)
-        tableRow.addView(ratingView)
+    fun newTableRow() : TableRow {
+        val tableRow: TableRow = TableRow(mDataViewActivity)
+        val lp = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
 
-        val certaintyView : TextView = TextView(mDataViewActivity)
-        certaintyView.text = classification.certainty
-        certaintyView.setTextAppearance(context, R.style.TextViewDataTableChild)
-        certaintyView.gravity = Gravity.CENTER
-        certaintyView.setPadding(10, 0, 10, 0)
-        tableRow.addView(certaintyView)
+        tableRow.layoutParams = lp
+        tableRow.gravity = Gravity.CENTER
+        tableRow.setPadding(3, 10, 3, 0)
 
-        val yearView : TextView = TextView(mDataViewActivity)
-        yearView.setTextAppearance(context, R.style.TextViewDataTableChild)
-        yearView.text = classification.year
-        yearView.gravity = Gravity.CENTER
-        yearView.setPadding(10, 0, 10, 0)
-        tableRow.addView(yearView)
+        return tableRow
+    }
 
-        mCDEDetailsTable.addView(tableRow, i);
-        return i++
+    fun addClassificationRow(label: String, classification: Classification?, isParent : Boolean = false) {
+        if (classification !is Classification) return
+
+        val tableRow: TableRow = newTableRow()
+        if (isParent) {
+            addTextView(tableRow, CDEPoint.classificationPrintValues[label], 0.4,
+                    R.style.TextViewDataTableParent, Gravity.START)
+        } else {
+            addTextView(tableRow, CDEPoint.classificationPrintValues[label], 0.4,
+                    R.style.TextViewDataTableParent, Gravity.START, 40)
+        }
+        addTextView(tableRow, CDEPoint.ratingPrintValues[classification.value], 0.25)
+        addTextView(tableRow, classification.certainty, 0.25)
+        addTextView(tableRow, classification.year, 0.1)
+
+        mCDEDetailsTable.addView(tableRow);
+    }
+
+    fun addTextView(tableRow: TableRow, value: String?, weight: Double = 1.0,
+                    style: Int = R.style.TextViewDataTableChild, gravity: Int = Gravity.CENTER,
+                    leftPadding: Int = 0) {
+        val textView : TextView = TextView(mDataViewActivity)
+        val params = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, weight.toFloat())
+
+        textView.layoutParams = params
+        textView.text = value
+        textView.setTextAppearance(context, style)
+        textView.gravity = gravity
+        textView.setPadding(leftPadding, 0, 0, 0)
+
+        tableRow.addView(textView)
     }
 
     fun <T : View> Activity.bind(@IdRes res : Int) : T {
