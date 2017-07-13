@@ -625,6 +625,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (fragment instanceof CDEDetailsFragment) {
             if(!result.getClassificationHashMap(CDEPoint.OBJECTIVE).isEmpty() &&
                     !result.getClassificationHashMap(CDEPoint.PREDICTED).isEmpty()) {
+                Log.i(TAG, "Calling CDEDETAILS");
                 mCDEDetailsFragment.setObjectivePredictedClassificationText(result);
             }
         } else if (fragment instanceof CDEDataFragment) {
