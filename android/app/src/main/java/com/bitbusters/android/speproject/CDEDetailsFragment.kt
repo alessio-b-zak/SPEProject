@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,9 @@ open class CDEDetailsFragment : Fragment() {
     private lateinit var mLinearLayout: LinearLayout
     private lateinit var mCDEDetailsFragment: CDEDetailsFragment
     private lateinit var mDataViewActivity: DataViewActivity
+    private var isObjectiveClassified: Boolean = false
+    private var isRNAGPopulated: Boolean = false
+
 
     companion object {
         private val TAG = "CDE_DETAILS_FRAGMENT"
@@ -98,19 +102,19 @@ open class CDEDetailsFragment : Fragment() {
         // Set Header Rows
         var tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow,"", 0.35, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Objective", 0.325, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Predicted", 0.325, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "", 0.35, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Objective", 0.325, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Predicted", 0.325, R.style.TextViewDataTableParent)
 
         mObjectivesTable.addView(tableHeaderRow)
 
         tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow,"", 0.35, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Rating", 0.19, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Year", 0.135, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Rating", 0.19, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Year", 0.135, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "", 0.35, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Rating", 0.19, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Year", 0.135, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Rating", 0.19, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Year", 0.135, R.style.TextViewDataTableParent)
 
         mObjectivesTable.addView(tableHeaderRow)
 
@@ -150,7 +154,6 @@ open class CDEDetailsFragment : Fragment() {
 
             mRNAGTable.addView(tableRow)
         }
-
     }
 
     fun addClassificationRow(cdePoint: CDEPoint, label: String, isReal: Boolean = true, isParent : Boolean = false) {

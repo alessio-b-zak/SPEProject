@@ -428,7 +428,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     mFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                             .add(R.id.fragment_container, fragment)
-                            .addToBackStack(null).commit();
+                            .commit();
                 }
             }
         });
@@ -523,30 +523,28 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void openCDEDetailsFragment() {
-        mFragmentManager.popBackStack();
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+//        mFragmentManager.popBackStack();
+//        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
 
-        fragment = new CDEDetailsFragment();
+        Fragment fragment = new CDEDetailsFragment();
         mCDEDetailsFragment = (CDEDetailsFragment) fragment;
 
         mFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                 .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null).commit();
+                .addToBackStack(null)
+                .commit();
     }
 
-    public void closeCDEDetailsFragment() {
-        mFragmentManager.popBackStack();
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-
-        fragment = new CDEDataFragment();
-        mCDEDataFragment = (CDEDataFragment) fragment;
-
-        mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null).commit();
-    }
+//    public void closeCDEDetailsFragment() {
+//        mFragmentManager.beginTransaction()
+//                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+//                .remove(mCDEDetailsFragment)
+//                .commit();
+//        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+//
+//
+//    }
 
     // Manipulates the map once available when created.
     @Override
@@ -762,14 +760,22 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
         } else if (fragment instanceof CDEDataFragment) {
-            mFragmentManager.popBackStack();
+            mFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                    .remove(fragment)
+                    .commit();
+//            mFragmentManager.popBackStack();
             clearMarkers(CDE);
             openView(CDE);
             mProgressSpinner.setVisibility(View.INVISIBLE);
             mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
         } else if (fragment instanceof CDEDetailsFragment) {
-            closeCDEDetailsFragment();
+//            mFragmentManager.beginTransaction()
+//                    .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+//                    .remove(fragment)
+//                    .commit();
+            mFragmentManager.popBackStack();
         } else if (fragment instanceof DischargePermitDataFragment) {
             mFragmentManager.popBackStack();
             clearMarkers(PERMIT);

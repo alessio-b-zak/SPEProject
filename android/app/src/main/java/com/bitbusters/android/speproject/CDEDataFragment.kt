@@ -48,7 +48,7 @@ open class CDEDataFragment : Fragment() {
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
         CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.REAL)
-
+        
         val cdePointLabel : TextView = view.bind(R.id.cde_label)
         val label = cdePoint.label
         cdePointLabel.text = label
