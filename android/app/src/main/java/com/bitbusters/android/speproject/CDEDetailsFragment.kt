@@ -1,12 +1,9 @@
 package com.bitbusters.android.speproject
 
-import android.app.Activity
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
-import android.transition.Transition
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +19,7 @@ open class CDEDetailsFragment : Fragment() {
     private lateinit var mToolbar: Toolbar  // The toolbar.
     private lateinit var mBackButton: ImageButton
     private lateinit var mCDEDetailsView: View
-    private lateinit var mCDEDetailsTable: TableLayout
+    private lateinit var mRealClassificationTable: TableLayout
     private lateinit var mObjectivesTable: TableLayout
     private lateinit var mRNAGTable: TableLayout
     private lateinit var mLinearLayout: LinearLayout
@@ -44,6 +41,14 @@ open class CDEDetailsFragment : Fragment() {
         mCDEDetailsView = view
         mCDEDetailsFragment = this
 
+        mRealClassificationTable = view.bind(R.id.cde_details_table)
+        mRNAGTable = view.bind(R.id.cde_rnag_table)
+        mObjectivesTable = view.bind(R.id.cde_objectives_table)
+
+        mRealClassificationTable.removeAllViewsInLayout()
+        mRNAGTable.removeAllViewsInLayout()
+        mObjectivesTable.removeAllViewsInLayout()
+
         val cdePoint = mDataViewActivity.selectedCDEPoint
         CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.PREDICTED)
         CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.OBJECTIVE)
@@ -53,10 +58,6 @@ open class CDEDetailsFragment : Fragment() {
         cdePointLabel.text = cdePoint.label
 
         mToolbar = view.bind(R.id.cde_details_toolbar)
-
-        mCDEDetailsTable = view.bind(R.id.cde_details_table)
-        mRNAGTable = view.bind(R.id.cde_rnag_table)
-        mObjectivesTable = view.bind(R.id.cde_objectives_table)
 
         mLinearLayout = view.bind(R.id.cde_details_linear_layout)
 
@@ -72,24 +73,24 @@ open class CDEDetailsFragment : Fragment() {
         // Set Header Row
         val tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow,"", 0.4, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Rating", 0.25, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"", 0.3, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Rating", 0.3, R.style.TextViewDataTableParent)
         addTextView(tableHeaderRow,"Certainty", 0.25, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Year", 0.1, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Year", 0.15, R.style.TextViewDataTableParent)
 
-        mCDEDetailsTable.addView(tableHeaderRow)
+        mRealClassificationTable.addView(tableHeaderRow)
 
         // Add the data
-        addClassificationRow(CDEPoint.OVERALL, cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.OVERALL], true)
+        addClassificationRow(cdePoint, CDEPoint.OVERALL, true, true)
 
-        addClassificationRow(CDEPoint.ECOLOGICAL, cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.ECOLOGICAL], true)
+        addClassificationRow(cdePoint, CDEPoint.ECOLOGICAL, true, true)
         for (item in CDEPoint.ecologicalGroup) {
-            addClassificationRow(item, cdePoint.getClassificationHashMap(CDEPoint.REAL)[item])
+            addClassificationRow(cdePoint, item)
         }
 
-        addClassificationRow(CDEPoint.CHEMICAL, cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.CHEMICAL], true)
+        addClassificationRow(cdePoint, CDEPoint.CHEMICAL, true, true)
         for (item in CDEPoint.chemicalGroup) {
-            addClassificationRow(item, cdePoint.getClassificationHashMap(CDEPoint.REAL)[item])
+            addClassificationRow(cdePoint, item)
         }
     }
 
@@ -97,23 +98,34 @@ open class CDEDetailsFragment : Fragment() {
         // Set Header Rows
         var tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow,"", 0.4, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Objective", 0.3, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Predicted", 0.3, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"", 0.3, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Objective", 0.35, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Predicted", 0.35, R.style.TextViewDataTableParent)
 
         mObjectivesTable.addView(tableHeaderRow)
 
         tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow,"", 0.4, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Rating", 0.2, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Year", 0.1, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Rating", 0.2, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Year", 0.1, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"", 0.3, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Rating", 0.225, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Year", 0.125, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Rating", 0.225, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"Year", 0.125, R.style.TextViewDataTableParent)
 
         mObjectivesTable.addView(tableHeaderRow)
 
+        // Add the data
+        addClassificationRow(cdePoint, CDEPoint.OVERALL, false, true)
 
+        addClassificationRow(cdePoint, CDEPoint.ECOLOGICAL, false, true)
+        for (item in CDEPoint.ecologicalGroup) {
+            addClassificationRow(cdePoint, item, false)
+        }
+
+        addClassificationRow(cdePoint, CDEPoint.CHEMICAL, false, true)
+        for (item in CDEPoint.chemicalGroup) {
+            addClassificationRow(cdePoint, item, false)
+        }
     }
 
     fun setRNAGText(cdePoint: CDEPoint) {
@@ -141,33 +153,42 @@ open class CDEDetailsFragment : Fragment() {
 
     }
 
-    fun newTableRow() : TableRow {
-        val tableRow: TableRow = TableRow(mDataViewActivity)
-        val lp = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
-
-        tableRow.layoutParams = lp
-        tableRow.gravity = Gravity.CENTER
-        tableRow.setPadding(3, 10, 3, 0)
-
-        return tableRow
-    }
-
-    fun addClassificationRow(label: String, classification: Classification?, isParent : Boolean = false) {
-        if (classification !is Classification) return
-
+    fun addClassificationRow(cdePoint: CDEPoint, label: String, isReal: Boolean = true, isParent : Boolean = false) {
+        // First column is always a classification label
         val tableRow: TableRow = newTableRow()
+
         if (isParent) {
-            addTextView(tableRow, CDEPoint.classificationPrintValues[label], 0.4,
+            addTextView(tableRow, CDEPoint.classificationPrintValues[label], 0.3,
                     R.style.TextViewDataTableParent, Gravity.START)
         } else {
-            addTextView(tableRow, CDEPoint.classificationPrintValues[label], 0.4,
+            addTextView(tableRow, CDEPoint.classificationPrintValues[label], 0.3,
                     R.style.TextViewDataTableParent, Gravity.START, 40)
         }
-        addTextView(tableRow, CDEPoint.ratingPrintValues[classification.value], 0.25)
-        addTextView(tableRow, classification.certainty, 0.25)
-        addTextView(tableRow, classification.year, 0.1)
 
-        mCDEDetailsTable.addView(tableRow);
+        if (isReal) {
+            val classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[label] ?:
+                    Classification("N/A", "N/A", "N/A")
+
+            addTextView(tableRow, CDEPoint.ratingPrintValues[classification.value], 0.3)
+            addTextView(tableRow, classification.certainty, 0.25)
+            addTextView(tableRow, classification.year, 0.15)
+
+            mRealClassificationTable.addView(tableRow)
+        } else {
+            var classification = cdePoint.getClassificationHashMap(CDEPoint.OBJECTIVE)[label] ?:
+                    Classification("N/A", "N/A", "N/A")
+            addTextView(tableRow, CDEPoint.ratingPrintValues[classification.value], 0.225)
+            addTextView(tableRow, classification.year, 0.125)
+
+            classification = cdePoint.getClassificationHashMap(CDEPoint.PREDICTED)[label] ?:
+                    Classification("N/A", "N/A", "N/A")
+            addTextView(tableRow, CDEPoint.ratingPrintValues[classification.value], 0.225)
+            addTextView(tableRow, classification.year, 0.125)
+
+            mObjectivesTable.addView(tableRow)
+        }
+
+
     }
 
     fun addTextView(tableRow: TableRow, value: String?, weight: Double = 1.0,
@@ -185,9 +206,15 @@ open class CDEDetailsFragment : Fragment() {
         tableRow.addView(textView)
     }
 
-    fun <T : View> Activity.bind(@IdRes res : Int) : T {
-        @Suppress("UNCHECKED_CAST")
-        return findViewById(res) as T
+    fun newTableRow() : TableRow {
+        val tableRow: TableRow = TableRow(mDataViewActivity)
+        val lp = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
+
+        tableRow.layoutParams = lp
+        tableRow.gravity = Gravity.CENTER
+        tableRow.setPadding(3, 10, 3, 0)
+
+        return tableRow
     }
 
     fun <T : View> View.bind(@IdRes res : Int) : T {

@@ -118,6 +118,7 @@ public class CDEPoint extends Point {
         ratingPrintValues.put(FOR_INFORMATION, "For Info");
         ratingPrintValues.put(FAILS_THRESHOLD, "Fails");
         ratingPrintValues.put(PASSES_THRESHOLD, "Passes");
+        ratingPrintValues.put("N/A", "N/A");
     }
 
     CDEPoint(String waterbodyId, String label, double latitude, double longitude, GeoJsonFeature geoJSONFeature) {

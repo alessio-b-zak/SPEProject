@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,9 @@ public class WIMSDataFragment extends Fragment {
 
             determinand.setText(measurement.getDeterminand());
             result.setText(String.valueOf(measurement.getResult()));
+            result.setGravity(Gravity.CENTER);
             date.setText(measurement.getYear());
+            date.setGravity(Gravity.CENTER);
 
             determinand.setPadding(3,0,0,0);
             determinand.setTextAppearance(getContext(), R.style.TextViewDataTableChild);

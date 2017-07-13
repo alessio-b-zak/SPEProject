@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -88,9 +89,12 @@ open class CDEDataFragment : Fragment() {
                 }
             }
 
-            year.text      = classification!!.year
-            value.text     = classification.value
+            year.text = classification!!.year
+            year.gravity = Gravity.CENTER
+            value.text = classification.value
+            value.gravity = Gravity.CENTER
             certainty.text = classification.certainty
+            certainty.gravity = Gravity.CENTER
         }
     }
 
