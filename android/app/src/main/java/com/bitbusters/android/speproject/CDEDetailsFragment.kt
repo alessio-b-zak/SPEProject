@@ -26,8 +26,6 @@ open class CDEDetailsFragment : Fragment() {
     private lateinit var mLinearLayout: LinearLayout
     private lateinit var mCDEDetailsFragment: CDEDetailsFragment
     private lateinit var mDataViewActivity: DataViewActivity
-    private var isObjectiveClassified: Boolean = false
-    private var isRNAGPopulated: Boolean = false
 
 
     companion object {
@@ -54,9 +52,9 @@ open class CDEDetailsFragment : Fragment() {
         mObjectivesTable.removeAllViewsInLayout()
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
-        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.PREDICTED)
-        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.OBJECTIVE)
-        CDERnagAPI(this).execute(cdePoint)
+//        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.PREDICTED)
+//        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.OBJECTIVE)
+//        CDERnagAPI(this).execute(cdePoint)
 
         val cdePointLabel : TextView = view.bind(R.id.cde_details_title)
         cdePointLabel.text = cdePoint.label
@@ -69,6 +67,8 @@ open class CDEDetailsFragment : Fragment() {
         mBackButton.setOnClickListener { activity.onBackPressed() }
 
         setRealClassificationText(cdePoint)
+        setObjectivePredictedClassificationText(cdePoint)
+        setRNAGText(cdePoint)
 
         return view
     }

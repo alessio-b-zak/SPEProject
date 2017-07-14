@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.support.annotation.IdRes
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
@@ -28,6 +29,7 @@ open class CDEDataFragment : Fragment() {
     private lateinit var mCDEDataFragment : CDEDataFragment
     private lateinit var mDataViewActivity: DataViewActivity
     private lateinit var mTableLayout: TableLayout
+    private lateinit var isDataLoaded: HashMap<String,Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +49,15 @@ open class CDEDataFragment : Fragment() {
         mTableLayout = view.bind(R.id.cde_table)
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
-        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.REAL)
-        
+
+        CDEPointRatingsAPI(this).execute(cdePoint, CDEPoint.REAL)
+        CDEPointRatingsAPI(this).execute(cdePoint, CDEPoint.PREDICTED)
+        CDEPointRatingsAPI(this).execute(cdePoint, CDEPoint.OBJECTIVE)
+
+        if(cdePoint.rnagList.isEmpty()) {
+            CDERnagAPI(this).execute(cdePoint)
+        }
+
         val cdePointLabel : TextView = view.bind(R.id.cde_label)
         val label = cdePoint.label
         cdePointLabel.text = label
@@ -60,8 +69,23 @@ open class CDEDataFragment : Fragment() {
 
         mMoreInfoButton = view.bind(R.id.info_button_cde_data_view)
         mMoreInfoButton.setOnClickListener { mDataViewActivity.openCDEDetailsFragment() }
+        mMoreInfoButton.visibility = View.INVISIBLE
+
+        isDataLoaded = HashMap()
+        isDataLoaded.put(CDEPoint.REAL, false)
+        isDataLoaded.put(CDEPoint.OBJECTIVE, false)
+        isDataLoaded.put(CDEPoint.PREDICTED, false)
+        isDataLoaded.put(CDEPoint.RNAG, false)
+
+        Log.i("CREATE", "I AM CREATED")
 
         return view
+    }
+
+    override fun onStart() {
+        Log.i("START", "I AM WORKING")
+        Log.i("START", isDataLoaded.entries.toString())
+        super.onStart()
     }
 
     fun setClassificationText(cdePoint: CDEPoint) {
@@ -95,6 +119,15 @@ open class CDEDataFragment : Fragment() {
             value.gravity = Gravity.CENTER
             certainty.text = classification.certainty
             certainty.gravity = Gravity.CENTER
+
+            isDataLoaded[CDEPoint.REAL] = true
+        }
+    }
+
+    fun classificationPopulated(classification: String) {
+        isDataLoaded[classification] = true
+        if (isDataLoaded.all { entry: Map.Entry<String, Boolean> ->  entry.value }) {
+            mMoreInfoButton.visibility = View.VISIBLE
         }
     }
 

@@ -10,7 +10,7 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
-open class CDERnagAPI(private val mCDEDetailsFragment: CDEDetailsFragment) :
+open class CDERnagAPI(private val mCDEDataFragment: CDEDataFragment) :
         AsyncTask<CDEPoint, Void, CDEPoint>() {
 
     lateinit var conn : HttpURLConnection
@@ -48,7 +48,7 @@ open class CDERnagAPI(private val mCDEDetailsFragment: CDEDetailsFragment) :
     }
 
     override fun onPostExecute(result: CDEPoint) {
-        mCDEDetailsFragment.setRNAGText(result)
+        mCDEDataFragment.classificationPopulated(CDEPoint.RNAG)
     }
 
     private fun openConnection(url: URL): HttpURLConnection {

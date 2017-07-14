@@ -764,17 +764,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                     .remove(fragment)
                     .commit();
-//            mFragmentManager.popBackStack();
             clearMarkers(CDE);
             openView(CDE);
             mProgressSpinner.setVisibility(View.INVISIBLE);
             mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
         } else if (fragment instanceof CDEDetailsFragment) {
-//            mFragmentManager.beginTransaction()
-//                    .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-//                    .remove(fragment)
-//                    .commit();
             mFragmentManager.popBackStack();
         } else if (fragment instanceof DischargePermitDataFragment) {
             mFragmentManager.popBackStack();

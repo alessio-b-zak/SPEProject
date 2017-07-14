@@ -11,18 +11,19 @@ import java.net.URL;
 
 import static com.bitbusters.android.speproject.CDEPoint.OBJECTIVE;
 import static com.bitbusters.android.speproject.CDEPoint.PREDICTED;
+import static com.bitbusters.android.speproject.CDEPoint.REAL;
 
-public class CDEPointRatingsAPI extends AsyncTask<Object, Void, CDEPoint> {
+public class CDEPointRatingsAPI extends AsyncTask<Object, Void, CDEAsyncReturn> {
 
     private static final String TAG = "CDE_GENERAL_RATINGS";
-    private OnTaskCompleted listener;
+    private CDEDataFragment mCDEDataFragment;
 
-    public CDEPointRatingsAPI(OnTaskCompleted listener) {
-        this.listener = listener;
+    public CDEPointRatingsAPI(CDEDataFragment cdeDataFragment) {
+        this.mCDEDataFragment = cdeDataFragment;
     }
 
     @Override
-    protected CDEPoint doInBackground(Object...params) {
+    protected CDEAsyncReturn doInBackground(Object...params) {
         CDEPoint cdePoint = (CDEPoint) params[0];
         String group = (String) params[1];
         String linkExtension = setLinkExtension(group);
@@ -71,12 +72,16 @@ public class CDEPointRatingsAPI extends AsyncTask<Object, Void, CDEPoint> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return cdePoint;
+        return new CDEAsyncReturn(cdePoint, group);
     }
 
     @Override
-    protected void onPostExecute(CDEPoint cdePoint) {
-        listener.onTaskCompletedCDEPointRatings(cdePoint);
+    protected void onPostExecute(CDEAsyncReturn result) {
+        if(result.getClassification().equals(REAL)) {
+            mCDEDataFragment.setClassificationText(result.getCdePoint());
+        } else {
+            mCDEDataFragment.classificationPopulated(result.getClassification());
+        }
     }
 
     private String setLinkExtension(String group) {

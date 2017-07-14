@@ -25,6 +25,9 @@ public class CDEPoint extends Point {
 
     private static final String TAG = "CDE_POINT";
 
+
+    public static final String RNAG = "RNAG";
+
     public static final String REAL = "Real";
     public static final String OBJECTIVE = "Objective";
     public static final String PREDICTED = "Predicted";
