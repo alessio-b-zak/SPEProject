@@ -1,19 +1,20 @@
 package com.bitbusters.android.speproject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by cp153 on 06/12/2016.
  */
 
-class WIMSPoint extends Point {
+public class WIMSPoint extends Point {
     private String id;
     private String type;
     private String label;
     private Integer easting;
     private Integer northing;
-    private List<Measurement> measurementList;
+    private HashMap<String, Measurement> measurementMap;
 
     WIMSPoint(String id, double latitude, double longitude, String type,
               String label, Integer easting, Integer northing) {
@@ -23,7 +24,7 @@ class WIMSPoint extends Point {
         this.label = label;
         this.easting = easting;
         this.northing = northing;
-        this.measurementList = new ArrayList<>();
+        this.measurementMap = new HashMap<>();
     }
 
     WIMSPoint(String id, double latitude, double longitude) {
@@ -33,7 +34,7 @@ class WIMSPoint extends Point {
         this.label = null;
         this.easting = null;
         this.northing = null;
-        this.measurementList = new ArrayList<>();
+        this.measurementMap = new HashMap<>();
     }
 
     public String getId() {
@@ -56,7 +57,7 @@ class WIMSPoint extends Point {
 
     public Integer getNorthing() { return northing; }
 
-    public List<Measurement> getMeasurementList() { return measurementList; }
+    public HashMap<String, Measurement> getMeasurementMap() { return measurementMap; }
 
     public String getLabel() { return label; }
 
@@ -81,8 +82,4 @@ class WIMSPoint extends Point {
     public void setEasting(Integer easting) { this.easting = easting; }
 
     public void setNorthing(Integer northing) { this.northing = northing; }
-
-    public boolean measurementsPopulated() {
-        return measurementList.size() == 3;
-    }
 }

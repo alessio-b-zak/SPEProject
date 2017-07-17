@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true" >
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:theme="?attr/actionBarTheme"
+        android:id="@+id/wims_details_toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:weightSum="1">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:id="@+id/back_button_wims_details_view"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@drawable/arrow_white"/>
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id = "@+id/cde_details_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundDefault"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/wims_details_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Measurements"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_measurements_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
