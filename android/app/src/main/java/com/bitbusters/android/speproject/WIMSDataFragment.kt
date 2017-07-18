@@ -51,7 +51,6 @@ open class WIMSDataFragment : Fragment() {
 
         val wimsPoint = mDataViewActivity.selectedWIMSPoint
         WIMSPointRatingsAPI(mWIMSDataFragment).execute(wimsPoint)
-        WIMSPointMetalsAPI(mWIMSDataFragment).execute(wimsPoint)
 
         mToolbar = view.bind(R.id.wims_data_toolbar)
 
@@ -59,10 +58,8 @@ open class WIMSDataFragment : Fragment() {
         mBackButton.setOnClickListener { activity.onBackPressed() }
 
         mMoreInfoButton = view.bind(R.id.info_button_wims_data_view)
-        // TODO: Change to openWIMSDetailsFragment
         mMoreInfoButton.setOnClickListener {
-            Log.i(TAG, "Number of measurements pulled: " + wimsPoint.measurementMap.size )
-            /*mDataViewActivity.openCDEDetailsFragment()*/
+            mDataViewActivity.openWIMSDetailsFragment()
         }
         mMoreInfoButton.visibility = View.INVISIBLE
 
@@ -74,41 +71,44 @@ open class WIMSDataFragment : Fragment() {
     }
 
     fun setMeasurementsText(wimsPoint: WIMSPoint) {
-        Log.i(TAG, "Number of measurements pulled: " + wimsPoint.measurementMap.size )
+        WIMSPointMetalsAPI(mWIMSDataFragment).execute(wimsPoint)
+//        Log.i(TAG, "Number of measurements pulled: " + wimsPoint.measurementMap.size )
         val wimsName : TextView = mWIMSDataView.bind(R.id.wims_name)
         wimsName.text = wimsPoint.label
 
         var tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow, "Determinand", 0.3, R.style.TextViewDataTableParent, Gravity.START)
-        addTextView(tableHeaderRow, "Unit", 0.2, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Sample Dates", 0.5, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Determinand", 0.28, R.style.TextViewDataTableParent, Gravity.START)
+        addTextView(tableHeaderRow, "Sample Dates", 0.72, R.style.TextViewDataTableParent)
 
         mMeasurementTable.addView(tableHeaderRow)
 
-        for(entry in wimsPoint.measurementMap) {
-            val measurementList = arrayListOf<Measurement>()
-            for(measure in entry.value) {
-                measurementList.add(measure)
-            }
-            if(measurementList.size > 1) {
-                tableHeaderRow = newTableRow()
+        for(entry in WIMSPoint.generalGroup) {
+            if(wimsPoint.measurementMap.containsKey(entry) && wimsPoint.measurementMap[entry]!!.isNotEmpty()) {
+                val measurementList = arrayListOf<Measurement>()
+                for (measure in wimsPoint.measurementMap[entry]!!) {
+                    measurementList.add(measure)
+                }
+                if (measurementList.size > 2) {
+                    tableHeaderRow = newTableRow()
 
-                addTextView(tableHeaderRow, "", 0.5, R.style.TextViewDataTableParent, Gravity.START)
-                addTextView(tableHeaderRow, measurementList[0].date, 0.25, R.style.TextViewDataTableParent)
-                addTextView(tableHeaderRow, measurementList[1].date, 0.25, R.style.TextViewDataTableParent)
+                    addTextView(tableHeaderRow, entry, 0.28, R.style.TextViewDataTableParentLight, Gravity.START)
+                    addTextView(tableHeaderRow, simplifyDate(measurementList[0].date), 0.24, R.style.TextViewDataTableParentLight, Gravity.END)
+                    addTextView(tableHeaderRow, simplifyDate(measurementList[1].date), 0.24, R.style.TextViewDataTableParentLight, Gravity.END)
+                    addTextView(tableHeaderRow, simplifyDate(measurementList[2].date), 0.24, R.style.TextViewDataTableParentLight, Gravity.END)
 
-                mMeasurementTable.addView(tableHeaderRow)
+                    mMeasurementTable.addView(tableHeaderRow)
 
+                    tableHeaderRow = newTableRow()
 
-                tableHeaderRow = newTableRow()
+                    val unit = measurementList[0].unit
+                    addTextView(tableHeaderRow, "($unit)", 0.28, R.style.TextViewDataTableChild, Gravity.START)
+                    addTextView(tableHeaderRow, measurementList[0].result.toString(), 0.24, R.style.TextViewDataTableChild, Gravity.END)
+                    addTextView(tableHeaderRow, measurementList[1].result.toString(), 0.24, R.style.TextViewDataTableChild, Gravity.END)
+                    addTextView(tableHeaderRow, measurementList[2].result.toString(), 0.24, R.style.TextViewDataTableChild, Gravity.END)
 
-                addTextView(tableHeaderRow, entry.key, 0.3, R.style.TextViewDataTableChild, Gravity.START)
-                addTextView(tableHeaderRow, measurementList[0].unit, 0.2, R.style.TextViewDataTableChild)
-                addTextView(tableHeaderRow, measurementList[0].result.toString(), 0.25, R.style.TextViewDataTableChild)
-                addTextView(tableHeaderRow, measurementList[1].result.toString(), 0.25, R.style.TextViewDataTableChild)
-
-                mMeasurementTable.addView(tableHeaderRow)
+                    mMeasurementTable.addView(tableHeaderRow)
+                }
             }
         }
     }
@@ -142,6 +142,14 @@ open class WIMSDataFragment : Fragment() {
     fun <T : View> View.bind(@IdRes res : Int) : T {
         @Suppress("UNCHECKED_CAST")
         return findViewById(res) as T
+    }
+
+    fun simplifyDate(date: String) : String {
+        val year = date.substring(2, 4)
+        val month = date.substring(5, 7)
+        val day = date.substring(8, 10)
+
+        return "$day/$month/$year"
     }
 
 }

@@ -96,6 +96,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private WIMSDataFragment mWIMSDataFragment;
     private CDEDataFragment mCDEDataFragment;
     private CDEDetailsFragment mCDEDetailsFragment;
+    private WIMSDetailsFragment mWIMSDetailsFragment;
     private DischargePermitDataFragment mDischargePermitDataFragment;
     private List<WIMSPoint> mWIMSPoints = new ArrayList<>();
     private List<CDEPoint> mCDEPoints = new ArrayList<>();
@@ -355,7 +356,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public void onCameraIdle() {
                 clearMarkers(view_params);
-                if( mMap.getCameraPosition().zoom > 10 ) {
+                if( mMap.getCameraPosition().zoom > 11 ) {
                     loadMarkers(view_params);
                 }
             }
@@ -523,9 +524,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void openCDEDetailsFragment() {
-//        mFragmentManager.popBackStack();
-//        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-
         Fragment fragment = new CDEDetailsFragment();
         mCDEDetailsFragment = (CDEDetailsFragment) fragment;
 
@@ -536,15 +534,17 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .commit();
     }
 
-//    public void closeCDEDetailsFragment() {
-//        mFragmentManager.beginTransaction()
-//                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-//                .remove(mCDEDetailsFragment)
-//                .commit();
-//        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-//
-//
-//    }
+    public void openWIMSDetailsFragment() {
+        Fragment fragment = new WIMSDetailsFragment();
+        mWIMSDetailsFragment = (WIMSDetailsFragment) fragment;
+
+        mFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
 
     // Manipulates the map once available when created.
     @Override
@@ -674,7 +674,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void updateMapCameraPosition() {
         if (mMap != null && mLocation != null) {
-            CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(11)
+            CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(12)
                     .target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
         }
@@ -770,6 +770,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mMap.setPadding(0, 0, 0, 0);
             displayHomeButtons(true);
         } else if (fragment instanceof CDEDetailsFragment) {
+            mFragmentManager.popBackStack();
+        } else if (fragment instanceof WIMSDetailsFragment) {
             mFragmentManager.popBackStack();
         } else if (fragment instanceof DischargePermitDataFragment) {
             mFragmentManager.popBackStack();

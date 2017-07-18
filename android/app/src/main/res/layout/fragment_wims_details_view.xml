@@ -43,18 +43,150 @@
                 android:id="@+id/wims_details_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="Measurements"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/wims_details_general_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_general_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <TableLayout
                 style="@style/TextViewDataTableParent"
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/wims_measurements_table"
+                android:id="@+id/wims_details_general_table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_diss_oxygen_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_diss_oxygen_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_diss_oxygen_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_oxygen_demand_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_oxygen_demand_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_oxygen_demand_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_nitrates_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_nitrates_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_nitrates_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_phosphates_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_phosphates_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_phosphates_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_metals_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_metals_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_metals_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_solids_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_solids_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_solids_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:gravity="top">
             </TableLayout>
 

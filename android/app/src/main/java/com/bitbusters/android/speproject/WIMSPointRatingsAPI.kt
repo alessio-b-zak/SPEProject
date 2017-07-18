@@ -59,7 +59,7 @@ open class WIMSPointRatingsAPI(private val mWIMSDataFragment: WIMSDataFragment) 
         inputStreamToWIMSMeasurements.readJsonStream(wimsPoint, inputStream)
 
         conn.disconnect()
-//
+
 //        Log.i(TAG, wimsPoint.measurementMap.toString())
 
         return wimsPoint
