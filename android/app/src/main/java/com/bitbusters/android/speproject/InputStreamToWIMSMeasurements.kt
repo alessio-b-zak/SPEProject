@@ -1,6 +1,8 @@
 package com.bitbusters.android.speproject
 
+import android.icu.util.Measure
 import android.util.JsonReader
+import android.util.Log
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -112,8 +114,19 @@ class InputStreamToWIMSMeasurements {
             e.printStackTrace()
         }
 
-        if(!wimsPoint.measurementMap.containsKey(determinand)) {
-            wimsPoint.measurementMap.put(determinand, Measurement(unit, result, date))
+        if(wimsPoint.measurementMap.containsKey(determinand)) {
+            var measurementList = wimsPoint.measurementMap[determinand]
+            if(measurementList != null) {
+                measurementList.add(Measurement(unit, result, date))
+                wimsPoint.label = label
+            } else {
+                measurementList = arrayListOf<Measurement>(Measurement(unit, result, date))
+                wimsPoint.measurementMap.put(determinand, measurementList)
+                wimsPoint.label = label
+            }
+        } else {
+            var measurementList = arrayListOf<Measurement>(Measurement(unit, result, date))
+            wimsPoint.measurementMap.put(determinand, measurementList)
             wimsPoint.label = label
         }
     }

@@ -30,6 +30,8 @@ open class WIMSDataFragment : Fragment() {
     private lateinit var mDataViewActivity: DataViewActivity
     private lateinit var mMeasurementTable: TableLayout
 
+    private val TAG = "WIMS_DATA_FRAGMENT"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
@@ -49,6 +51,7 @@ open class WIMSDataFragment : Fragment() {
 
         val wimsPoint = mDataViewActivity.selectedWIMSPoint
         WIMSPointRatingsAPI(mWIMSDataFragment).execute(wimsPoint)
+        WIMSPointMetalsAPI(mWIMSDataFragment).execute(wimsPoint)
 
         mToolbar = view.bind(R.id.wims_data_toolbar)
 
@@ -57,35 +60,56 @@ open class WIMSDataFragment : Fragment() {
 
         mMoreInfoButton = view.bind(R.id.info_button_wims_data_view)
         // TODO: Change to openWIMSDetailsFragment
-        mMoreInfoButton.setOnClickListener { mDataViewActivity.openCDEDetailsFragment() }
+        mMoreInfoButton.setOnClickListener {
+            Log.i(TAG, "Number of measurements pulled: " + wimsPoint.measurementMap.size )
+            /*mDataViewActivity.openCDEDetailsFragment()*/
+        }
         mMoreInfoButton.visibility = View.INVISIBLE
 
         return view
     }
 
+    fun showMoreInfoButton() {
+        mMoreInfoButton.visibility = View.VISIBLE
+    }
+
     fun setMeasurementsText(wimsPoint: WIMSPoint) {
+        Log.i(TAG, "Number of measurements pulled: " + wimsPoint.measurementMap.size )
         val wimsName : TextView = mWIMSDataView.bind(R.id.wims_name)
         wimsName.text = wimsPoint.label
 
         var tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow, "Determinand", 0.4, R.style.TextViewDataTableParent, Gravity.START)
-        addTextView(tableHeaderRow, "Unit", 0.15, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Result", 0.15, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Date", 0.3, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Determinand", 0.3, R.style.TextViewDataTableParent, Gravity.START)
+        addTextView(tableHeaderRow, "Unit", 0.2, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Sample Dates", 0.5, R.style.TextViewDataTableParent)
 
         mMeasurementTable.addView(tableHeaderRow)
 
-        for(measurement in wimsPoint.measurementMap) {
+        for(entry in wimsPoint.measurementMap) {
+            val measurementList = arrayListOf<Measurement>()
+            for(measure in entry.value) {
+                measurementList.add(measure)
+            }
+            if(measurementList.size > 1) {
+                tableHeaderRow = newTableRow()
 
-            tableHeaderRow = newTableRow()
+                addTextView(tableHeaderRow, "", 0.5, R.style.TextViewDataTableParent, Gravity.START)
+                addTextView(tableHeaderRow, measurementList[0].date, 0.25, R.style.TextViewDataTableParent)
+                addTextView(tableHeaderRow, measurementList[1].date, 0.25, R.style.TextViewDataTableParent)
 
-            addTextView(tableHeaderRow, measurement.key, 0.4, R.style.TextViewDataTableChild, Gravity.START)
-            addTextView(tableHeaderRow, measurement.value.unit, 0.15, R.style.TextViewDataTableChild)
-            addTextView(tableHeaderRow, measurement.value.result.toString(), 0.15, R.style.TextViewDataTableChild)
-            addTextView(tableHeaderRow, measurement.value.date, 0.3, R.style.TextViewDataTableChild)
+                mMeasurementTable.addView(tableHeaderRow)
 
-            mMeasurementTable.addView(tableHeaderRow)
+
+                tableHeaderRow = newTableRow()
+
+                addTextView(tableHeaderRow, entry.key, 0.3, R.style.TextViewDataTableChild, Gravity.START)
+                addTextView(tableHeaderRow, measurementList[0].unit, 0.2, R.style.TextViewDataTableChild)
+                addTextView(tableHeaderRow, measurementList[0].result.toString(), 0.25, R.style.TextViewDataTableChild)
+                addTextView(tableHeaderRow, measurementList[1].result.toString(), 0.25, R.style.TextViewDataTableChild)
+
+                mMeasurementTable.addView(tableHeaderRow)
+            }
         }
     }
 

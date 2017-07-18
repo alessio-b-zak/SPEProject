@@ -8,13 +8,13 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
-open class WIMSPointRatingsAPI(private val mWIMSDataFragment: WIMSDataFragment) :
+open class WIMSPointMetalsAPI(private val mWIMSDataFragment: WIMSDataFragment) :
         AsyncTask<WIMSPoint, Void, WIMSPoint>() {
 
     lateinit var conn : HttpURLConnection
 
     companion object {
-        private val TAG = "WIMS_RATINGS_API"
+        private val TAG = "WIMS_METALS_API"
     }
 
     override fun doInBackground(vararg params: WIMSPoint): WIMSPoint {
@@ -27,29 +27,14 @@ open class WIMSPointRatingsAPI(private val mWIMSDataFragment: WIMSDataFragment) 
                 .appendPath("data")
                 .appendPath("measurement.json")
                 .appendQueryParameter("samplingPoint", wimsPoint.id)
-                .appendQueryParameter("determinand", "0076")
-                .appendQueryParameter("determinand", "0077")
-                .appendQueryParameter("determinand", "0061")
-                .appendQueryParameter("determinand", "0092")
-                .appendQueryParameter("determinand", "0085")
-                .appendQueryParameter("determinand", "0117")
-                .appendQueryParameter("determinand", "9853")
-                .appendQueryParameter("determinand", "0192")
-                .appendQueryParameter("determinand", "0180")
-                .appendQueryParameter("determinand", "9856")
-                .appendQueryParameter("determinand", "0135")
-                .appendQueryParameter("determinand", "0134")
-                .appendQueryParameter("determinand", "1012")
-                .appendQueryParameter("determinand", "0143")
-                .appendQueryParameter("determinand", "9924")
-                .appendQueryParameter("determinand", "9901")
+                .appendQueryParameter("determinandGroup", "metals")
                 .appendQueryParameter("_limit", "5000")
                 .appendQueryParameter("_sort", "-sample")
         val myUrl = builder.build().toString()
-        var url = URL(myUrl)
+        val url = URL(myUrl)
 
         conn = openConnection(url)
-        var response = conn.responseCode
+        val response = conn.responseCode
 
         Log.i(TAG, "Url is: " + url)
         Log.i(TAG, "The response is: " + response)
@@ -66,7 +51,7 @@ open class WIMSPointRatingsAPI(private val mWIMSDataFragment: WIMSDataFragment) 
     }
 
     override fun onPostExecute(result: WIMSPoint) {
-        mWIMSDataFragment.setMeasurementsText(result)
+        mWIMSDataFragment.showMoreInfoButton()
     }
 
     private fun openConnection(url: URL): HttpURLConnection {

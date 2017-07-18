@@ -1,5 +1,7 @@
 package com.bitbusters.android.speproject;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,7 @@ public class WIMSPoint extends Point {
     private String label;
     private Integer easting;
     private Integer northing;
-    private HashMap<String, Measurement> measurementMap;
+    private HashMap<String, ArrayList<Measurement>> measurementMap;
 
     WIMSPoint(String id, double latitude, double longitude, String type,
               String label, Integer easting, Integer northing) {
@@ -34,7 +36,7 @@ public class WIMSPoint extends Point {
         this.label = null;
         this.easting = null;
         this.northing = null;
-        this.measurementMap = new HashMap<>();
+        this.measurementMap = new HashMap<String, ArrayList<Measurement>>();
     }
 
     public String getId() {
@@ -57,7 +59,7 @@ public class WIMSPoint extends Point {
 
     public Integer getNorthing() { return northing; }
 
-    public HashMap<String, Measurement> getMeasurementMap() { return measurementMap; }
+    public HashMap<String, ArrayList<Measurement>> getMeasurementMap() { return measurementMap; }
 
     public String getLabel() { return label; }
 
