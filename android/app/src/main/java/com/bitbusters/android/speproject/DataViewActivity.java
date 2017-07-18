@@ -312,9 +312,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     private void getDischargePermitData(Double easting, Double northing, int distance) {
         List<String> effluentTypes = new ArrayList<>();
-//        effluentTypes.add("waste-site");
+        effluentTypes.add("waste-site");
         effluentTypes.add("agriculture");
-//        effluentTypes.add("sewage-not-water-company");
+        effluentTypes.add("sewage-not-water-company");
         for (String effluentType : effluentTypes) {
             String[] parameters = {String.valueOf(easting.intValue()),
                                    String.valueOf(northing.intValue()),

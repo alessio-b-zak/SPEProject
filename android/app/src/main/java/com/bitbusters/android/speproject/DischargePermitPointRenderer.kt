@@ -13,7 +13,7 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer
 class DischargePermitPointRenderer(context: Context, val mMap: GoogleMap, clusterManager: ClusterManager<DischargePermitPoint>) :
         DefaultClusterRenderer<DischargePermitPoint>(context, mMap, clusterManager) {
 
-    override fun onBeforeClusterItemRendered(permitPoint: DischargePermitPoint?, markerOptions: MarkerOptions?) {
-        markerOptions!!.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+    override fun onBeforeClusterItemRendered(permitPoint: DischargePermitPoint, markerOptions: MarkerOptions) {
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
     }
 }
