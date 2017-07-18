@@ -133,26 +133,33 @@ open class CDEDetailsFragment : Fragment() {
     }
 
     fun setRNAGText(cdePoint: CDEPoint) {
-        // Adds header row
-        val tableHeaderRow = newTableRow()
+        val rnagTitle: TextView = mCDEDetailsView.bind(R.id.cde_rnag_title)
+        if(cdePoint.rnagList.isNotEmpty()) {
+//            Log.i(TAG,"I have RNAG")
+            // Adds header row
+            val tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow, "Element", 0.25, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Rating", 0.25, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Activity", 0.39, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Year", 0.11, R.style.TextViewDataTableParent)
+            addTextView(tableHeaderRow, "Element", 0.25, R.style.TextViewDataTableParent)
+            addTextView(tableHeaderRow, "Rating", 0.25, R.style.TextViewDataTableParent)
+            addTextView(tableHeaderRow, "Activity", 0.39, R.style.TextViewDataTableParent)
+            addTextView(tableHeaderRow, "Year", 0.11, R.style.TextViewDataTableParent)
 
-        mRNAGTable.addView(tableHeaderRow)
+            mRNAGTable.addView(tableHeaderRow)
 
-        for (rnag in cdePoint.rnagList) {
+            for (rnag in cdePoint.rnagList) {
 
-            val tableRow = newTableRow()
+                val tableRow = newTableRow()
 
-            addTextView(tableRow, rnag.element, 0.25)
-            addTextView(tableRow, rnag.rating, 0.25)
-            addTextView(tableRow, rnag.activity, 0.39)
-            addTextView(tableRow, rnag.year.toString(), 0.11)
+                addTextView(tableRow, rnag.element, 0.25)
+                addTextView(tableRow, rnag.rating, 0.25)
+                addTextView(tableRow, rnag.activity, 0.39)
+                addTextView(tableRow, rnag.year.toString(), 0.11)
 
-            mRNAGTable.addView(tableRow)
+                mRNAGTable.addView(tableRow)
+            }
+        } else {
+            rnagTitle.visibility = View.GONE
+            mRNAGTable.visibility = View.GONE
         }
     }
 
