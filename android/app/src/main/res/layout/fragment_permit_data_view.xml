@@ -4,12 +4,31 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent" >
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:theme="?attr/actionBarTheme"
+        android:id="@+id/permit_toolbar"
+        android:minHeight="?attr/actionBarSize">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:id="@+id/back_button_permit_data_view"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@drawable/arrow_white" />
+
+    </android.support.v7.widget.Toolbar>
+
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:clickable="true"
-    android:background="@color/backgroundTransparent">
+    android:background="@color/backgroundDefault">
 
         <TextView
         android:text=""
@@ -27,6 +46,7 @@
             android:id="@+id/permit_table"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
             android:stretchColumns="1,2">
             <TableRow
                 android:id="@+id/permit_table_type_row"
@@ -34,6 +54,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     style="@style/TextViewDataTableParent"
+                    android:gravity="end"
                     android:text="@string/permit_table_type"/>
                 <TextView
                     style="@style/TextViewDataTableChild"
@@ -51,6 +72,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     style="@style/TextViewDataTableParent"
+                    android:gravity="end"
                     android:text="@string/permit_table_date"/>
                 <TextView
                     style="@style/TextViewDataTableChild"
@@ -60,35 +82,6 @@
             </TableRow>
         </TableLayout>
     </LinearLayout>
-
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#CC000000"
-        android:theme="?attr/actionBarTheme"
-        android:id="@+id/permit_toolbar"
-        android:minHeight="?attr/actionBarSize">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:orientation="horizontal"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" >
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:id="@+id/back_button_permit_data_view"
-                android:clickable="true"
-                android:scaleType="center"
-                android:padding="16dp"
-                android:src="@drawable/arrow_white" />
-
-        </LinearLayout>
-
-    </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/permit_grid_view"
