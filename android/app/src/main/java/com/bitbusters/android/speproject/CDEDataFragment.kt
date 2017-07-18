@@ -77,15 +77,7 @@ open class CDEDataFragment : Fragment() {
         isDataLoaded.put(CDEPoint.PREDICTED, false)
         isDataLoaded.put(CDEPoint.RNAG, false)
 
-        Log.i("CREATE", "I AM CREATED")
-
         return view
-    }
-
-    override fun onStart() {
-        Log.i("START", "I AM WORKING")
-        Log.i("START", isDataLoaded.entries.toString())
-        super.onStart()
     }
 
     fun setClassificationText(cdePoint: CDEPoint) {

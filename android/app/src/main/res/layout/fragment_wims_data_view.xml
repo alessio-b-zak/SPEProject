@@ -4,12 +4,46 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent" >
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:theme="?attr/actionBarTheme"
+        android:id="@+id/wims_data_toolbar"
+        android:minHeight="?attr/actionBarSize">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:id="@+id/back_button_wims_data_view"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@drawable/arrow_white" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:id="@+id/info_button_wims_data_view"
+            android:clickable="true"
+            android:scaleType="center"
+            android:layout_gravity="end"
+            android:padding="16dp"
+            android:text="@string/cde_info_button"
+            android:textAllCaps="false"
+            android:textAlignment="textEnd"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/info_white" />
+
+    </android.support.v7.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:clickable="true"
-        android:background="#cc4fc3f7">
+        android:background="#4fc3f7">
 
         <TextView
             android:text=""
@@ -40,57 +74,14 @@
             android:id="@+id/wims_table"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:stretchColumns="0,1,2">
-            <TableRow>
-                <TextView
-                    style="@style/TextViewDataTableParent"
-                    android:text="@string/wims_table_determinand"
-                    android:gravity="start"/>
-                <TextView
-                    style="@style/TextViewDataTableParent"
-                    android:text="@string/wims_table_result"
-                    android:gravity="start"/>
-                <TextView
-                    style="@style/TextViewDataTableParent"
-                    android:text="@string/wims_table_date"
-                    android:gravity="start"/>
-            </TableRow>
+            android:layout_marginBottom="8dp">
 
         </TableLayout>
 
     </LinearLayout>
 
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#CC000000"
-        android:theme="?attr/actionBarTheme"
-        android:id="@+id/dataview_toolbar"
-        android:minHeight="?attr/actionBarSize">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:orientation="horizontal"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" >
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:id="@+id/back_button_sp_data_view"
-                android:clickable="true"
-                android:scaleType="center"
-                android:padding="16dp"
-                android:src="@drawable/arrow_white" />
-
-        </LinearLayout>
-
-    </android.support.v7.widget.Toolbar>
-
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/grid_view"
+        android:id="@+id/wims_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#AA000000"

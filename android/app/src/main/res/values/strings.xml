@@ -45,6 +45,15 @@
     <string name="wims_table_date">Date</string>
     <string name="wims_table_type">Type</string>
 
+    <string name="wims_details_general_title">General</string>
+    <string name="wims_details_diss_oxygen_title">Dissolved Oxygen</string>
+    <string name="wims_details_oxygen_demand_title">Oxygen Demand</string>
+    <string name="wims_details_nutrients_title">Nutrients</string>
+    <string name="wims_details_nitrates_title">Nitrates</string>
+    <string name="wims_details_phosphates_title">Phosphates</string>
+    <string name="wims_details_metals_title">Metals</string>
+    <string name="wims_details_solids_title">Solids</string>
+
     <string name="permit_table_type">Permit Type: </string>
     <string name="permit_table_date">Effective Since: </string>
 

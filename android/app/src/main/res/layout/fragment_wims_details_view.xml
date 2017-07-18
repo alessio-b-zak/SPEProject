@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true" >
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:theme="?attr/actionBarTheme"
+        android:id="@+id/wims_details_toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:weightSum="1">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:id="@+id/back_button_wims_details_view"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@drawable/arrow_white"/>
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id = "@+id/cde_details_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundDefault"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/wims_details_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/wims_details_general_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_general_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_general_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_diss_oxygen_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_diss_oxygen_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_diss_oxygen_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_oxygen_demand_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_oxygen_demand_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_oxygen_demand_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_nitrates_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_nitrates_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_nitrates_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_phosphates_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_phosphates_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_phosphates_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_metals_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_metals_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_metals_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/wims_details_solids_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/wims_details_solids_title"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TableLayout
+                style="@style/TextViewDataTableParent"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/wims_details_solids_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="top">
+            </TableLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

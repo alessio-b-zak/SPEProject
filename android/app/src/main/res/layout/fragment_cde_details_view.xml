@@ -66,6 +66,7 @@
                 android:id="@+id/cde_details_table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:gravity="top">
             </TableLayout>
 
@@ -86,6 +87,7 @@
                 android:id="@+id/cde_objectives_table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:gravity="top">
             </TableLayout>
 
@@ -106,6 +108,7 @@
                 android:id="@+id/cde_rnag_table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:gravity="top">
             </TableLayout>
 
