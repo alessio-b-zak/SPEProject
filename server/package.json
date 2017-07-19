@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "lint": "eslint ."
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -24,5 +25,10 @@
     "serve-favicon": "~2.3.0",
     "sharp": "^0.17.2",
     "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.7.0"
   }
 }
