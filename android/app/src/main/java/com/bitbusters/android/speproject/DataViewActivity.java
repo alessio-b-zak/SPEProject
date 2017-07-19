@@ -278,49 +278,23 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     new CDEPointAPI(DataViewActivity.this).execute(polygon);
                     break;
                 case WIMS:
-                    double distanceM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
-                    int distanceKM = (int) (distanceM / 1.5) / 1000;
                     String[] params = {String.valueOf(screen.farLeft.latitude),
                                        String.valueOf(screen.farLeft.longitude),
                                        String.valueOf(screen.nearRight.latitude),
                                        String.valueOf(screen.nearRight.longitude),
                                        String.valueOf(2017)};
                     new WIMSPointAPI(DataViewActivity.this).execute(params);
-//                    String[] pt = new String[5];
-//                    pt[0] = String.valueOf(screen.farLeft.latitude);
-//                    pt[1] = String.valueOf(screen.farLeft.longitude);
-//                    pt[2] = String.valueOf(screen.nearRight.latitude);
-//                    pt[3] = String.valueOf(screen.nearRight.longitude);
-//                    pt[4] = "2016";
-//                    Log.i(TAG, "Total Rows: " + mDbHelper.numberOfRows());
-//                    Log.i(TAG, "Total Nulls: " + mDbHelper.numberOfNulls());
-//                    new WIMSPointAPIDatabase(this, mDbHelper).execute(pt);
                     break;
                 case PERMIT:
-                    mDischargePermitPoints = new ArrayList<>();
-                    double distM = SphericalUtil.computeDistanceBetween(screen.farLeft,screen.nearRight);
-                    int distKM = (int) (distM / 1.5) / 1000;
-                    Pair<Double,Double> eastNorth =
-                            coordinateSystemConverter.convertLatLngToEastNorth(camCentre.latitude, camCentre.longitude);
-                    getDischargePermitData(eastNorth.first, eastNorth.second, distKM);
+                    String[] input = {String.valueOf(screen.farLeft.latitude),
+                                      String.valueOf(screen.farLeft.longitude),
+                                      String.valueOf(screen.nearRight.latitude),
+                                      String.valueOf(screen.nearRight.longitude)};
+                    new DischargePermitPointAPI(this).execute(input);
                     break;
             }
         } else {
             Toast.makeText(getApplicationContext(), "Data retrieval needs internet connection", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void getDischargePermitData(Double easting, Double northing, int distance) {
-        List<String> effluentTypes = new ArrayList<>();
-        effluentTypes.add("waste-site");
-        effluentTypes.add("agriculture");
-        effluentTypes.add("sewage-not-water-company");
-        for (String effluentType : effluentTypes) {
-            String[] parameters = {String.valueOf(easting.intValue()),
-                                   String.valueOf(northing.intValue()),
-                                   String.valueOf(distance),
-                                   effluentType};
-            new DischargePermitPointAPI(this).execute(parameters);
         }
     }
 

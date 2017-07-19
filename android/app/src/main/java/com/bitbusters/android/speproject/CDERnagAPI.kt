@@ -30,10 +30,10 @@ open class CDERnagAPI(private val mCDEDataFragment: CDEDataFragment) :
                 .appendPath("reason-for-failure.json")
                 .appendQueryParameter("waterBody", cdePoint.waterbodyId)
         val myUrl = builder.build().toString()
-        var url = URL(myUrl)
+        val url = URL(myUrl)
 
         conn = openConnection(url)
-        var response = conn.responseCode
+        val response = conn.responseCode
 
         Log.i(TAG, "Url is: " + url)
         Log.i(TAG, "The response is: " + response)

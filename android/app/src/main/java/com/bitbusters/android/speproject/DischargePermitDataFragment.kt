@@ -39,7 +39,7 @@ open class DischargePermitDataFragment : android.support.v4.app.Fragment() {
         val permitPoint = mDataViewActivity.selectedPermitPoint
 
         val permitHolderNameView = view.findViewById(R.id.permit_holder_name) as TextView
-        permitHolderNameView.text = permitPoint.holderName
+        permitHolderNameView.text = permitPoint.holder
 
         mToolbar = view.findViewById(R.id.permit_toolbar) as Toolbar
 

@@ -16,43 +16,23 @@ open class DischargePermitPointAPI(private val listener: OnTaskCompleted) :
     val mDataViewActivity = listener as DataViewActivity
     lateinit var conn : HttpURLConnection
 
-    companion object {
-        private val TAG = "WATER_DISCHARGE_API"
-        private val EFFLUENT_TYPE_URI = "http://environment.data.gov.uk/public-register/water-discharges/def/effluent-type/"
-    }
+    private val TAG = "WATER_DISCHARGE_API"
 
     override fun doInBackground(vararg params: String): List<DischargePermitPoint> {
-        val easting = params[0]
-        val northing = params[1]
-        val distance = params[2]
-        val effluentType = EFFLUENT_TYPE_URI + params[3]
-
         val builder = Uri.Builder()
         builder.scheme("http")
-                .authority("environment.data.gov.uk")
-                .appendPath("public-register")
-                .appendPath("water-discharges")
-                .appendPath("registration.json")
-                .appendQueryParameter("easting", easting)
-                .appendQueryParameter("northing", northing)
-                .appendQueryParameter("dist", distance)
-                .appendQueryParameter("effluentType", effluentType)
-                .appendQueryParameter("_limit", "500")
+                .encodedAuthority("139.59.184.70:8080")
+                //.encodedAuthority("172.23.215.243:3000")
+                .appendPath("getPermits")
+                .appendPath(params[0])
+                .appendPath(params[1])
+                .appendPath(params[2])
+                .appendPath(params[3])
         val myUrl = builder.build().toString()
-        var url = URL(myUrl)
+        val url = URL(myUrl)
 
         conn = openConnection(url)
-        var response = conn.responseCode
-
-        while (response in 300..399) {
-            val redirectUrl = conn.getHeaderField("Location")
-            Log.i(TAG, "Redirect URL: " + redirectUrl)
-            url = URL(redirectUrl)
-            conn.disconnect()
-            conn.inputStream.close()
-            conn = openConnection(url)
-            response = conn.responseCode
-        }
+        val response = conn.responseCode
 
         Log.i(TAG, "Url is: " + url)
         Log.i(TAG, "The response is: " + response)
