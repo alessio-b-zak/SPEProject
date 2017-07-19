@@ -226,7 +226,59 @@ router.get('/getWIMSPoints/:lat1/:lon1/:lat3/:lon3/:lastActive', function(req, r
     });
 });
 
+//:lat1/:lon1/:lat3/:lon3
+router.get('/getPermits/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 
+    // Cast all parametters into integers
+    var lat1 = parseFloat(req.params.lat1);
+    var lon1 = parseFloat(req.params.lon1);
+    var lat3 = parseFloat(req.params.lat3);
+    var lon3 = parseFloat(req.params.lon3);
+    var lat2 = lat1;
+    var lon2 = lon3;
+    var lat4 = lat3;
+    var lon4 = lon1;
+    var onlyActive = req.params.onlyActive;
+
+    // Get the documents collection
+    var eprTable = db.collection("eprmodels");
+
+    // Find all wimsPoints within the area which are last active on a given year
+    eprTable.find({
+        loc: {
+            $geoWithin: {
+                $polygon: [ [ lat1, lon1 ],
+                            [ lat2, lon2 ],
+                            [ lat3, lon3 ],
+                            [ lat4, lon4 ],
+                            [ lat1, lon1 ] ]
+            }
+        }
+    }).toArray(function (err, result) {
+        if (err) {
+            console.log(err);
+            res.send([]);
+        } else {
+            console.log('Found:', result);
+            var points = [];
+            for (var i = 0; i < result.length; i++) {
+                points[i] = {};
+                points[i].id        = result[i].permitId;
+                points[i].latitude  = result[i].loc[0];
+                points[i].longitude = result[i].loc[1];
+                points[i].effluentType = result[i].effluentType;
+                points[i].effectiveDate = result[i].effectiveDate;
+                points[i].siteType = result[i].siteType;
+                points[i].holder = result[i].holder;
+                if(result[i].revocationDate != null) {
+                    points[i].revocationDate = result[i].revocationDate;
+                }
+            }
+        res.status(200).send(points);
+        res.end();
+        }
+    });
+});
 
 router.post('/uploadImage', function(req, res) {
     var images = db.collection("images");
