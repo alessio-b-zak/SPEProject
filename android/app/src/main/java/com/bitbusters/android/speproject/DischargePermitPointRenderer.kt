@@ -14,6 +14,6 @@ class DischargePermitPointRenderer(context: Context, val mMap: GoogleMap, cluste
         DefaultClusterRenderer<DischargePermitPoint>(context, mMap, clusterManager) {
 
     override fun onBeforeClusterItemRendered(permitPoint: DischargePermitPoint, markerOptions: MarkerOptions) {
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_permit_marker))
     }
 }

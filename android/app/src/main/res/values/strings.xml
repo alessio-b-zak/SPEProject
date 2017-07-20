@@ -54,8 +54,9 @@
     <string name="wims_details_metals_title">Metals</string>
     <string name="wims_details_solids_title">Solids</string>
 
-    <string name="permit_table_type">Permit Type: </string>
-    <string name="permit_table_date">Effective Since: </string>
+    <string name="permit_table_effluent_type">Permit Type: </string>
+    <string name="permit_table_site_type">Site Type: </string>
+    <string name="permit_table_effective_date">Effective Since: </string>
 
     <string name="info_title"><b>myRivers™ v1.1</b></string>
     <string name="info_description">myRivers allows anyone to submit and browse photos of

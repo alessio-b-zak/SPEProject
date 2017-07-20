@@ -17,7 +17,7 @@ import org.w3c.dom.Text
  * Created by mihajlo on 07/07/17.
  */
 
-open class WIMSDetailsFragment : Fragment() {
+open class WIMSDetailsFragment : FragmentHelper() {
     private lateinit var mDataViewActivity: DataViewActivity
     private lateinit var mWIMSDetailsFragment: WIMSDetailsFragment
     private lateinit var mWIMSDetailsView: View
@@ -145,44 +145,4 @@ open class WIMSDetailsFragment : Fragment() {
             }
         }
     }
-
-    fun addTextView(tableRow: TableRow, value: String?, weight: Double = 1.0,
-                    style: Int = R.style.TextViewDataTableChild, gravity: Int = Gravity.CENTER,
-                    leftPadding: Int = 0) {
-        val textView : TextView = TextView(mDataViewActivity)
-        val params = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, weight.toFloat())
-
-        textView.layoutParams = params
-        textView.text = value
-        textView.setTextAppearance(context, style)
-        textView.gravity = gravity
-        textView.setPadding(leftPadding, 0, 0, 0)
-
-        tableRow.addView(textView)
-    }
-
-    fun newTableRow() : TableRow {
-        val tableRow: TableRow = TableRow(mDataViewActivity)
-        val lp = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
-
-        tableRow.layoutParams = lp
-        tableRow.gravity = Gravity.CENTER
-        tableRow.setPadding(3, 10, 3, 0)
-
-        return tableRow
-    }
-
-    fun <T : View> View.bind(@IdRes res : Int) : T {
-        @Suppress("UNCHECKED_CAST")
-        return findViewById(res) as T
-    }
-
-    fun simplifyDate(date: String) : String {
-        val year = date.substring(2, 4)
-        val month = date.substring(5, 7)
-        val day = date.substring(8, 10)
-
-        return "$day/$month/$year"
-    }
-
 }

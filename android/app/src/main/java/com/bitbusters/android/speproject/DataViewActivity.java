@@ -199,7 +199,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.marker_white);
+                .withIcon(R.drawable.ic_permit_marker);
 
         final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
                 .withIdentifier(4)
@@ -341,15 +341,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         switch (view) {
             case CDE:
                 mLayerName.setText(R.string.layer_cde);
-                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cde));
+                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.layer_cde));
                 break;
             case WIMS:
                 mLayerName.setText(R.string.layer_wims);
-                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.wims));
+                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.layer_wims));
                 break;
             case PERMIT:
                 mLayerName.setText(R.string.layer_permit);
-                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.permit));
+                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.layer_permit));
                 break;
         }
     }
@@ -502,7 +502,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mCDEDetailsFragment = (CDEDetailsFragment) fragment;
 
         mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
@@ -513,7 +513,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mWIMSDetailsFragment = (WIMSDetailsFragment) fragment;
 
         mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();

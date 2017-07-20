@@ -1,8 +1,6 @@
 package com.bitbusters.android.speproject
 
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Gravity
@@ -16,7 +14,7 @@ import android.widget.*
  * Created by mihajlo on 07/07/17.
  */
 
-open class CDEDetailsFragment : Fragment() {
+open class CDEDetailsFragment : FragmentHelper() {
     private lateinit var mToolbar: Toolbar  // The toolbar.
     private lateinit var mBackButton: ImageButton
     private lateinit var mCDEDetailsView: View
@@ -52,9 +50,6 @@ open class CDEDetailsFragment : Fragment() {
         mObjectivesTable.removeAllViewsInLayout()
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
-//        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.PREDICTED)
-//        CDEPointRatingsAPI(mDataViewActivity).execute(cdePoint, CDEPoint.OBJECTIVE)
-//        CDERnagAPI(this).execute(cdePoint)
 
         val cdePointLabel : TextView = view.bind(R.id.cde_details_title)
         cdePointLabel.text = cdePoint.label
@@ -197,38 +192,5 @@ open class CDEDetailsFragment : Fragment() {
 
             mObjectivesTable.addView(tableRow)
         }
-
-
-    }
-
-    fun addTextView(tableRow: TableRow, value: String?, weight: Double = 1.0,
-                    style: Int = R.style.TextViewDataTableChild, gravity: Int = Gravity.CENTER,
-                    leftPadding: Int = 0) {
-        val textView : TextView = TextView(mDataViewActivity)
-        val params = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, weight.toFloat())
-
-        textView.layoutParams = params
-        textView.text = value
-        textView.setTextAppearance(context, style)
-        textView.gravity = gravity
-        textView.setPadding(leftPadding, 0, 0, 0)
-
-        tableRow.addView(textView)
-    }
-
-    fun newTableRow() : TableRow {
-        val tableRow: TableRow = TableRow(mDataViewActivity)
-        val lp = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
-
-        tableRow.layoutParams = lp
-        tableRow.gravity = Gravity.CENTER
-        tableRow.setPadding(3, 10, 3, 0)
-
-        return tableRow
-    }
-
-    fun <T : View> View.bind(@IdRes res : Int) : T {
-        @Suppress("UNCHECKED_CAST")
-        return findViewById(res) as T
     }
 }

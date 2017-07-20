@@ -1,6 +1,5 @@
 package com.bitbusters.android.speproject
 
-import android.app.Fragment
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v7.widget.RecyclerView
@@ -14,7 +13,7 @@ import android.widget.TextView
 /**
  * Created by mihajlo on 05/07/17.
  */
-open class DischargePermitDataFragment : android.support.v4.app.Fragment() {
+open class DischargePermitDataFragment : FragmentHelper() {
 
     private lateinit var mToolbar : Toolbar
     private lateinit var mBackButton : ImageButton
@@ -32,25 +31,26 @@ open class DischargePermitDataFragment : android.support.v4.app.Fragment() {
         val view = inflater!!.inflate(R.layout.fragment_permit_data_view, container, false)
         mDischargePermitDataView = view
 
+        mToolbar = view.bind(R.id.permit_toolbar)
+
+        mBackButton = view.bind(R.id.back_button_permit_data_view)
+        mBackButton.setOnClickListener { activity.onBackPressed() }
+
         // Initialise Recycler View and hide it
-        mRecyclerView = view.findViewById(R.id.permit_grid_view) as RecyclerView
+        mRecyclerView = view.bind(R.id.permit_grid_view)
         mRecyclerView.visibility = View.INVISIBLE
 
         val permitPoint = mDataViewActivity.selectedPermitPoint
 
-        val permitHolderNameView = view.findViewById(R.id.permit_holder_name) as TextView
+        val permitHolderNameView: TextView = view.bind(R.id.permit_holder_name)
+        val effluentTypeView: TextView = view.bind(R.id.permit_table_effluent_type)
+        val siteTypeView: TextView = view.bind(R.id.permit_table_site_type)
+        val effectiveDateView: TextView = view.bind(R.id.permit_table_effective_date)
+
         permitHolderNameView.text = permitPoint.holder
-
-        mToolbar = view.findViewById(R.id.permit_toolbar) as Toolbar
-
-        mBackButton = view.findViewById(R.id.back_button_permit_data_view) as ImageButton
-        mBackButton.setOnClickListener { activity.onBackPressed() }
-
-        val siteTypeView = mDischargePermitDataView.findViewById(R.id.permit_table_type) as TextView
-        val effectiveDateView = mDischargePermitDataView.findViewById(R.id.permit_table_date) as TextView
-
+        effluentTypeView.text = permitPoint.effluentType
         siteTypeView.text = permitPoint.siteType
-        effectiveDateView.text = permitPoint.effectiveDate
+        effectiveDateView.text = simplifyDate(permitPoint.effectiveDate)
 
         return view
     }

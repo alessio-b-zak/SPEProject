@@ -11,11 +11,11 @@ import java.util.ArrayList
 /**
  * Created by mihajlo on 04/07/17.
  */
-class InputStreamToWaterDischargePermit {
+class InputStreamToWIMSPoint {
     private val TAG = "WIMS_POINTS_READER"
 
     @Throws(IOException::class)
-    fun readJsonStream(inputStream: InputStream): List<DischargePermitPoint> {
+    fun readJsonStream(inputStream: InputStream): List<WIMSPoint> {
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
         try {
             return readMessagesArray(reader)
@@ -25,8 +25,8 @@ class InputStreamToWaterDischargePermit {
     }
 
     @Throws(IOException::class)
-    fun readMessagesArray(reader: JsonReader): List<DischargePermitPoint> {
-        val messages = ArrayList<DischargePermitPoint>()
+    fun readMessagesArray(reader: JsonReader): List<WIMSPoint> {
+        val messages = ArrayList<WIMSPoint>()
         try {
             reader.beginArray()
             while (reader.hasNext()) {
@@ -41,31 +41,16 @@ class InputStreamToWaterDischargePermit {
     }
 
     @Throws(IOException::class)
-    fun readMessage(reader: JsonReader): DischargePermitPoint {
-        var id = ""
-        var holder = ""
-        var siteType = ""
-        var effluentType = ""
-        var effectiveDate: String = ""
-        var revocationDate: String = ""
-        var latitude: Double = 0.0
-        var longitude: Double = 0.0
+    fun readMessage(reader: JsonReader): WIMSPoint {
+        var id: String = ""
+        var latitude = 0.0
+        var longitude = 0.0
         try {
             reader.beginObject()
             while (reader.hasNext()) {
                 val name = reader.nextName()
                 if (name == "id") {
                     id = reader.nextString()
-                } else if (name == "holder") {
-                    holder = reader.nextString()
-                } else if (name == "siteType") {
-                    siteType = reader.nextString()
-                } else if (name == "effluentType") {
-                    effluentType = reader.nextString()
-                } else if (name == "effectiveDate") {
-                    effectiveDate = reader.nextString()
-                } else if (name == "revocationDate") {
-                    revocationDate = reader.nextString()
                 } else if (name == "latitude") {
                     latitude = reader.nextDouble()
                 } else if (name == "longitude") {
@@ -79,8 +64,7 @@ class InputStreamToWaterDischargePermit {
             e.printStackTrace()
         }
 
-        return DischargePermitPoint(id, holder, siteType, effluentType, effectiveDate,
-                                    revocationDate, latitude, longitude)
+        return WIMSPoint(id, latitude, longitude)
     }
 
 }

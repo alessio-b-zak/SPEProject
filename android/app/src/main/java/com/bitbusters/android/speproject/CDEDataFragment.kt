@@ -20,7 +20,7 @@ import android.widget.*
  * Created by mihajlo on 07/07/17.
  */
 
-open class CDEDataFragment : Fragment() {
+open class CDEDataFragment : FragmentHelper() {
     private lateinit var mToolbar: Toolbar  // The toolbar.
     private lateinit var mBackButton: ImageButton
     private lateinit var mMoreInfoButton: Button
@@ -33,7 +33,7 @@ open class CDEDataFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true
+//        retainInstance = true
         mDataViewActivity = activity as DataViewActivity
     }
 
@@ -54,10 +54,6 @@ open class CDEDataFragment : Fragment() {
         CDEPointRatingsAPI(this).execute(cdePoint, CDEPoint.PREDICTED)
         CDEPointRatingsAPI(this).execute(cdePoint, CDEPoint.OBJECTIVE)
 
-        if(cdePoint.rnagList.isEmpty()) {
-            CDERnagAPI(this).execute(cdePoint)
-        }
-
         val cdePointLabel : TextView = view.bind(R.id.cde_label)
         val label = cdePoint.label
         cdePointLabel.text = label
@@ -76,6 +72,17 @@ open class CDEDataFragment : Fragment() {
         isDataLoaded.put(CDEPoint.OBJECTIVE, false)
         isDataLoaded.put(CDEPoint.PREDICTED, false)
         isDataLoaded.put(CDEPoint.RNAG, false)
+
+        // Checks if rnagList is populated
+        // If it is [then fragment is opened by going back from the CDEDetailsFragment]
+        //      data is already loaded and moreInfoButton should be visible
+        // else [fragment is initialised by clicking on geoJSON feature]
+        //      populate rnagList
+        if(cdePoint.rnagList.isNotEmpty()) {
+            mMoreInfoButton.visibility = View.VISIBLE
+        } else {
+            CDERnagAPI(this).execute(cdePoint)
+        }
 
         return view
     }
@@ -122,15 +129,4 @@ open class CDEDataFragment : Fragment() {
             mMoreInfoButton.visibility = View.VISIBLE
         }
     }
-
-    fun <T : View> Activity.bind(@IdRes res : Int) : T {
-        @Suppress("UNCHECKED_CAST")
-        return findViewById(res) as T
-    }
-
-    fun <T : View> View.bind(@IdRes res : Int) : T {
-        @Suppress("UNCHECKED_CAST")
-        return findViewById(res) as T
-    }
-
 }

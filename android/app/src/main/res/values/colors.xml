@@ -13,8 +13,8 @@
     <color name="darkGreyTransparent">#dd444444</color>
     <color name="backgroundDefault">#4fc3f7</color>
     <color name="backgroundTransparent">#cc4fc3f7</color>
-    <color name="wims">#00c2e8</color>
-    <color name="cde">#00c292</color>
-    <color name="permit">#FFFF00</color>
+    <color name="layer_wims">#C6CB7D</color>
+    <color name="layer_cde">#00C292</color>
+    <color name="layer_permit">#CCDDE5</color>
 
 </resources>
