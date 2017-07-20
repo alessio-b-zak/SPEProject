@@ -7,43 +7,18 @@
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#000000"
+        android:background="@color/colorPrimaryDark"
         android:theme="?attr/actionBarTheme"
         android:id="@+id/cde_toolbar"
         android:minHeight="?attr/actionBarSize">
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="?attr/actionBarSize"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:layout_marginLeft="16dp"-->
-            <!--android:layout_marginRight="16dp" >-->
+        <ImageButton
+            style="@style/back_button"
+            android:id="@+id/back_button_cde_data_view"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:id="@+id/back_button_cde_data_view"
-                android:clickable="true"
-                android:scaleType="center"
-                android:src="@drawable/arrow_white" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:id="@+id/info_button_cde_data_view"
-                android:clickable="true"
-                android:scaleType="center"
-                android:layout_gravity="end"
-                android:padding="16dp"
-                android:text="@string/cde_info_button"
-                android:textAllCaps="false"
-                android:textAlignment="textEnd"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/info_white" />
-
-        <!--</LinearLayout>-->
+        <Button
+            style="@style/info_button"
+            android:id="@+id/info_button_cde_data_view"/>
 
     </android.support.v7.widget.Toolbar>
 
@@ -55,36 +30,26 @@
     android:background="@color/backgroundDefault">
 
         <TextView
-        android:text=""
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/cde_label"
-        android:textSize="18sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textAlignment="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"/>
-
+            style="@style/text_view_heading"
+            android:id="@+id/cde_label"
+            android:text=""/>
 
         <TableLayout
-            style="@style/TextViewDataTableParent"
+            style="@style/table_layout"
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/cde_table"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:stretchColumns="1,2"
-            android:layout_marginBottom="10dp">
+            android:stretchColumns="1,2">
             <TableRow>
                 <TextView
                     android:text=""/>
                 <TextView
-                    style="@style/TextViewDataTableParent"
+                    style="@style/text_view_table_parent"
                     android:text="@string/cde_table_classification_value"/>
                 <TextView
-                    style="@style/TextViewDataTableParent"
+                    style="@style/text_view_table_parent"
                     android:text="@string/cde_table_classification_certainty"/>
                 <TextView
-                    style="@style/TextViewDataTableParent"
+                    style="@style/text_view_table_parent"
                     android:text="@string/cde_table_classification_year"/>
             </TableRow>
 
@@ -93,20 +58,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    style="@style/TextViewDataTableParent"
+                    style="@style/text_view_table_parent"
                     android:id="@+id/cde_table_overall_name"
                     android:text="@string/cde_table_overall"
                     android:gravity="start"/>
                 <TextView
-                    style="@style/TextViewDataTableChild"
+                    style="@style/text_view_table_child"
                     android:id="@+id/cde_table_overall_value"
                     android:text=""/>
                 <TextView
-                    style="@style/TextViewDataTableChild"
+                    style="@style/text_view_table_child"
                     android:id="@+id/cde_table_overall_certainty"
                     android:text=""/>
                 <TextView
-                    style="@style/TextViewDataTableChild"
+                    style="@style/text_view_table_child"
                     android:id="@+id/cde_table_overall_year"
                     android:text="" />
             </TableRow>
@@ -116,20 +81,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    style="@style/TextViewDataTableParent"
+                    style="@style/text_view_table_parent"
                     android:id="@+id/cde_table_ecological_name"
                     android:text="@string/cde_table_ecological"
                     android:gravity="start"/>
                 <TextView
-                    style="@style/TextViewDataTableChild"
+                    style="@style/text_view_table_child"
                     android:id="@+id/cde_table_ecological_value"
                     android:text=""/>
                 <TextView
-                    style="@style/TextViewDataTableChild"
+                    style="@style/text_view_table_child"
                     android:id="@+id/cde_table_ecological_certainty"
                     android:text=""/>
                 <TextView
-                    style="@style/TextViewDataTableChild"
+                    style="@style/text_view_table_child"
                     android:id="@+id/cde_table_ecological_year"
                     android:text=""/>
             </TableRow>
@@ -139,99 +104,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    style="@style/TextViewDataTableParent"
+                    style="@style/text_view_table_parent"
                     android:id="@+id/cde_table_chemical_name"
                     android:text="@string/cde_table_chemical"
                     android:gravity="start" />
                 <TextView
-                    style="@style/TextViewDataTableChild"
+                    style="@style/text_view_table_child"
                     android:id="@+id/cde_table_chemical_value"
                     android:text=""/>
                 <TextView
-                    style="@style/TextViewDataTableChild"
+                    style="@style/text_view_table_child"
                     android:id="@+id/cde_table_chemical_certainty"
                     android:text=""/>
                 <TextView
-                    style="@style/TextViewDataTableChild"
+                    style="@style/text_view_table_child"
                     android:id="@+id/cde_table_chemical_year"
                     android:text=""/>
             </TableRow>
-
-            <!--<TableRow-->
-                <!--android:id="@+id/cde_table_priority_substances_row"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:visibility="invisible">-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableParent"-->
-                    <!--android:id="@+id/cde_table_priority_substances_name"-->
-                    <!--android:text=""-->
-                    <!--android:gravity="start"-->
-                    <!--android:visibility="invisible"/>-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableChild"-->
-                    <!--android:id="@+id/cde_table_priority_substances_value"-->
-                    <!--android:text=""-->
-                    <!--android:visibility="invisible"/>-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableChild"-->
-                    <!--android:id="@+id/cde_table_priority_substances_certainty"-->
-                    <!--android:text=""-->
-                    <!--android:visibility="invisible"/>-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableChild"-->
-                    <!--android:id="@+id/cde_table_priority_substances_year"-->
-                    <!--android:text=""-->
-                    <!--android:visibility="invisible"/>-->
-            <!--</TableRow>-->
-
-            <!--<TableRow-->
-                <!--android:id="@+id/cde_table_hazardous_substances_row"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:visibility="invisible">-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableParent"-->
-                    <!--android:id="@+id/cde_table_hazardous_substances_name"-->
-                    <!--android:text=""-->
-                    <!--android:gravity="start" />-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableChild"-->
-                    <!--android:id="@+id/cde_table_hazardous_substances_value"-->
-                    <!--android:text=""/>-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableChild"-->
-                    <!--android:id="@+id/cde_table_hazardous_substances_certainty"-->
-                    <!--android:text=""/>-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableChild"-->
-                    <!--android:id="@+id/cde_table_hazardous_substances_year"-->
-                    <!--android:text=""/>-->
-            <!--</TableRow>-->
-
-            <!--<TableRow-->
-                <!--android:id="@+id/cde_table_other_pollutants_row"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:visibility="invisible">-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableParent"-->
-                    <!--android:id="@+id/cde_table_other_pollutants_name"-->
-                    <!--android:text=""-->
-                    <!--android:gravity="start" />-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableChild"-->
-                    <!--android:id="@+id/cde_table_other_pollutants_value"-->
-                    <!--android:text=""/>-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableChild"-->
-                    <!--android:id="@+id/cde_table_other_pollutants_certainty"-->
-                    <!--android:text=""/>-->
-                <!--<TextView-->
-                    <!--style="@style/TextViewDataTableChild"-->
-                    <!--android:id="@+id/cde_table_other_pollutants_year"-->
-                    <!--android:text=""/>-->
-            <!--</TableRow>-->
 
         </TableLayout>
     </LinearLayout>
@@ -239,7 +128,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cde_grid_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:background="#AA000000"
         android:layout_weight="0.30" />
 

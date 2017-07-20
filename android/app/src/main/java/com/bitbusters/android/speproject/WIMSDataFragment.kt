@@ -1,19 +1,14 @@
 package com.bitbusters.android.speproject
 
-import android.app.Activity
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.TextView
-import org.w3c.dom.Text
 
 
 /**
@@ -78,8 +73,8 @@ open class WIMSDataFragment : FragmentHelper() {
 
         var tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow, "Determinand", 0.28, R.style.TextViewDataTableParent, Gravity.START)
-        addTextView(tableHeaderRow, "Sample Dates", 0.72, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "Determinand", 0.28, R.style.text_view_table_parent, Gravity.START)
+        addTextView(tableHeaderRow, "Sample Dates", 0.72, R.style.text_view_table_parent)
 
         mMeasurementTable.addView(tableHeaderRow)
 
@@ -92,20 +87,20 @@ open class WIMSDataFragment : FragmentHelper() {
                 if (measurementList.size > 2) {
                     tableHeaderRow = newTableRow()
 
-                    addTextView(tableHeaderRow, entry, 0.28, R.style.TextViewDataTableParentLight, Gravity.START)
-                    addTextView(tableHeaderRow, simplifyDate(measurementList[0].date), 0.24, R.style.TextViewDataTableParentLight, Gravity.END)
-                    addTextView(tableHeaderRow, simplifyDate(measurementList[1].date), 0.24, R.style.TextViewDataTableParentLight, Gravity.END)
-                    addTextView(tableHeaderRow, simplifyDate(measurementList[2].date), 0.24, R.style.TextViewDataTableParentLight, Gravity.END)
+                    addTextView(tableHeaderRow, entry, 0.28, R.style.text_view_table_parent_light, Gravity.START)
+                    addTextView(tableHeaderRow, simplifyDate(measurementList[0].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
+                    addTextView(tableHeaderRow, simplifyDate(measurementList[1].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
+                    addTextView(tableHeaderRow, simplifyDate(measurementList[2].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
 
                     mMeasurementTable.addView(tableHeaderRow)
 
                     tableHeaderRow = newTableRow()
 
                     val unit = measurementList[0].unit
-                    addTextView(tableHeaderRow, "($unit)", 0.28, R.style.TextViewDataTableChild, Gravity.START)
-                    addTextView(tableHeaderRow, measurementList[0].result.toString(), 0.24, R.style.TextViewDataTableChild, Gravity.END)
-                    addTextView(tableHeaderRow, measurementList[1].result.toString(), 0.24, R.style.TextViewDataTableChild, Gravity.END)
-                    addTextView(tableHeaderRow, measurementList[2].result.toString(), 0.24, R.style.TextViewDataTableChild, Gravity.END)
+                    addTextView(tableHeaderRow, "($unit)", 0.28, R.style.text_view_table_child, Gravity.START)
+                    addTextView(tableHeaderRow, measurementList[0].result.toString(), 0.24, R.style.text_view_table_child, Gravity.END)
+                    addTextView(tableHeaderRow, measurementList[1].result.toString(), 0.24, R.style.text_view_table_child, Gravity.END)
+                    addTextView(tableHeaderRow, measurementList[2].result.toString(), 0.24, R.style.text_view_table_child, Gravity.END)
 
                     mMeasurementTable.addView(tableHeaderRow)
                 }

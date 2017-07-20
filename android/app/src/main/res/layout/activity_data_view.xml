@@ -57,8 +57,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="0dp"
         android:layout_marginStart="0dp"
-        android:src="@drawable/ic_menu_white"
-        app:backgroundTint="@color/colorAccent"/>
+        android:src="@drawable/ic_menu_white"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/gps_button"
@@ -69,7 +68,8 @@
         android:layout_marginTop="20dp"
         android:layout_gravity="bottom|end"
         android:onClick="currentLocation"
-        android:src="@drawable/target_white"/>
+        android:src="@drawable/target_white"
+        app:backgroundTint="@color/colorSecondary"/>
 
     <TextView
         android:id="@+id/layer_name"

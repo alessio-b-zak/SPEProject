@@ -8,20 +8,15 @@
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#000000"
+        android:background="@color/colorPrimaryDark"
         android:theme="?attr/actionBarTheme"
         android:id="@+id/cde_details_toolbar"
         android:minHeight="?attr/actionBarSize"
         android:weightSum="1">
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="#00000000"
-            android:id="@+id/back_button_cde_details_view"
-            android:clickable="true"
-            android:scaleType="center"
-            android:src="@drawable/arrow_white"/>
+            style="@style/back_button"
+            android:id="@+id/back_button_cde_details_view"/>
 
 
     </android.support.v7.widget.Toolbar>
@@ -32,7 +27,7 @@
         android:fillViewport="true">
 
         <LinearLayout
-            android:id = "@+id/cde_details_linear_layout"
+            android:id="@+id/cde_details_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/backgroundDefault"
@@ -40,76 +35,41 @@
             android:weightSum="1">
 
             <TextView
+                style="@style/text_view_heading"
                 android:id="@+id/cde_details_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:text=""
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:text=""/>
 
             <TextView
+                style="@style/text_view_sub_heading"
                 android:id="@+id/cde_classification_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:layout_marginTop="16dp"
-                android:gravity="start"
-                android:text="@string/cde_classification_title"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:text="@string/cde_classification_title"/>
 
             <TableLayout
-                style="@style/TextViewDataTableParent"
+                style="@style/table_layout"
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/cde_details_table"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:gravity="top">
+                android:id="@+id/cde_details_table">
             </TableLayout>
 
             <TextView
+                style="@style/text_view_sub_heading"
                 android:id="@+id/cde_objectives_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:layout_marginTop="16dp"
-                android:gravity="start"
-                android:text="@string/cde_objectives_title"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:text="@string/cde_objectives_title"/>
 
             <TableLayout
-                style="@style/TextViewDataTableParent"
+                style="@style/table_layout"
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/cde_objectives_table"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:gravity="top">
+                android:id="@+id/cde_objectives_table">
             </TableLayout>
 
             <TextView
+                style="@style/text_view_sub_heading"
                 android:id="@+id/cde_rnag_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:padding="8dp"
-                android:gravity="start"
-                android:text="@string/cde_rnag_title"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:text="@string/cde_rnag_title"/>
 
             <TableLayout
-                style="@style/TextViewDataTableParent"
+                style="@style/table_layout"
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/cde_rnag_table"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:gravity="top">
+                android:id="@+id/cde_rnag_table">
             </TableLayout>
 
         </LinearLayout>
