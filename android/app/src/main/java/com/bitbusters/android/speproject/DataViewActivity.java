@@ -2,7 +2,6 @@ package com.bitbusters.android.speproject;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -10,27 +9,24 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.Pair;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -48,7 +44,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
-import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.data.Feature;
@@ -68,6 +63,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -111,6 +107,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private WIMSPoint selectedWIMSPoint;
     private CDEPoint selectedCDEPoint;
     private DischargePermitPoint selectedPermitPoint;
+
+    private Snackbar connectionSnack;
+    private Snackbar zoomSnack;
+    private boolean wasConnectionSnackDisplayed;
+    private boolean wasZoomSnackDisplayed;
 
 
     @Override
@@ -156,12 +157,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         mMapCameraPadding = displayMetrics.heightPixels / 3;
 
-        currentView = CDE;
+        currentView = WIMS;
 
         coordinateSystemConverter = new CoordinateSystemConverter();
 
-//        mDbHelper = new WIMSDbHelper(getApplicationContext());
-//        new WIMSPopulateDatabase(getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        setupSnackbars();
     }
 
     public void setupDrawer() {
@@ -258,6 +258,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         updateLayerName(view);
     }
 
+    public void initiateView(int view) {
+        currentView = view;
+        setMapOnCameraIdleListener(view);
+        updateLayerName(view);
+    }
+
     public void closeView(int view) {
         mMap.setOnCameraIdleListener(null);
         clearMarkers(view);
@@ -268,6 +274,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mProgressSpinner.setVisibility(View.VISIBLE);
             LatLng camCentre = mMap.getCameraPosition().target;
             VisibleRegion screen = mMap.getProjection().getVisibleRegion();
+            dismissSnackbars();
             switch (view) {
                 case CDE:
                     LatLng[] polygon = new LatLng[4];
@@ -279,22 +286,25 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     break;
                 case WIMS:
                     String[] params = {String.valueOf(screen.farLeft.latitude),
-                                       String.valueOf(screen.farLeft.longitude),
-                                       String.valueOf(screen.nearRight.latitude),
-                                       String.valueOf(screen.nearRight.longitude),
-                                       String.valueOf(2017)};
+                            String.valueOf(screen.farLeft.longitude),
+                            String.valueOf(screen.nearRight.latitude),
+                            String.valueOf(screen.nearRight.longitude),
+                            String.valueOf(2017)};
                     new WIMSPointAPI(DataViewActivity.this).execute(params);
                     break;
                 case PERMIT:
                     String[] input = {String.valueOf(screen.farLeft.latitude),
-                                      String.valueOf(screen.farLeft.longitude),
-                                      String.valueOf(screen.nearRight.latitude),
-                                      String.valueOf(screen.nearRight.longitude)};
+                            String.valueOf(screen.farLeft.longitude),
+                            String.valueOf(screen.nearRight.latitude),
+                            String.valueOf(screen.nearRight.longitude)};
                     new DischargePermitPointAPI(this).execute(input);
                     break;
             }
         } else {
-            Toast.makeText(getApplicationContext(), "Data retrieval needs internet connection", Toast.LENGTH_LONG).show();
+//            Log.i(TAG, "waszoom: " + String.valueOf(wasConnectionSnackDisplayed) + " iszoom: " + String.valueOf(connectionSnack.isShown()));
+            if(!wasConnectionSnackDisplayed && !connectionSnack.isShown()) {
+                connectionSnack.show();
+            }
         }
     }
 
@@ -332,6 +342,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 clearMarkers(view_params);
                 if( mMap.getCameraPosition().zoom > 11 ) {
                     loadMarkers(view_params);
+                } else {
+//                    Log.i(TAG, "waszoom: " + String.valueOf(wasZoomSnackDisplayed) + " iszoom: " + String.valueOf(zoomSnack.isShown()));
+                    if(!wasZoomSnackDisplayed && !zoomSnack.isShown()) {
+                        zoomSnack.show();
+                    }
                 }
             }
         });
@@ -502,8 +517,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mCDEDetailsFragment = (CDEDetailsFragment) fragment;
 
         mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
-                .replace(R.id.fragment_container, fragment)
+                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
+                .add(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -513,8 +528,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mWIMSDetailsFragment = (WIMSDetailsFragment) fragment;
 
         mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
-                .replace(R.id.fragment_container, fragment)
+                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
+                .add(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -540,30 +555,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(55.036837, -3.625488), 5.0f));
 
         setUpMultiManager();
-        // Zooms in on current location
-        currentLocation(findViewById(R.id.map));
 
-        if(!haveGPSOn(getApplicationContext())){
-            Toast.makeText(getApplicationContext(), "Please enable your GPS or zoom in to a " +
-                    "desired location", Toast.LENGTH_LONG).show();
-        }
-
-        // When zoom finished it populates the map with sampling points
-        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                openView(WIMS);
-            }
-        });
-
+        mGoogleApiClient.connect();
     }
 
     public void setUpMultiManager() {
         mWIMSClusterManager = new ClusterManager<>(this, mMap);
         mPermitClusterManager = new ClusterManager<>(this, mMap);
 
-        setUpPermitManager();
         setUpWIMSManager();
+        setUpPermitManager();
         setUpCDEManager();
 
         mMultiListener.addOC(mWIMSClusterManager);
@@ -622,9 +623,22 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     //Method called when connection established with Google Play Service Location API
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.i(TAG, "CONNECTED!");
+        displayLocation();
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
-            displayLocation();
+            if(!haveGPSOn(getApplicationContext())){
+                initiateView(currentView);
+            } else {
+                currentLocation(findViewById(R.id.map));
+                mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                    @Override
+                    public void onCameraIdle() {
+                        openView(currentView);
+                    }
+                });
+                mMap.setOnCameraIdleListener(null);
+            }
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
@@ -635,8 +649,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLocation == null) {
                 Log.e(TAG, "mLocation was null");
-            }
-            if (mLocation != null) {
+            } else {
                 setLocationMarker(mLocation.getLatitude(), mLocation.getLongitude());
                 updateMapCameraPosition();
             }
@@ -648,9 +661,17 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void updateMapCameraPosition() {
         if (mMap != null && mLocation != null) {
-            CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(12)
+            final CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(12)
                     .target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
+            mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                @Override
+                public void onCameraIdle() {
+                    if(mMap.getCameraPosition().zoom != 12){
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
+                    }
+                }
+            });
         }
     }
 
@@ -679,15 +700,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     //Method called when location button is pressed
     public void currentLocation(View v){
         if(haveGPSOn(v.getContext())){
+            Log.i(TAG, "Has GPS On");
             if(!connected){
+                Log.i(TAG, "Not Connected");
                 mGoogleApiClient.connect();
-
-            }else if(currentLocationMarker != null){
+            } else if(currentLocationMarker != null){
+                Log.i(TAG, "Has currentLocationMarker");
                 displayLocation();
             }
-
-        }else{
-            Toast.makeText(v.getContext(), "GPS Required", Toast.LENGTH_LONG).show();
+        } else {
+            displaySimpleSnackbar("GPS Required", Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -718,7 +740,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i(TAG, "Connection Failed");
-        Toast.makeText(this,"Location Connection Failed", Toast.LENGTH_SHORT).show();
+        displaySimpleSnackbar("Location Connection Failed", Snackbar.LENGTH_SHORT);
         connected = false;
         mGoogleApiClient.connect();
     }
@@ -832,6 +854,51 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public boolean haveGPSOn(Context context){
         LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    private void displaySimpleSnackbar(String message, Integer length) {
+        Snackbar snack = Snackbar.make(findViewById(R.id.fragment_container), message, length);
+        snack.show();
+    }
+
+    private Snackbar dismissableSnackbar(String message, Integer length) {
+        Snackbar snack = Snackbar.make(findViewById(R.id.fragment_container),message, length);
+        snack.setAction("DISMISS", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        return snack;
+    }
+
+    private void setupSnackbars(){
+        wasConnectionSnackDisplayed = false;
+        wasZoomSnackDisplayed = false;
+
+        connectionSnack  = dismissableSnackbar( "Data retrieval needs internet connection", Snackbar.LENGTH_INDEFINITE);
+        connectionSnack.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                super.onDismissed(transientBottomBar, event);
+                wasConnectionSnackDisplayed = true;
+            }
+        });
+
+        zoomSnack = dismissableSnackbar("Zoom in to show data points", Snackbar.LENGTH_INDEFINITE);
+        zoomSnack.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                super.onDismissed(transientBottomBar, event);
+                wasZoomSnackDisplayed = true;
+            }
+        });
+    }
+
+    private void dismissSnackbars() {
+        wasConnectionSnackDisplayed = false;
+        wasZoomSnackDisplayed = false;
+        if(connectionSnack.isShown()) connectionSnack.dismiss();
+        if(zoomSnack.isShown()) zoomSnack.dismiss();
     }
 
 }
