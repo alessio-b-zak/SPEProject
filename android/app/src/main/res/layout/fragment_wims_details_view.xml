@@ -6,13 +6,8 @@
     android:clickable="true" >
 
     <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:theme="?attr/actionBarTheme"
-        android:id="@+id/wims_details_toolbar"
-        android:minHeight="?attr/actionBarSize"
-        android:weightSum="1">
+        style="@style/toolbar_default"
+        android:id="@+id/wims_details_toolbar">
 
         <ImageButton
             style="@style/back_button"

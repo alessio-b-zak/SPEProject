@@ -60,29 +60,26 @@
     <string name="permit_table_site_type">Site Type: </string>
     <string name="permit_table_effective_date">Effective Since: </string>
 
-    <string name="info_title"><b>myRivers™ v1.1</b></string>
-    <string name="info_description">myRivers allows anyone to submit and browse photos of
-        interesting wildlife observations and pollution incidents. It also provides useful
-        information about river pollution found in two Environment Agency data sets.</string>
+    <string name="info_title"><b>myRivers™ v2.0</b></string>
+    <string name="info_description">myRivers allows anyone to browse detailed river pollution
+        reports in the UK. The available data is pulled and filtered from three different data sets,
+        all provided by the Environment Agency.</string>
     <string name="info_subtitle">\u00A9 BitBusters 2017</string>
     <string name="info_home_buttons">Home Buttons: </string>
     <string name="info_layers">Layers: </string>
-    <string name="info_spvText">
-        <b>SP View Button</b>: Show all sample points within a 10km radius (it is recommended to zoom in first by clicking the GPS button)
-    </string>
     <string name="info_gpsText">
         <b>GPS Button</b>: Zoom in to your current location.
     </string>
-    <string name="info_camText">
-        <b>Camera Button</b>: Take a picture of interesting wildlife observation or a pollution incident.
-    </string>
     <string name="info_cde_description">
-        <b>CDE Layer</b>: Displays sampling points from Catchment Data Explorer data set along with pollution levels.
+        <b>CDE Layer</b>: Displays sampling points from Catchment Data Explorer data set along with
+        pollution levels.
     </string>
     <string name="info_wims_description">
-        <b>WIMS Layer</b>: Displays sampling points from Water Quality Archive with the latest three measurements.
+        <b>WIMS Layer</b>: Displays sampling points from Water Quality Archive with the latest
+        measurements of all measured determinands.
     </string>
-    <string name="info_image_description">
-        <b>Image Layer</b>: Displays images of wildlife and pollution incidents submitted by the app users.
+    <string name="info_permit_description">
+        <b>Discharge Permit Layer</b>: Displays locations of water discharge permit points along
+        with the holders name, type of permit and type of site.
     </string>
 </resources>

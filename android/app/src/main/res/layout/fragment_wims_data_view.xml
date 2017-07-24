@@ -5,12 +5,8 @@
               android:layout_height="match_parent" >
 
     <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:theme="?attr/actionBarTheme"
-        android:id="@+id/wims_data_toolbar"
-        android:minHeight="?attr/actionBarSize">
+        style="@style/toolbar_default"
+        android:id="@+id/wims_data_toolbar">
 
         <ImageButton
             style="@style/back_button"

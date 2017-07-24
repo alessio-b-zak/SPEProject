@@ -208,7 +208,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.info_white);
+                .withIcon(R.drawable.info_white_no_padding);
 
         //create the drawer and remember the `Drawer` result object
         mDrawer = new DrawerBuilder()
@@ -254,15 +254,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void openView(int view) {
         currentView = view;
-        loadMarkers(view);
         setMapOnCameraIdleListener(view);
         updateLayerName(view);
-    }
-
-    public void initiateView(int view) {
-        currentView = view;
-        setMapOnCameraIdleListener(view);
-        updateLayerName(view);
+        if(mMap.getCameraPosition().zoom > BASE_ZOOM_LEVEL - 1) {
+            loadMarkers(view);
+        }
     }
 
     public void closeView(int view) {
@@ -625,8 +621,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
             if(!haveGPSOn(getApplicationContext())){
-//                displayLocation();
-                initiateView(currentView);
+                openView(currentView);
             } else {
                 displayLocation();
                 mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
