@@ -70,6 +70,7 @@ import java.util.List;
 public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final String TAG = "DATA_VIEW_ACTIVITY";
+    private static final Integer BASE_ZOOM_LEVEL = 12;
     private static final int REQUEST_LOCATION = 1;
     private static final int CDE = 0;
     private static final int WIMS = 1;
@@ -340,11 +341,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             @Override
             public void onCameraIdle() {
                 clearMarkers(view_params);
-                if( mMap.getCameraPosition().zoom > 11 ) {
+                if( mMap.getCameraPosition().zoom > BASE_ZOOM_LEVEL - 1 ) {
                     loadMarkers(view_params);
                 } else {
-//                    Log.i(TAG, "waszoom: " + String.valueOf(wasZoomSnackDisplayed) + " iszoom: " + String.valueOf(zoomSnack.isShown()));
-                    if(!wasZoomSnackDisplayed && !zoomSnack.isShown()) {
+                    if(!wasZoomSnackDisplayed && !zoomSnack.isShown() && haveNetworkConnection()) {
                         zoomSnack.show();
                     }
                 }
@@ -598,7 +598,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (fragment instanceof CDEDetailsFragment) {
             if(!result.getClassificationHashMap(CDEPoint.OBJECTIVE).isEmpty() &&
                     !result.getClassificationHashMap(CDEPoint.PREDICTED).isEmpty()) {
-                Log.i(TAG, "Calling CDEDETAILS");
                 mCDEDetailsFragment.setObjectivePredictedClassificationText(result);
             }
         } else if (fragment instanceof CDEDataFragment) {
@@ -623,21 +622,24 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     //Method called when connection established with Google Play Service Location API
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.i(TAG, "CONNECTED!");
-        displayLocation();
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             connected = true;
             if(!haveGPSOn(getApplicationContext())){
+//                displayLocation();
                 initiateView(currentView);
             } else {
-                currentLocation(findViewById(R.id.map));
+                displayLocation();
                 mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
                     @Override
                     public void onCameraIdle() {
-                        openView(currentView);
+                        if(mMap.getCameraPosition().zoom < BASE_ZOOM_LEVEL - 1) {
+                            displayLocation();
+                        } else {
+                            openView(currentView);
+                            return;
+                        }
                     }
                 });
-                mMap.setOnCameraIdleListener(null);
             }
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
@@ -646,6 +648,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void displayLocation() {
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(false);
             mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLocation == null) {
                 Log.e(TAG, "mLocation was null");
@@ -661,17 +664,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void updateMapCameraPosition() {
         if (mMap != null && mLocation != null) {
-            final CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(12)
+            final CameraPosition newCameraPosition = new CameraPosition.Builder().zoom(BASE_ZOOM_LEVEL)
                     .target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude())).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
-            mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-                @Override
-                public void onCameraIdle() {
-                    if(mMap.getCameraPosition().zoom != 12){
-                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
-                    }
-                }
-            });
         }
     }
 
@@ -700,12 +695,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     //Method called when location button is pressed
     public void currentLocation(View v){
         if(haveGPSOn(v.getContext())){
-            Log.i(TAG, "Has GPS On");
             if(!connected){
-                Log.i(TAG, "Not Connected");
                 mGoogleApiClient.connect();
-            } else if(currentLocationMarker != null){
-                Log.i(TAG, "Has currentLocationMarker");
+            } else {
                 displayLocation();
             }
         } else {
@@ -900,5 +892,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if(connectionSnack.isShown()) connectionSnack.dismiss();
         if(zoomSnack.isShown()) zoomSnack.dismiss();
     }
+
+//    protected boolean isOnline() {
+//        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+//        return netInfo != null && netInfo.isConnected();
+//    }
 
 }
