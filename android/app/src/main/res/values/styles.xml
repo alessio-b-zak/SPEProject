@@ -6,8 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:textColorPrimaryInverse">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorPrimaryInverse">@color/colorTextSecondary</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
@@ -95,7 +95,7 @@
     </style>
 
     <style name="text_view_table_child" parent="@android:style/Widget.TextView">
-        <item name="android:textColor">@color/colorSecondaryDark</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingStart">8dp</item>
