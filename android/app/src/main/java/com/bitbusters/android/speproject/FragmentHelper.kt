@@ -1,6 +1,5 @@
 package com.bitbusters.android.speproject
 
-import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.view.Gravity
@@ -31,7 +30,7 @@ abstract class FragmentHelper : Fragment() {
     }
 
     fun addTextView(tableRow: TableRow, value: String?, weight: Double = 1.0,
-                    style: Int = R.style.TextViewDataTableChild, gravity: Int = Gravity.CENTER,
+                    style: Int = R.style.text_view_table_child, gravity: Int = Gravity.CENTER,
                     leftPadding: Int = 0) {
         val textView : TextView = TextView(context)
         val params = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, weight.toFloat())

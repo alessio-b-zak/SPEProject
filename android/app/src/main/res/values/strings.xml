@@ -6,6 +6,9 @@
     <string name="cam_toast">SWOOSH!</string>
     <string name="choose_tag">Choose a tag</string>
 
+    <string name="back_button">Back</string>
+    <string name="info_button">More Info</string>
+
     <string name="drawer_cde">CDE Data</string>
     <string name="drawer_wims">WIMS Data</string>
     <string name="drawer_permit">Discharge Permits Data</string>
@@ -23,7 +26,6 @@
     <string name="button_desc_hamburger">Hamburger Button</string>
 
     <string name="cde_loading_message">Loading ratings data...</string>
-    <string name="cde_info_button">More Info</string>
     <string name="cde_table_classification_value">Rating</string>
     <string name="cde_table_classification_year">Year</string>
     <string name="cde_table_classification_certainty">Certainty</string>

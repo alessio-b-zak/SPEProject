@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorPrimaryInverse">@color/colorAccent</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
@@ -17,31 +19,87 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="TextViewDataTableParent" parent="@android:style/Widget.TextView">
+    <style name="back_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#00000000</item>
+        <item name="android:clickable">true</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:src">@drawable/arrow_black</item>
+        <item name="android:contentDescription">@string/back_button</item>
+    </style>
+
+    <style name="info_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#00000000</item>
+        <item name="android:clickable">true</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:contentDescription">@string/info_button</item>
+        <item name="android:layout_gravity">end</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:text">@string/info_button</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textAlignment">textEnd</item>
+        <item name="android:drawableStart">@drawable/info_black</item>
+    </style>
+
+    <style name="text_view_heading" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">@color/darkGrey</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="text_view_sub_heading" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">@color/darkGrey</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="table_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:gravity">top</item>
+    </style>
+
+    <style name="text_view_table_parent" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/darkGrey</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:paddingStart">8dip</item>
-        <item name="android:paddingEnd">8dip</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="TextViewDataTableParentLight" parent="@android:style/Widget.TextView">
-        <item name="android:textColor">@color/darkGreen</item>
+    <style name="text_view_table_parent_light" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/darkGrey</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingStart">8dip</item>
-        <item name="android:paddingEnd">8dip</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="TextViewDataTableChild" parent="@android:style/Widget.TextView">
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+    <style name="text_view_table_child" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/colorSecondaryDark</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingStart">8dip</item>
-        <item name="android:paddingEnd">8dip</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">2</item>

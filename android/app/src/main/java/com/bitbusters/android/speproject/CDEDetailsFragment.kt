@@ -2,7 +2,6 @@ package com.bitbusters.android.speproject
 
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -72,10 +71,10 @@ open class CDEDetailsFragment : FragmentHelper() {
         // Set Header Row
         val tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow,"", 0.35, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Rating", 0.275, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Certainty", 0.225, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow,"Year", 0.15, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow,"", 0.35, R.style.text_view_table_parent)
+        addTextView(tableHeaderRow,"Rating", 0.275, R.style.text_view_table_parent)
+        addTextView(tableHeaderRow,"Certainty", 0.225, R.style.text_view_table_parent)
+        addTextView(tableHeaderRow,"Year", 0.15, R.style.text_view_table_parent)
 
         mRealClassificationTable.addView(tableHeaderRow)
 
@@ -97,19 +96,19 @@ open class CDEDetailsFragment : FragmentHelper() {
         // Set Header Rows
         var tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow, "", 0.35, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Objective", 0.325, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Predicted", 0.325, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "", 0.35, R.style.text_view_table_parent)
+        addTextView(tableHeaderRow, "Objective", 0.325, R.style.text_view_table_parent)
+        addTextView(tableHeaderRow, "Predicted", 0.325, R.style.text_view_table_parent)
 
         mObjectivesTable.addView(tableHeaderRow)
 
         tableHeaderRow = newTableRow()
 
-        addTextView(tableHeaderRow, "", 0.35, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Rating", 0.19, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Year", 0.135, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Rating", 0.19, R.style.TextViewDataTableParent)
-        addTextView(tableHeaderRow, "Year", 0.135, R.style.TextViewDataTableParent)
+        addTextView(tableHeaderRow, "", 0.35, R.style.text_view_table_parent)
+        addTextView(tableHeaderRow, "Rating", 0.19, R.style.text_view_table_parent)
+        addTextView(tableHeaderRow, "Year", 0.135, R.style.text_view_table_parent)
+        addTextView(tableHeaderRow, "Rating", 0.19, R.style.text_view_table_parent)
+        addTextView(tableHeaderRow, "Year", 0.135, R.style.text_view_table_parent)
 
         mObjectivesTable.addView(tableHeaderRow)
 
@@ -134,10 +133,10 @@ open class CDEDetailsFragment : FragmentHelper() {
             // Adds header row
             val tableHeaderRow = newTableRow()
 
-            addTextView(tableHeaderRow, "Element", 0.25, R.style.TextViewDataTableParent)
-            addTextView(tableHeaderRow, "Rating", 0.25, R.style.TextViewDataTableParent)
-            addTextView(tableHeaderRow, "Activity", 0.39, R.style.TextViewDataTableParent)
-            addTextView(tableHeaderRow, "Year", 0.11, R.style.TextViewDataTableParent)
+            addTextView(tableHeaderRow, "Element", 0.25, R.style.text_view_table_parent)
+            addTextView(tableHeaderRow, "Rating", 0.25, R.style.text_view_table_parent)
+            addTextView(tableHeaderRow, "Activity", 0.39, R.style.text_view_table_parent)
+            addTextView(tableHeaderRow, "Year", 0.11, R.style.text_view_table_parent)
 
             mRNAGTable.addView(tableHeaderRow)
 
@@ -164,10 +163,10 @@ open class CDEDetailsFragment : FragmentHelper() {
 
         if (isParent) {
             addTextView(tableRow, CDEPoint.classificationPrintValues[label], 0.35,
-                    R.style.TextViewDataTableParent, Gravity.START)
+                    R.style.text_view_table_parent, Gravity.START)
         } else {
             addTextView(tableRow, CDEPoint.classificationPrintValues[label], 0.35,
-                    R.style.TextViewDataTableParent, Gravity.START, 40)
+                    R.style.text_view_table_parent, Gravity.START, 40)
         }
 
         if (isReal) {

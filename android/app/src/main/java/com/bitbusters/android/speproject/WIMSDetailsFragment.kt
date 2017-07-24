@@ -1,16 +1,12 @@
 package com.bitbusters.android.speproject
 
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import org.w3c.dom.Text
 
 
 /**
@@ -121,10 +117,10 @@ open class WIMSDetailsFragment : FragmentHelper() {
                 // Set Header Row
                 var tableHeaderRow = newTableRow()
 
-                addTextView(tableHeaderRow, "Determinand", 0.3, R.style.TextViewDataTableParent, Gravity.START)
-                addTextView(tableHeaderRow, "Unit", 0.2, R.style.TextViewDataTableParent)
-                addTextView(tableHeaderRow, "Result", 0.2, R.style.TextViewDataTableParent)
-                addTextView(tableHeaderRow, "Date", 0.3, R.style.TextViewDataTableParent)
+                addTextView(tableHeaderRow, "Determinand", 0.3, R.style.text_view_table_parent, Gravity.START)
+                addTextView(tableHeaderRow, "Unit", 0.2, R.style.text_view_table_parent)
+                addTextView(tableHeaderRow, "Result", 0.2, R.style.text_view_table_parent)
+                addTextView(tableHeaderRow, "Date", 0.3, R.style.text_view_table_parent)
 
                 groupTable.addView(tableHeaderRow)
 
@@ -132,10 +128,10 @@ open class WIMSDetailsFragment : FragmentHelper() {
                     if (wimsPoint.measurementMap.containsKey(entry)) {
                         tableHeaderRow = newTableRow()
 
-                        addTextView(tableHeaderRow, entry, 0.3, R.style.TextViewDataTableChild, Gravity.START)
-                        addTextView(tableHeaderRow, wimsPoint.measurementMap[entry]!![0].unit, 0.2, R.style.TextViewDataTableChild)
-                        addTextView(tableHeaderRow, wimsPoint.measurementMap[entry]!![0].result.toString(), 0.2, R.style.TextViewDataTableChild)
-                        addTextView(tableHeaderRow, simplifyDate(wimsPoint.measurementMap[entry]!![0].date), 0.3, R.style.TextViewDataTableChild)
+                        addTextView(tableHeaderRow, entry, 0.3, R.style.text_view_table_child, Gravity.START)
+                        addTextView(tableHeaderRow, wimsPoint.measurementMap[entry]!![0].unit, 0.2, R.style.text_view_table_child)
+                        addTextView(tableHeaderRow, wimsPoint.measurementMap[entry]!![0].result.toString(), 0.2, R.style.text_view_table_child)
+                        addTextView(tableHeaderRow, simplifyDate(wimsPoint.measurementMap[entry]!![0].date), 0.3, R.style.text_view_table_child)
 
                         groupTable.addView(tableHeaderRow)
                     }

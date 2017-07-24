@@ -1,11 +1,11 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -20,36 +20,6 @@
         android:layout_gravity= "center_vertical|center_horizontal"
         android:visibility="invisible" />
 
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/cam_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:layout_marginEnd="20dp"-->
-        <!--android:layout_marginBottom="20dp"-->
-        <!--android:layout_marginTop="90dp"-->
-        <!--android:src="@drawable/photo_icon" />-->
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/sp_view_button"-->
-        <!--android:visibility="invisible"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:layout_marginRight="20dp"-->
-        <!--android:layout_marginBottom="160dp"-->
-        <!--android:src="@drawable/marker_white" />-->
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/hamburger_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginStart="0dp"-->
-        <!--android:layout_marginTop="0dp"-->
-        <!--android:src="@drawable/ic_menu_white_36dp"-->
-        <!--app:borderWidth="0dp" />-->
-
     <ImageButton
         android:id="@+id/hamburger_button"
         android:contentDescription="@string/button_desc_hamburger"
@@ -57,19 +27,17 @@
         android:layout_height="50dp"
         android:layout_marginTop="0dp"
         android:layout_marginStart="0dp"
-        android:src="@drawable/ic_menu_white"
-        app:backgroundTint="@color/colorAccent"/>
+        android:src="@drawable/ic_menu_white"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/gps_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
         android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
         android:onClick="currentLocation"
-        android:src="@drawable/target_white"/>
+        android:src="@drawable/target_white"
+        app:backgroundTint="@color/colorSecondary"/>
 
     <TextView
         android:id="@+id/layer_name"
@@ -87,4 +55,4 @@
         android:padding="6dp"
         android:layout_gravity="top|end"/>
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
