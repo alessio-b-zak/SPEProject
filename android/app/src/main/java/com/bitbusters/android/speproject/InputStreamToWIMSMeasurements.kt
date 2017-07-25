@@ -15,34 +15,27 @@ class InputStreamToWIMSMeasurements {
     @Throws(IOException::class)
     fun readJsonStream(wimsPoint: WIMSPoint, `in`: InputStream) {
         val reader = JsonReader(InputStreamReader(`in`, "UTF-8"))
-        try {
+        reader.use {
             readMessagesArray(wimsPoint, reader)
-        } finally {
-            reader.close()
         }
     }
 
     @Throws(IOException::class)
     fun readMessagesArray(wimsPoint: WIMSPoint, reader: JsonReader) {
-        try {
-            reader.beginObject()
-            while (reader.hasNext()) {
-                val name = reader.nextName()
-                if (name == "items") {
-                    reader.beginArray()
-                    while (reader.hasNext()) {
-                        readMessage(wimsPoint, reader)
-                    }
-                    reader.endArray()
-                } else {
-                    reader.skipValue()
+        reader.beginObject()
+        while (reader.hasNext()) {
+            val name = reader.nextName()
+            if (name == "items") {
+                reader.beginArray()
+                while (reader.hasNext()) {
+                    readMessage(wimsPoint, reader)
                 }
+                reader.endArray()
+            } else {
+                reader.skipValue()
             }
-            reader.endObject()
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
-
+        reader.endObject()
     }
 
     @Throws(IOException::class)
@@ -53,66 +46,63 @@ class InputStreamToWIMSMeasurements {
         var unit = ""
         var label = ""
         var result: Double = 0.0
-        try {
-            reader.beginObject()
-            while (reader.hasNext()) {
-                var name = reader.nextName()
-                if (name == "determinand") {
-                    reader.beginObject()
-                    while (reader.hasNext()) {
-                        name = reader.nextName()
-                        if (name == "label") {
-                            determinand = reader.nextString()
-                        } else if (name == "unit") {
-                            reader.beginObject()
-                            while (reader.hasNext()) {
-                                name = reader.nextName()
-                                if (name == "label") {
-                                    unit = reader.nextString()
-                                } else {
-                                    reader.skipValue()
-                                }
-                            }
-                            reader.endObject()
-                        } else {
-                            reader.skipValue()
-                        }
-                    }
-                    reader.endObject()
-                } else if (name == "result") {
-                    result = reader.nextDouble()
-                } else if (name == "sample") {
-                    reader.beginObject()
-                    while (reader.hasNext()) {
-                        name = reader.nextName()
-                        if (name == "sampleDateTime") {
-                            dateTimeString = reader.nextString()
-                            date = dateTimeString.substring(0, 10);
-                        } else if (name == "samplingPoint") {
-                            reader.beginObject()
-                            while (reader.hasNext()) {
-                                name = reader.nextName()
-                                if (name == "label") {
-                                    label = reader.nextString()
-                                } else {
-                                    reader.skipValue()
-                                }
-                            }
-                            reader.endObject()
 
-                        } else {
-                            reader.skipValue()
+        reader.beginObject()
+        while (reader.hasNext()) {
+            var name = reader.nextName()
+            if (name == "determinand") {
+                reader.beginObject()
+                while (reader.hasNext()) {
+                    name = reader.nextName()
+                    if (name == "label") {
+                        determinand = reader.nextString()
+                    } else if (name == "unit") {
+                        reader.beginObject()
+                        while (reader.hasNext()) {
+                            name = reader.nextName()
+                            if (name == "label") {
+                                unit = reader.nextString()
+                            } else {
+                                reader.skipValue()
+                            }
                         }
+                        reader.endObject()
+                    } else {
+                        reader.skipValue()
                     }
-                    reader.endObject()
-                } else {
-                    reader.skipValue()
                 }
+                reader.endObject()
+            } else if (name == "result") {
+                result = reader.nextDouble()
+            } else if (name == "sample") {
+                reader.beginObject()
+                while (reader.hasNext()) {
+                    name = reader.nextName()
+                    if (name == "sampleDateTime") {
+                        dateTimeString = reader.nextString()
+                        date = dateTimeString.substring(0, 10);
+                    } else if (name == "samplingPoint") {
+                        reader.beginObject()
+                        while (reader.hasNext()) {
+                            name = reader.nextName()
+                            if (name == "label") {
+                                label = reader.nextString()
+                            } else {
+                                reader.skipValue()
+                            }
+                        }
+                        reader.endObject()
+
+                    } else {
+                        reader.skipValue()
+                    }
+                }
+                reader.endObject()
+            } else {
+                reader.skipValue()
             }
-            reader.endObject()
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
+        reader.endObject()
 
         if(wimsPoint.measurementMap.containsKey(determinand)) {
             var measurementList = wimsPoint.measurementMap[determinand]
@@ -125,7 +115,7 @@ class InputStreamToWIMSMeasurements {
                 wimsPoint.label = label
             }
         } else {
-            var measurementList = arrayListOf<Measurement>(Measurement(unit, result, date))
+            val measurementList = arrayListOf<Measurement>(Measurement(unit, result, date))
             wimsPoint.measurementMap.put(determinand, measurementList)
             wimsPoint.label = label
         }

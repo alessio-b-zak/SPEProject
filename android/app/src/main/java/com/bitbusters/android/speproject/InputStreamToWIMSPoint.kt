@@ -17,25 +17,20 @@ class InputStreamToWIMSPoint {
     @Throws(IOException::class)
     fun readJsonStream(inputStream: InputStream): List<WIMSPoint> {
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
-        try {
+        reader.use {
             return readMessagesArray(reader)
-        } finally {
-            reader.close()
         }
     }
 
     @Throws(IOException::class)
     fun readMessagesArray(reader: JsonReader): List<WIMSPoint> {
         val messages = ArrayList<WIMSPoint>()
-        try {
-            reader.beginArray()
-            while (reader.hasNext()) {
-                messages.add(readMessage(reader))
-            }
-            reader.endArray()
-        } catch (e: Exception) {
-            e.printStackTrace()
+
+        reader.beginArray()
+        while (reader.hasNext()) {
+            messages.add(readMessage(reader))
         }
+        reader.endArray()
 
         return messages
     }
@@ -45,24 +40,18 @@ class InputStreamToWIMSPoint {
         var id: String = ""
         var latitude = 0.0
         var longitude = 0.0
-        try {
-            reader.beginObject()
-            while (reader.hasNext()) {
-                val name = reader.nextName()
-                if (name == "id") {
-                    id = reader.nextString()
-                } else if (name == "latitude") {
-                    latitude = reader.nextDouble()
-                } else if (name == "longitude") {
-                    longitude = reader.nextDouble()
-                } else {
-                    reader.skipValue()
-                }
+
+        reader.beginObject()
+        while (reader.hasNext()) {
+            val name = reader.nextName()
+            when(name){
+                "id"        -> id = reader.nextString()
+                "latitude"  -> latitude = reader.nextDouble()
+                "longitude" -> longitude = reader.nextDouble()
+                else        -> reader.skipValue()
             }
-            reader.endObject()
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
+        reader.endObject()
 
         return WIMSPoint(id, latitude, longitude)
     }

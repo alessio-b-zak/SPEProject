@@ -32,6 +32,7 @@
     <string name="cde_table_overall">Overall</string>
     <string name="cde_table_ecological">Ecological</string>
     <string name="cde_table_chemical">Chemical</string>
+    <string name="cde_waterbody_id_title">Waterbody ID:</string>
     <string name="cde_classification_title">Classification</string>
     <string name="cde_rnag_title">Reasons for not achieving good</string>
     <string name="cde_objectives_title">Objectives and Predictions</string>

@@ -50,8 +50,11 @@ open class CDEDetailsFragment : FragmentHelper() {
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
 
-        val cdePointLabel : TextView = view.bind(R.id.cde_details_title)
+        val cdePointLabel: TextView = view.bind(R.id.cde_details_title)
         cdePointLabel.text = cdePoint.label
+
+        val waterbodyId: TextView = view.bind(R.id.cde_waterbody_id)
+        waterbodyId.text = cdePoint.waterbodyId
 
         mToolbar = view.bind(R.id.cde_details_toolbar)
 

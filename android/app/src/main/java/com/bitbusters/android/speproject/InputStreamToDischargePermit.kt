@@ -16,25 +16,20 @@ class InputStreamToDischargePermit {
     @Throws(IOException::class)
     fun readJsonStream(inputStream: InputStream): List<DischargePermitPoint> {
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
-        try {
+        reader.use {
             return readMessagesArray(reader)
-        } finally {
-            reader.close()
         }
     }
 
     @Throws(IOException::class)
     fun readMessagesArray(reader: JsonReader): List<DischargePermitPoint> {
         val messages = ArrayList<DischargePermitPoint>()
-        try {
-            reader.beginArray()
-            while (reader.hasNext()) {
-                readMessage(reader, messages)
-            }
-            reader.endArray()
-        } catch (e: Exception) {
-            e.printStackTrace()
+
+        reader.beginArray()
+        while (reader.hasNext()) {
+            readMessage(reader, messages)
         }
+        reader.endArray()
 
         return messages
     }
@@ -49,34 +44,23 @@ class InputStreamToDischargePermit {
         var revocationDate: String = ""
         var latitude: Double = 0.0
         var longitude: Double = 0.0
-        try {
-            reader.beginObject()
-            while (reader.hasNext()) {
-                val name = reader.nextName()
-                if (name == "id") {
-                    id = reader.nextString()
-                } else if (name == "holder") {
-                    holder = reader.nextString()
-                } else if (name == "siteType") {
-                    siteType = reader.nextString()
-                } else if (name == "effluentType") {
-                    effluentType = reader.nextString()
-                } else if (name == "effectiveDate") {
-                    effectiveDate = reader.nextString()
-                } else if (name == "revocationDate") {
-                    revocationDate = reader.nextString()
-                } else if (name == "latitude") {
-                    latitude = reader.nextDouble()
-                } else if (name == "longitude") {
-                    longitude = reader.nextDouble()
-                } else {
-                    reader.skipValue()
-                }
+
+        reader.beginObject()
+        while (reader.hasNext()) {
+            val name = reader.nextName()
+            when(name){
+                "id"              -> id = reader.nextString()
+                "holder"          -> holder = reader.nextString()
+                "siteType"        -> siteType = reader.nextString()
+                "effluentType"    -> effluentType = reader.nextString()
+                "effectiveDate"   -> effectiveDate = reader.nextString()
+                "revocationDate"  -> revocationDate = reader.nextString()
+                "latitude"        -> latitude = reader.nextDouble()
+                "longitude"       -> longitude = reader.nextDouble()
+                else              -> reader.skipValue()
             }
-            reader.endObject()
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
+        reader.endObject()
 
         if(revocationDate != "") {
             val newPoint = DischargePermitPoint(id, holder, effluentType, siteType, effectiveDate,

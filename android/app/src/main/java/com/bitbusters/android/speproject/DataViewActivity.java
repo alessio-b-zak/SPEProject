@@ -584,8 +584,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void onTaskCompletedCDEPoint(List<CDEPoint> result) {
         mCDEPoints = result;
         for (CDEPoint r : result) {
-            showGeoJsonData(r);
+            boolean isOnMap = false;
+            for(GeoJsonFeature feature : mGeoJsonLayer.getFeatures()) {
+                if (feature.equals(r.getGeoJSONFeature())) isOnMap = true;
+            }
+            if(!isOnMap) {
+                r.getGeoJSONFeature().setPolygonStyle(GeoJsonStyles.geoJsonPolygonStyle(r));
+                mGeoJsonLayer.addFeature(r.getGeoJSONFeature());
+            }
         }
+        mGeoJsonLayer.addLayerToMap();
     }
 
     @Override
@@ -610,7 +618,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void showGeoJsonData(CDEPoint cdePoint) {
         cdePoint.getGeoJSONFeature().setPolygonStyle(GeoJsonStyles.geoJsonPolygonStyle(cdePoint));
-        cdePoint.getGeoJSONFeature().setLineStringStyle(GeoJsonStyles.geoJsonLineStringStyle(cdePoint));
+//        cdePoint.getGeoJSONFeature().setLineStringStyle(GeoJsonStyles.geoJsonLineStringStyle(cdePoint));
         mGeoJsonLayer.addFeature(cdePoint.getGeoJSONFeature());
         mGeoJsonLayer.addLayerToMap();
     }

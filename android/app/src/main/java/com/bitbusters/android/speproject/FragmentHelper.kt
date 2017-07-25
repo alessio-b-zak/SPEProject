@@ -1,5 +1,6 @@
 package com.bitbusters.android.speproject
 
+import android.os.Build
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.view.Gravity
@@ -37,9 +38,14 @@ abstract class FragmentHelper : Fragment() {
 
         textView.layoutParams = params
         textView.text = value
-        textView.setTextAppearance(context, style)
         textView.gravity = gravity
         textView.setPadding(leftPadding, 0, 0, 0)
+
+        if (Build.VERSION.SDK_INT < 23) {
+            textView.setTextAppearance(context, style)
+        } else {
+            textView.setTextAppearance(style)
+        }
 
         tableRow.addView(textView)
     }

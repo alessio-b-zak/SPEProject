@@ -10,4 +10,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.bitbusters.android.speproject.SplashActivity">
 
+    <ImageView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:src="@drawable/background_dark_resized_named">
+    </ImageView>
+
+    <ImageView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:padding="130dp"
+        android:gravity="center"
+        android:src="@mipmap/icon_green_blue">
+    </ImageView>
+
 </RelativeLayout>
