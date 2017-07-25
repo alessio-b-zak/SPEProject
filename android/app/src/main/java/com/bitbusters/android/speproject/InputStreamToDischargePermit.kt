@@ -10,7 +10,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by mihajlo on 04/07/17.
  */
-class InputStreamToDischargePermit {
+class InputStreamToDischargePermit: InputStreamHelper() {
     private val TAG = "DISCHARGE_PERMIT_READER"
 
     @Throws(IOException::class)

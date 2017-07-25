@@ -53,6 +53,7 @@ open class CDEDataFragment : FragmentHelper() {
         CDEPointRatingsAPI(this).execute(cdePoint, CDEPoint.REAL)
         CDEPointRatingsAPI(this).execute(cdePoint, CDEPoint.PREDICTED)
         CDEPointRatingsAPI(this).execute(cdePoint, CDEPoint.OBJECTIVE)
+        CDERiverLineAPI(mDataViewActivity).execute(cdePoint)
 
         val cdePointLabel : TextView = view.bind(R.id.cde_label)
         val label = cdePoint.label

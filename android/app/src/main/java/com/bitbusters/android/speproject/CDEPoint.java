@@ -3,7 +3,6 @@ package com.bitbusters.android.speproject;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.maps.android.data.Feature;
 import com.google.maps.android.data.geojson.GeoJsonFeature;
 
 import java.util.ArrayList;
@@ -19,12 +18,12 @@ public class CDEPoint extends Point {
     private String waterbodyId;
     private String label;
     private LatLng location;
-    private GeoJsonFeature geoJSONFeature;
+    private GeoJsonFeature riverPolygon;
+    private GeoJsonFeature riverLine;
     private HashMap<String, HashMap<String, Classification>> classificationHashMap;
     private List<RNAG> rnagList;
 
     private static final String TAG = "CDE_POINT";
-
 
     public static final String RNAG = "RNAG";
 
@@ -124,7 +123,7 @@ public class CDEPoint extends Point {
         ratingPrintValues.put("N/A", "N/A");
     }
 
-    CDEPoint(String waterbodyId, String label, double latitude, double longitude, GeoJsonFeature geoJSONFeature) {
+    CDEPoint(String waterbodyId, String label, double latitude, double longitude, GeoJsonFeature riverPolygon) {
         super(latitude,longitude,"CDE_Point", "");
         this.waterbodyId = waterbodyId;
         this.label = label;
@@ -133,7 +132,8 @@ public class CDEPoint extends Point {
         this.classificationHashMap.put(REAL, new HashMap<String, Classification>());
         this.classificationHashMap.put(OBJECTIVE, new HashMap<String, Classification>());
         this.classificationHashMap.put(PREDICTED, new HashMap<String, Classification>());
-        this.geoJSONFeature = geoJSONFeature;
+        this.riverPolygon = riverPolygon;
+        this.riverLine = null;
         this.rnagList = new ArrayList<>();
     }
 
@@ -153,8 +153,12 @@ public class CDEPoint extends Point {
         return location.longitude;
     }
 
-    public GeoJsonFeature getGeoJSONFeature() {
-        return geoJSONFeature;
+    public GeoJsonFeature getRiverPolygon() {
+        return riverPolygon;
+    }
+
+    public GeoJsonFeature getRiverLine() {
+        return riverLine;
     }
 
     public HashMap<String, Classification> getClassificationHashMap(String group) {
@@ -181,6 +185,10 @@ public class CDEPoint extends Point {
 
     public void setLongitude(double longitude) {
         super.setLongitude(longitude);
+    }
+
+    public void setRiverLine(GeoJsonFeature riverLine) {
+        this.riverLine = riverLine;
     }
 
     public void printClassification(String group) {

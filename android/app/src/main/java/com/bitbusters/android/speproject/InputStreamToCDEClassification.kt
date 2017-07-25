@@ -10,7 +10,7 @@ import java.io.InputStreamReader
 /**
  * Created by mihajlo on 04/07/17.
  */
-class InputStreamToCDEClassification {
+class InputStreamToCDEClassification: InputStreamHelper() {
 
     @Throws(IOException::class)
     fun readJsonStream(cdePoint: CDEPoint, inputStream: InputStream, group: String) {
@@ -67,22 +67,5 @@ class InputStreamToCDEClassification {
             cdePoint.getClassificationHashMap(group).put(item, Classification(value, certainty, year))
         }
 
-    }
-
-    fun readItemToString(reader: JsonReader): String {
-        var item = ""
-
-        reader.beginObject()
-        while (reader.hasNext()) {
-            val name = reader.nextName()
-            if (name == "label") {
-                item = reader.nextString()
-            } else {
-                reader.skipValue()
-            }
-        }
-        reader.endObject()
-
-        return item
     }
 }

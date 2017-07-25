@@ -63,7 +63,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -586,27 +585,21 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         for (CDEPoint r : result) {
             boolean isOnMap = false;
             for(GeoJsonFeature feature : mGeoJsonLayer.getFeatures()) {
-                if (feature.equals(r.getGeoJSONFeature())) isOnMap = true;
+                if (feature.equals(r.getRiverPolygon())) isOnMap = true;
             }
             if(!isOnMap) {
-                r.getGeoJSONFeature().setPolygonStyle(GeoJsonStyles.geoJsonPolygonStyle(r));
-                mGeoJsonLayer.addFeature(r.getGeoJSONFeature());
+                r.getRiverPolygon().setPolygonStyle(GeoJsonStyles.geoJsonPolygonStyle());
+                mGeoJsonLayer.addFeature(r.getRiverPolygon());
             }
         }
         mGeoJsonLayer.addLayerToMap();
     }
 
     @Override
-    public void onTaskCompletedCDEPointRatings(CDEPoint result) {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-        if (fragment instanceof CDEDetailsFragment) {
-            if(!result.getClassificationHashMap(CDEPoint.OBJECTIVE).isEmpty() &&
-                    !result.getClassificationHashMap(CDEPoint.PREDICTED).isEmpty()) {
-                mCDEDetailsFragment.setObjectivePredictedClassificationText(result);
-            }
-        } else if (fragment instanceof CDEDataFragment) {
-            mCDEDataFragment.setClassificationText(result);
-        }
+    public void onTaskCompletedCDERiverLine(CDEPoint result) {
+        result.getRiverLine().setLineStringStyle(GeoJsonStyles.geoJsonLineStringStyle());
+        mGeoJsonLayer.addFeature(result.getRiverLine());
+        mGeoJsonLayer.addLayerToMap();
     }
 
     @Override
@@ -617,9 +610,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void showGeoJsonData(CDEPoint cdePoint) {
-        cdePoint.getGeoJSONFeature().setPolygonStyle(GeoJsonStyles.geoJsonPolygonStyle(cdePoint));
-//        cdePoint.getGeoJSONFeature().setLineStringStyle(GeoJsonStyles.geoJsonLineStringStyle(cdePoint));
-        mGeoJsonLayer.addFeature(cdePoint.getGeoJSONFeature());
+        cdePoint.getRiverPolygon().setPolygonStyle(GeoJsonStyles.geoJsonPolygonStyle());
+//        cdePoint.getRiverPolygon().setLineStringStyle(GeoJsonStyles.geoJsonLineStringStyle());
+        mGeoJsonLayer.addFeature(cdePoint.getRiverPolygon());
         mGeoJsonLayer.addLayerToMap();
     }
 
@@ -806,7 +799,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void setSelectedCDEPoint(Feature feature) {
         for (CDEPoint cdePoint : mCDEPoints) {
-            if (cdePoint.getGeoJSONFeature() == feature) {
+            if (cdePoint.getRiverPolygon() == feature) {
                 selectedCDEPoint = cdePoint;
             }
         }
@@ -815,8 +808,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public GeoJsonFeature getGeoJSONFeature(Feature feature) {
         GeoJsonFeature result = null;
         for (CDEPoint cdePoint : mCDEPoints) {
-            if (cdePoint.getGeoJSONFeature() == feature) {
-                result = cdePoint.getGeoJSONFeature();
+            if (cdePoint.getRiverPolygon() == feature) {
+                result = cdePoint.getRiverPolygon();
             }
         }
         return result;

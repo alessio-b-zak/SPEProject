@@ -10,7 +10,7 @@ import java.io.InputStreamReader
 /**
  * Created by mihajlo on 04/07/17.
  */
-class InputStreamToWIMSMeasurements {
+class InputStreamToWIMSMeasurements: InputStreamHelper() {
 
     @Throws(IOException::class)
     fun readJsonStream(wimsPoint: WIMSPoint, `in`: InputStream) {
@@ -57,16 +57,7 @@ class InputStreamToWIMSMeasurements {
                     if (name == "label") {
                         determinand = reader.nextString()
                     } else if (name == "unit") {
-                        reader.beginObject()
-                        while (reader.hasNext()) {
-                            name = reader.nextName()
-                            if (name == "label") {
-                                unit = reader.nextString()
-                            } else {
-                                reader.skipValue()
-                            }
-                        }
-                        reader.endObject()
+                        unit = readItemToString(reader)
                     } else {
                         reader.skipValue()
                     }
@@ -82,17 +73,7 @@ class InputStreamToWIMSMeasurements {
                         dateTimeString = reader.nextString()
                         date = dateTimeString.substring(0, 10);
                     } else if (name == "samplingPoint") {
-                        reader.beginObject()
-                        while (reader.hasNext()) {
-                            name = reader.nextName()
-                            if (name == "label") {
-                                label = reader.nextString()
-                            } else {
-                                reader.skipValue()
-                            }
-                        }
-                        reader.endObject()
-
+                        label = readItemToString(reader);
                     } else {
                         reader.skipValue()
                     }
