@@ -329,7 +329,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     polygon[1] = screen.farRight;
                     polygon[2] = screen.nearRight;
                     polygon[3] = screen.nearLeft;
-                    new CDEPointAPI(DataViewActivity.this).execute(polygon, "geojson");
+                    new CDEPointAPI(DataViewActivity.this).execute(polygon);
                     break;
                 case WIMS:
                     String[] params = {String.valueOf(screen.farLeft.latitude),
@@ -969,6 +969,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         wasZoomSnackDisplayed = false;
         if(connectionSnack.isShown()) connectionSnack.dismiss();
         if(zoomSnack.isShown()) zoomSnack.dismiss();
+    }
+
+    public Location getCurrentLocation() {
+        return mLocation;
     }
 
 
