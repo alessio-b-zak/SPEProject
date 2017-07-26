@@ -6,8 +6,8 @@ android/.idea/*
 android/app/.idea/
 android/app/.idea/*
 android/app/build/
-app/src/release/res/values/google_maps_api.xml
-app/src/debug/res/values/google_maps_api.xml
+android/app/src/release/res/values/google_maps_api.xml
+android/app/src/debug/res/values/google_maps_api.xml
 server/routes/thumbnails/
 server/routes/uploads/
 server/node_modules/
