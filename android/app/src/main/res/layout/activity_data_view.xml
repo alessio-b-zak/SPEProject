@@ -1,6 +1,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,45 +11,25 @@
         android:id="@+id/data_view_toolbar">
 
         <ImageButton
-            android:id="@+id/hamburger_button"
-            android:contentDescription="@string/button_desc_hamburger"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="center"
-            android:clickable="true"
-            android:src="@drawable/ic_menu_white"
-            android:background="#00000000"/>
+            style="@style/menu_button"
+            android:id="@+id/data_view_hamburger_button"/>
 
         <ImageButton
-            android:id="@+id/search_button"
-            android:contentDescription="@string/button_desc_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="center"
-            android:clickable="true"
-            android:layout_gravity="end"
-            android:paddingEnd="16dp"
-            android:src="@drawable/ic_search"
-            android:background="#00000000"/>
+            style="@style/search_button"
+            android:id="@+id/data_view_search_button"/>
 
     </android.support.v7.widget.Toolbar>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    <fragment
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        tools:context="com.bitbusters.android.speproject.DataViewActivity" />
-
-    <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--xmlns:tools="http://schemas.android.com/tools"-->
-        <!--android:id="@+id/place_autocomplete_fragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginTop="?attr/actionBarSize"-->
-        <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>-->
+        tools:context="com.bitbusters.android.speproject.DataViewActivity"
+        tools:layout="@layout/activity_data_view" />
 
     <ProgressBar
         android:id="@+id/progress_spinner"

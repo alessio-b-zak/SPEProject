@@ -29,7 +29,32 @@
         <item name="android:clickable">true</item>
         <item name="android:scaleType">center</item>
         <item name="android:src">@drawable/arrow_white</item>
+        <item name="android:padding">16dp</item>
         <item name="android:contentDescription">@string/back_button</item>
+    </style>
+
+    <style name="menu_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#00000000</item>
+        <item name="android:clickable">true</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:src">@drawable/ic_menu_white</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:contentDescription">@string/button_desc_hamburger</item>
+    </style>
+
+    <style name="search_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@drawable/ic_search</item>
+        <item name="android:contentDescription">@string/button_desc_search</item>
+        <item name="android:background">#00000000</item>
+        <item name="android:clickable">true</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:layout_gravity">end</item>
     </style>
 
     <style name="info_button">
@@ -82,7 +107,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/colorPrimary</item>
-        <item name="android:theme">?attr/actionBarTheme</item>
+        <item name="android:layout_marginStart">-16dp</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
 

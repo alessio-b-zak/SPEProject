@@ -45,7 +45,8 @@ open class WIMSDataFragment : FragmentHelper() {
         mMeasurementTable = view.bind(R.id.wims_table)
 
         val wimsPoint = mDataViewActivity.selectedWIMSPoint
-        WIMSPointRatingsAPI(mWIMSDataFragment).execute(wimsPoint)
+//        WIMSPointRatingsAPI(mWIMSDataFragment).execute(wimsPoint)
+//        WIMSPointMetalsAPI(mWIMSDataFragment).execute(wimsPoint)
 
         mToolbar = view.bind(R.id.wims_data_toolbar)
 
@@ -66,7 +67,6 @@ open class WIMSDataFragment : FragmentHelper() {
     }
 
     fun setMeasurementsText(wimsPoint: WIMSPoint) {
-        WIMSPointMetalsAPI(mWIMSDataFragment).execute(wimsPoint)
 //        Log.i(TAG, "Number of measurements pulled: " + wimsPoint.measurementMap.size )
         val wimsName : TextView = mWIMSDataView.bind(R.id.wims_name)
         wimsName.text = wimsPoint.label

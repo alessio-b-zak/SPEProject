@@ -40,8 +40,6 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'joda-time:joda-time:2.9.4'
-    //compile 'com.google.android.gms:play-services:9.6.0'
     compile 'com.google.android.gms:play-services-maps:11.0.2'
     compile 'com.google.android.gms:play-services-location:11.0.2'
     compile 'com.google.android.gms:play-services-places:11.0.2'
@@ -57,7 +55,6 @@ dependencies {
         transitive = true
     }
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
 }
 repositories {
     mavenCentral()

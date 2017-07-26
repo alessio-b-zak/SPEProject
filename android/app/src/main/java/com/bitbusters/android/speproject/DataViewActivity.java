@@ -30,8 +30,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
@@ -41,9 +39,6 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -51,7 +46,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -146,7 +140,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         setupDrawer();
 
         // The action performed when the menu button is pressed.
-        mMenuButton = (ImageButton) findViewById(R.id.hamburger_button);
+        mMenuButton = (ImageButton) findViewById(R.id.data_view_hamburger_button);
         mMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,7 +176,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         setupSnackbars();
 
-        mSearchButton = (ImageButton) findViewById(R.id.search_button);
+        mSearchButton = (ImageButton) findViewById(R.id.data_view_search_button);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -455,6 +449,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     fragment = new CDEDataFragment();
                     mCDEDataFragment = (CDEDataFragment) fragment;
 
+                    new CDEPointRatingsAPI(mCDEDataFragment).execute(selectedCDEPoint, CDEPoint.REAL);
+                    new CDEPointRatingsAPI(mCDEDataFragment).execute(selectedCDEPoint, CDEPoint.PREDICTED);
+                    new CDEPointRatingsAPI(mCDEDataFragment).execute(selectedCDEPoint, CDEPoint.OBJECTIVE);
+
                     mFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                             .add(R.id.fragment_container, fragment)
@@ -487,6 +485,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
                         fragment = new WIMSDataFragment();
                         mWIMSDataFragment = (WIMSDataFragment) fragment;
+
+                        new WIMSPointRatingsAPI(mWIMSDataFragment).execute(selectedWIMSPoint);
+                        new WIMSPointMetalsAPI(mWIMSDataFragment).execute(selectedWIMSPoint);
 
                         mFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
@@ -580,7 +581,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(place.getViewport(), 0));
-                Log.i(TAG, "Place: " + place.getName());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 Log.i(TAG, status.getStatusMessage());
@@ -834,11 +834,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void displayHomeButtons(boolean condition) {
         if(condition) {
             mGpsButton.show();
+            mSearchButton.setVisibility(View.VISIBLE);
             mMenuButton.setVisibility(View.VISIBLE);
             mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         } else {
             mGpsButton.hide();
             mMenuButton.setVisibility(View.INVISIBLE);
+            mSearchButton.setVisibility(View.INVISIBLE);
             mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
     }

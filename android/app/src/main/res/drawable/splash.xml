@@ -13,10 +13,4 @@
             android:src="@mipmap/icon_green_blue"/>
     </item>
 
-    <!--<item>-->
-        <!--<bitmap-->
-            <!--android:gravity="center"-->
-            <!--android:src="@mipmap/name"/>-->
-    <!--</item>-->
-
 </layer-list>
