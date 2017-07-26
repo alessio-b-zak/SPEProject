@@ -222,8 +222,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withTextColor(Color.WHITE)
                 .withIcon(R.drawable.ic_permit_marker);
 
-        final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
+        final SecondaryDrawerItem drawerMyArea = new SecondaryDrawerItem()
                 .withIdentifier(4)
+                .withName(R.string.drawer_my_area)
+                .withSelectedColor(0x0d4caf)
+                .withSelectedTextColor(Color.WHITE)
+                .withTextColor(Color.WHITE)
+                .withIcon(R.drawable.gps_icon);
+
+        final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
+                .withIdentifier(5)
                 .withName(R.string.drawer_info)
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
@@ -240,6 +248,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         drawerWIMS,
                         drawerPermit,
                         new DividerDrawerItem(),
+                        drawerMyArea,
                         drawerInfo
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -261,6 +270,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                                 openView(PERMIT);
                                 break;
                             case 4:
+                                showMyArea(view);
+                                break;
+                            case 5:
                                 showInfo(view);
                                 break;
                             default:
@@ -317,7 +329,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     polygon[1] = screen.farRight;
                     polygon[2] = screen.nearRight;
                     polygon[3] = screen.nearLeft;
-                    new CDEPointAPI(DataViewActivity.this).execute(polygon);
+                    new CDEPointAPI(DataViewActivity.this).execute(polygon, "geojson");
                     break;
                 case WIMS:
                     String[] params = {String.valueOf(screen.farLeft.latitude),
@@ -346,10 +358,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void clearMarkers(int view) {
         switch (view) {
             case CDE:
-//                mCDEClusterManager.clearItems();
-//                mCDEClusterManager.cluster();
-//                mGeoJsonLayer.removeLayerFromMap();
-//                Log.i(TAG, "GeoJsonLayerFeatures : " + mGeoJsonLayer.getFeatures().toString());
                 List<GeoJsonFeature> featuresToRemove = new ArrayList<>();
                 for(GeoJsonFeature feature : mGeoJsonLayer.getFeatures()) {
                     featuresToRemove.add(feature);
@@ -408,6 +416,17 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         displayHomeButtons(false);
         // Initiate the info fragment.
         InfoFragment fragment = new InfoFragment();
+        mFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                .add(R.id.fragment_container, fragment)
+                .addToBackStack(null).commit();
+    }
+
+    public void showMyArea(View v) {
+        // Hide the floating action buttons.
+        displayHomeButtons(false);
+        // Initiate the info fragment.
+        MyAreaFragment fragment = new MyAreaFragment();
         mFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                 .add(R.id.fragment_container, fragment)
@@ -825,6 +844,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         } else if (fragment instanceof InfoFragment) {
             mFragmentManager.popBackStack();
             displayHomeButtons(true);
+        } else if (fragment instanceof MyAreaFragment) {
+            mFragmentManager.popBackStack();
+            displayHomeButtons(true);
         }
         else {
             super.onBackPressed();
@@ -949,10 +971,5 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if(zoomSnack.isShown()) zoomSnack.dismiss();
     }
 
-//    protected boolean isOnline() {
-//        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-//        return netInfo != null && netInfo.isConnected();
-//    }
 
 }

@@ -16,7 +16,7 @@ import java.util.List;
 
 //import static com.google.android.gms.internal.zznu.is;
 
-public class CDEPointAPI extends AsyncTask<LatLng, Void, List<CDEPoint>> {
+public class CDEPointAPI extends AsyncTask<Object, Void, List<CDEPoint>> {
     private static final String TAG = "CDE_API";
     private OnTaskCompleted listener;
     private DataViewActivity mDataViewActivity;
@@ -27,7 +27,13 @@ public class CDEPointAPI extends AsyncTask<LatLng, Void, List<CDEPoint>> {
     }
 
     @Override
-    protected List<CDEPoint> doInBackground(LatLng...params) {
+    protected List<CDEPoint> doInBackground(Object...params) {
+        LatLng[] points = (LatLng[]) params[0];
+//        LatLng topLeft = (LatLng) params[0][0];
+//        LatLng topRight = (LatLng) params[0][1];
+//        LatLng bottomLeft = (LatLng) params[0][2];
+//        LatLng bottomRight = (LatLng) params[0][3];
+        String dataType = (String) params[1];
         List<CDEPoint> cdePoints = new ArrayList<CDEPoint>();
         // params comes from the execute() call: params[0] is the url.
         try {
@@ -36,13 +42,13 @@ public class CDEPointAPI extends AsyncTask<LatLng, Void, List<CDEPoint>> {
                     .authority("ea-cde-pub.epimorphics.net")
                     .appendPath("catchment-planning")
                     .appendPath("so")
-                    .appendPath("WaterBody.geojson")
+                    .appendPath("WaterBody." + dataType)
                     .appendQueryParameter("polygon", "{\"type\":\"Polygon\",\"coordinates\":[[["
-                                          + params[0].longitude + "," + params[0].latitude +"],["
-                                          + params[1].longitude + "," + params[1].latitude +"],["
-                                          + params[2].longitude + "," + params[2].latitude +"],["
-                                          + params[3].longitude + "," + params[3].latitude +"],["
-                                          + params[0].longitude + "," + params[0].latitude + "]]]}")
+                                          + points[0].longitude + "," + points[0].latitude +"],["
+                                          + points[1].longitude + "," + points[1].latitude +"],["
+                                          + points[2].longitude + "," + points[2].latitude +"],["
+                                          + points[3].longitude + "," + points[3].latitude +"],["
+                                          + points[0].longitude + "," + points[0].latitude + "]]]}")
                     .appendQueryParameter("type", "River");
             String myUrl = builder.build().toString();
 
