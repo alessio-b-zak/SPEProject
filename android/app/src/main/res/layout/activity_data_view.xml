@@ -5,13 +5,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        style="@style/toolbar_default"
+        android:id="@+id/data_view_toolbar">
+
+        <ImageButton
+            android:id="@+id/hamburger_button"
+            android:contentDescription="@string/button_desc_hamburger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:clickable="true"
+            android:src="@drawable/ic_menu_white"
+            android:background="#00000000"/>
+
+        <ImageButton
+            android:id="@+id/search_button"
+            android:contentDescription="@string/button_desc_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:clickable="true"
+            android:layout_gravity="end"
+            android:paddingEnd="16dp"
+            android:src="@drawable/ic_search"
+            android:background="#00000000"/>
+
+    </android.support.v7.widget.Toolbar>
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
         tools:context="com.bitbusters.android.speproject.DataViewActivity" />
+
+    <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--android:id="@+id/place_autocomplete_fragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginTop="?attr/actionBarSize"-->
+        <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>-->
 
     <ProgressBar
         android:id="@+id/progress_spinner"
@@ -19,16 +56,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity= "center_vertical|center_horizontal"
         android:visibility="invisible" />
-
-    <ImageButton
-        android:id="@+id/hamburger_button"
-        android:contentDescription="@string/button_desc_hamburger"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginStart="0dp"
-        android:src="@drawable/ic_menu_white"
-        android:backgroundTint="@color/darkGreyTransparent"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/gps_button"
@@ -52,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="?attr/actionBarSize"
         android:padding="6dp"
         android:layout_gravity="top|end"/>
 

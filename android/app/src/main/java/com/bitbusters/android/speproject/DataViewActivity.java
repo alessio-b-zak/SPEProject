@@ -2,6 +2,7 @@ package com.bitbusters.android.speproject;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -29,10 +30,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -74,10 +83,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private static final int CDE = 0;
     private static final int WIMS = 1;
     private static final int PERMIT = 2;
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+
     private int currentView;
     private GoogleMap mMap;
     private ProgressBar mProgressSpinner;
     private ImageButton mMenuButton;
+    private ImageButton mSearchButton;
     private FloatingActionButton mGpsButton;
     private TextView mLayerName;
 
@@ -148,6 +160,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
                     .build();
         }
 
@@ -162,6 +176,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         coordinateSystemConverter = new CoordinateSystemConverter();
 
         setupSnackbars();
+
+        mSearchButton = (ImageButton) findViewById(R.id.search_button);
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSearch();
+            }
+        });
     }
 
     public void setupDrawer() {
@@ -263,6 +285,18 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void closeView(int view) {
         mMap.setOnCameraIdleListener(null);
         clearMarkers(view);
+    }
+
+    public void openSearch() {
+        try {
+            Intent intent =
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                            .build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void loadMarkers(int view) {
@@ -528,6 +562,24 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.i(TAG, "Place: " + place.getName());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Log.i(TAG, status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
 
 
     // Manipulates the map once available when created.
