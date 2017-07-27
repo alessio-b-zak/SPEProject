@@ -10,29 +10,26 @@ import java.io.InputStreamReader
 /**
  * Created by mihajlo on 04/07/17.
  */
-class InputStreamToMyArea: InputStreamHelper() {
-
-    private lateinit var myArea: MyArea
+class InputStreamToMyAreaCDE : InputStreamHelper() {
 
     @Throws(IOException::class)
-    fun readJsonStream(inputStream: InputStream): MyArea {
+    fun readJsonStream(inputStream: InputStream, myArea: MyArea) {
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
         reader.isLenient = true
         reader.use {
-            readMessagesArray(reader)
+            readMessagesArray(reader, myArea)
         }
-        return myArea
     }
 
     @Throws(IOException::class)
-    fun readMessagesArray(reader: JsonReader) {
+    fun readMessagesArray(reader: JsonReader, myArea: MyArea) {
         reader.beginObject()
         while (reader.hasNext()) {
             val name = reader.nextName()
             if (name == "items") {
                 reader.beginArray()
                 while (reader.hasNext()) {
-                    readMessage(reader)
+                    readMessage(reader, myArea)
                 }
                 reader.endArray()
             } else {
@@ -43,23 +40,20 @@ class InputStreamToMyArea: InputStreamHelper() {
     }
 
     @Throws(IOException::class)
-    fun readMessage(reader: JsonReader) {
-        var waterbody = ""
-        var operationalCatchment = ""
+    fun readMessage(reader: JsonReader, myArea: MyArea) {
         val characteristicList = arrayListOf<Characteristic>()
 
         reader.beginObject()
         while (reader.hasNext()) {
             val name = reader.nextName()
             when(name){
-                "label"       -> waterbody = reader.nextString()
-                "isVersionOf" -> operationalCatchment = readVersionOf(reader, characteristicList)
+                "label"       -> myArea.waterbody = reader.nextString()
+                "isVersionOf" -> myArea.operationalCatchment = readVersionOf(reader, characteristicList)
                 else          -> reader.skipValue()
             }
         }
         reader.endObject()
-
-        myArea = MyArea(waterbody, operationalCatchment, characteristicList)
+        myArea.characteristicList = characteristicList;
     }
 
     @Throws(IOException::class)

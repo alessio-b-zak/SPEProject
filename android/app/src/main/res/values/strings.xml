@@ -87,5 +87,10 @@
     </string>
 
     <string name="my_area_title"><b>My Area</b></string>
-    <string name="my_area_description"></string>
+    <string name="my_area_waterbody">Nearest River:</string>
+    <string name="my_area_operational">Operational Catchment:</string>
+    <string name="my_area_management">Management Catchment:</string>
+    <string name="my_area_district">River Basin District:</string>
+    <string name="my_area_permit_button">Show the Nearest\nDischarge Permit\nPoint on the Map</string>
+    <string name="my_area_wims_button">Show the Nearest\nWIMS Point\non the Map</string>
 </resources>

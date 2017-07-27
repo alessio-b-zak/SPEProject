@@ -40,6 +40,115 @@
                 style="@style/table_layout"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/my_area_summary_table">
+
+                <TableRow
+                    android:id="@+id/my_area_waterbody_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/text_view_table_parent"
+                        android:id="@+id/my_area_waterbody_name"
+                        android:text="@string/my_area_waterbody"
+                        android:gravity="start"
+                        android:layout_weight="0.7"/>
+                    <TextView
+                        style="@style/text_view_table_child"
+                        android:id="@+id/my_area_waterbody_value"
+                        android:text=""
+                        android:gravity="start"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/my_area_operational_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/text_view_table_parent"
+                        android:id="@+id/my_area_operational_name"
+                        android:text="@string/my_area_operational"
+                        android:gravity="start"
+                        android:layout_weight="0.7"/>
+                    <TextView
+                        style="@style/text_view_table_child"
+                        android:id="@+id/my_area_operational_value"
+                        android:text=""
+                        android:gravity="start"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/my_area_management_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/text_view_table_parent"
+                        android:id="@+id/my_area_management_name"
+                        android:text="@string/my_area_management"
+                        android:gravity="start"
+                        android:layout_weight="0.7"/>
+                    <TextView
+                        style="@style/text_view_table_child"
+                        android:id="@+id/my_area_management_value"
+                        android:text=""
+                        android:gravity="start"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/my_area_district_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/text_view_table_parent"
+                        android:id="@+id/my_area_district_name"
+                        android:text="@string/my_area_district"
+                        android:gravity="start"
+                        android:layout_weight="0.7"/>
+                    <TextView
+                        style="@style/text_view_table_child"
+                        android:id="@+id/my_area_district_value"
+                        android:text=""
+                        android:gravity="start"/>
+
+                </TableRow>
+
+            </TableLayout>
+
+            <TableLayout
+                style="@style/table_layout"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/my_area_button_table">
+
+                <TableRow
+                    android:id="@+id/my_area_button_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <Button
+                        style="@style/big_button"
+                        android:id="@+id/my_area_wims_button"
+                        android:layout_width="0dip"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:text="@string/my_area_wims_button"
+                        android:drawableTop="@drawable/ic_wims_marker"
+                        android:contentDescription="@string/my_area_wims_button"/>
+
+                    <Button
+                        style="@style/big_button"
+                        android:id="@+id/my_area_permit_button"
+                        android:text="@string/my_area_permit_button"
+                        android:drawableTop="@drawable/ic_permit_marker"
+                        android:contentDescription="@string/my_area_permit_button"/>
+
+                </TableRow>
+
             </TableLayout>
 
         </LinearLayout>

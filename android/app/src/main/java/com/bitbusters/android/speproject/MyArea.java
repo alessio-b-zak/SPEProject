@@ -2,6 +2,7 @@ package com.bitbusters.android.speproject;
 
 import android.util.Log;
 
+import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.data.geojson.GeoJsonFeature;
 
@@ -21,14 +22,22 @@ public class MyArea {
     private String managementCatchment;
     private String riverBasinDistrict;
     private ArrayList<Characteristic> characteristicList;
+    private WIMSPoint wimsPoint;
+    private DischargePermitPoint permitPoint;
 
-    MyArea(String waterbody, String operationalCatchment,
-           ArrayList<Characteristic> characteristicList) {
-        this.waterbody = waterbody;
-        this.characteristicList = characteristicList;
-        this.operationalCatchment = operationalCatchment;
+    private List<Boolean> isDataLoaded;
+
+    private OnPopulated listener;
+
+    MyArea() {
+        this.waterbody = "";
+        this.characteristicList = null;
+        this.operationalCatchment = "";
         this.managementCatchment = "";
         this.riverBasinDistrict = "";
+        this.wimsPoint = null;
+        this.permitPoint = null;
+        this.isDataLoaded = new ArrayList<Boolean>();
     }
 
     public String getWaterbody() {
@@ -45,6 +54,14 @@ public class MyArea {
 
     public String getRiverBasinDistrict() {
         return riverBasinDistrict;
+    }
+
+    public WIMSPoint getWIMSPoint() {
+        return wimsPoint;
+    }
+
+    public DischargePermitPoint getPermitPoint() {
+        return permitPoint;
     }
 
     public ArrayList<Characteristic> getCharacteristicList() {
@@ -65,6 +82,38 @@ public class MyArea {
 
     public void setRiverBasinDistrict(String riverBasinDistrict) {
         this.riverBasinDistrict = riverBasinDistrict;
+        isDataLoaded.add(true);
+        if(isDataLoaded.size() == 3 && listener != null) {
+            listener.onPopulated();
+        }
+    }
+
+    public void setCharacteristicList(ArrayList<Characteristic> characteristicList) {
+        this.characteristicList = characteristicList;
+    }
+
+    public void setWimsPoint(WIMSPoint wimsPoint) {
+        this.wimsPoint = wimsPoint;
+        isDataLoaded.add(true);
+        if(isDataLoaded.size() == 3 && listener != null) {
+            listener.onPopulated();
+        }
+    }
+
+    public void setPermitPoint(DischargePermitPoint permitPoint) {
+        this.permitPoint = permitPoint;
+        isDataLoaded.add(true);
+        if(isDataLoaded.size() == 3 && listener != null) {
+            listener.onPopulated();
+        }
+    }
+
+    public OnPopulated getOnPopulatedListener() {
+        return listener;
+    }
+
+    public void setOnPopulatedListener(OnPopulated listener) {
+        this.listener = listener;
     }
 
 }

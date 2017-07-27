@@ -10,4 +10,7 @@ public interface OnTaskCompleted {
     void onTaskCompletedCDEPoint(List<CDEPoint> result);
     void onTaskCompletedDischargePermitPoint(List<DischargePermitPoint> result);
     void onTaskCompletedCDERiverLine(CDEPoint result);
+    void onTaskCompletedMyAreaWIMS(WIMSPoint wimsPoint);
+    void onTaskCompletedMyAreaPermit(DischargePermitPoint permitPoint);
+    void onTaskCompletedMyAreaCDE();
 }

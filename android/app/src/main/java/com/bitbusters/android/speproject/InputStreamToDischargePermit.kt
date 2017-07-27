@@ -35,7 +35,7 @@ class InputStreamToDischargePermit: InputStreamHelper() {
     }
 
     @Throws(IOException::class)
-    fun readMessage(reader: JsonReader, messages: ArrayList<DischargePermitPoint>) {
+    fun readMessage(reader: JsonReader, messages: ArrayList<DischargePermitPoint>, includeAll: Boolean = false) {
         var id = ""
         var holder = ""
         var siteType = ""
@@ -62,7 +62,7 @@ class InputStreamToDischargePermit: InputStreamHelper() {
         }
         reader.endObject()
 
-        if(revocationDate != "") {
+        if(revocationDate != "" || includeAll) {
             val newPoint = DischargePermitPoint(id, holder, effluentType, siteType, effectiveDate,
                                                 latitude, longitude)
             messages.add(newPoint)

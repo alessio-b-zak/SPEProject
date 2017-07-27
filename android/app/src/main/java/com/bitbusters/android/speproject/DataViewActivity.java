@@ -102,6 +102,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private FragmentManager mFragmentManager;
     private WIMSDataFragment mWIMSDataFragment;
     private CDEDataFragment mCDEDataFragment;
+    private MyAreaFragment mMyAreaFragment;
     private CDEDetailsFragment mCDEDetailsFragment;
     private WIMSDetailsFragment mWIMSDetailsFragment;
     private DischargePermitDataFragment mDischargePermitDataFragment;
@@ -114,6 +115,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private MultiListener mMultiListener = new MultiListener();
     private Drawer mDrawer;
     private CoordinateSystemConverter coordinateSystemConverter;
+
+    private MyArea myArea;
 
     private WIMSPoint selectedWIMSPoint;
     private CDEPoint selectedCDEPoint;
@@ -301,7 +304,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void openSearch() {
         try {
             AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
-                    .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
                     .setCountry("GB")
                     .build();
 
@@ -423,14 +425,53 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void showMyArea(View v) {
-        // Hide the floating action buttons.
-        displayHomeButtons(false);
-        // Initiate the info fragment.
-        MyAreaFragment fragment = new MyAreaFragment();
-        mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-                .add(R.id.fragment_container, fragment)
-                .addToBackStack(null).commit();
+        mDrawer.closeDrawer();
+        if(connected) {
+            if(haveGPSOn(getApplicationContext())) {
+                if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    mMap.setMyLocationEnabled(false);
+                    mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
+
+                    // Hide the floating action buttons.
+                    displayHomeButtons(false);
+                    // Initiate the info fragment.
+
+                    mProgressSpinner.setVisibility(View.VISIBLE);
+                    final Snackbar snack = Snackbar.make(findViewById(R.id.fragment_container),
+                                                   "Determining your exact location",
+                                                   Snackbar.LENGTH_INDEFINITE);
+                    snack.show();
+
+                    myArea = new MyArea();
+
+                    new MyAreaCDEAPI(this).execute(getCurrentLocation(), myArea);
+
+                    myArea.setOnPopulatedListener(new OnPopulated() {
+                        @Override
+                        public void onPopulated() {
+                            Fragment fragment = new MyAreaFragment();
+                            mMyAreaFragment = (MyAreaFragment) fragment;
+
+                            mFragmentManager.beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                                    .add(R.id.fragment_container, mMyAreaFragment)
+                                    .addToBackStack(null).commit();
+
+                            mProgressSpinner.setVisibility(View.INVISIBLE);
+                            snack.dismiss();
+                        }
+                    });
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+                }
+            } else {
+                displaySimpleSnackbar("GPS Required", Snackbar.LENGTH_SHORT);
+            }
+        } else {
+            displaySimpleSnackbar("Internet Connection Required", Snackbar.LENGTH_SHORT);
+        }
+
     }
 
     @Override
@@ -686,9 +727,26 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mPermitClusterManager.cluster();
     }
 
+    @Override
+    public void onTaskCompletedMyAreaWIMS(WIMSPoint wimsPoint) {
+        myArea.setWimsPoint(wimsPoint);
+    }
+
+    @Override
+    public void onTaskCompletedMyAreaPermit(DischargePermitPoint permitPoint) {
+        myArea.setPermitPoint(permitPoint);
+    }
+
+    @Override
+    public void onTaskCompletedMyAreaCDE() {
+        new MyAreaCatchmentsAPI().execute(myArea);
+        new MyAreaNearestWIMSAPI(this).execute(getCurrentLocation());
+        new MyAreaNearestPermitAPI(this).execute(getCurrentLocation());
+    }
+
+
     public void showGeoJsonData(CDEPoint cdePoint) {
         cdePoint.getRiverPolygon().setPolygonStyle(GeoJsonStyles.geoJsonPolygonStyle());
-//        cdePoint.getRiverPolygon().setLineStringStyle(GeoJsonStyles.geoJsonLineStringStyle());
         mGeoJsonLayer.addFeature(cdePoint.getRiverPolygon());
         mGeoJsonLayer.addLayerToMap();
     }
@@ -975,5 +1033,22 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         return mLocation;
     }
 
+    public MyArea getMyArea() {
+        return myArea;
+    }
+
+    public void setCameraFocusOnMarker(Object point) {
+        LatLng position = null;
+        onBackPressed();
+        closeView(currentView);
+        if(point instanceof WIMSPoint) {
+            openView(WIMS);
+            position = new LatLng(((WIMSPoint) point).getLatitude(), ((WIMSPoint) point).getLongitude());
+        } else if(point instanceof DischargePermitPoint) {
+            openView(PERMIT);
+            position = new LatLng(((DischargePermitPoint) point).getLatitude(), ((DischargePermitPoint) point).getLongitude());
+        }
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+    }
 
 }
