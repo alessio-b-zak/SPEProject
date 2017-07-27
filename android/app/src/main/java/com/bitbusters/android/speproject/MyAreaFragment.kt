@@ -75,10 +75,6 @@ class MyAreaFragment: FragmentHelper() {
         addTextView(tableRow, "River Basin District:", parentWeighting, R.style.text_view_table_parent, Gravity.START)
         addTextView(tableRow, myArea.riverBasinDistrict, childWeighting, R.style.text_view_table_child, Gravity.START)
         mSummaryTable.addView(tableRow)
-
-//        Log.i(TAG, "waterbody: ${myArea.waterbody} \noperational: ${myArea.operationalCatchment} " +
-//                "\nmanagement: ${myArea.managementCatchment} \ndistrict: ${myArea.riverBasinDistrict}" +
-//                "\ncharacteristics: ${myArea.characteristicList}")
     }
 
     internal class MyAreaCatchmentsAPI(val mMyAreaFragment: MyAreaFragment):

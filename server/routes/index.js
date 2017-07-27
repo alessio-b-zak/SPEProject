@@ -226,6 +226,48 @@ router.get('/getWIMSPoints/:lat1/:lon1/:lat3/:lon3/:lastActive', function(req, r
     });
 });
 
+//:lat/:lon/:lastActive
+router.get('/getNearestWIMSPoint/:lat/:lon/:lastActive', function(req, res) {
+
+    // Cast all parametters
+    var lat = parseFloat(req.params.lat);
+    var lon = parseFloat(req.params.lon);
+    var lastActiveYear = req.params.lastActive;
+
+    // Get the documents collection
+    var wimsPoints = db.collection("wimsmodels");
+
+    // Find nearest wimsPoints which was last active on a given year
+    wimsPoints.find({
+        loc: {
+            $near: {
+                $geometry: { 
+                    type: "Point",  
+                    coordinates: [ lon, lat ] 
+                }
+            }
+        },
+        lastActive: {
+            $regex : lastActiveYear
+        }
+    }).toArray(function (err, result) {
+        if (err) {
+            console.log(err);
+            res.send([]);
+        } else {
+            console.log('Found:', result[0]);
+
+            var point = {};
+            point.id        = result[0].waterbodyId;
+            point.latitude  = result[0].loc[0];
+            point.longitude = result[0].loc[1];
+        
+            res.status(200).send(point);
+            res.end();
+        }
+    });
+});
+
 //:lat1/:lon1/:lat3/:lon3
 router.get('/getPermits/:lat1/:lon1/:lat3/:lon3', function(req, res) {
 
@@ -238,12 +280,11 @@ router.get('/getPermits/:lat1/:lon1/:lat3/:lon3', function(req, res) {
     var lon2 = lon3;
     var lat4 = lat3;
     var lon4 = lon1;
-    var onlyActive = req.params.onlyActive;
 
     // Get the documents collection
     var eprTable = db.collection("eprmodels");
 
-    // Find all wimsPoints within the area which are last active on a given year
+    // Find all permits within the area which are last active on a given year
     eprTable.find({
         loc: {
             $geoWithin: {
@@ -276,6 +317,51 @@ router.get('/getPermits/:lat1/:lon1/:lat3/:lon3', function(req, res) {
             }
         res.status(200).send(points);
         res.end();
+        }
+    });
+});
+
+//:lat/:lon
+router.get('/getNearestPermit/:lat/:lon', function(req, res) {
+
+    // Cast all parametters into floats
+    var lat = parseFloat(req.params.lat);
+    var lon = parseFloat(req.params.lon);
+
+    // Get the documents collection
+    var eprTable = db.collection("eprmodels");
+
+    // Find the nearest permit
+    eprTable.find({
+        loc: {
+            $near: {
+                $geometry: { 
+                    type: "Point",  
+                    coordinates: [ lon, lat ] 
+                }
+            }
+        }
+    }).toArray(function (err, result) {
+        if (err) {
+            console.log(err);
+            res.send([]);
+        } else {
+            console.log('Found:', result[0]);
+            
+            point = {};
+            point.id            = result[0].permitId;
+            point.latitude      = result[0].loc[0];
+            point.longitude     = result[0].loc[1];
+            point.effluentType  = result[0].effluentType;
+            point.effectiveDate = result[0].effectiveDate;
+            point.siteType      = result[0].siteType;
+            point.holder        = result[0].holder;
+            if(result[0].revocationDate != null) {
+                point.revocationDate = result[0].revocationDate;
+            }
+        
+            res.status(200).send(point);
+            res.end();
         }
     });
 });

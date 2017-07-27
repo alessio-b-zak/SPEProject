@@ -17,7 +17,7 @@
         <!-- Customize your theme here. -->
         <item name="android:textColorPrimary">@color/colorTextPrimary</item>
         <item name="android:textColorPrimaryInverse">@color/colorTextPrimary</item>
-        <item name="android:statusBarColor">@android:color/holo_blue_bright</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorAccent">@color/colorAccent</item>
