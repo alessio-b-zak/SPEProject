@@ -240,12 +240,7 @@ router.get('/getNearestWIMSPoint/:lat/:lon/:lastActive', function(req, res) {
     // Find nearest wimsPoints which was last active on a given year
     wimsPoints.find({
         loc: {
-            $near: {
-                $geometry: { 
-                    type: "Point",  
-                    coordinates: [ lon, lat ] 
-                }
-            }
+            $near: [ lat, lon ]
         },
         lastActive: {
             $regex : lastActiveYear
@@ -334,12 +329,7 @@ router.get('/getNearestPermit/:lat/:lon', function(req, res) {
     // Find the nearest permit
     eprTable.find({
         loc: {
-            $near: {
-                $geometry: { 
-                    type: "Point",  
-                    coordinates: [ lon, lat ] 
-                }
-            }
+            $near: [ lat, lon ]
         }
     }).toArray(function (err, result) {
         if (err) {
@@ -348,7 +338,7 @@ router.get('/getNearestPermit/:lat/:lon', function(req, res) {
         } else {
             console.log('Found:', result[0]);
             
-            point = {};
+            var point = {};
             point.id            = result[0].permitId;
             point.latitude      = result[0].loc[0];
             point.longitude     = result[0].loc[1];
