@@ -14,7 +14,7 @@ import java.util.Map;
  * Created by cp153 on 06/12/2016.
  */
 
-public class CDEPoint extends Point {
+public class CDEPoint {
     private String waterbodyId;
     private String label;
     private LatLng location;
@@ -124,7 +124,6 @@ public class CDEPoint extends Point {
     }
 
     CDEPoint(String waterbodyId, String label, double latitude, double longitude, GeoJsonFeature riverPolygon) {
-        super(latitude,longitude,"CDE_Point", "");
         this.waterbodyId = waterbodyId;
         this.label = label;
         this.location = new LatLng(latitude,longitude);
@@ -178,14 +177,6 @@ public class CDEPoint extends Point {
     }
 
     public void setLabel(String label) { this.label = label; }
-
-    public void setLatitude(double latitude) {
-        super.setLatitude(latitude);
-    }
-
-    public void setLongitude(double longitude) {
-        super.setLongitude(longitude);
-    }
 
     public void setRiverLine(GeoJsonFeature riverLine) {
         this.riverLine = riverLine;

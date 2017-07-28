@@ -138,6 +138,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
                 }
             } else {
                 groupTitle.visibility = View.GONE
+                groupTable.visibility = View.GONE
             }
         }
     }

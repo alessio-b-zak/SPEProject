@@ -231,7 +231,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.gps_icon);
+                .withIcon(R.drawable.ic_where_am_i);
 
         final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
                 .withIdentifier(5)
@@ -432,36 +432,40 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     mMap.setMyLocationEnabled(false);
                     mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
+                    if(mLocation != null) {
 
-                    // Hide the floating action buttons.
-                    displayHomeButtons(false);
-                    // Initiate the info fragment.
+                        // Hide the floating action buttons.
+                        displayHomeButtons(false);
+                        // Initiate the info fragment.
 
-                    mProgressSpinner.setVisibility(View.VISIBLE);
-                    final Snackbar snack = Snackbar.make(findViewById(R.id.fragment_container),
-                                                   "Determining your exact location",
-                                                   Snackbar.LENGTH_INDEFINITE);
-                    snack.show();
+                        mProgressSpinner.setVisibility(View.VISIBLE);
+                        final Snackbar snack = Snackbar.make(findViewById(R.id.fragment_container),
+                                "Determining your exact location",
+                                Snackbar.LENGTH_INDEFINITE);
+                        snack.show();
 
-                    myArea = new MyArea();
+                        myArea = new MyArea();
 
-                    new MyAreaCDEAPI(this).execute(getCurrentLocation(), myArea);
+                        new MyAreaCDEAPI(this).execute(getCurrentLocation(), myArea);
 
-                    myArea.setOnPopulatedListener(new OnPopulated() {
-                        @Override
-                        public void onPopulated() {
-                            Fragment fragment = new MyAreaFragment();
-                            mMyAreaFragment = (MyAreaFragment) fragment;
+                        myArea.setOnPopulatedListener(new OnPopulated() {
+                            @Override
+                            public void onPopulated() {
+                                Fragment fragment = new MyAreaFragment();
+                                mMyAreaFragment = (MyAreaFragment) fragment;
 
-                            mFragmentManager.beginTransaction()
-                                    .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-                                    .add(R.id.fragment_container, mMyAreaFragment)
-                                    .addToBackStack(null).commit();
+                                mFragmentManager.beginTransaction()
+                                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                                        .add(R.id.fragment_container, mMyAreaFragment)
+                                        .addToBackStack(null).commit();
 
-                            mProgressSpinner.setVisibility(View.INVISIBLE);
-                            snack.dismiss();
-                        }
-                    });
+                                mProgressSpinner.setVisibility(View.INVISIBLE);
+                                snack.dismiss();
+                            }
+                        });
+                    } else {
+                        displaySimpleSnackbar("Failed to determine your exact location", Snackbar.LENGTH_SHORT);
+                    }
                 } else {
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
                 }
@@ -814,7 +818,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
-        currentLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.target_icon)));
+        currentLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_target_black)));
         currentLocationMarker.setTag("Current Location");
     }
 
