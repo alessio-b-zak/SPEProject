@@ -110,6 +110,10 @@
                 android:id="@+id/wims_details_solids_table">
             </TableLayout>
 
+            <Button
+                style="@style/full_report_button"
+                android:id="@+id/wims_full_report_button"/>
+
         </LinearLayout>
     </ScrollView>
 

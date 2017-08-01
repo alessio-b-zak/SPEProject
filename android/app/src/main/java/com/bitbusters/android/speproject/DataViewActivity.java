@@ -430,14 +430,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         if(hasNetworkConnection()) {
             if(haveGPSOn(getApplicationContext())) {
                 if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    mMap.setMyLocationEnabled(false);
-                    mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
+                    if(connected) {
+                        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
+                    }
                     if(mLocation != null) {
-
-                        // Hide the floating action buttons.
                         displayHomeButtons(false);
-                        // Initiate the info fragment.
 
                         mProgressSpinner.setVisibility(View.VISIBLE);
                         final Snackbar snack = Snackbar.make(findViewById(R.id.fragment_container),

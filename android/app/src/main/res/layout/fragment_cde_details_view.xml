@@ -33,23 +33,23 @@
                 android:id="@+id/cde_details_title"
                 android:text=""/>
 
-            <TableLayout
-                style="@style/table_layout"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/cde_waterbody_id_table"
-                android:stretchColumns="1">
-                <TableRow>
-                    <TextView
-                        style="@style/text_view_table_parent"
-                        android:id="@+id/cde_waterbody_id_title"
-                        android:text="@string/cde_waterbody_id_title"
-                        android:gravity="start"/>
-                    <TextView
-                        style="@style/text_view_table_child"
-                        android:id="@+id/cde_waterbody_id"
-                        android:gravity="start"/>
-                </TableRow>
-            </TableLayout>
+            <!--<TableLayout-->
+                <!--style="@style/table_layout"-->
+                <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:id="@+id/cde_waterbody_id_table"-->
+                <!--android:stretchColumns="1">-->
+                <!--<TableRow>-->
+                    <!--<TextView-->
+                        <!--style="@style/text_view_table_parent"-->
+                        <!--android:id="@+id/cde_waterbody_id_title"-->
+                        <!--android:text="@string/cde_waterbody_id_title"-->
+                        <!--android:gravity="start"/>-->
+                    <!--<TextView-->
+                        <!--style="@style/text_view_table_child"-->
+                        <!--android:id="@+id/cde_waterbody_id"-->
+                        <!--android:gravity="start"/>-->
+                <!--</TableRow>-->
+            <!--</TableLayout>-->
 
             <TextView
                 style="@style/text_view_sub_heading"
@@ -84,6 +84,9 @@
                 android:id="@+id/cde_rnag_table">
             </TableLayout>
 
+            <Button
+                style="@style/full_report_button"
+                android:id="@+id/cde_full_report_button"/>
         </LinearLayout>
     </ScrollView>
 

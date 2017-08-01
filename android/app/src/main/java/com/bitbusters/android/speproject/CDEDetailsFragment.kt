@@ -2,11 +2,16 @@ package com.bitbusters.android.speproject
 
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import java.net.URL
+import android.content.Intent
+import android.net.Uri
 
 
 /**
@@ -16,6 +21,7 @@ import android.widget.*
 open class CDEDetailsFragment : FragmentHelper() {
     private lateinit var mToolbar: Toolbar  // The toolbar.
     private lateinit var mBackButton: ImageButton
+    private lateinit var mFullReportButton: Button
     private lateinit var mCDEDetailsView: View
     private lateinit var mRealClassificationTable: TableLayout
     private lateinit var mObjectivesTable: TableLayout
@@ -27,6 +33,7 @@ open class CDEDetailsFragment : FragmentHelper() {
 
     companion object {
         private val TAG = "CDE_DETAILS_FRAGMENT"
+        private val URL_PREFIX = "http://environment.data.gov.uk/catchment-planning/WaterBody/"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,12 +60,18 @@ open class CDEDetailsFragment : FragmentHelper() {
         val cdePointLabel: TextView = view.bind(R.id.cde_details_title)
         cdePointLabel.text = cdePoint.label
 
-        val waterbodyId: TextView = view.bind(R.id.cde_waterbody_id)
-        waterbodyId.text = cdePoint.waterbodyId
-
         mToolbar = view.bind(R.id.cde_details_toolbar)
 
         mLinearLayout = view.bind(R.id.cde_details_linear_layout)
+
+        mFullReportButton = view.bind(R.id.cde_full_report_button)
+        mFullReportButton.setOnClickListener {
+            val intent = Intent()
+            intent.action = Intent.ACTION_VIEW
+            intent.addCategory(Intent.CATEGORY_BROWSABLE)
+            intent.data = Uri.parse(URL_PREFIX + cdePoint.waterbodyId)
+            startActivity(intent)
+        }
 
         mBackButton = view.bind(R.id.back_button_cde_details_view)
         mBackButton.setOnClickListener { activity.onBackPressed() }

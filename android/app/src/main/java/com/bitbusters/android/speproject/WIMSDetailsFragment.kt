@@ -1,5 +1,7 @@
 package com.bitbusters.android.speproject
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
@@ -19,6 +21,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
     private lateinit var mWIMSDetailsView: View
     private lateinit var mToolbar: Toolbar  // The toolbar.
     private lateinit var mBackButton: ImageButton
+    private lateinit var mFullReportButton: Button
     private lateinit var mGeneralTable: TableLayout
     private lateinit var mDissolvedOxygenTable: TableLayout
     private lateinit var mOxygenDemandTable: TableLayout
@@ -28,6 +31,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
     private lateinit var mSolidsTable: TableLayout
 
     private val TAG = "WIMS_DETAILS_FRAGMENT"
+    private val URL_PREFIX = "http://environment.data.gov.uk/water-quality/id/sampling-point/"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +59,15 @@ open class WIMSDetailsFragment : FragmentHelper() {
         wimsPointLabel.text = wimsPoint.label
 
         mToolbar = view.bind(R.id.wims_details_toolbar)
+
+        mFullReportButton = view.bind(R.id.wims_full_report_button)
+        mFullReportButton.setOnClickListener {
+            val intent = Intent()
+            intent.action = Intent.ACTION_VIEW
+            intent.addCategory(Intent.CATEGORY_BROWSABLE)
+            intent.data = Uri.parse(URL_PREFIX + wimsPoint.id + ".html")
+            startActivity(intent)
+        }
 
         mBackButton = view.bind(R.id.back_button_wims_details_view)
         mBackButton.setOnClickListener { activity.onBackPressed() }

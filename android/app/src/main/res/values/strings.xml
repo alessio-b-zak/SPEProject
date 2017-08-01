@@ -6,9 +6,6 @@
     <string name="cam_toast">SWOOSH!</string>
     <string name="choose_tag">Choose a tag</string>
 
-    <string name="back_button">Back</string>
-    <string name="info_button">More Info</string>
-
     <string name="drawer_cde">River Catchment Quality</string>
     <string name="drawer_wims">Water Quality</string>
     <string name="drawer_permit">Pollution Licence Holders</string>
@@ -29,6 +26,9 @@
 
     <string name="button_desc_hamburger">Menu</string>
     <string name="button_desc_search">Search</string>
+    <string name="button_desc_back">Back</string>
+    <string name="button_desc_info">More Info</string>
+    <string name="button_desc_full_report">Full Report</string>
 
     <string name="cde_loading_message">Loading ratings data...</string>
     <string name="cde_table_classification_value">Rating</string>
