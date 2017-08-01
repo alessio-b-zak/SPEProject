@@ -7,9 +7,31 @@ var router = express.Router();
 var Jimp = require("jimp");
 var Baby = require("babyparse");
 var sharp = require("sharp");
+var schedule = require('node-schedule');
 
 var mongodb = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
+
+var axios = require('axios');
+var Promise = require("bluebird");
+var mongoose = require('mongoose')
+  , Schema = mongoose.Schema
+
+mongoose.connect('mongodb://localhost:27017/local', {
+    useMongoClient: true,
+});
+
+const Proj4js = require('proj4');
+
+Proj4js.defs([
+    [
+        'WGS84',
+        '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+    ],[
+        'EPSG:27700',
+        '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.060,0.1502, 0.2470,0.8421,-20.4894 +units=m +no_defs'
+    ]
+])
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -411,6 +433,175 @@ router.post('/uploadImage', function(req, res) {
         } else {
             console.dir(request);
         }
+    });
+});
+
+// Every Saturday at 03:59 repopulate wims data
+var wims_update_rule = new schedule.RecurrenceRule();
+wims_update_rule.hour = 3;
+wims_update_rule.minute = 59;
+wims_update_rule.dayOfWeek = 6;
+
+var update_wims = schedule.scheduleJob(wims_update_rule, function(){
+    db.collection("wimsmodel").drop();
+
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+    var wimsSchema = Schema(
+        {
+            waterbodyId: String,
+            loc:         [Number],
+            lastActive:  String
+        }
+    );
+
+    var wimsModel = mongoose.model('wimsModel', wimsSchema);
+
+    axios.get('http://environment.data.gov.uk/water-quality/id/sampling-point.json?lat=54.483784&long=-2.114319&dist=750&_limit=50000&samplingPointStatus=open').then(function (response) {
+        var result = response.data
+        var wimsPoints = []
+
+        result["items"].forEach(function(element) {
+            var wimsPoint = {
+                url: `http://environment.data.gov.uk/water-quality/data/measurement.json?samplingPoint=${element["notation"]}&_sort=-sample&_limit=1`,
+                data: {
+                    waterbodyId: element["notation"],
+                    loc: [element["lat"], element["long"]]
+                }
+            }
+
+            wimsPoints.push(wimsPoint)
+
+        })
+
+        Promise.map(wimsPoints, function(wimsPoint){
+            return axios.get(wimsPoint.url).then(function (response) {
+                var res = response.data
+                var items = res["items"];
+                if (items != null){
+                    var firstItem = items[0];
+                    if (firstItem != null) {
+                        var sample = firstItem["sample"];
+                        if (sample != null) {
+                            wimsPoint.data.lastActive = sample["sampleDateTime"]; 
+                        }
+                    }
+                }
+                wimsModel.create(wimsPoint.data, function (err, entry) {
+                    if (err) return handleError(err);
+                    // saved!
+                    console.log(`waterbodyId: ${wimsPoint.data.waterbodyId}; loc: ${wimsPoint.data.loc}; lastActive: ${wimsPoint.data.lastActive}`);
+                });
+            }).catch(function (error) {
+                console.log('error with:' + error);
+            })
+        }, {concurrency: 10}).then(() => {
+            process.exit()
+        })
+    }).catch(function (error) {
+        console.log('error in 2');
+    });
+});
+
+
+function osgbToWGS84(easting, northing) {
+    var source = new Proj4js.Proj('EPSG:27700');
+    var dest = new Proj4js.Proj('WGS84');
+
+    var result = Proj4js.transform(source, dest, [easting, northing]);
+
+    return [result.y, result.x]
+}
+
+function isArray(what) {
+    return Object.prototype.toString.call(what) === '[object Array]';
+}
+
+function handleError(err) {
+    console.log('Error saving the permit: ' + err);
+}
+
+// Every Saturday at 02:59 repopulate epr data
+var epr_update_rule = new schedule.RecurrenceRule();
+epr_update_rule.hour = 2;
+epr_update_rule.minute = 59;
+epr_update_rule.dayOfWeek = 6;
+
+var update_epr = schedule.scheduleJob(epr_update_rule, function(){
+    db.collection("eprmodel").drop();
+
+    const db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+    const eprSchema = Schema({
+        permitId: String,
+        effectiveDate: String,
+        revocationDate: String,
+        holder: String,
+        effluentType: String,
+        siteType: String,
+        loc: [Number],
+    });
+
+    const eprModel = mongoose.model('eprModel', eprSchema);
+
+    const urls = [
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fwaste-site&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fagriculture&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=5000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=10000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=15000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=20000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=25000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=30000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=35000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=40000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=45000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=50000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=55000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=60000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=65000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=70000&_limit=5000',
+    ];
+
+    Promise.map(urls, url => axios.get(url).then((response) => {
+        const res = response.data;
+        const items = res.items;
+        if (items != null) {
+            items.forEach((item) => {
+                const permit = {};
+                permit.permitId       = item['@id'];
+                permit.effectiveDate  = item.effectiveDate;
+                permit.effluentType   = item.effluentType.comment;
+                permit.siteType       = item.site.siteType.comment;
+                
+                const holder          = item.holder;
+                if (isArray(holder)) {
+                    permit.holder = holder[0].name;
+                } else {
+                    permit.holder = holder.name;
+                }
+                
+                if (item.revocationDate != null) {
+                    permit.revocationDate = item.revocationDate;
+                }
+                
+                const easting  = item.site.location.easting;
+                const northing = item.site.location.northing;
+                permit.loc = osgbToWGS84(easting, northing);
+                
+                eprModel.create(permit, (err, doc) => {
+                    if (err) return handleError(err);
+                    console.log(`permitId: ${permit.permitId}; revocationDate: ${permit.revocationDate}`);
+                });
+            });
+        }
+    }).catch((error) => {
+        console.log(error);
+    }), { concurrency: 5 }).then(() => {
+        process.exit();
     });
 });
 
