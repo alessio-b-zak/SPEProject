@@ -443,11 +443,11 @@ wims_update_rule.minute = 59;
 wims_update_rule.dayOfWeek = 6;
 
 var update_wims = schedule.scheduleJob(wims_update_rule, function(){
-    db.collection("wimsmodel").drop();
-
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
+    
+    db.collection("wimsmodels").drop(); 
+   
     var wimsSchema = Schema(
         {
             waterbodyId: String,
@@ -524,16 +524,15 @@ function handleError(err) {
 
 // Every Saturday at 02:59 repopulate epr data
 var epr_update_rule = new schedule.RecurrenceRule();
-epr_update_rule.hour = 2;
-epr_update_rule.minute = 59;
-epr_update_rule.dayOfWeek = 6;
+epr_update_rule.hour = 8;
+epr_update_rule.minute = 44;
+epr_update_rule.dayOfWeek = 2;
 
 var update_epr = schedule.scheduleJob(epr_update_rule, function(){
-    db.collection("eprmodel").drop();
-
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
+    db.collection("eprmodels").drop();
+    
     const eprSchema = Schema({
         permitId: String,
         effectiveDate: String,
