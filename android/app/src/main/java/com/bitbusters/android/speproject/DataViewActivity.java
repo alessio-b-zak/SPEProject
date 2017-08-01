@@ -201,21 +201,22 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        final PrimaryDrawerItem drawerCDE = new PrimaryDrawerItem()
-                .withIdentifier(1)
-                .withName(R.string.drawer_cde)
-                .withSelectedColor(0x0d4caf)
-                .withSelectedTextColor(Color.WHITE)
-                .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.ic_cde_marker);
 
         final PrimaryDrawerItem drawerWIMS = new PrimaryDrawerItem()
-                .withIdentifier(2)
+                .withIdentifier(1)
                 .withName(R.string.drawer_wims)
                 .withSelectedColor(0x0d4caf)
                 .withSelectedTextColor(Color.WHITE)
                 .withTextColor(Color.WHITE)
                 .withIcon(R.drawable.ic_wims_marker);
+
+        final PrimaryDrawerItem drawerCDE = new PrimaryDrawerItem()
+                .withIdentifier(2)
+                .withName(R.string.drawer_cde)
+                .withSelectedColor(0x0d4caf)
+                .withSelectedTextColor(Color.WHITE)
+                .withTextColor(Color.WHITE)
+                .withIcon(R.drawable.ic_cde_marker);
 
         final PrimaryDrawerItem drawerPermit = new PrimaryDrawerItem()
                 .withIdentifier(3)
@@ -247,8 +248,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withAccountHeader(header)
                 .withSliderBackgroundColor(Color.DKGRAY)
                 .addDrawerItems(
-                        drawerCDE,
                         drawerWIMS,
+                        drawerCDE,
                         drawerPermit,
                         new DividerDrawerItem(),
                         drawerMyArea,
@@ -262,11 +263,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         switch ((int) drawerItem.getIdentifier()){
                             case 1:
                                 closeView(currentView);
-                                openView(CDE);
+                                openView(WIMS);
                                 break;
                             case 2:
                                 closeView(currentView);
-                                openView(WIMS);
+                                openView(CDE);
                                 break;
                             case 3:
                                 closeView(currentView);
@@ -319,7 +320,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     public void loadMarkers(int view) {
-        if (haveNetworkConnection()) {
+        if (hasNetworkConnection()) {
             mProgressSpinner.setVisibility(View.VISIBLE);
             LatLng camCentre = mMap.getCameraPosition().target;
             VisibleRegion screen = mMap.getProjection().getVisibleRegion();
@@ -388,7 +389,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 if( mMap.getCameraPosition().zoom > BASE_ZOOM_LEVEL - 1 ) {
                     loadMarkers(view_params);
                 } else {
-                    if(!wasZoomSnackDisplayed && !zoomSnack.isShown() && haveNetworkConnection()) {
+                    if(!wasZoomSnackDisplayed && !zoomSnack.isShown() && hasNetworkConnection()) {
                         zoomSnack.show();
                     }
                 }
@@ -399,15 +400,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void updateLayerName(int view) {
         switch (view) {
             case CDE:
-                mLayerName.setText(R.string.layer_cde);
+                mLayerName.setText(R.string.drawer_cde);
                 mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.layer_cde));
                 break;
             case WIMS:
-                mLayerName.setText(R.string.layer_wims);
+                mLayerName.setText(R.string.drawer_wims);
                 mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.layer_wims));
                 break;
             case PERMIT:
-                mLayerName.setText(R.string.layer_permit);
+                mLayerName.setText(R.string.drawer_permit);
                 mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.layer_permit));
                 break;
         }
@@ -426,7 +427,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     public void showMyArea(View v) {
         mDrawer.closeDrawer();
-        if(connected) {
+        if(hasNetworkConnection()) {
             if(haveGPSOn(getApplicationContext())) {
                 if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     mMap.setMyLocationEnabled(false);
@@ -963,7 +964,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         return mProgressSpinner;
     }
 
-    public boolean haveNetworkConnection() {
+    public boolean hasNetworkConnection() {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
 

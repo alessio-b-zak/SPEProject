@@ -9,15 +9,15 @@
     <string name="back_button">Back</string>
     <string name="info_button">More Info</string>
 
-    <string name="drawer_cde">CDE Data</string>
-    <string name="drawer_wims">WIMS Data</string>
-    <string name="drawer_permit">Discharge Permits Data</string>
+    <string name="drawer_cde">River Catchment Quality</string>
+    <string name="drawer_wims">Water Quality</string>
+    <string name="drawer_permit">Pollution Licence Holders</string>
     <string name="drawer_my_area">Where am I now?</string>
     <string name="drawer_info">How it Works</string>
 
-    <string name="layer_cde">CDE Layer</string>
-    <string name="layer_wims">WIMS Layer</string>
-    <string name="layer_permit">Discharge Permit Layer</string>
+    <!--<string name="layer_cde">CDE Layer</string>-->
+    <!--<string name="layer_wims">WIMS Layer</string>-->
+    <!--<string name="layer_permit">Discharge Permit Layer</string>-->
 
     <string name="marker_wims">WIMS_Point</string>
     <string name="marker_permit">Waste_Point</string>
@@ -77,15 +77,15 @@
         <b>GPS Button</b>: Zoom in to your current location.
     </string>
     <string name="info_cde_description">
-        <b>CDE Layer</b>: Displays sampling points from Catchment Data Explorer data set along with
-        pollution levels.
+        <b>River Catchment Quality</b>: Displays sampling points from Catchment Data Explorer data
+        set along with pollution levels.
     </string>
     <string name="info_wims_description">
-        <b>WIMS Layer</b>: Displays sampling points from Water Quality Archive with the latest
-        measurements of all measured determinands.
+        <b>Water Quality</b>: Displays sampling points from Water Quality Data Archive showing
+        the latest measurements of all measured determinands.
     </string>
     <string name="info_permit_description">
-        <b>Discharge Permit Layer</b>: Displays locations of water discharge permit points along
+        <b>Pollution Licence Holders</b>: Displays locations of water discharge permit points along
         with the holders name, type of permit and type of site.
     </string>
 
@@ -102,5 +102,6 @@
     <string name="google_search_input_field_holder">Search</string>
     <string name="google_map">Google Map</string>
 
+    <!--Testing Only-->
     <string name="bristol_airport">Bristol Airport</string>
 </resources>
