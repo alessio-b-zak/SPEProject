@@ -55,7 +55,7 @@ class DrawerTest: TestHelper() {
         // Screenshot
         takeScreenshot(mDevice, FOLDER_NAME, "DrawerOpenPermitLayer")
         // Tests
-        onView(withId(R.id.layer_name)).check(matches(withText(R.string.layer_permit)))
+        onView(withId(R.id.layer_name)).check(matches(withText(R.string.drawer_permit)))
         onView(withId(R.id.material_drawer_account_header)).check(matches(not(isDisplayed())))
     }
 
@@ -68,7 +68,7 @@ class DrawerTest: TestHelper() {
         // Screenshot
         takeScreenshot(mDevice, FOLDER_NAME, "DrawerOpenWIMSLayer")
         // Tests
-        onView(withId(R.id.layer_name)).check(matches(withText(R.string.layer_wims)))
+        onView(withId(R.id.layer_name)).check(matches(withText(R.string.drawer_wims)))
         onView(withId(R.id.material_drawer_account_header)).check(matches(not(isDisplayed())))
     }
 
@@ -81,7 +81,7 @@ class DrawerTest: TestHelper() {
         // Screenshot
         takeScreenshot(mDevice, FOLDER_NAME, "DrawerOpenCDELayer")
         // Tests
-        onView(withId(R.id.layer_name)).check(matches(withText(R.string.layer_cde)))
+        onView(withId(R.id.layer_name)).check(matches(withText(R.string.drawer_cde)))
         onView(withId(R.id.material_drawer_account_header)).check(matches(not(isDisplayed())))
     }
 

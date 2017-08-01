@@ -173,7 +173,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         mMapCameraPadding = displayMetrics.heightPixels / 3;
 
-        currentView = WIMS;
+        currentView = CDE;
 
         coordinateSystemConverter = new CoordinateSystemConverter();
 
@@ -248,8 +248,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 .withAccountHeader(header)
                 .withSliderBackgroundColor(Color.DKGRAY)
                 .addDrawerItems(
-                        drawerWIMS,
                         drawerCDE,
+                        drawerWIMS,
                         drawerPermit,
                         new DividerDrawerItem(),
                         drawerMyArea,

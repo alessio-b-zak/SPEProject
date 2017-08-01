@@ -56,7 +56,7 @@ class MyAreaFragmentTest: TestHelper() {
         // Screenshot
         takeScreenshot(mDevice, FOLDER_NAME, "MyAreaFragmentClickNearestWimsButton")
         // Tests
-        onView(withId(R.id.layer_name)).check(matches(withText(R.string.layer_wims)))
+        onView(withId(R.id.layer_name)).check(matches(withText(R.string.drawer_wims)))
         assertTrue(findObjectByDescriptor(mDevice, R.string.marker_wims).exists())
         onView(withId(R.id.map)).check(matches(isDisplayed()))
     }
@@ -68,7 +68,7 @@ class MyAreaFragmentTest: TestHelper() {
         // Screenshot
         takeScreenshot(mDevice, FOLDER_NAME, "MyAreaFragmentClickNearestPermitButton")
         // Tests
-        onView(withId(R.id.layer_name)).check(matches(withText(R.string.layer_permit)))
+        onView(withId(R.id.layer_name)).check(matches(withText(R.string.drawer_permit)))
         assertTrue(findObjectByDescriptor(mDevice, R.string.marker_permit).exists())
         onView(withId(R.id.map)).check(matches(isDisplayed()))
     }
