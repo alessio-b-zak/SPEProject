@@ -458,6 +458,10 @@ var update_wims = schedule.scheduleJob(wims_update_rule, function(){
 
     var wimsModel = mongoose.model('wimsModel', wimsSchema);
 
+    db.collection("wimsmodels").createIndex({
+	loc: "2d"
+    })
+
     axios.get('http://environment.data.gov.uk/water-quality/id/sampling-point.json?lat=54.483784&long=-2.114319&dist=750&_limit=50000&samplingPointStatus=open').then(function (response) {
         var result = response.data
         var wimsPoints = []
@@ -524,9 +528,9 @@ function handleError(err) {
 
 // Every Saturday at 02:59 repopulate epr data
 var epr_update_rule = new schedule.RecurrenceRule();
-epr_update_rule.hour = 8;
-epr_update_rule.minute = 44;
-epr_update_rule.dayOfWeek = 2;
+epr_update_rule.hour = 2;
+epr_update_rule.minute = 59;
+epr_update_rule.dayOfWeek = 6;
 
 var update_epr = schedule.scheduleJob(epr_update_rule, function(){
     const db = mongoose.connection;
@@ -545,24 +549,28 @@ var update_epr = schedule.scheduleJob(epr_update_rule, function(){
 
     const eprModel = mongoose.model('eprModel', eprSchema);
 
+    db.collection("eprmodels").createIndex({
+	loc: "2d"
+    })
+	
     const urls = [
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fwaste-site&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fagriculture&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=5000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=10000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=15000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=20000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=25000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=30000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=35000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=40000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=45000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=50000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=55000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=60000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=65000&_limit=5000',
-    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?easting=423373&northing=360021&dist=1000&effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=70000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fwaste-site&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fagriculture&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=5000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=10000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=15000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=20000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=25000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=30000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=35000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=40000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=45000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=50000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=55000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=60000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=65000&_limit=5000',
+    'https://environment.data.gov.uk/public-register/water-discharges/registration.json?effluentType=http%3A%2F%2Fenvironment.data.gov.uk%2Fpublic-register%2Fwater-discharges%2Fdef%2Feffluent-type%2Fsewage-not-water-company&_offset=70000&_limit=5000',
     ];
 
     Promise.map(urls, url => axios.get(url).then((response) => {
@@ -598,7 +606,7 @@ var update_epr = schedule.scheduleJob(epr_update_rule, function(){
             });
         }
     }).catch((error) => {
-        console.log(error);
+        console.log(error + "ERROR");
     }), { concurrency: 5 }).then(() => {
         process.exit();
     });
