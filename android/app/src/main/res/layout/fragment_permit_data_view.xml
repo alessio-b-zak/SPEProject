@@ -30,49 +30,7 @@
         <TableLayout
             style="@style/table_layout"
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/permit_table"
-            android:stretchColumns="1,2">
-            <TableRow
-                android:id="@+id/permit_table_effluent_type_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    style="@style/text_view_table_parent"
-                    android:gravity="start"
-                    android:text="@string/permit_table_effluent_type"/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/permit_table_effluent_type"
-                    android:text=""/>
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/permit_table_site_type_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    style="@style/text_view_table_parent"
-                    android:gravity="start"
-                    android:text="@string/permit_table_site_type"/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/permit_table_site_type"
-                    android:text=""/>
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/permit_table_effective_date_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    style="@style/text_view_table_parent"
-                    android:gravity="start"
-                    android:text="@string/permit_table_effective_date"/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/permit_table_effective_date"
-                    android:text=""/>
-            </TableRow>
+            android:id="@+id/permit_table">
         </TableLayout>
     </LinearLayout>
 

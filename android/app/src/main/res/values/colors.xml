@@ -14,6 +14,9 @@
     <color name="colorTextPrimary">#FFFFFF</color>
     <color name="colorTextSecondary">#212121</color>
 
+    <color name="tablePrimary">#E1FFFF</color>
+    <color name="tableSecondary">#D2F5FF</color>
+
     <color name="buttonDefault">#00acc1</color>
     <color name="darkGreen">#618057</color>
     <color name="orange">#ff4d00</color>

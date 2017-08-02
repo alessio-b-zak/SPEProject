@@ -1,5 +1,6 @@
 package com.bitbusters.android.speproject
 
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
@@ -7,25 +8,46 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TableRow
 import android.widget.TextView
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import android.view.ViewGroup
+
+
 
 /**
  * Created by mihajlo on 20/07/17.
  */
 
-abstract class FragmentHelper : Fragment() {
+abstract class FragmentHelper() : Fragment() {
 
     fun <T : View> View.bind(@IdRes res : Int) : T {
         @Suppress("UNCHECKED_CAST")
         return findViewById(res) as T
     }
 
-    fun newTableRow() : TableRow {
+    fun newTableRow(position: Int) : TableRow {
         val tableRow: TableRow = TableRow(context)
-        val lp = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
+        val lp = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT)
 
         tableRow.layoutParams = lp
         tableRow.gravity = Gravity.CENTER
-        tableRow.setPadding(3, 10, 3, 0)
+        tableRow.setPadding(16, 8, 16, 0)
+
+        when(position % 2) {
+            0 -> {
+                if (Build.VERSION.SDK_INT < 21) {
+                    tableRow.background = resources.getDrawable(R.color.tablePrimary)
+                } else {
+                    tableRow.background = resources.getDrawable(R.color.tablePrimary, null)
+                }
+            }
+            1 -> {
+                if (Build.VERSION.SDK_INT < 21) {
+                    tableRow.background = resources.getDrawable(R.color.tableSecondary)
+                } else {
+                    tableRow.background = resources.getDrawable(R.color.tableSecondary, null)
+                }
+            }
+        }
 
         return tableRow
     }

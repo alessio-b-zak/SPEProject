@@ -127,8 +127,9 @@ open class WIMSDetailsFragment : FragmentHelper() {
             }
 
             if(groupHasRecords) {
+                var rowIndex = 0
                 // Set Header Row
-                var tableHeaderRow = newTableRow()
+                var tableHeaderRow = newTableRow(rowIndex++)
 
                 addTextView(tableHeaderRow, "Determinand", 0.3, R.style.text_view_table_parent, Gravity.START)
                 addTextView(tableHeaderRow, "Unit", 0.2, R.style.text_view_table_parent)
@@ -139,7 +140,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
 
                 for (entry: String in groupDeterminandList) {
                     if (wimsPoint.measurementMap.containsKey(entry)) {
-                        tableHeaderRow = newTableRow()
+                        tableHeaderRow = newTableRow(rowIndex++)
 
                         addTextView(tableHeaderRow, entry, 0.3, R.style.text_view_table_child, Gravity.START)
                         addTextView(tableHeaderRow, wimsPoint.measurementMap[entry]!![0].unit, 0.2, R.style.text_view_table_child)

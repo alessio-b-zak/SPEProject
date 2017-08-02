@@ -1,11 +1,6 @@
 package com.bitbusters.android.speproject
 
-import android.app.Activity
-import android.graphics.Color
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
@@ -13,7 +8,10 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TableLayout
+import android.widget.TextView
 
 
 /**
@@ -21,19 +19,18 @@ import android.widget.*
  */
 
 open class CDEDataFragment : FragmentHelper() {
-    private lateinit var mToolbar: Toolbar  // The toolbar.
+    private lateinit var mToolbar: Toolbar
     private lateinit var mBackButton: ImageButton
     private lateinit var mMoreInfoButton: Button
     private lateinit var mCDEDataView: View
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mCDEDataFragment : CDEDataFragment
     private lateinit var mDataViewActivity: DataViewActivity
-    private lateinit var mTableLayout: TableLayout
+    private lateinit var mDetailsTable: TableLayout
     private lateinit var isDataLoaded: HashMap<String,Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        retainInstance = true
         mDataViewActivity = activity as DataViewActivity
     }
 
@@ -46,7 +43,7 @@ open class CDEDataFragment : FragmentHelper() {
         mRecyclerView = view.bind(R.id.cde_grid_view)
         mRecyclerView.visibility = View.INVISIBLE
 
-        mTableLayout = view.bind(R.id.cde_table)
+        mDetailsTable = view.bind(R.id.cde_table)
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
 
@@ -86,38 +83,42 @@ open class CDEDataFragment : FragmentHelper() {
     }
 
     fun setClassificationText(cdePoint: CDEPoint) {
-        val ratingList = arrayListOf<String>("overall", "ecological", "chemical");
+        var rowIndex = 0
+        // Add header row
+        var tableRow = newTableRow(rowIndex++)
 
+        addTextView(tableRow, "", 0.25, R.style.text_view_table_parent)
+        addTextView(tableRow, "Rating", 0.30, R.style.text_view_table_parent)
+        addTextView(tableRow, "Certainty", 0.30, R.style.text_view_table_parent)
+        addTextView(tableRow, "Year", 0.15, R.style.text_view_table_parent)
+
+        mDetailsTable.addView(tableRow)
+
+        // Add data rows
+        val ratingList = arrayListOf<String>("Overall", "Ecological", "Chemical")
         for(rating in ratingList) {
-            val year      : TextView = mCDEDataView.bind(resources.getIdentifier(
-                    "cde_table_" + rating + "_year", "id",
-                    mDataViewActivity.packageName))
-            val value     : TextView = mCDEDataView.bind(resources.getIdentifier(
-                    "cde_table_" + rating + "_value", "id",
-                    mDataViewActivity.packageName))
-            val certainty : TextView = mCDEDataView.bind(resources.getIdentifier(
-                    "cde_table_" + rating + "_certainty",
-                    "id", mDataViewActivity.packageName))
-
             var classification : Classification? = null
 
             when(rating){
-                "overall" -> classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.OVERALL]
-                "chemical" -> classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.CHEMICAL]
-                "ecological" -> classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.ECOLOGICAL]
-                else -> {
-                    Log.i("FAIL","FAILED TO CONVERT RATING")
-                }
+                "Overall" -> classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.OVERALL]
+                "Chemical" -> classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.CHEMICAL]
+                "Ecological" -> classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[CDEPoint.ECOLOGICAL]
             }
 
-            year.text = classification!!.year
-            year.gravity = Gravity.CENTER
-            value.text = classification.value
-            value.gravity = Gravity.CENTER
-            certainty.text = classification.certainty
-            certainty.gravity = Gravity.CENTER
+            if(classification != null) {
+                tableRow = newTableRow(rowIndex++)
 
-            isDataLoaded[CDEPoint.REAL] = true
+                addTextView(tableRow, rating, 0.25, R.style.text_view_table_parent, Gravity.START)
+                addTextView(tableRow, classification.value, 0.30)
+                addTextView(tableRow, classification.certainty, 0.30)
+                addTextView(tableRow, classification.year, 0.15)
+
+                mDetailsTable.addView(tableRow)
+
+                isDataLoaded[CDEPoint.REAL] = true
+            } else {
+                continue
+            }
         }
     }
 

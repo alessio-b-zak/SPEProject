@@ -71,7 +71,8 @@ open class WIMSDataFragment : FragmentHelper() {
         val wimsName : TextView = mWIMSDataView.bind(R.id.wims_name)
         wimsName.text = wimsPoint.label
 
-        var tableHeaderRow = newTableRow()
+        var rowIndex = 0
+        var tableHeaderRow = newTableRow(rowIndex++)
 
         addTextView(tableHeaderRow, "Determinand", 0.28, R.style.text_view_table_parent, Gravity.START)
         addTextView(tableHeaderRow, "Sample Dates", 0.72, R.style.text_view_table_parent)
@@ -85,7 +86,7 @@ open class WIMSDataFragment : FragmentHelper() {
                     measurementList.add(measure)
                 }
                 if (measurementList.size > 2) {
-                    tableHeaderRow = newTableRow()
+                    tableHeaderRow = newTableRow(rowIndex++)
 
                     addTextView(tableHeaderRow, entry, 0.28, R.style.text_view_table_parent_light, Gravity.START)
                     addTextView(tableHeaderRow, simplifyDate(measurementList[0].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
@@ -94,7 +95,7 @@ open class WIMSDataFragment : FragmentHelper() {
 
                     mMeasurementTable.addView(tableHeaderRow)
 
-                    tableHeaderRow = newTableRow()
+                    tableHeaderRow = newTableRow(rowIndex++)
 
                     val unit = measurementList[0].unit
                     addTextView(tableHeaderRow, "($unit)", 0.28, R.style.text_view_table_child, Gravity.START)

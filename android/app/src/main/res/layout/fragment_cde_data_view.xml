@@ -33,92 +33,9 @@
         <TableLayout
             style="@style/table_layout"
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/cde_table"
-            android:stretchColumns="1,2">
-            <TableRow>
-                <TextView
-                    android:text=""/>
-                <TextView
-                    style="@style/text_view_table_parent"
-                    android:text="@string/cde_table_classification_value"/>
-                <TextView
-                    style="@style/text_view_table_parent"
-                    android:text="@string/cde_table_classification_certainty"/>
-                <TextView
-                    style="@style/text_view_table_parent"
-                    android:text="@string/cde_table_classification_year"/>
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/cde_table_overall_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    style="@style/text_view_table_parent"
-                    android:id="@+id/cde_table_overall_name"
-                    android:text="@string/cde_table_overall"
-                    android:gravity="start"/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/cde_table_overall_value"
-                    android:text=""/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/cde_table_overall_certainty"
-                    android:text=""/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/cde_table_overall_year"
-                    android:text="" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/cde_table_ecological_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    style="@style/text_view_table_parent"
-                    android:id="@+id/cde_table_ecological_name"
-                    android:text="@string/cde_table_ecological"
-                    android:gravity="start"/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/cde_table_ecological_value"
-                    android:text=""/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/cde_table_ecological_certainty"
-                    android:text=""/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/cde_table_ecological_year"
-                    android:text=""/>
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/cde_table_chemical_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    style="@style/text_view_table_parent"
-                    android:id="@+id/cde_table_chemical_name"
-                    android:text="@string/cde_table_chemical"
-                    android:gravity="start" />
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/cde_table_chemical_value"
-                    android:text=""/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/cde_table_chemical_certainty"
-                    android:text=""/>
-                <TextView
-                    style="@style/text_view_table_child"
-                    android:id="@+id/cde_table_chemical_year"
-                    android:text=""/>
-            </TableRow>
-
+            android:id="@+id/cde_table">
         </TableLayout>
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

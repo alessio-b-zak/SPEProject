@@ -134,7 +134,8 @@
     <style name="table_layout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:gravity">top</item>
     </style>
 
@@ -156,6 +157,7 @@
         <item name="android:paddingStart">8dp</item>
         <item name="android:paddingEnd">8dp</item>
         <item name="android:gravity">center</item>
+        <!--<item name="android:background">@drawable/table_parent_shape</item>-->
     </style>
 
     <style name="text_view_table_parent_light" parent="@android:style/Widget.TextView">
