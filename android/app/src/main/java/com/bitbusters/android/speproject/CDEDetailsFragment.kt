@@ -65,6 +65,7 @@ open class CDEDetailsFragment : FragmentHelper() {
         mLinearLayout = view.bind(R.id.cde_details_linear_layout)
 
         mFullReportButton = view.bind(R.id.cde_full_report_button)
+        raiseButton(mFullReportButton)
         mFullReportButton.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_VIEW

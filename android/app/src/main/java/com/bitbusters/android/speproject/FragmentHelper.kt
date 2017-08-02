@@ -88,7 +88,7 @@ abstract class FragmentHelper() : Fragment() {
         }
 
         button.background = drawable
-        button.setPadding(26, 26, 26, 26)
+        button.setPadding(36, 36, 52, 36)
     }
 
     fun simplifyDate(date: String) : String {
