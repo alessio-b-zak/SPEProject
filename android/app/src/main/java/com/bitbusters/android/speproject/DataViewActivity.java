@@ -401,22 +401,19 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         switch (view) {
             case CDE:
                 mLayerName.setText(R.string.drawer_cde);
-                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.layer_cde));
                 break;
             case WIMS:
                 mLayerName.setText(R.string.drawer_wims);
-                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.layer_wims));
                 break;
             case PERMIT:
                 mLayerName.setText(R.string.drawer_permit);
-                mLayerName.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.layer_permit));
                 break;
         }
     }
 
     public void showInfo(View v) {
         // Hide the floating action buttons.
-        displayHomeButtons(false);
+        displayHomeLayer(false);
         // Initiate the info fragment.
         InfoFragment fragment = new InfoFragment();
         mFragmentManager.beginTransaction()
@@ -435,7 +432,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
                     }
                     if(mLocation != null) {
-                        displayHomeButtons(false);
+                        displayHomeLayer(false);
 
                         mProgressSpinner.setVisibility(View.VISIBLE);
                         final Snackbar snack = Snackbar.make(findViewById(R.id.fragment_container),
@@ -502,7 +499,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                 setSelectedCDEPoint(feature);
                 Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                 if (fragment == null) {
-                    displayHomeButtons(false);
+                    displayHomeLayer(false);
 
                     mMap.setOnCameraIdleListener(null);
 
@@ -535,7 +532,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     selectedWIMSPoint = point;
                     Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
-                        displayHomeButtons(false);
+                        displayHomeLayer(false);
 
                         LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
                         mMap.setPadding(0, mMapCameraPadding, 0, 0);
@@ -583,7 +580,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     selectedPermitPoint = point;
                     Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
                     if (fragment == null) {
-                        displayHomeButtons(false);
+                        displayHomeLayer(false);
 
                         LatLng markerPos = new LatLng(point.getLatitude(), point.getLongitude());
                         mMap.setPadding(0, mMapCameraPadding, 0, 0);
@@ -880,7 +877,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             openView(WIMS);
             mProgressSpinner.setVisibility(View.INVISIBLE);
             mMap.setPadding(0, 0, 0, 0);
-            displayHomeButtons(true);
+            displayHomeLayer(true);
         } else if (fragment instanceof CDEDataFragment) {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
@@ -890,7 +887,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             openView(CDE);
             mProgressSpinner.setVisibility(View.INVISIBLE);
             mMap.setPadding(0, 0, 0, 0);
-            displayHomeButtons(true);
+            displayHomeLayer(true);
         } else if (fragment instanceof CDEDetailsFragment) {
             mFragmentManager.popBackStack();
         } else if (fragment instanceof WIMSDetailsFragment) {
@@ -901,29 +898,31 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             openView(PERMIT);
             mProgressSpinner.setVisibility(View.INVISIBLE);
             mMap.setPadding(0, 0, 0, 0);
-            displayHomeButtons(true);
+            displayHomeLayer(true);
         } else if (fragment instanceof InfoFragment) {
             mFragmentManager.popBackStack();
-            displayHomeButtons(true);
+            displayHomeLayer(true);
         } else if (fragment instanceof MyAreaFragment) {
             mFragmentManager.popBackStack();
-            displayHomeButtons(true);
+            displayHomeLayer(true);
         }
         else {
             super.onBackPressed();
         }
     }
 
-    public void displayHomeButtons(boolean condition) {
+    public void displayHomeLayer(boolean condition) {
         if(condition) {
             mGpsButton.show();
             mSearchButton.setVisibility(View.VISIBLE);
             mMenuButton.setVisibility(View.VISIBLE);
+            mLayerName.setVisibility(View.VISIBLE);
             mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         } else {
             mGpsButton.hide();
             mMenuButton.setVisibility(View.INVISIBLE);
             mSearchButton.setVisibility(View.INVISIBLE);
+            mLayerName.setVisibility(View.INVISIBLE);
             mDrawer.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
     }
