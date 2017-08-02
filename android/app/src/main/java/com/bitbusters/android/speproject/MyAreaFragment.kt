@@ -8,6 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Button
 import android.widget.TextView
+import android.graphics.drawable.Drawable
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.view.Gravity
+import android.widget.TableLayout
+
 
 /**
  * Created by mihajlo on 18/07/17.
@@ -18,6 +24,7 @@ class MyAreaFragment: FragmentHelper() {
 
     private lateinit var mDataViewActivity: DataViewActivity
     private lateinit var mMyAreaView: View
+    private lateinit var mDataTable: TableLayout
     private lateinit var myArea: MyArea
     private lateinit var mBackButton: ImageButton
     private lateinit var mWIMSPointButton: Button
@@ -40,10 +47,14 @@ class MyAreaFragment: FragmentHelper() {
             activity.onBackPressed()
         }
 
+        mDataTable = view.bind(R.id.my_area_summary_table)
+
         mPermitPointButton = view.bind(R.id.my_area_permit_button)
+        raiseButton(mPermitPointButton)
         mPermitPointButton.visibility = View.GONE
 
         mWIMSPointButton = view.bind(R.id.my_area_wims_button)
+        raiseButton(mWIMSPointButton)
         mWIMSPointButton.visibility = View.GONE
 
         populateCDEData()
@@ -55,17 +66,29 @@ class MyAreaFragment: FragmentHelper() {
 
 
     fun populateCDEData() {
-        val waterbodyView: TextView = mMyAreaView.bind(R.id.my_area_waterbody_value)
-        waterbodyView.text = myArea.waterbody
+        var rowIndex = 0
+        val parentWeight = 0.3
+        val childWeight = 0.7
 
-        val operationalView: TextView = mMyAreaView.bind(R.id.my_area_operational_value)
-        operationalView.text = myArea.operationalCatchment
+        var tableRow = newTableRow(rowIndex++)
+        addTextView(tableRow, "Nearest River:", parentWeight, R.style.text_view_table_parent, Gravity.START)
+        addTextView(tableRow, myArea.waterbody, childWeight, R.style.text_view_table_child, Gravity.START)
+        mDataTable.addView(tableRow)
 
-        val managementView: TextView = mMyAreaView.bind(R.id.my_area_management_value)
-        managementView.text = myArea.managementCatchment
+        tableRow = newTableRow(rowIndex++)
+        addTextView(tableRow, "Operational Catchment:", parentWeight, R.style.text_view_table_parent, Gravity.START)
+        addTextView(tableRow, myArea.operationalCatchment, childWeight, R.style.text_view_table_child, Gravity.START)
+        mDataTable.addView(tableRow)
 
-        val districtView: TextView = mMyAreaView.bind(R.id.my_area_district_value)
-        districtView.text = myArea.riverBasinDistrict
+        tableRow = newTableRow(rowIndex++)
+        addTextView(tableRow, "Management Catchment:", parentWeight, R.style.text_view_table_parent, Gravity.START)
+        addTextView(tableRow, myArea.managementCatchment, childWeight, R.style.text_view_table_child, Gravity.START)
+        mDataTable.addView(tableRow)
+
+        tableRow = newTableRow(rowIndex)
+        addTextView(tableRow, "River Basin District:", parentWeight, R.style.text_view_table_parent, Gravity.START)
+        addTextView(tableRow, myArea.riverBasinDistrict, childWeight, R.style.text_view_table_child, Gravity.START)
+        mDataTable.addView(tableRow)
     }
 
     fun populateWIMSData() {

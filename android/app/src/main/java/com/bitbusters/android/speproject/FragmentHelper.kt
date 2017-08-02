@@ -1,5 +1,7 @@
 package com.bitbusters.android.speproject
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.IdRes
@@ -8,9 +10,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TableRow
 import android.widget.TextView
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import android.view.ViewGroup
-
+import android.widget.Button
 
 
 /**
@@ -70,6 +70,25 @@ abstract class FragmentHelper() : Fragment() {
         }
 
         tableRow.addView(textView)
+    }
+
+    fun raiseButton(button: Button) {
+        val drawable: Drawable
+
+        if (Build.VERSION.SDK_INT < 21) {
+            drawable = resources.getDrawable(android.R.drawable.dialog_holo_light_frame)
+        } else {
+            drawable = resources.getDrawable(android.R.drawable.dialog_holo_light_frame, null)
+        }
+
+        if (Build.VERSION.SDK_INT < 23) {
+            drawable.colorFilter = PorterDuffColorFilter(resources.getColor(R.color.accent), PorterDuff.Mode.MULTIPLY)
+        } else {
+            drawable.colorFilter = PorterDuffColorFilter(resources.getColor(R.color.accent, null), PorterDuff.Mode.MULTIPLY)
+        }
+
+        button.background = drawable
+        button.setPadding(26, 26, 26, 26)
     }
 
     fun simplifyDate(date: String) : String {
