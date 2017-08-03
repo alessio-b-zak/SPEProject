@@ -188,103 +188,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         });
     }
 
-    public void setupDrawer() {
-
-        AccountHeader header = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(R.drawable.drawer_back)
-                .addProfiles(
-                        new ProfileDrawerItem().withName("myRivers").withIcon(R.drawable.icon_green_blue)
-                )
-                .withTextColor(Color.BLACK)
-                .withSelectionListEnabledForSingleProfile(false)
-                .build();
-
-        //if you want to update the items at a later time it is recommended to keep it in a variable
-
-        final PrimaryDrawerItem drawerWIMS = new PrimaryDrawerItem()
-                .withIdentifier(1)
-                .withName(R.string.drawer_wims)
-                .withSelectedColorRes(R.color.colorPrimaryDark)
-                .withSelectedTextColorRes(R.color.colorTextPrimary)
-                .withTextColorRes(R.color.colorTextPrimary)
-                .withIcon(R.drawable.ic_wims_marker);
-
-        final PrimaryDrawerItem drawerCDE = new PrimaryDrawerItem()
-                .withIdentifier(2)
-                .withName(R.string.drawer_cde)
-                .withSelectedColorRes(R.color.colorPrimaryDark)
-                .withSelectedTextColorRes(R.color.colorTextPrimary)
-                .withTextColorRes(R.color.colorTextPrimary)
-                .withIcon(R.drawable.ic_cde_marker);
-
-        final PrimaryDrawerItem drawerPermit = new PrimaryDrawerItem()
-                .withIdentifier(3)
-                .withName(R.string.drawer_permit)
-                .withSelectedColorRes(R.color.colorPrimaryDark)
-                .withSelectedTextColorRes(R.color.colorTextPrimary)
-                .withTextColorRes(R.color.colorTextPrimary)
-                .withIcon(R.drawable.ic_permit_marker);
-
-        final SecondaryDrawerItem drawerMyArea = new SecondaryDrawerItem()
-                .withIdentifier(4)
-                .withName(R.string.drawer_my_area)
-                .withTextColorRes(R.color.colorTextPrimary)
-                .withIcon(R.drawable.ic_where_am_i)
-                .withSelectable(false);
-
-        final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
-                .withIdentifier(5)
-                .withName(R.string.drawer_info)
-                .withTextColorRes(R.color.colorTextPrimary)
-                .withIcon(R.drawable.info_white_no_padding)
-                .withSelectable(false);
-
-        //create the drawer and remember the `Drawer` result object
-        mDrawer = new DrawerBuilder()
-                .withActivity(this)
-                .withAccountHeader(header)
-                .withSliderBackgroundColor(Color.DKGRAY)
-                .addDrawerItems(
-                        drawerCDE,
-                        drawerWIMS,
-                        drawerPermit,
-                        new DividerDrawerItem(),
-                        drawerMyArea,
-                        drawerInfo
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        mDrawer.closeDrawer();
-                        switch ((int) drawerItem.getIdentifier()){
-                            case 1:
-                                closeView(currentView);
-                                openView(WIMS);
-                                break;
-                            case 2:
-                                closeView(currentView);
-                                openView(CDE);
-                                break;
-                            case 3:
-                                closeView(currentView);
-                                openView(PERMIT);
-                                break;
-                            case 4:
-                                showMyArea(view);
-                                break;
-                            case 5:
-                                showInfo(view);
-                                break;
-                            default:
-                                break;
-                        }
-                        return true;
-                    }
-                })
-                .build();
-    }
-
     public void openView(int view) {
         currentView = view;
         setMapOnCameraIdleListener(view);
@@ -1048,6 +951,99 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
             position = new LatLng(((DischargePermitPoint) point).getLatitude(), ((DischargePermitPoint) point).getLongitude());
         }
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+    }
+
+    public void setupDrawer() {
+
+        AccountHeader header = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.drawer_back)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("myRivers").withIcon(R.drawable.icon_green_blue)
+                )
+                .withTextColor(Color.BLACK)
+                .withSelectionListEnabledForSingleProfile(false)
+                .build();
+
+        final PrimaryDrawerItem drawerWIMS =
+                newPrimaryDrawerItem(1, R.string.drawer_wims, R.drawable.ic_wims_marker);
+
+        final PrimaryDrawerItem drawerCDE =
+                newPrimaryDrawerItem(2, R.string.drawer_cde, R.drawable.ic_cde_marker);
+
+        final PrimaryDrawerItem drawerPermit =
+                newPrimaryDrawerItem(3, R.string.drawer_permit, R.drawable.ic_permit_marker);
+
+        final SecondaryDrawerItem drawerMyArea =
+                newSecondaryDrawerItem(4, R.string.drawer_my_area, R.drawable.ic_where_am_i);
+
+        final SecondaryDrawerItem drawerInfo =
+                newSecondaryDrawerItem(5, R.string.drawer_info, R.drawable.info_white_no_padding);
+
+        //create the drawer and remember the `Drawer` result object
+        mDrawer = new DrawerBuilder()
+                .withActivity(this)
+                .withAccountHeader(header)
+                .withSliderBackgroundColor(Color.DKGRAY)
+                .addDrawerItems(
+                        drawerCDE,
+                        drawerWIMS,
+                        drawerPermit,
+                        new DividerDrawerItem(),
+                        drawerMyArea,
+                        drawerInfo
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        mDrawer.closeDrawer();
+                        switch ((int) drawerItem.getIdentifier()){
+                            case 1:
+                                closeView(currentView);
+                                openView(WIMS);
+                                break;
+                            case 2:
+                                closeView(currentView);
+                                openView(CDE);
+                                break;
+                            case 3:
+                                closeView(currentView);
+                                openView(PERMIT);
+                                break;
+                            case 4:
+                                showMyArea(view);
+                                break;
+                            case 5:
+                                showInfo(view);
+                                break;
+                            default:
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .withStickyFooterShadow(false)
+                .withStickyFooter(R.layout.drawer_footer)
+                .build();
+    }
+
+    private PrimaryDrawerItem newPrimaryDrawerItem(int identifier, int name, int icon) {
+        return new PrimaryDrawerItem()
+                .withIdentifier(identifier)
+                .withName(name)
+                .withSelectedColorRes(R.color.colorPrimaryDark)
+                .withSelectedTextColorRes(R.color.colorTextPrimary)
+                .withTextColorRes(R.color.colorTextPrimary)
+                .withIcon(icon);
+    }
+
+    private SecondaryDrawerItem newSecondaryDrawerItem(int identifier, int name, int icon) {
+        return new SecondaryDrawerItem()
+                .withIdentifier(identifier)
+                .withName(name)
+                .withTextColorRes(R.color.colorTextPrimary)
+                .withIcon(icon)
+                .withSelectable(false);
     }
 
 }
