@@ -28,7 +28,7 @@
     <string name="button_desc_search">Search</string>
     <string name="button_desc_back">Back</string>
     <string name="button_desc_info">More Info</string>
-    <string name="button_desc_full_report">Full Report</string>
+    <string name="button_desc_full_report">Detailed Report</string>
 
     <string name="cde_loading_message">Loading ratings data...</string>
     <string name="cde_table_classification_value">Rating</string>
@@ -69,7 +69,7 @@
     <string name="info_title"><b>myRivers™ v2.0</b></string>
     <string name="info_description">myRivers allows anyone to browse detailed river pollution
         reports in the UK. The available data is pulled and filtered from three different data sets,
-        all provided by the Environment Agency.</string>
+        all provided by the Environment Agency under the terms of Open Government Licence v3.0.</string>
     <string name="info_subtitle">Developed by BitBusters and Epimorphics</string>
     <string name="info_home_buttons">Home Buttons: </string>
     <string name="info_layers">Layers: </string>
@@ -94,8 +94,8 @@
     <string name="my_area_operational">Operational Catchment:</string>
     <string name="my_area_management">Management Catchment:</string>
     <string name="my_area_district">River Basin District:</string>
-    <string name="my_area_permit_button">Show the Nearest\nDischarge Permit\nPoint on the Map</string>
-    <string name="my_area_wims_button">Show the Nearest\nWIMS Point\non the Map</string>
+    <string name="my_area_permit_button">Show the Nearest\nPollution Licence\nHolder on the Map</string>
+    <string name="my_area_wims_button">Show the Nearest\nWater Quality\nSample on the Map</string>
 
     <string name="google_search_back_button">Navigate up</string>
     <string name="google_search_cancel_button">Clear search</string>

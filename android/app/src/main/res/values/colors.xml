@@ -31,4 +31,6 @@
     <color name="layer_cde">#00C292</color>
     <color name="layer_permit">#CCDDE5</color>
 
+    <color name="drawer_selected">#0d4caf</color>
+
 </resources>

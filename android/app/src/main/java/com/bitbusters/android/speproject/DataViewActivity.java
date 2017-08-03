@@ -205,42 +205,40 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         final PrimaryDrawerItem drawerWIMS = new PrimaryDrawerItem()
                 .withIdentifier(1)
                 .withName(R.string.drawer_wims)
-                .withSelectedColor(0x0d4caf)
-                .withSelectedTextColor(Color.WHITE)
-                .withTextColor(Color.WHITE)
+                .withSelectedColorRes(R.color.colorPrimaryDark)
+                .withSelectedTextColorRes(R.color.colorTextPrimary)
+                .withTextColorRes(R.color.colorTextPrimary)
                 .withIcon(R.drawable.ic_wims_marker);
 
         final PrimaryDrawerItem drawerCDE = new PrimaryDrawerItem()
                 .withIdentifier(2)
                 .withName(R.string.drawer_cde)
-                .withSelectedColor(0x0d4caf)
-                .withSelectedTextColor(Color.WHITE)
-                .withTextColor(Color.WHITE)
+                .withSelectedColorRes(R.color.colorPrimaryDark)
+                .withSelectedTextColorRes(R.color.colorTextPrimary)
+                .withTextColorRes(R.color.colorTextPrimary)
                 .withIcon(R.drawable.ic_cde_marker);
 
         final PrimaryDrawerItem drawerPermit = new PrimaryDrawerItem()
                 .withIdentifier(3)
                 .withName(R.string.drawer_permit)
-                .withSelectedColor(0x0d4caf)
-                .withSelectedTextColor(Color.WHITE)
-                .withTextColor(Color.WHITE)
+                .withSelectedColorRes(R.color.colorPrimaryDark)
+                .withSelectedTextColorRes(R.color.colorTextPrimary)
+                .withTextColorRes(R.color.colorTextPrimary)
                 .withIcon(R.drawable.ic_permit_marker);
 
         final SecondaryDrawerItem drawerMyArea = new SecondaryDrawerItem()
                 .withIdentifier(4)
                 .withName(R.string.drawer_my_area)
-                .withSelectedColor(0x0d4caf)
-                .withSelectedTextColor(Color.WHITE)
-                .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.ic_where_am_i);
+                .withTextColorRes(R.color.colorTextPrimary)
+                .withIcon(R.drawable.ic_where_am_i)
+                .withSelectable(false);
 
         final SecondaryDrawerItem drawerInfo = new SecondaryDrawerItem()
                 .withIdentifier(5)
                 .withName(R.string.drawer_info)
-                .withSelectedColor(0x0d4caf)
-                .withSelectedTextColor(Color.WHITE)
-                .withTextColor(Color.WHITE)
-                .withIcon(R.drawable.info_white_no_padding);
+                .withTextColorRes(R.color.colorTextPrimary)
+                .withIcon(R.drawable.info_white_no_padding)
+                .withSelectable(false);
 
         //create the drawer and remember the `Drawer` result object
         mDrawer = new DrawerBuilder()
@@ -259,7 +257,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         mDrawer.closeDrawer();
-//                        Log.i(TAG, "identifier: " + Long.toString(drawerItem.getIdentifier()));
                         switch ((int) drawerItem.getIdentifier()){
                             case 1:
                                 closeView(currentView);

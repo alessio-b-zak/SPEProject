@@ -27,14 +27,9 @@
             android:background="@color/backgroundDefault" >
 
             <TextView
+                style="@style/text_view_heading"
                 android:id="@+id/my_area_title"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_huge"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/my_area_title"
-                android:layout_marginTop="16dp" />
+                android:text="@string/my_area_title" />
 
             <TableLayout
                 style="@style/table_layout"

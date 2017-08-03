@@ -69,7 +69,7 @@ open class WIMSDataFragment : FragmentHelper() {
     fun setMeasurementsText(wimsPoint: WIMSPoint) {
 //        Log.i(TAG, "Number of measurements pulled: " + wimsPoint.measurementMap.size )
         val wimsName : TextView = mWIMSDataView.bind(R.id.wims_name)
-        wimsName.text = wimsPoint.label
+        wimsName.text = "Samples from ${wimsPoint.label}"
 
         var rowIndex = 0
         var tableHeaderRow = newTableRow(rowIndex++)

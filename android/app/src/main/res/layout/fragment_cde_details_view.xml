@@ -86,7 +86,7 @@
 
             <android.support.v7.widget.AppCompatButton
                 style="@style/full_report_button"
-                android:id="@+id/cde_full_report_button"/>
+                android:id="@+id/cde_full_report_button" />
         </LinearLayout>
     </ScrollView>
 

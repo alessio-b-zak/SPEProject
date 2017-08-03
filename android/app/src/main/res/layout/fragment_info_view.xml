@@ -41,7 +41,7 @@
                 android:id="@+id/info_description"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_small"
-                android:gravity="center"
+                android:gravity="start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/info_description"

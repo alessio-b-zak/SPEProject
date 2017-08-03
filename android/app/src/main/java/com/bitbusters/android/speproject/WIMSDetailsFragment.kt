@@ -56,12 +56,12 @@ open class WIMSDetailsFragment : FragmentHelper() {
         val wimsPoint = mDataViewActivity.selectedWIMSPoint
 
         val wimsPointLabel : TextView = view.bind(R.id.wims_details_title)
-        wimsPointLabel.text = wimsPoint.label
+        wimsPointLabel.text = "Samples from ${wimsPoint.label}"
 
         mToolbar = view.bind(R.id.wims_details_toolbar)
 
         mFullReportButton = view.bind(R.id.wims_full_report_button)
-        raiseButton(mFullReportButton)
+//        setButtonColor(mFullReportButton, true)
         mFullReportButton.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_VIEW

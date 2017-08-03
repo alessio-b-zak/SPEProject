@@ -1,16 +1,11 @@
 package com.bitbusters.android.speproject
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Button
-import android.widget.TextView
-import android.graphics.drawable.Drawable
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.view.Gravity
 import android.widget.TableLayout
 
@@ -36,7 +31,7 @@ class MyAreaFragment: FragmentHelper() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_my_area, container, false)
+        val view = inflater.inflate(R.layout.fragment_my_area_view, container, false)
 
         mMyAreaView = view;
 
@@ -50,11 +45,11 @@ class MyAreaFragment: FragmentHelper() {
         mDataTable = view.bind(R.id.my_area_summary_table)
 
         mPermitPointButton = view.bind(R.id.my_area_permit_button)
-        raiseButton(mPermitPointButton)
+//        setButtonColor(mPermitPointButton)
         mPermitPointButton.visibility = View.GONE
 
         mWIMSPointButton = view.bind(R.id.my_area_wims_button)
-        raiseButton(mWIMSPointButton)
+//        setButtonColor(mWIMSPointButton)
         mWIMSPointButton.visibility = View.GONE
 
         populateCDEData()

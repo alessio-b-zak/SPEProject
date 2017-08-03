@@ -65,7 +65,8 @@ open class CDEDetailsFragment : FragmentHelper() {
         mLinearLayout = view.bind(R.id.cde_details_linear_layout)
 
         mFullReportButton = view.bind(R.id.cde_full_report_button)
-        raiseButton(mFullReportButton)
+//        mFullReportButton.setBackgroundColor(R.color.colorAccent)
+//        setButtonColor(mFullReportButton, true)
         mFullReportButton.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_VIEW
@@ -152,7 +153,7 @@ open class CDEDetailsFragment : FragmentHelper() {
             // Adds header row
             val tableHeaderRow = newTableRow(rowIndex++)
 
-            addTextView(tableHeaderRow, "Element", 0.25, R.style.text_view_table_parent)
+            addTextView(tableHeaderRow, "Element", 0.25, R.style.text_view_table_parent, Gravity.START)
             addTextView(tableHeaderRow, "Rating", 0.25, R.style.text_view_table_parent)
             addTextView(tableHeaderRow, "Activity", 0.39, R.style.text_view_table_parent)
             addTextView(tableHeaderRow, "Year", 0.11, R.style.text_view_table_parent)
@@ -163,7 +164,7 @@ open class CDEDetailsFragment : FragmentHelper() {
 
                 val tableRow = newTableRow(rowIndex++)
 
-                addTextView(tableRow, rnag.element, 0.25)
+                addTextView(tableRow, rnag.element, 0.25, R.style.text_view_table_parent, Gravity.START)
                 addTextView(tableRow, rnag.rating, 0.25)
                 addTextView(tableRow, rnag.activity, 0.39)
                 addTextView(tableRow, rnag.year.toString(), 0.11)
