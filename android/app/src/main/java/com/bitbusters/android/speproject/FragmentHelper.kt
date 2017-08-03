@@ -12,6 +12,13 @@ import android.view.View
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Button
+import android.support.v4.widget.PopupWindowCompat.showAsDropDown
+import android.graphics.drawable.BitmapDrawable
+import android.view.LayoutInflater
+import android.view.WindowManager
+import android.widget.PopupWindow
+
+
 
 
 /**
@@ -25,7 +32,7 @@ abstract class FragmentHelper() : Fragment() {
         return findViewById(res) as T
     }
 
-    fun newTableRow(position: Int) : TableRow {
+    fun newTableRow(position: Int, isDoubleRow: Boolean = false, offset: Int = 0) : TableRow {
         val tableRow: TableRow = TableRow(context)
         val lp = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT)
 
@@ -33,7 +40,14 @@ abstract class FragmentHelper() : Fragment() {
         tableRow.gravity = Gravity.CENTER
         tableRow.setPadding(16, 8, 16, 8)
 
-        when(position % 2) {
+        val condition: Int = if(isDoubleRow){
+            val inputAsDouble = (position + offset).toDouble()
+            (Math.floor(inputAsDouble / 2)).toInt() % 2
+        } else {
+            position % 2
+        }
+
+        when(condition) {
             0 -> {
                 if (Build.VERSION.SDK_INT < 21) {
                     tableRow.background = resources.getDrawable(R.color.tablePrimary)
@@ -55,7 +69,7 @@ abstract class FragmentHelper() : Fragment() {
 
     fun addTextView(tableRow: TableRow, value: String?, weight: Double = 1.0,
                     style: Int = R.style.text_view_table_child, gravity: Int = Gravity.CENTER,
-                    leftPadding: Int = 0) {
+                    leftPadding: Int = 0, popupText: String = "") {
         val textView : TextView = TextView(context)
         val params = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, weight.toFloat())
 
@@ -70,7 +84,30 @@ abstract class FragmentHelper() : Fragment() {
             textView.setTextAppearance(style)
         }
 
+        if(popupText != "") {
+            textView.setOnClickListener { view: View -> displayPopupWindow(view, popupText) }
+        }
+
         tableRow.addView(textView)
+    }
+
+    fun displayPopupWindow(view: View, inputString: String) {
+        val popup = PopupWindow(context)
+        val layoutInflater = LayoutInflater.from(context)
+        val layout = layoutInflater.inflate(R.layout.popup_content, null)
+        popup.contentView = layout
+        // Set content width and height
+        popup.height = WindowManager.LayoutParams.WRAP_CONTENT
+        popup.width = WindowManager.LayoutParams.WRAP_CONTENT
+        // Closes the popup window when touch outside of it - when looses focus
+        popup.isOutsideTouchable = true
+        popup.isFocusable = true
+        // Set Text
+        val textView: TextView = popup.contentView.findViewById(R.id.pop_up_window) as TextView
+        textView.text = inputString
+        // Show anchored to button
+        popup.setBackgroundDrawable(BitmapDrawable())
+        popup.showAsDropDown(view)
     }
 
     fun simplifyDate(date: String) : String {

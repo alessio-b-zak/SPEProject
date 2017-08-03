@@ -45,6 +45,7 @@ class InputStreamToWIMSMeasurements: InputStreamHelper() {
         var date = ""
         var unit = ""
         var label = ""
+        var descriptor = ""
         var result: Double = 0.0
 
         reader.beginObject()
@@ -56,6 +57,8 @@ class InputStreamToWIMSMeasurements: InputStreamHelper() {
                     name = reader.nextName()
                     if (name == "label") {
                         determinand = reader.nextString()
+                    } else if (name == "definition") {
+                        descriptor = reader.nextString()
                     } else if (name == "unit") {
                         unit = readItemToString(reader)
                     } else {
@@ -88,15 +91,15 @@ class InputStreamToWIMSMeasurements: InputStreamHelper() {
         if(wimsPoint.measurementMap.containsKey(determinand)) {
             var measurementList = wimsPoint.measurementMap[determinand]
             if(measurementList != null) {
-                measurementList.add(Measurement(unit, result, date))
+                measurementList.add(Measurement(unit, result, descriptor, date))
                 wimsPoint.label = label
             } else {
-                measurementList = arrayListOf<Measurement>(Measurement(unit, result, date))
+                measurementList = arrayListOf<Measurement>(Measurement(unit, result, descriptor, date))
                 wimsPoint.measurementMap.put(determinand, measurementList)
                 wimsPoint.label = label
             }
         } else {
-            val measurementList = arrayListOf<Measurement>(Measurement(unit, result, date))
+            val measurementList = arrayListOf<Measurement>(Measurement(unit, result, descriptor, date))
             wimsPoint.measurementMap.put(determinand, measurementList)
             wimsPoint.label = label
         }

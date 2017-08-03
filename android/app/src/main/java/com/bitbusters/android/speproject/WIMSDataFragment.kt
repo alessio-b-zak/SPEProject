@@ -86,16 +86,17 @@ open class WIMSDataFragment : FragmentHelper() {
                     measurementList.add(measure)
                 }
                 if (measurementList.size > 2) {
-                    tableHeaderRow = newTableRow(rowIndex++)
+                    tableHeaderRow = newTableRow(rowIndex++, true, 1)
 
-                    addTextView(tableHeaderRow, entry, 0.28, R.style.text_view_table_parent_light, Gravity.START)
+                    val descriptor = measurementList[0].descriptor
+                    addTextView(tableHeaderRow, entry, 0.28, R.style.text_view_table_parent_light, Gravity.START, 0, descriptor)
                     addTextView(tableHeaderRow, simplifyDate(measurementList[0].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
                     addTextView(tableHeaderRow, simplifyDate(measurementList[1].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
                     addTextView(tableHeaderRow, simplifyDate(measurementList[2].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
 
                     mMeasurementTable.addView(tableHeaderRow)
 
-                    tableHeaderRow = newTableRow(rowIndex++)
+                    tableHeaderRow = newTableRow(rowIndex++, true, 1)
 
                     val unit = measurementList[0].unit
                     addTextView(tableHeaderRow, "($unit)", 0.28, R.style.text_view_table_child, Gravity.START)

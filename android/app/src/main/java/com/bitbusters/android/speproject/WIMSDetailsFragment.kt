@@ -143,7 +143,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
                     if (wimsPoint.measurementMap.containsKey(entry)) {
                         tableHeaderRow = newTableRow(rowIndex++)
 
-                        addTextView(tableHeaderRow, entry, 0.3, R.style.text_view_table_child, Gravity.START)
+                        addTextView(tableHeaderRow, entry, 0.3, R.style.text_view_table_child, Gravity.START, 0, wimsPoint.measurementMap[entry]!![0].descriptor)
                         addTextView(tableHeaderRow, wimsPoint.measurementMap[entry]!![0].unit, 0.2, R.style.text_view_table_child)
                         addTextView(tableHeaderRow, wimsPoint.measurementMap[entry]!![0].result.toString(), 0.2, R.style.text_view_table_child)
                         addTextView(tableHeaderRow, simplifyDate(wimsPoint.measurementMap[entry]!![0].date), 0.3, R.style.text_view_table_child)
