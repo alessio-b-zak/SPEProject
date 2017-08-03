@@ -29,7 +29,8 @@
             <TextView
                 style="@style/text_view_heading"
                 android:id="@+id/my_area_title"
-                android:text="@string/my_area_title" />
+                android:text="@string/my_area_title"
+                android:paddingTop="@dimen/layout_base_vertical_padding"/>
 
             <TableLayout
                 style="@style/table_layout"
@@ -51,7 +52,7 @@
                     <Button
                         style="@style/big_button"
                         android:id="@+id/my_area_wims_button"
-                        android:layout_width="0dip"
+                        android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:text="@string/my_area_wims_button"

@@ -23,7 +23,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16sp"
+            android:paddingTop="@dimen/layout_base_vertical_padding"
+            android:paddingBottom="@dimen/layout_base_vertical_padding"
+            android:paddingStart="@dimen/layout_base_horizontal_padding"
+            android:paddingEnd="@dimen/layout_base_horizontal_padding"
             android:orientation="vertical"
             android:background="@color/backgroundDefault" >
 
@@ -34,8 +37,7 @@
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/info_title"
-                android:layout_marginTop="16dp" />
+                android:text="@string/info_title" />
 
             <TextView
                 android:id="@+id/info_description"
@@ -45,9 +47,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/info_description"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"/>
+                android:textColorLink="@color/colorPrimaryDarkDark"
+                android:layout_marginTop="@dimen/text_view_parent_vertical_padding"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,8 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/info_home_buttons"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="25dp" />
+                    android:layout_marginTop="@dimen/text_view_parent_vertical_padding" />
 
             </LinearLayout>
 
@@ -79,8 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.80"
                     android:src="@drawable/target_white"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="16dp"/>
+                    android:layout_marginTop="@dimen/text_view_child_vertical_padding"/>
 
                 <TextView
                     android:id="@+id/info_gpsText"
@@ -91,8 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.20"
                     android:text="@string/info_gpsText"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp" />
+                    android:layout_marginTop="@dimen/text_view_child_vertical_padding" />
 
             </LinearLayout>
 
@@ -109,8 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/info_layers"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginStart="25dp" />
+                    android:layout_marginTop="@dimen/text_view_parent_vertical_padding" />
 
             </LinearLayout>
 
@@ -126,8 +123,7 @@
                     android:layout_height="40dp"
                     android:layout_weight="0.80"
                     android:src="@drawable/ic_cde_marker"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginStart="16dp"/>
+                    android:layout_marginTop="@dimen/text_view_child_vertical_padding"/>
 
                 <TextView
                     android:id="@+id/info_cde_description"
@@ -138,8 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.20"
                     android:text="@string/info_cde_description"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="16dp"/>
+                    android:layout_marginTop="@dimen/text_view_child_vertical_padding"/>
 
             </LinearLayout>
 
@@ -155,8 +150,7 @@
                     android:layout_height="40dp"
                     android:layout_weight="0.80"
                     android:src="@drawable/ic_wims_marker"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="16dp"/>
+                    android:layout_marginTop="@dimen/text_view_child_vertical_padding"/>
 
                 <TextView
                     android:id="@+id/info_wims_description"
@@ -167,8 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.20"
                     android:text="@string/info_wims_description"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"/>
+                    android:layout_marginTop="@dimen/text_view_child_vertical_padding"/>
 
             </LinearLayout>
 
@@ -184,8 +177,7 @@
                     android:layout_height="40dp"
                     android:layout_weight="0.80"
                     android:src="@drawable/ic_permit_marker"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="16dp"/>
+                    android:layout_marginTop="@dimen/text_view_child_vertical_padding"/>
 
                 <TextView
                     android:id="@+id/info_image_description"
@@ -196,9 +188,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.20"
                     android:text="@string/info_permit_description"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginTop="@dimen/text_view_child_vertical_padding"/>
 
             </LinearLayout>
             <TextView
@@ -209,8 +199,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/info_subtitle"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp" />
+                android:layout_marginTop="@dimen/text_view_parent_vertical_padding" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -221,8 +210,7 @@
                     android:layout_width="120dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="@dimen/text_view_child_vertical_padding"
                     android:src="@drawable/epimorphics_logo"/>
 
                 <ImageView
@@ -231,7 +219,7 @@
                     android:layout_height="30dp"
                     android:layout_alignTop="@id/epimorphics_logo"
                     android:layout_toStartOf="@id/epimorphics_logo"
-                    android:layout_marginEnd="16dp"
+                    android:paddingEnd="@dimen/text_view_child_vertical_padding"
                     android:src="@drawable/uob_logo"/>
 
             </RelativeLayout>

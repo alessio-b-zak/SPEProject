@@ -69,7 +69,9 @@
     <string name="info_title"><b>myRivers™ v2.0</b></string>
     <string name="info_description">myRivers allows anyone to browse detailed river pollution
         reports in the UK. The available data is pulled and filtered from three different data sets,
-        all provided by the Environment Agency under the terms of Open Government Licence v3.0.</string>
+        all provided by the Environment Agency under the terms of
+        <b><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">
+            Open Government Licence v3.0</a></b>.</string>
     <string name="info_subtitle">Developed by BitBusters and Epimorphics</string>
     <string name="info_home_buttons">Home Buttons: </string>
     <string name="info_layers">Layers: </string>

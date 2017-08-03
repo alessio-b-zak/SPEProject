@@ -1,9 +1,5 @@
 package com.bitbusters.android.speproject
 
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
@@ -11,8 +7,6 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TableRow
 import android.widget.TextView
-import android.widget.Button
-import android.support.v4.widget.PopupWindowCompat.showAsDropDown
 import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.WindowManager
@@ -69,14 +63,15 @@ abstract class FragmentHelper() : Fragment() {
 
     fun addTextView(tableRow: TableRow, value: String?, weight: Double = 1.0,
                     style: Int = R.style.text_view_table_child, gravity: Int = Gravity.CENTER,
-                    leftPadding: Int = 0, popupText: String = "") {
+                    startPadding: Int = 0, popupText: String = "") {
         val textView : TextView = TextView(context)
         val params = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, weight.toFloat())
 
         textView.layoutParams = params
         textView.text = value
         textView.gravity = gravity
-        textView.setPadding(leftPadding, 0, 0, 0)
+        val basePadding = context.resources.getDimensionPixelSize(R.dimen.table_base_padding)
+        textView.setPaddingRelative(basePadding + startPadding, 0, basePadding, 0)
 
         if (Build.VERSION.SDK_INT < 23) {
             textView.setTextAppearance(context, style)

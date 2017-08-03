@@ -31,7 +31,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
     private lateinit var mSolidsTable: TableLayout
 
     private val TAG = "WIMS_DETAILS_FRAGMENT"
-    private val URL_PREFIX = "http://environment.data.gov.uk/water-quality/id/sampling-point/"
+    private val URL_PREFIX = "http://environment.data.gov.uk/water-quality/view/sampling-point/"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +66,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
             val intent = Intent()
             intent.action = Intent.ACTION_VIEW
             intent.addCategory(Intent.CATEGORY_BROWSABLE)
-            intent.data = Uri.parse(URL_PREFIX + wimsPoint.id + ".html")
+            intent.data = Uri.parse(URL_PREFIX + wimsPoint.id)
             startActivity(intent)
         }
 

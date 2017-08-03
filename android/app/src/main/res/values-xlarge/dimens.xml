@@ -5,6 +5,15 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    <dimen name="table_base_padding">32sp</dimen>
+    <dimen name="table_child_padding">32sp</dimen>
+
+    <dimen name="layout_base_vertical_padding">24sp</dimen>
+    <dimen name="layout_base_horizontal_padding">64sp</dimen>
+
+    <dimen name="text_view_parent_vertical_padding">24sp</dimen>
+    <dimen name="text_view_child_vertical_padding">16sp</dimen>
+
     <dimen name="text_tiny">15sp</dimen>
     <dimen name="text_small">18sp</dimen>
     <dimen name="text_medium">21sp</dimen>
@@ -14,4 +23,6 @@
     <dimen name="text_button_small">14sp</dimen>
     <dimen name="text_button_medium">15sp</dimen>
     <dimen name="text_button_large">17sp</dimen>
+
+    <dimen name="big_button_padding">40sp</dimen>
 </resources>

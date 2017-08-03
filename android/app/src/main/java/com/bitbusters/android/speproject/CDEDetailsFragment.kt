@@ -65,8 +65,6 @@ open class CDEDetailsFragment : FragmentHelper() {
         mLinearLayout = view.bind(R.id.cde_details_linear_layout)
 
         mFullReportButton = view.bind(R.id.cde_full_report_button)
-//        mFullReportButton.setBackgroundColor(R.color.colorAccent)
-//        setButtonColor(mFullReportButton, true)
         mFullReportButton.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_VIEW
@@ -153,10 +151,10 @@ open class CDEDetailsFragment : FragmentHelper() {
             // Adds header row
             val tableHeaderRow = newTableRow(rowIndex++)
 
-            addTextView(tableHeaderRow, "Element", 0.25, R.style.text_view_table_parent, Gravity.START)
+            addTextView(tableHeaderRow, "Element", 0.23, R.style.text_view_table_parent, Gravity.START)
             addTextView(tableHeaderRow, "Rating", 0.25, R.style.text_view_table_parent)
             addTextView(tableHeaderRow, "Activity", 0.39, R.style.text_view_table_parent)
-            addTextView(tableHeaderRow, "Year", 0.11, R.style.text_view_table_parent)
+            addTextView(tableHeaderRow, "Year", 0.13, R.style.text_view_table_parent)
 
             mRNAGTable.addView(tableHeaderRow)
 
@@ -164,10 +162,10 @@ open class CDEDetailsFragment : FragmentHelper() {
 
                 val tableRow = newTableRow(rowIndex++)
 
-                addTextView(tableRow, rnag.element, 0.25, R.style.text_view_table_parent, Gravity.START)
+                addTextView(tableRow, rnag.element, 0.23, R.style.text_view_table_parent, Gravity.START)
                 addTextView(tableRow, rnag.rating, 0.25)
                 addTextView(tableRow, rnag.activity, 0.39)
-                addTextView(tableRow, rnag.year.toString(), 0.11)
+                addTextView(tableRow, rnag.year.toString(), 0.13)
 
                 mRNAGTable.addView(tableRow)
             }
@@ -186,7 +184,8 @@ open class CDEDetailsFragment : FragmentHelper() {
                     R.style.text_view_table_parent, Gravity.START)
         } else {
             addTextView(tableRow, CDEPoint.classificationPrintValues[label], 0.35,
-                    R.style.text_view_table_parent, Gravity.START, 40)
+                    R.style.text_view_table_parent, Gravity.START,
+                    context.resources.getDimensionPixelSize(R.dimen.table_child_padding))
         }
 
         if (isReal) {
