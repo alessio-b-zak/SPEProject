@@ -292,14 +292,14 @@ router.get('/getNearestWIMSPoint/:lat/:lon/:lastActive', function(req, res) {
             console.log(err);
             res.send([]);
         } else {
-            console.log('Found:', result[0]);
-
             var point = {};
             point.id        = result[0].waterbodyId;
             point.latitude  = result[0].loc[0];
             point.longitude = result[0].loc[1];
             point.distance  = getDistanceBetweenTwoLatLonInKm(lat, lon, point.latitude, point.longitude);
         
+	    console.log(point)
+
             res.status(200).send(point);
             res.end();
         }
@@ -378,9 +378,7 @@ router.get('/getNearestPermit/:lat/:lon', function(req, res) {
         if (err) {
             console.log(err);
             res.send([]);
-        } else {
-            console.log('Found:', result[0]);
-            
+        } else {            
             var point = {};
             point.id            = result[0].permitId;
             point.latitude      = result[0].loc[0];
@@ -393,7 +391,7 @@ router.get('/getNearestPermit/:lat/:lon', function(req, res) {
                 point.revocationDate = result[0].revocationDate;
             }
             point.distance      = getDistanceBetweenTwoLatLonInKm(lat, lon, point.latitude, point.longitude);
-        
+            console.log(point);
             res.status(200).send(point);
             res.end();
         }
