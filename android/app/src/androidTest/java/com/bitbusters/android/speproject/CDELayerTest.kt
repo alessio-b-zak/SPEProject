@@ -42,10 +42,7 @@ class CDELayerTest: TestHelper() {
         // Access the device state using UiAutomator
         mDevice = UiDevice.getInstance(getInstrumentation())
         // Zoom in to the current location
-        onView(withId(R.id.gps_button)).perform(click())
-        // Open info fragment
-        onView(withId(R.id.data_view_hamburger_button)).perform(click())
-        findObjectByText(mDevice, R.string.drawer_cde).click()
+        clickButtonAndPause(R.id.gps_button)
     }
 
     @Test
@@ -89,6 +86,7 @@ class CDELayerTest: TestHelper() {
     fun CDEDetailsFragmentClickBackButton() {
         // Action
         openCDEDetailsFragment()
+        findObjectById(mDevice, "R.id.back_button_cde_details_view").waitForExists(2000)
         onView(withId(R.id.back_button_cde_details_view)).perform(click())
         // Screenshot
         takeScreenshot(mDevice, FOLDER_NAME, "CDEDetailsFragmentClickBackButton")
@@ -100,6 +98,8 @@ class CDELayerTest: TestHelper() {
 
     fun openCDEDataFragment() {
         findObjectByDescriptor(mDevice, R.string.google_map).clickBottomRight()
+        findObjectById(mDevice, "R.id.back_button_cde_data_view").waitForExists(2000)
+        findObjectById(mDevice, "R.id.info_button_cde_data_view").waitForExists(2000)
     }
 
     fun openCDEDetailsFragment() {

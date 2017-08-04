@@ -108,7 +108,6 @@ class DrawerTest: TestHelper() {
         // Screenshot
         takeScreenshot(mDevice, FOLDER_NAME, "DrawerOpenMyAreaFragmentLoadingScreen")
         // Tests
-        onView(withId(R.id.layer_name)).check(matches(isDisplayed()))
         onView(withId(R.id.material_drawer_account_header)).check(matches(not(isDisplayed())))
     }
 

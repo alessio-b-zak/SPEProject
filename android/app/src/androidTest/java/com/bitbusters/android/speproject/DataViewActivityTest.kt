@@ -51,7 +51,6 @@ class DataViewActivityTest: TestHelper() {
         // Screenshot
         takeScreenshot(mDevice, FOLDER_NAME, "DataViewActivityClickGPSButton")
         // Tests
-        assertTrue(findObjectByDescriptor(mDevice, R.string.marker_wims).exists())
         onView(withId(R.id.layer_name)).check(matches(isDisplayed()))
     }
 

@@ -144,6 +144,11 @@ open class CDEDetailsFragment : FragmentHelper() {
         }
     }
 
+    /**
+     *
+     *
+     *
+     */
     fun setRNAGText(cdePoint: CDEPoint) {
         val rnagTitle: TextView = mCDEDetailsView.bind(R.id.cde_rnag_title)
         if(cdePoint.rnagList.isNotEmpty()) {

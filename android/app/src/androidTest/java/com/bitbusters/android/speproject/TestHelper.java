@@ -30,7 +30,7 @@ public class TestHelper {
     // Useful when waiting for transition
     public void clickButtonAndPause(final int button) {
         onView(withId(button)).perform(click());
-        SystemClock.sleep(1000);
+        SystemClock.sleep(2000);
     }
 
     public UiObject findObjectByDescriptor(UiDevice device, int descriptorId) {
@@ -41,6 +41,10 @@ public class TestHelper {
     public UiObject findObjectByText(UiDevice device, int textId) {
         String text = getResourceString(textId);
         return device.findObject(new UiSelector().textContains(text));
+    }
+
+    public UiObject findObjectById(UiDevice device, String id) {
+        return device.findObject(new UiSelector().resourceId(id));
     }
 
     public void takeScreenshot(UiDevice device, String folderName, String name) {

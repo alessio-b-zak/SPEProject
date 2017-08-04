@@ -1,6 +1,7 @@
 package com.bitbusters.android.speproject
 
 /**
- * Created by mihajlo on 12/07/17.
+ * CDEAsyncReturn is only used as a return object for CDEPointRatingsAPI.
+ * @see CDEPointRatingsAPI
  */
 data class CDEAsyncReturn(val cdePoint: CDEPoint, val classification: String) {}

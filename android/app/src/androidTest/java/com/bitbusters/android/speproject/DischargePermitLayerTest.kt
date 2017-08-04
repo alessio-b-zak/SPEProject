@@ -43,7 +43,7 @@ class DischargePermitLayerTest: TestHelper() {
         mDevice = UiDevice.getInstance(getInstrumentation())
         // Zoom in to the current location
         onView(withId(R.id.gps_button)).perform(click())
-        // Open info fragment
+        // Open discharge permit fragment
         onView(withId(R.id.data_view_hamburger_button)).perform(click())
         findObjectByText(mDevice, R.string.drawer_permit).click()
     }

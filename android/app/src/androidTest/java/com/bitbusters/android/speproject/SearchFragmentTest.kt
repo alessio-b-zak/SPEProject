@@ -30,7 +30,7 @@ class SearchFragmentTest: TestHelper() {
 
     private val FOLDER_NAME = "SearchFragmentTest"
 
-    private val BRISTOL = "Bristol"
+    private val BRISTOL = "Bristol A"
 
     private lateinit var mDevice: UiDevice
 
