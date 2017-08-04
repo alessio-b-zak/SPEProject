@@ -1,3 +1,7 @@
+.idea/
+.idea/*
+feedback/
+feedback/*
 android/local.properties
 android/build/
 android/.gradle/
