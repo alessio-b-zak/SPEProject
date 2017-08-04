@@ -11,5 +11,6 @@ data class DischargePermitPoint(val id: String,
                                 val siteType: String,
                                 val effectiveDate: String,
                                 val latitude: Double,
-                                val longitude: Double) : Point(latitude, longitude, "Waste_Point", "") {
+                                val longitude: Double,
+                                val distance: Double = 0.0) : Point(latitude, longitude, "Waste_Point", "") {
 }

@@ -35,7 +35,7 @@ class InputStreamToDischargePermit: InputStreamHelper() {
     }
 
     @Throws(IOException::class)
-    fun readMessage(reader: JsonReader, messages: ArrayList<DischargePermitPoint>, includeAll: Boolean = false) {
+    fun readMessage(reader: JsonReader, messages: ArrayList<DischargePermitPoint>) {
         var id = ""
         var holder = ""
         var siteType = ""
@@ -62,11 +62,45 @@ class InputStreamToDischargePermit: InputStreamHelper() {
         }
         reader.endObject()
 
-        if(revocationDate != "" || includeAll) {
+        if(revocationDate != "") {
             val newPoint = DischargePermitPoint(id, holder, effluentType, siteType, effectiveDate,
                                                 latitude, longitude)
             messages.add(newPoint)
         }
+
+    }
+
+    @Throws(IOException::class)
+    fun readMessageWithDistance(reader: JsonReader): DischargePermitPoint {
+        var id = ""
+        var holder = ""
+        var siteType = ""
+        var effluentType = ""
+        var effectiveDate: String = ""
+        var latitude: Double = 0.0
+        var longitude: Double = 0.0
+        var distance: Double = 0.0
+
+        reader.beginObject()
+        while (reader.hasNext()) {
+            val name = reader.nextName()
+            when(name){
+                "id"              -> id = reader.nextString()
+                "holder"          -> holder = reader.nextString()
+                "siteType"        -> siteType = reader.nextString()
+                "effluentType"    -> effluentType = reader.nextString()
+                "effectiveDate"   -> effectiveDate = reader.nextString()
+                "latitude"        -> latitude = reader.nextDouble()
+                "longitude"       -> longitude = reader.nextDouble()
+                "distance"        -> distance = reader.nextDouble()
+                else              -> reader.skipValue()
+            }
+        }
+        reader.endObject()
+
+        Log.i(TAG, "Distance: ${distance}")
+        return DischargePermitPoint(id, holder, effluentType, siteType, effectiveDate,
+                latitude, longitude, distance)
 
     }
 

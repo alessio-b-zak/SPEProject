@@ -27,10 +27,14 @@
             android:background="@color/backgroundDefault" >
 
             <TextView
-                style="@style/text_view_heading"
                 android:id="@+id/my_area_title"
-                android:text="@string/my_area_title"
-                android:paddingTop="@dimen/layout_base_vertical_padding"/>
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_huge"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_base_vertical_padding"
+                android:text="@string/my_area_title"/>
 
             <TableLayout
                 style="@style/table_layout"
@@ -55,14 +59,14 @@
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:text="@string/my_area_wims_button"
+                        android:text=""
                         android:drawableTop="@drawable/ic_wims_marker"
                         android:contentDescription="@string/my_area_wims_button"/>
 
                     <Button
                         style="@style/big_button"
                         android:id="@+id/my_area_permit_button"
-                        android:text="@string/my_area_permit_button"
+                        android:text=""
                         android:drawableTop="@drawable/ic_permit_marker"
                         android:contentDescription="@string/my_area_permit_button"/>
 

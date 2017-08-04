@@ -43,8 +43,7 @@ open class MyAreaNearestWIMSAPI(private val listener: OnTaskCompleted):
         val inputStream = conn.inputStream
         val inputStreamToWIMSPoint = InputStreamToWIMSPoint()
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
-        val result: WIMSPoint = inputStreamToWIMSPoint.readMessage(reader)
-
+        val result: WIMSPoint = inputStreamToWIMSPoint.readMessage(reader, true)
 
         return result
     }

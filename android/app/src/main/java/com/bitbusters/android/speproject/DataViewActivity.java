@@ -938,7 +938,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         snack.show();
     }
 
-    private Snackbar dismissableSnackbar(String message, Integer length) {
+    public Snackbar dismissableSnackbar(String message, Integer length) {
         Snackbar snack = Snackbar.make(findViewById(R.id.fragment_container),message, length);
         snack.setAction("DISMISS", new View.OnClickListener() {
             @Override

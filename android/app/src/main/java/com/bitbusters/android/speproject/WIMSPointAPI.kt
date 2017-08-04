@@ -2,11 +2,13 @@ package com.bitbusters.android.speproject
 
 import android.net.Uri
 import android.os.AsyncTask
+import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.View
 
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.net.URL
 
 open class WIMSPointAPI(private val listener: OnTaskCompleted) :
@@ -65,7 +67,6 @@ open class WIMSPointAPI(private val listener: OnTaskCompleted) :
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
         return conn
     }
 

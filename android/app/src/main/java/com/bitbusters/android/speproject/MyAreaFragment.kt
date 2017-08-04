@@ -1,6 +1,7 @@
 package com.bitbusters.android.speproject
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,6 +92,8 @@ class MyAreaFragment: FragmentHelper() {
             mDataViewActivity.setCameraFocusOnMarker(myArea.wimsPoint)
         }
         mWIMSPointButton.visibility = View.VISIBLE
+        val buttonDescription: String = resources.getString(R.string.my_area_wims_button,  myArea.wimsPoint.distance)
+        mWIMSPointButton.text = buttonDescription
     }
 
     fun populatePermitData() {
@@ -98,6 +101,8 @@ class MyAreaFragment: FragmentHelper() {
             mDataViewActivity.setCameraFocusOnMarker(myArea.permitPoint)
         }
         mPermitPointButton.visibility = View.VISIBLE
+        val buttonDescription: String = resources.getString(R.string.my_area_permit_button,  myArea.permitPoint.distance)
+        mPermitPointButton.text = buttonDescription
         mDataViewActivity.progressSpinner.visibility = View.INVISIBLE
     }
 }

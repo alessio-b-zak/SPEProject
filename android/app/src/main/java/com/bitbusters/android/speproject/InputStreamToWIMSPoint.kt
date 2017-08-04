@@ -36,10 +36,11 @@ class InputStreamToWIMSPoint {
     }
 
     @Throws(IOException::class)
-    fun readMessage(reader: JsonReader): WIMSPoint {
+    fun readMessage(reader: JsonReader, withDistance: Boolean = false): WIMSPoint {
         var id: String = ""
         var latitude = 0.0
         var longitude = 0.0
+        var distance = 0.0
 
         reader.beginObject()
         while (reader.hasNext()) {
@@ -48,12 +49,17 @@ class InputStreamToWIMSPoint {
                 "id"        -> id = reader.nextString()
                 "latitude"  -> latitude = reader.nextDouble()
                 "longitude" -> longitude = reader.nextDouble()
+                "distance"  -> distance = reader.nextDouble()
                 else        -> reader.skipValue()
             }
         }
         reader.endObject()
 
-        return WIMSPoint(id, latitude, longitude)
+        if(withDistance) {
+            return WIMSPoint(id, latitude, longitude, distance)
+        } else {
+            return WIMSPoint(id, latitude, longitude)
+        }
     }
 
 }

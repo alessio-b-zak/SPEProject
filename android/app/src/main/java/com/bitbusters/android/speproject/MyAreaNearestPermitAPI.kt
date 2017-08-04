@@ -42,11 +42,10 @@ open class MyAreaNearestPermitAPI(private val listener: OnTaskCompleted):
         val inputStream = conn.inputStream
         val inputStreamToDischargePermit = InputStreamToDischargePermit()
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
-        val result: ArrayList<DischargePermitPoint> = arrayListOf()
 
-        inputStreamToDischargePermit.readMessage(reader, result, true)
+        val result = inputStreamToDischargePermit.readMessageWithDistance(reader)
 
-        return result[0]
+        return result
     }
 
     // onPostExecute displays the results of the AsyncTask.

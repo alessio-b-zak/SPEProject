@@ -16,6 +16,7 @@ public class WIMSPoint extends Point {
     private String label;
     private Integer easting;
     private Integer northing;
+    private Double distance;
     private HashMap<String, ArrayList<Measurement>> measurementMap;
 
     public static final String TEMPERATURE = "Temp Water";
@@ -102,6 +103,7 @@ public class WIMSPoint extends Point {
         this.label = label;
         this.easting = easting;
         this.northing = northing;
+        this.distance = 0.0;
         this.measurementMap = new HashMap<>();
     }
 
@@ -112,6 +114,18 @@ public class WIMSPoint extends Point {
         this.label = null;
         this.easting = null;
         this.northing = null;
+        this.distance = 0.0;
+        this.measurementMap = new HashMap<String, ArrayList<Measurement>>();
+    }
+
+    WIMSPoint(String id, double latitude, double longitude, double distance) {
+        super(latitude,longitude,"WIMS_Point", "");
+        this.id = id;
+        this.type = null;
+        this.label = null;
+        this.easting = null;
+        this.northing = null;
+        this.distance = distance;
         this.measurementMap = new HashMap<String, ArrayList<Measurement>>();
     }
 
@@ -125,6 +139,10 @@ public class WIMSPoint extends Point {
 
     public double getLongitude() {
         return this.getPosition().longitude;
+    }
+
+    public double getDistance() {
+        return distance;
     }
 
     public String getType() {
