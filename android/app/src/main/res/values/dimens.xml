@@ -18,6 +18,7 @@
     <dimen name="text_medium">16sp</dimen>
     <dimen name="text_large">18sp</dimen>
     <dimen name="text_huge">25sp</dimen>
+    <dimen name="text_massive">50sp</dimen>
 
     <dimen name="text_button_small">12sp</dimen>
     <dimen name="text_button_medium">13sp</dimen>

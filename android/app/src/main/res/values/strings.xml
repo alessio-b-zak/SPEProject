@@ -104,6 +104,18 @@
     <string name="google_search_input_field_holder">Search</string>
     <string name="google_map">Google Map</string>
 
+    <string name="dialog_title">Search Condition</string>
+    <string name="dialog_description">Search by any of the following:</string>
+
+    <string name="dialog_region">Region Name</string>
+    <string name="dialog_city">City Name</string>
+    <string name="dialog_post_code">Post Code</string>
+    <string name="dialog_street">Street Name</string>
+    <string name="dialog_address">Exact Address</string>
+
+    <string name="dialog_do_not_show_again">Do not show again</string>
+
+    <string name="ok">Ok</string>
     <!--Testing Only-->
     <string name="bristol_airport">Bristol Airport</string>
 </resources>

@@ -33,6 +33,26 @@ Proj4js.defs([
     ]
 ])
 
+// Converts degrees to radians
+function degTorad(deg) {
+  return deg * (Math.PI / 180);
+}
+
+// Calculates the distance between two lat/lon points using Haversine Formula:
+// https://en.wikipedia.org/wiki/Haversine_formula
+function getDistanceBetweenTwoLatLonInKm(lat1, lon1, lat2, lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = degTorad(lat2 - lat1);  
+    var dLon = degTorad(lon2 - lon1); 
+    var a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(degTorad(lat1)) * Math.cos(degTorad(lat2)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2); 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; // Distance in km
+    return d;
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express' });    
@@ -278,6 +298,7 @@ router.get('/getNearestWIMSPoint/:lat/:lon/:lastActive', function(req, res) {
             point.id        = result[0].waterbodyId;
             point.latitude  = result[0].loc[0];
             point.longitude = result[0].loc[1];
+            point.distance  = getDistanceBetweenTwoLatLonInKm(lat, lon, point.latitude, point.longitude);
         
             res.status(200).send(point);
             res.end();
@@ -371,6 +392,7 @@ router.get('/getNearestPermit/:lat/:lon', function(req, res) {
             if(result[0].revocationDate != null) {
                 point.revocationDate = result[0].revocationDate;
             }
+            point.distance      = getDistanceBetweenTwoLatLonInKm(lat, lon, point.latitude, point.longitude);
         
             res.status(200).send(point);
             res.end();

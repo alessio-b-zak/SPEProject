@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="32sp"
+    android:paddingEnd="32sp">
+
+    <TextView
+        style="@style/text_view_dialog_parent"
+        android:text="@string/dialog_description"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16sp"
+        android:layout_gravity="top">
+        <TableRow>
+            <TextView
+                style="@style/text_view_dialog_child"
+                android:text="@string/dialog_region"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                style="@style/text_view_dialog_child"
+                android:text="@string/dialog_city"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                style="@style/text_view_dialog_child"
+                android:text="@string/dialog_post_code"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                style="@style/text_view_dialog_child"
+                android:text="@string/dialog_street"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                style="@style/text_view_dialog_child"
+                android:text="@string/dialog_address"/>
+        </TableRow>
+    </TableLayout>
+    <CheckBox
+        android:id="@+id/dialog_do_not_show_again"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_small"
+        android:text="@string/dialog_do_not_show_again"/>
+</LinearLayout>

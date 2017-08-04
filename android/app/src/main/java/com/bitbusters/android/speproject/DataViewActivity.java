@@ -1,8 +1,11 @@
 package com.bitbusters.android.speproject;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -24,7 +27,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -70,6 +75,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.android.gms.location.places.AutocompleteFilter.TYPE_FILTER_ADDRESS;
+import static com.google.android.gms.location.places.AutocompleteFilter.TYPE_FILTER_CITIES;
+import static com.google.android.gms.location.places.AutocompleteFilter.TYPE_FILTER_GEOCODE;
+import static com.google.android.gms.location.places.AutocompleteFilter.TYPE_FILTER_REGIONS;
 
 
 public class DataViewActivity extends FragmentActivity implements OnTaskCompleted, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -117,6 +127,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private CoordinateSystemConverter coordinateSystemConverter;
 
     private MyArea myArea;
+    private CheckBox doNotShowAgain;
+    public static final String SHARED_PREFERENCES_NAME = "search_dialog_preferences";
 
     private WIMSPoint selectedWIMSPoint;
     private CDEPoint selectedCDEPoint;
@@ -183,7 +195,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openSearch();
+                showSearchDialog();
             }
         });
     }
@@ -202,10 +214,45 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         clearMarkers(view);
     }
 
+    public void showSearchDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService (Context.LAYOUT_INFLATER_SERVICE);
+        View searchDialog = inflater.inflate(R.layout.search_dialog, null);
+
+        doNotShowAgain = (CheckBox) searchDialog.findViewById(R.id.dialog_do_not_show_again);
+
+        builder.setView(searchDialog)
+                .setTitle(R.string.dialog_title)
+                .setIcon(R.drawable.ic_search);
+
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                SharedPreferences settings = getSharedPreferences(SHARED_PREFERENCES_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean("skipMessage", doNotShowAgain.isChecked());
+                editor.apply();
+
+                openSearch();
+            }
+        });
+
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFERENCES_NAME, 0);
+        Boolean skipMessage = settings.getBoolean("skipMessage", false);
+        if (skipMessage.equals(false)) {
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            openSearch();
+        }
+
+    }
+
     public void openSearch() {
         try {
             AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
                     .setCountry("GB")
+                    .setTypeFilter(TYPE_FILTER_GEOCODE)
                     .build();
 
             Intent intent =
