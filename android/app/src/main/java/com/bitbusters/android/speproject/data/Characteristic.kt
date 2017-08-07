@@ -1,6 +1,3 @@
 package com.bitbusters.android.speproject.data
 
-/**
- * Created by mihajlo on 12/07/17.
- */
-data class Characteristic(val unit: String, val label: String, val value: Number) {}
+data class Characteristic(val unit: String, val label: String, val value: Number)

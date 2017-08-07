@@ -329,13 +329,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void clearMarkers(int view) {
         switch (view) {
             case CDE:
-                List<GeoJsonFeature> featuresToRemove = new ArrayList<>();
-                for (GeoJsonFeature feature : mGeoJsonLayer.getFeatures()) {
-                    featuresToRemove.add(feature);
-                }
-                for (GeoJsonFeature feature : featuresToRemove) {
-                    mGeoJsonLayer.removeFeature(feature);
-                }
+                mMap.clear();
                 break;
             case WIMS:
                 mWIMSClusterManager.clearItems();

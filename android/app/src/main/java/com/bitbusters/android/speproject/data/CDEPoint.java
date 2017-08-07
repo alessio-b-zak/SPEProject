@@ -1,24 +1,27 @@
 package com.bitbusters.android.speproject.data;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.data.geojson.GeoJsonFeature;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Created by cp153 on 06/12/2016.
+ *
+ * Data class representing an individual waterbody found in Catchment Data Explorer:
+ * @see <a href="http://environment.data.gov.uk/catchment-planning/">Catchment Data Explorer</a>
+ *
  */
-
 public class CDEPoint {
+    /**
+     * Constants used for manipulating data
+     */
     public static final String RNAG = "RNAG";
     public static final String REAL = "Real";
     public static final String OBJECTIVE = "Objective";
     public static final String PREDICTED = "Predicted";
+
     // Classifications
     public static final String OVERALL = "Overall Water Body";
     public static final String ECOLOGICAL = "Ecological";
@@ -27,12 +30,45 @@ public class CDEPoint {
     public static final String HYDROMORPHOLOGICAL_ELEMENTS = "Hydromorphological Supporting Elements";
     public static final String PHYSICO_CHEMICAL_ELEMENTS = "Physico-chemical quality elements";
     public static final String SPECIFIC_POLLUTANTS = "Specific pollutants";
-    public static final List<String> ecologicalGroup;
     public static final String CHEMICAL = "Chemical";
     public static final String PRIORITY_SUBSTANCES = "Priority substances";
     public static final String OTHER_POLLUTANTS = "Other Pollutants";
     public static final String HAZARDOUS_SUBSTANCES = " Priority hazardous substances";
+
+    public static final List<String> ecologicalGroup;
+    static {
+        ecologicalGroup = new ArrayList<>();
+        ecologicalGroup.add(SUPPORTING_ELEMENTS);
+        ecologicalGroup.add(BIOLOGICAL_ELEMENTS);
+        ecologicalGroup.add(HYDROMORPHOLOGICAL_ELEMENTS);
+        ecologicalGroup.add(PHYSICO_CHEMICAL_ELEMENTS);
+        ecologicalGroup.add(SPECIFIC_POLLUTANTS);
+    }
+
     public static final List<String> chemicalGroup;
+    static {
+        chemicalGroup = new ArrayList<>();
+        chemicalGroup.add(PRIORITY_SUBSTANCES);
+        chemicalGroup.add(OTHER_POLLUTANTS);
+        chemicalGroup.add(HAZARDOUS_SUBSTANCES);
+    }
+
+    public static final HashMap<String, String> classificationPrintValues;
+    static {
+        classificationPrintValues = new HashMap<>();
+        classificationPrintValues.put(OVERALL, "Overall");
+        classificationPrintValues.put(ECOLOGICAL, "Ecological");
+        classificationPrintValues.put(CHEMICAL, "Chemical");
+        classificationPrintValues.put(SUPPORTING_ELEMENTS, "Supporting");
+        classificationPrintValues.put(BIOLOGICAL_ELEMENTS, "Biological");
+        classificationPrintValues.put(HYDROMORPHOLOGICAL_ELEMENTS, "Hydromorphological");
+        classificationPrintValues.put(PHYSICO_CHEMICAL_ELEMENTS, "Physico-chemical");
+        classificationPrintValues.put(SPECIFIC_POLLUTANTS, "Specific");
+        classificationPrintValues.put(PRIORITY_SUBSTANCES, "Priority");
+        classificationPrintValues.put(OTHER_POLLUTANTS, "Other");
+        classificationPrintValues.put(HAZARDOUS_SUBSTANCES, "Hazardous");
+    }
+
     // Ratings
     public static final String FAIL = "Fail";
     public static final String BAD = "Bad";
@@ -51,41 +87,8 @@ public class CDEPoint {
     public static final String FOR_INFORMATION = "For information";
     public static final String FAILS_THRESHOLD = "Fails Threshold";
     public static final String PASSES_THRESHOLD = "Passes Threshold";
-    public static final HashMap<String, String> classificationPrintValues;
+
     public static final HashMap<String, String> ratingPrintValues;
-    private static final String TAG = "CDE_POINT";
-
-    static {
-        ecologicalGroup = new ArrayList<>();
-        ecologicalGroup.add(SUPPORTING_ELEMENTS);
-        ecologicalGroup.add(BIOLOGICAL_ELEMENTS);
-        ecologicalGroup.add(HYDROMORPHOLOGICAL_ELEMENTS);
-        ecologicalGroup.add(PHYSICO_CHEMICAL_ELEMENTS);
-        ecologicalGroup.add(SPECIFIC_POLLUTANTS);
-    }
-
-    static {
-        chemicalGroup = new ArrayList<>();
-        chemicalGroup.add(PRIORITY_SUBSTANCES);
-        chemicalGroup.add(OTHER_POLLUTANTS);
-        chemicalGroup.add(HAZARDOUS_SUBSTANCES);
-    }
-
-    static {
-        classificationPrintValues = new HashMap<>();
-        classificationPrintValues.put(OVERALL, "Overall");
-        classificationPrintValues.put(ECOLOGICAL, "Ecological");
-        classificationPrintValues.put(CHEMICAL, "Chemical");
-        classificationPrintValues.put(SUPPORTING_ELEMENTS, "Supporting");
-        classificationPrintValues.put(BIOLOGICAL_ELEMENTS, "Biological");
-        classificationPrintValues.put(HYDROMORPHOLOGICAL_ELEMENTS, "Hydromorphological");
-        classificationPrintValues.put(PHYSICO_CHEMICAL_ELEMENTS, "Physico-chemical");
-        classificationPrintValues.put(SPECIFIC_POLLUTANTS, "Specific");
-        classificationPrintValues.put(PRIORITY_SUBSTANCES, "Priority");
-        classificationPrintValues.put(OTHER_POLLUTANTS, "Other");
-        classificationPrintValues.put(HAZARDOUS_SUBSTANCES, "Hazardous");
-    }
-
     static {
         ratingPrintValues = new HashMap<>();
         ratingPrintValues.put(POOR, "Poor");
@@ -108,6 +111,7 @@ public class CDEPoint {
         ratingPrintValues.put("N/A", "N/A");
     }
 
+    // Object fields
     private String waterbodyId;
     private String label;
     private LatLng location;
@@ -129,60 +133,116 @@ public class CDEPoint {
         this.rnagList = new ArrayList<>();
     }
 
+    /**
+     * Returns waterbodyId
+     *
+     * @return String waterbodyId
+     */
     public String getWaterbodyId() {
         return waterbodyId;
     }
 
-    public void setWaterbodyId(String waterbodyId) {
-        this.waterbodyId = waterbodyId;
-    }
-
+    /**
+     * Returns label
+     *
+     * @return String label
+     */
     public String getLabel() {
         return label;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
+    /**
+     * Returns latitude
+     *
+     * @return double latitude
+     */
     public double getLatitude() {
         return location.latitude;
     }
 
+    /**
+     * Returns longitude
+     *
+     * @return double longitude
+     */
     public double getLongitude() {
         return location.longitude;
     }
 
+    /**
+     * Returns River Catchment as a GeoJSON polygon
+     *
+     * @return GeoJsonFeature riverPolygon
+     */
     public GeoJsonFeature getRiverPolygon() {
         return riverPolygon;
     }
 
+    /**
+     * Returns River Line as a GeoJSON multi line
+     *
+     * @return GeoJsonFeature riverLine
+     */
     public GeoJsonFeature getRiverLine() {
         return riverLine;
     }
 
-    public void setRiverLine(GeoJsonFeature riverLine) {
-        this.riverLine = riverLine;
-    }
-
+    /**
+     * Returns a HashMap of a given classification group
+     *
+     * @param group
+     * @return HashMap classification
+     * @see Classification
+     */
     public HashMap<String, Classification> getClassificationHashMap(String group) {
         return classificationHashMap.get(group);
     }
 
+    /**
+     * Returns a list of Reasons for Not Achieving Good
+     *
+     * @return List<RNAG> rnagList
+     * @see RNAG
+     */
     public List<RNAG> getRnagList() {
         return rnagList;
     }
 
+    /**
+     * Adds given RNAG to the rnagList
+     *
+     * @param rnag
+     * @see RNAG
+     */
     public void addRNAG(RNAG rnag) {
         rnagList.add(rnag);
     }
 
-    public void printClassification(String group) {
-        Log.i(TAG, group);
-        for (Map.Entry<String, Classification> entry : classificationHashMap.get(group).entrySet()) {
-            Log.i(TAG, entry.getKey() + " " + entry.getValue().getValue() + " "
-                    + entry.getValue().getCertainty() + " " + entry.getValue().getYear());
-        }
+    /**
+     * Sets the waterbodyId
+     *
+     * @param waterbodyId
+     */
+    public void setWaterbodyId(String waterbodyId) {
+        this.waterbodyId = waterbodyId;
+    }
+
+    /**
+     * Sets the label
+     *
+     * @param label
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * Sets the GeoJSON multi line representing the river line
+     *
+     * @param riverLine
+     */
+    public void setRiverLine(GeoJsonFeature riverLine) {
+        this.riverLine = riverLine;
     }
 
 }
