@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bitbusters.android.speproject">
+    package="com.epimorphics.android.myrivers">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -8,8 +8,6 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -20,8 +18,8 @@
    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Used only for testing -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
 
    <application
        android:allowBackup="true"
@@ -44,13 +42,13 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.DataViewActivity"
+            android:name="com.epimorphics.android.myrivers.activities.DataViewActivity"
             android:label="@string/title_activity_maps"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullSensor" />
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="com.epimorphics.android.myrivers.activities.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>

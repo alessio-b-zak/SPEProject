@@ -4,6 +4,6 @@
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bitbusters.android.speproject.SplashActivity">
+    tools:context="com.epimorphics.android.myrivers.SplashActivity">
 
 </RelativeLayout>

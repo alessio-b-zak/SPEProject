@@ -10,12 +10,12 @@ android {
             storePassword 'android'
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.1'
     defaultConfig {
-        applicationId "com.bitbusters.android.speproject"
+        applicationId "com.epimorphics.android.myrivers"
         minSdkVersion 18
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -34,18 +34,18 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support:support-annotations:25.3.1'
+    androidTestCompile 'com.android.support:support-annotations:26.0.0'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.google.android.gms:play-services-maps:11.0.2'
-    compile 'com.google.android.gms:play-services-location:11.0.2'
-    compile 'com.google.android.gms:play-services-places:11.0.2'
-    compile 'com.google.android.gms:play-services-appinvite:11.0.2'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.0.0'
+    compile 'com.google.android.gms:play-services-maps:11.0.4'
+    compile 'com.google.android.gms:play-services-location:11.0.4'
+    compile 'com.google.android.gms:play-services-places:11.0.4'
+    compile 'com.google.android.gms:play-services-appinvite:11.0.4'
+    compile 'com.android.support:design:26.0.0'
+    compile 'com.android.support:recyclerview-v7:26.0.0'
     compile 'com.google.maps.android:android-maps-utils:0.5'
     compile 'com.cocoahero.android:geojson:1.0.1@jar'
     // https://mvnrepository.com/artifact/io.jeo/proj4j
