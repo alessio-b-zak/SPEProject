@@ -5,11 +5,10 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TableLayout
+import android.widget.*
 import com.bitbusters.android.speproject.R
 import com.bitbusters.android.speproject.activities.DataViewActivity
+import com.bitbusters.android.speproject.data.Characteristic
 import com.bitbusters.android.speproject.data.MyArea
 import com.bitbusters.android.speproject.helpers.FragmentHelper
 
@@ -23,7 +22,9 @@ class MyAreaFragment : FragmentHelper() {
 
     private lateinit var mDataViewActivity: DataViewActivity
     private lateinit var mMyAreaView: View
-    private lateinit var mDataTable: TableLayout
+    private lateinit var mCDETable: TableLayout
+    private lateinit var mCharacteristicsTitle: TextView
+    private lateinit var mCharacteristicsTable: TableLayout
     private lateinit var myArea: MyArea
     private lateinit var mBackButton: ImageButton
     private lateinit var mWIMSPointButton: Button
@@ -46,7 +47,9 @@ class MyAreaFragment : FragmentHelper() {
             activity.onBackPressed()
         }
 
-        mDataTable = view.bind(R.id.my_area_summary_table)
+        mCDETable = view.bind(R.id.my_area_summary_table)
+        mCharacteristicsTitle = view.bind(R.id.my_area_characteristics_title)
+        mCharacteristicsTable = view.bind(R.id.my_area_characteristics_table)
 
         mPermitPointButton = view.bind(R.id.my_area_permit_button)
 //        setButtonColor(mPermitPointButton)
@@ -63,31 +66,55 @@ class MyAreaFragment : FragmentHelper() {
         return view
     }
 
-
     fun populateCDEData() {
+        if(myArea.hasWaterbody) {
+            populateWaterbodyDetails()
+            populateCharacteristicsDetails()
+        } else {
+            mCDETable.visibility = View.GONE
+            mCharacteristicsTable.visibility = View.GONE
+            mCharacteristicsTitle.text = context.resources.getString(R.string.my_area_unable_to_find_waterbody)
+        }
+    }
+
+    fun populateWaterbodyDetails() {
         var rowIndex = 0
         val parentWeight = 0.3
         val childWeight = 0.7
 
         var tableRow = newTableRow(rowIndex++)
-        addTextView(tableRow, "Nearest River:", parentWeight, R.style.text_view_table_parent, Gravity.START)
+        addTextView(tableRow, "Nearest Waterbody:", parentWeight, R.style.text_view_table_parent, Gravity.START)
         addTextView(tableRow, myArea.waterbody, childWeight, R.style.text_view_table_child, Gravity.START)
-        mDataTable.addView(tableRow)
+        mCDETable.addView(tableRow)
 
         tableRow = newTableRow(rowIndex++)
         addTextView(tableRow, "Operational Catchment:", parentWeight, R.style.text_view_table_parent, Gravity.START)
         addTextView(tableRow, myArea.operationalCatchment, childWeight, R.style.text_view_table_child, Gravity.START)
-        mDataTable.addView(tableRow)
+        mCDETable.addView(tableRow)
 
         tableRow = newTableRow(rowIndex++)
         addTextView(tableRow, "Management Catchment:", parentWeight, R.style.text_view_table_parent, Gravity.START)
         addTextView(tableRow, myArea.managementCatchment, childWeight, R.style.text_view_table_child, Gravity.START)
-        mDataTable.addView(tableRow)
+        mCDETable.addView(tableRow)
 
         tableRow = newTableRow(rowIndex)
         addTextView(tableRow, "River Basin District:", parentWeight, R.style.text_view_table_parent, Gravity.START)
         addTextView(tableRow, myArea.riverBasinDistrict, childWeight, R.style.text_view_table_child, Gravity.START)
-        mDataTable.addView(tableRow)
+        mCDETable.addView(tableRow)
+    }
+
+    fun populateCharacteristicsDetails() {
+        var rowIndex = 0
+        val parentWeight = 0.4
+        val childWeight = 0.6
+        for(characteristic: Characteristic in myArea.characteristicList) {
+            val tableRow: TableRow = newTableRow(rowIndex++)
+            addTextView(tableRow, characteristic.label, parentWeight,
+                        R.style.text_view_table_parent, Gravity.START)
+            addTextView(tableRow, "${characteristic.value} ${characteristic.unit}", childWeight,
+                        R.style.text_view_table_child, Gravity.START)
+            mCharacteristicsTable.addView(tableRow)
+        }
     }
 
     fun populateWIMSData() {

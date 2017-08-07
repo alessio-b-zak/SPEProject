@@ -12,10 +12,6 @@
     <string name="drawer_my_area">Where am I now?</string>
     <string name="drawer_info">How it Works</string>
 
-    <!--<string name="layer_cde">CDE Layer</string>-->
-    <!--<string name="layer_wims">WIMS Layer</string>-->
-    <!--<string name="layer_permit">Discharge Permit Layer</string>-->
-
     <string name="marker_wims">WIMS_Point</string>
     <string name="marker_permit">Waste_Point</string>
 
@@ -92,12 +88,15 @@
     </string>
 
     <string name="my_area_title"><b>Where am I now?</b></string>
+    <string name="my_area_characteristics_title">River Catchment Characteristics</string>
     <string name="my_area_waterbody">Nearest River:</string>
     <string name="my_area_operational">Operational Catchment:</string>
     <string name="my_area_management">Management Catchment:</string>
     <string name="my_area_district">River Basin District:</string>
     <string name="my_area_permit_button">Show the Nearest\nPollution Licence\nHolder on the Map\n(%.2f km away)</string>
     <string name="my_area_wims_button">Show the Nearest\nWater Quality\nSample on the Map\n(%.2f km away)</string>
+
+    <string name="my_area_unable_to_find_waterbody">You are currently not inside a registered river catchment</string>
 
     <string name="google_search_back_button">Navigate up</string>
     <string name="google_search_cancel_button">Clear search</string>

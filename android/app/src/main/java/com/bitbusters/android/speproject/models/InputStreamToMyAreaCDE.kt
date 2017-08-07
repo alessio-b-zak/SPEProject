@@ -99,8 +99,9 @@ class InputStreamToMyAreaCDE : InputStreamHelper() {
             }
         }
         reader.endObject()
-
-        characteristicList.add(Characteristic(unitLabel[0], unitLabel[1], value))
+        if (unitLabel[0] != "ha") {
+            characteristicList.add(Characteristic(unitLabel[0], unitLabel[1], value))
+        }
     }
 
     @Throws(IOException::class)

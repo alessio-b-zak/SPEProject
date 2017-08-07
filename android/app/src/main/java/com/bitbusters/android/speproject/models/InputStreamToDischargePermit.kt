@@ -47,6 +47,7 @@ class InputStreamToDischargePermit : InputStreamHelper() {
         var longitude: Double = 0.0
 
         reader.beginObject()
+
         while (reader.hasNext()) {
             val name = reader.nextName()
             when (name) {
@@ -63,7 +64,7 @@ class InputStreamToDischargePermit : InputStreamHelper() {
         }
         reader.endObject()
 
-        if (revocationDate != "") {
+        if (revocationDate == "") {
             val newPoint = DischargePermitPoint(id, holder, effluentType, siteType, effectiveDate,
                     latitude, longitude)
             messages.add(newPoint)
@@ -99,7 +100,6 @@ class InputStreamToDischargePermit : InputStreamHelper() {
         }
         reader.endObject()
 
-        Log.i(TAG, "Distance: ${distance}")
         return DischargePermitPoint(id, holder, effluentType, siteType, effectiveDate,
                 latitude, longitude, distance)
 

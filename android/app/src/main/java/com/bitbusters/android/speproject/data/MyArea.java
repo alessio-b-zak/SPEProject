@@ -15,6 +15,7 @@ public class MyArea {
     private String managementCatchment;
     private String riverBasinDistrict;
     private ArrayList<Characteristic> characteristicList;
+    private Boolean hasWaterbody;
     private WIMSPoint wimsPoint;
     private DischargePermitPoint permitPoint;
 
@@ -23,13 +24,14 @@ public class MyArea {
     private OnPopulated listener;
 
     public MyArea() {
-        this.waterbody = "";
+        this.waterbody = null;
         this.characteristicList = null;
-        this.operationalCatchment = "";
-        this.managementCatchment = "";
-        this.riverBasinDistrict = "";
+        this.operationalCatchment = null;
+        this.managementCatchment = null;
+        this.riverBasinDistrict = null;
         this.wimsPoint = null;
         this.permitPoint = null;
+        this.hasWaterbody = false;
         this.isDataLoaded = new ArrayList<Boolean>();
     }
 
@@ -61,12 +63,8 @@ public class MyArea {
         return riverBasinDistrict;
     }
 
-    public void setRiverBasinDistrict(String riverBasinDistrict) {
-        this.riverBasinDistrict = riverBasinDistrict;
-        isDataLoaded.add(true);
-        if (isDataLoaded.size() == 3 && listener != null) {
-            listener.onPopulated();
-        }
+    public Boolean getHasWaterbody() {
+        return hasWaterbody;
     }
 
     public WIMSPoint getWIMSPoint() {
@@ -75,6 +73,21 @@ public class MyArea {
 
     public DischargePermitPoint getPermitPoint() {
         return permitPoint;
+    }
+
+    public void setRiverBasinDistrict(String riverBasinDistrict) {
+        this.riverBasinDistrict = riverBasinDistrict;
+        isDataLoaded.add(true);
+        if (isDataLoaded.size() == 3 && listener != null) {
+            listener.onPopulated();
+        }
+    }
+
+    public void setHasWaterbody(boolean hasWaterbody) {
+        this.hasWaterbody = hasWaterbody;
+        if(!hasWaterbody) {
+            isDataLoaded.add(true);
+        }
     }
 
     public void setPermitPoint(DischargePermitPoint permitPoint) {

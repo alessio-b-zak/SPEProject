@@ -329,7 +329,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void clearMarkers(int view) {
         switch (view) {
             case CDE:
-                mMap.clear();
+                List<GeoJsonFeature> featuresToRemove = new ArrayList<>();
+                for(GeoJsonFeature feature : mGeoJsonLayer.getFeatures()) {
+                    featuresToRemove.add(feature);
+                }
+                for(GeoJsonFeature feature : featuresToRemove) {
+                    mGeoJsonLayer.removeFeature(feature);
+                }
                 break;
             case WIMS:
                 mWIMSClusterManager.clearItems();
@@ -701,7 +707,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
     @Override
     public void onTaskCompletedMyAreaCDE() {
-        new MyAreaCatchmentsAPI().execute(myArea);
+        if(myArea.getWaterbody() != null) {
+            myArea.setHasWaterbody(true);
+            new MyAreaCatchmentsAPI().execute(myArea);
+        } else {
+            myArea.setHasWaterbody(false);
+        }
         new MyAreaNearestWIMSAPI(this).execute(getCurrentLocation());
         new MyAreaNearestPermitAPI(this).execute(getCurrentLocation());
     }

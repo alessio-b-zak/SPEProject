@@ -42,6 +42,18 @@
                 android:id="@+id/my_area_summary_table">
             </TableLayout>
 
+            <TextView
+                style="@style/text_view_sub_heading"
+                android:id="@+id/my_area_characteristics_title"
+                android:textColor="@color/black"
+                android:text="@string/my_area_characteristics_title"/>
+
+            <TableLayout
+                style="@style/table_layout"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/my_area_characteristics_table">
+            </TableLayout>
+
             <TableLayout
                 style="@style/table_layout"
                 xmlns:android="http://schemas.android.com/apk/res/android"
