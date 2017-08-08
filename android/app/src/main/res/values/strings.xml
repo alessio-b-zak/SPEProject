@@ -3,7 +3,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_main2">Main2Activity</string>
-    <string name="cam_toast">SWOOSH!</string>
     <string name="choose_tag">Choose a tag</string>
 
     <string name="drawer_cde">River Catchment Quality</string>
@@ -68,7 +67,7 @@
     <string name="permit_table_site_type">Site Type: </string>
     <string name="permit_table_effective_date">Effective Since: </string>
 
-    <string name="info_title"><b>myRivers™ v1.1</b></string>
+    <string name="info_title"><b>myRivers v1.10</b></string>
     <string name="info_description">myRivers allows anyone to browse detailed river pollution
         reports in the UK. The available data is pulled and filtered from three different data sets,
         all provided by the Environment Agency under the terms of
