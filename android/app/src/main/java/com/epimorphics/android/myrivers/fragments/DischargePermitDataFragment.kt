@@ -1,5 +1,7 @@
 package com.epimorphics.android.myrivers.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
@@ -7,6 +9,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TableLayout
 import android.widget.TextView
@@ -20,7 +23,6 @@ import com.epimorphics.android.myrivers.helpers.FragmentHelper
 open class DischargePermitDataFragment : FragmentHelper() {
 
     private lateinit var mToolbar: Toolbar
-    private lateinit var mBackButton: ImageButton
     private lateinit var mDataTable: TableLayout
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mDischargePermitDataView: View
@@ -38,7 +40,7 @@ open class DischargePermitDataFragment : FragmentHelper() {
 
         mToolbar = view.bind(R.id.permit_toolbar)
 
-        mBackButton = view.bind(R.id.back_button_permit_data_view)
+        val mBackButton: ImageButton = view.bind(R.id.back_button_permit_data_view)
         mBackButton.setOnClickListener { activity.onBackPressed() }
 
         // Initialise Recycler View and hide it
@@ -46,6 +48,15 @@ open class DischargePermitDataFragment : FragmentHelper() {
         mRecyclerView.visibility = View.INVISIBLE
 
         val permitPoint = mDataViewActivity.selectedPermitPoint
+
+        val mFullReportButton: Button = view.bind(R.id.full_report_button_permit_data_view)
+        mFullReportButton.setOnClickListener {
+            val intent = Intent()
+            intent.action = Intent.ACTION_VIEW
+            intent.addCategory(Intent.CATEGORY_BROWSABLE)
+            intent.data = Uri.parse(permitPoint.id)
+            startActivity(intent)
+        }
 
         val permitHolderNameView: TextView = view.bind(R.id.permit_holder_name)
         permitHolderNameView.text = permitPoint.holder

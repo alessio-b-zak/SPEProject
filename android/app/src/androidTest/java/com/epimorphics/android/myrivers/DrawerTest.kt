@@ -17,6 +17,7 @@ import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.action.ViewActions.swipeLeft
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
+import com.epimorphics.android.myrivers.activities.DataViewActivity
 
 import org.hamcrest.core.IsNot.not
 /**

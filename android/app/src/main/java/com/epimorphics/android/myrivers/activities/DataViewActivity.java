@@ -751,6 +751,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                     public void onCameraIdle() {
                         if (mMap.getCameraPosition().zoom < BASE_ZOOM_LEVEL - 1) {
                             displayLocation();
+                            openView(currentView);
                         } else {
                             openView(currentView);
                             return;

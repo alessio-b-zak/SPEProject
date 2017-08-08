@@ -70,7 +70,6 @@ open class WIMSDetailsFragment : FragmentHelper() {
         mToolbar = view.bind(R.id.wims_details_toolbar)
 
         mFullReportButton = view.bind(R.id.wims_full_report_button)
-//        setButtonColor(mFullReportButton, true)
         mFullReportButton.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_VIEW

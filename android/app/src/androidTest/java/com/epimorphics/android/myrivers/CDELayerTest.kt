@@ -16,6 +16,7 @@ import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
+import com.epimorphics.android.myrivers.activities.DataViewActivity
 
 /**
  * Created by mihajlo on 28/07/17.
