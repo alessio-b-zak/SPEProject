@@ -30,6 +30,13 @@
             android:id="@+id/wims_name"
             android:text=""/>
 
+        <TextView
+            style="@style/text_view_table_parent_light"
+            android:id="@+id/wims_no_data"
+            android:paddingTop="8dp"
+            android:visibility="gone"
+            android:text="@string/wims_no_data_description" />
+
         <TableLayout
             style="@style/table_layout"
             xmlns:android="http://schemas.android.com/apk/res/android"

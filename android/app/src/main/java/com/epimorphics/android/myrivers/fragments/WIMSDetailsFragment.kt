@@ -17,6 +17,7 @@ import com.epimorphics.android.myrivers.activities.DataViewActivity
 import com.epimorphics.android.myrivers.data.Measurement
 import com.epimorphics.android.myrivers.data.WIMSPoint
 import com.epimorphics.android.myrivers.helpers.FragmentHelper
+import org.w3c.dom.Text
 
 
 /**
@@ -64,7 +65,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
         val wimsPoint = mDataViewActivity.selectedWIMSPoint
 
         val wimsPointLabel: TextView = view.bind(R.id.wims_details_title)
-        wimsPointLabel.text = "Samples from ${wimsPoint.label}"
+        wimsPointLabel.text = if(wimsPoint.label != null) "Samples from ${wimsPoint.label}" else "Samples from ${wimsPoint.id}"
 
         mToolbar = view.bind(R.id.wims_details_toolbar)
 
@@ -89,6 +90,8 @@ open class WIMSDetailsFragment : FragmentHelper() {
     fun setText(wimsPoint: WIMSPoint) {
         val groupList = arrayListOf<String>("general", "diss_oxygen", "oxygen_demand",
                 "nitrates", "phosphates", "metals", "solids");
+
+        var emptyGroupCount = 0
 
         for (group in groupList) {
             var groupDeterminandList = ArrayList<String>()
@@ -164,7 +167,13 @@ open class WIMSDetailsFragment : FragmentHelper() {
             } else {
                 groupTitle.visibility = View.GONE
                 groupTable.visibility = View.GONE
+                emptyGroupCount++
             }
+        }
+
+        if (groupList.size == emptyGroupCount) {
+            val noDataExplanation: TextView = mWIMSDetailsView.bind(R.id.wims_details_no_data)
+            noDataExplanation.visibility = View.VISIBLE
         }
     }
 }

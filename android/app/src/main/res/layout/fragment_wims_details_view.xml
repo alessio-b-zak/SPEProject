@@ -110,6 +110,14 @@
                 android:id="@+id/wims_details_solids_table">
             </TableLayout>
 
+            <TextView
+                style="@style/text_view_table_parent_light"
+                android:id="@+id/wims_details_no_data"
+                android:visibility="gone"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/wims_details_no_data_description"/>
+
             <Button
                 style="@style/full_report_button"
                 android:id="@+id/wims_full_report_button"/>

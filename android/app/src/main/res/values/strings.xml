@@ -58,6 +58,12 @@
     <string name="wims_details_metals_title">Metals</string>
     <string name="wims_details_solids_title">Solids</string>
 
+    <string name="wims_no_data_description">No measurements for pH, Temperature of Water and
+        Conductivity at 25C. Please click on \"More Info\" button to examine other measurements.</string>
+
+    <string name="wims_details_no_data_description">No measurements found.
+        Please click on \"Detailed Report\" button to examine full measurements history.</string>
+
     <string name="permit_table_effluent_type">Permit Type: </string>
     <string name="permit_table_site_type">Site Type: </string>
     <string name="permit_table_effective_date">Effective Since: </string>

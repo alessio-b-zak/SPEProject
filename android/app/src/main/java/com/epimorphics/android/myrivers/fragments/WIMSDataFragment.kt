@@ -76,44 +76,54 @@ open class WIMSDataFragment : FragmentHelper() {
     fun setMeasurementsText(wimsPoint: WIMSPoint) {
 //        Log.i(TAG, "Number of measurements pulled: " + wimsPoint.measurementMap.size )
         val wimsName: TextView = mWIMSDataView.bind(R.id.wims_name)
-        wimsName.text = "Samples from ${wimsPoint.label}"
+        wimsName.text = if(wimsPoint.label != null) "Samples from ${wimsPoint.label}" else "Samples from ${wimsPoint.id}"
 
         var rowIndex = 0
         var tableHeaderRow = newTableRow(rowIndex++)
 
-        addTextView(tableHeaderRow, "Determinand", 0.28, R.style.text_view_table_parent, Gravity.START)
-        addTextView(tableHeaderRow, "Sample Dates", 0.72, R.style.text_view_table_parent)
+        val hasGeneralRecords = wimsPoint.measurementMap.any {
+            entry: Map.Entry<String, ArrayList<Measurement>> ->
+                WIMSPoint.generalGroup.contains(entry.key)
+        }
 
-        mMeasurementTable.addView(tableHeaderRow)
+        if (hasGeneralRecords) {
+            addTextView(tableHeaderRow, "Determinand", 0.28, R.style.text_view_table_parent, Gravity.START)
+            addTextView(tableHeaderRow, "Sample Dates", 0.72, R.style.text_view_table_parent)
 
-        for (entry in WIMSPoint.generalGroup) {
-            if (wimsPoint.measurementMap.containsKey(entry) && wimsPoint.measurementMap[entry]!!.isNotEmpty()) {
-                val measurementList = arrayListOf<Measurement>()
-                for (measure in wimsPoint.measurementMap[entry]!!) {
-                    measurementList.add(measure)
-                }
-                if (measurementList.size > 2) {
-                    tableHeaderRow = newTableRow(rowIndex++, true, 1)
+            mMeasurementTable.addView(tableHeaderRow)
 
-                    val descriptor = measurementList[0].descriptor
-                    addTextView(tableHeaderRow, entry, 0.28, R.style.text_view_table_parent_light, Gravity.START, 0, descriptor)
-                    addTextView(tableHeaderRow, simplifyDate(measurementList[0].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
-                    addTextView(tableHeaderRow, simplifyDate(measurementList[1].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
-                    addTextView(tableHeaderRow, simplifyDate(measurementList[2].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
+            for (entry in WIMSPoint.generalGroup) {
+                if (wimsPoint.measurementMap.containsKey(entry) && wimsPoint.measurementMap[entry]!!.isNotEmpty()) {
+                    val measurementList = arrayListOf<Measurement>()
+                    for (measure in wimsPoint.measurementMap[entry]!!) {
+                        measurementList.add(measure)
+                    }
+                    if (measurementList.size > 2) {
+                        tableHeaderRow = newTableRow(rowIndex++, true, 1)
 
-                    mMeasurementTable.addView(tableHeaderRow)
+                        val descriptor = measurementList[0].descriptor
+                        addTextView(tableHeaderRow, entry, 0.28, R.style.text_view_table_parent_light, Gravity.START, 0, descriptor)
+                        addTextView(tableHeaderRow, simplifyDate(measurementList[0].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
+                        addTextView(tableHeaderRow, simplifyDate(measurementList[1].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
+                        addTextView(tableHeaderRow, simplifyDate(measurementList[2].date), 0.24, R.style.text_view_table_parent_light, Gravity.END)
 
-                    tableHeaderRow = newTableRow(rowIndex++, true, 1)
+                        mMeasurementTable.addView(tableHeaderRow)
 
-                    val unit = measurementList[0].unit
-                    addTextView(tableHeaderRow, "($unit)", 0.28, R.style.text_view_table_child, Gravity.START)
-                    addTextView(tableHeaderRow, measurementList[0].result.toString(), 0.24, R.style.text_view_table_child, Gravity.END)
-                    addTextView(tableHeaderRow, measurementList[1].result.toString(), 0.24, R.style.text_view_table_child, Gravity.END)
-                    addTextView(tableHeaderRow, measurementList[2].result.toString(), 0.24, R.style.text_view_table_child, Gravity.END)
+                        tableHeaderRow = newTableRow(rowIndex++, true, 1)
 
-                    mMeasurementTable.addView(tableHeaderRow)
+                        val unit = measurementList[0].unit
+                        addTextView(tableHeaderRow, "($unit)", 0.28, R.style.text_view_table_child, Gravity.START)
+                        addTextView(tableHeaderRow, measurementList[0].result.toString(), 0.24, R.style.text_view_table_child, Gravity.END)
+                        addTextView(tableHeaderRow, measurementList[1].result.toString(), 0.24, R.style.text_view_table_child, Gravity.END)
+                        addTextView(tableHeaderRow, measurementList[2].result.toString(), 0.24, R.style.text_view_table_child, Gravity.END)
+
+                        mMeasurementTable.addView(tableHeaderRow)
+                    }
                 }
             }
+        } else {
+            val noDataExplanation: TextView = mWIMSDataView.bind(R.id.wims_no_data)
+            noDataExplanation.visibility = View.VISIBLE
         }
     }
 }

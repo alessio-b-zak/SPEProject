@@ -80,11 +80,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.data.Feature;
 import com.google.maps.android.data.Layer;
@@ -530,9 +532,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mWIMSClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<WIMSPoint>() {
             @Override
             public boolean onClusterClick(Cluster<WIMSPoint> cluster) {
-                mMap.setPadding(0, mMapCameraPadding, 0, 0);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
-                        (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300, null);
+                LatLngBounds.Builder builder = LatLngBounds.builder();
+                for (ClusterItem item : cluster.getItems()) {
+                    builder.include(item.getPosition());
+                }
+                final LatLngBounds bounds = builder.build();
+                mMap.setPadding(0, 0, 0, 0);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+//                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
+//                        (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300, null);
                 return true;
             }
         });
@@ -574,8 +582,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mPermitClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<DischargePermitPoint>() {
             @Override
             public boolean onClusterClick(Cluster<DischargePermitPoint> cluster) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
-                        (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300, null);
+                LatLngBounds.Builder builder = LatLngBounds.builder();
+                for (ClusterItem item : cluster.getItems()) {
+                    builder.include(item.getPosition());
+                }
+                final LatLngBounds bounds = builder.build();
+                mMap.setPadding(0, 0, 0, 0);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
                 return true;
             }
         });
@@ -586,7 +599,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mCDEDetailsFragment = (CDEDetailsFragment) fragment;
 
         mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
+                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
                 .add(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
