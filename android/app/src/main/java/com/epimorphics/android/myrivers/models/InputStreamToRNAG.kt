@@ -9,10 +9,21 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 /**
- * Created by mihajlo on 12/07/17.
+ * Consumes an InputStream and converts it to a list of RNAGs
+ *
+ * @see CDEPoint
+ * @see RNAG
  */
 class InputStreamToRNAG : InputStreamHelper() {
 
+    /**
+     * Converts InputStream to JsonReader and consumes it.
+     *
+     * @param cdePoint CDEPoint to which parsed RNAGs belong
+     * @param inputStream InputStream to be consumed
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readJsonStream(cdePoint: CDEPoint, inputStream: InputStream) {
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
@@ -22,6 +33,15 @@ class InputStreamToRNAG : InputStreamHelper() {
         }
     }
 
+    /**
+     * Focuses on the array of objects that are to be converted to RNAGs and parses
+     * them one by one.
+     *
+     * @param cdePoint CDEPoint to which parsed RNAGs belong
+     * @param reader JsonReader to be consumed
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessagesArray(cdePoint: CDEPoint, reader: JsonReader) {
         reader.beginObject()
@@ -40,6 +60,14 @@ class InputStreamToRNAG : InputStreamHelper() {
         reader.endObject()
     }
 
+    /**
+     * Converts single JsonObject to RNAG and adds it to the given CDEPoint's rnagList.
+     *
+     * @param cdePoint CDEPoint to which parsed RNAG belongs
+     * @param reader JsonReader to be consumed
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessage(cdePoint: CDEPoint, reader: JsonReader) {
         var element = ""
@@ -65,6 +93,14 @@ class InputStreamToRNAG : InputStreamHelper() {
         cdePoint.addRNAG(RNAG(element, rating, activity, category, year.toInt()))
     }
 
+    /**
+     * Reads group value from the reader and returns it as a string
+     *
+     * @param reader JsonReader to be consumed
+     * @return String group value
+     *
+     * @throws IOException
+     */
     fun readClassificationToString(reader: JsonReader): String {
         var item = ""
 

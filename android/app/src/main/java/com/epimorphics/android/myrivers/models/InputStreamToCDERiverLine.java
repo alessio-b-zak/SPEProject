@@ -5,6 +5,7 @@ import com.epimorphics.android.myrivers.helpers.GeoJsonParser;
 import com.google.maps.android.data.Geometry;
 import com.google.maps.android.data.geojson.GeoJsonFeature;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -13,31 +14,47 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * Created by mihajlo on 24/07/2017.
+ * Consumes an InputStream and converts it to a GeoJsonFeature
+ *
+ * @see CDEPoint
+ * @see GeoJsonFeature
  */
-
 public class InputStreamToCDERiverLine {
 
-    private static final String TAG = "IN_STREAM_TO_RIVER_LINE";
+    /**
+     * Converts InputStream to JsonObject
+     *
+     * @param inputStream InputStream to be converted
+     * @return JSONObject corresponding to the given InputStream
+     * @throws JSONException if JSONObject not convertible from StringBuilder
+     * @throws IOException if InputStream not convertible to BufferReader
+     */
+    private static JSONObject inStreamToJSONObject(InputStream inputStream)
+            throws IOException, JSONException {
 
-    private static JSONObject inStreamToJSONObject(InputStream in) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            BufferedReader streamReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            StringBuilder responseStrBuilder = new StringBuilder();
+        BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+        StringBuilder responseStrBuilder = new StringBuilder();
 
-            String inputStr;
-            while ((inputStr = streamReader.readLine()) != null)
-                responseStrBuilder.append(inputStr);
-            jsonObject = new JSONObject(responseStrBuilder.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        String inputStr;
+        while ((inputStr = streamReader.readLine()) != null) {
+            responseStrBuilder.append(inputStr);
         }
-        return jsonObject;
+        return new JSONObject(responseStrBuilder.toString());
     }
 
-    public void readJsonStream(InputStream in, CDEPoint cdePoint) throws IOException {
-        JSONObject jsonObject = inStreamToJSONObject(in);
+    /**
+     * Converts an InputStream to the GeoJsonFeature riverLine and sets it to the given CDEPoint
+     *
+     * @param inputStream InputStream to be converted
+     * @param cdePoint CDEPoint to which a converted river line belongs
+     * @throws IOException if InputStream not convertible to JSONObject
+     * @throws JSONException if JSONObject not accessed properly
+     *
+     * @see CDEPoint
+     * @see GeoJsonFeature
+     */
+    public void readJsonStream(InputStream inputStream, CDEPoint cdePoint) throws IOException, JSONException {
+        JSONObject jsonObject = inStreamToJSONObject(inputStream);
         Geometry geometry = GeoJsonParser.parseGeometry(jsonObject);
         GeoJsonFeature riverLine = new GeoJsonFeature(geometry, "Feature", null, null);
         cdePoint.setRiverLine(riverLine);

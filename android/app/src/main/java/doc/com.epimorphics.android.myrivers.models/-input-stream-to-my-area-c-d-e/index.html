@@ -1,0 +1,93 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>InputStreamToMyAreaCDE - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.epimorphics.android.myrivers.models</a>&nbsp;/&nbsp;<a href=".">InputStreamToMyAreaCDE</a><br/>
+<br/>
+<h1>InputStreamToMyAreaCDE</h1>
+<code><span class="keyword">class </span><span class="identifier">InputStreamToMyAreaCDE</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../com.epimorphics.android.myrivers.helpers/-input-stream-helper/index.html"><span class="identifier">com.epimorphics.android.myrivers.helpers.InputStreamHelper</span></a></code>
+<p>Consumes an InputStream and populates relevant fields of MyArea relating to the nearest waterbody</p>
+<p><strong>See Also</strong><br/>
+<p><a href="#">MyArea</a></p>
+<p><a href="../../com.epimorphics.android.myrivers.data/-characteristic/index.html">Characteristic</a></p>
+</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">InputStreamToMyAreaCDE</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>Consumes an InputStream and populates relevant fields of MyArea relating to the nearest waterbody</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="read-characteristics.html">readCharacteristics</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readCharacteristics</span><span class="symbol">(</span><span class="identifier">reader</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">, </span><span class="identifier">myArea</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Reads a characteristicList from the JsonObject</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="read-json-stream.html">readJsonStream</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readJsonStream</span><span class="symbol">(</span><span class="identifier">inputStream</span><span class="symbol">:</span>&nbsp;<span class="identifier">java.io.InputStream</span><span class="symbol">, </span><span class="identifier">myArea</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Converts InputStream to JsonReader and consumes it.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="read-messages-array.html">readMessagesArray</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readMessagesArray</span><span class="symbol">(</span><span class="identifier">reader</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">, </span><span class="identifier">myArea</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Focuses on the array of objects that are to be converted to Classifications and parses
+them one by one.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="read-operational-catchment.html">readOperationalCatchment</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readOperationalCatchment</span><span class="symbol">(</span><span class="identifier">reader</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">, </span><span class="identifier">myArea</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Reads in waterbody operationalCatchment and continues to parse characteristicList</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="read-single-characteristic.html">readSingleCharacteristic</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readSingleCharacteristic</span><span class="symbol">(</span><span class="identifier">reader</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">, </span><span class="identifier">characteristicList</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Reads a single characteristic from the JsonObject and adds it to the characteristicList</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="read-unit-label.html">readUnitLabel</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readUnitLabel</span><span class="symbol">(</span><span class="identifier">reader</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">NonExistentClass</span></code>
+<p>Reads a single characteristic unit and label from the JsonObject and returns it</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="read-waterbody.html">readWaterbody</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readWaterbody</span><span class="symbol">(</span><span class="identifier">reader</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">, </span><span class="identifier">myArea</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Reads in waterbody name and continues to parse operationalCatchment and characteristicList</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

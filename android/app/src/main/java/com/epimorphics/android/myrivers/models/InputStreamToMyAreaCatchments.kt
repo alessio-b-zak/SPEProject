@@ -8,10 +8,21 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 /**
- * Created by mihajlo on 04/07/17.
+ * Consumes an InputStream and populates relevant fields of MyArea relating to the nearest river
+ * catchment
+ *
+ * @see MyArea
  */
 class InputStreamToMyAreaCatchments : InputStreamHelper() {
 
+    /**
+     * Converts InputStream to JsonReader and consumes it.
+     *
+     * @param inputStream InputStream to be consumed
+     * @param myArea an object which is to be populated with catchment data
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readJsonStream(inputStream: InputStream, myArea: MyArea) {
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
@@ -21,6 +32,14 @@ class InputStreamToMyAreaCatchments : InputStreamHelper() {
         }
     }
 
+    /**
+     * Focuses on the object that contains relevant data to be converted to MyArea fields.
+     *
+     * @param reader JsonReader to be consumed
+     * @param myArea an object which is to be populated with catchment data
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessagesArray(reader: JsonReader, myArea: MyArea) {
         reader.beginObject()
@@ -44,6 +63,14 @@ class InputStreamToMyAreaCatchments : InputStreamHelper() {
         reader.endObject()
     }
 
+    /**
+     * Converts single JsonObject to relevant MyArea catchment records..
+     *
+     * @param reader JsonReader to be consumed
+     * @param myArea an object which is to be populated with catchment data
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessage(reader: JsonReader, myArea: MyArea) {
         reader.beginObject()

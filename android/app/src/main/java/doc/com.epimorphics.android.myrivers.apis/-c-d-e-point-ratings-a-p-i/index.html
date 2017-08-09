@@ -1,0 +1,48 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CDEPointRatingsAPI - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.epimorphics.android.myrivers.apis</a>&nbsp;/&nbsp;<a href=".">CDEPointRatingsAPI</a><br/>
+<br/>
+<h1>CDEPointRatingsAPI</h1>
+<code><span class="keyword">class </span><span class="identifier">CDEPointRatingsAPI</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">AsyncTask</span><span class="symbol">&lt;</span><span class="identifier">java.lang.Object</span><span class="symbol">,</span>&nbsp;<span class="identifier">java.lang.Void</span><span class="symbol">,</span>&nbsp;<a href="../../com.epimorphics.android.myrivers.data/-c-d-e-async-return/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.CDEAsyncReturn</span></a><span class="symbol">&gt;</span></code>
+<p>A class handling a query requesting CDEPoint ratings from the CDE API. Call is made asynchronously in the background.</p>
+<p><strong>See Also</strong><br/>
+CDEPoint</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">CDEPointRatingsAPI</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="do-in-background.html">doInBackground</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">doInBackground</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.epimorphics.android.myrivers.data/-c-d-e-async-return/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.CDEAsyncReturn</span></a></code>
+<p>Builds uri, opens an http connection, makes a get request and returns parsed result. All done in the background.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-post-execute.html">onPostExecute</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onPostExecute</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Called when doInBackground finishes executing. Sends the result back to the CDEDataFragment.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

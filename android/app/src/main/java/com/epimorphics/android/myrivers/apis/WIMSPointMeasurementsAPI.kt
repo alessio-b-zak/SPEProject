@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.util.Log
 import com.epimorphics.android.myrivers.data.WIMSPoint
+import com.epimorphics.android.myrivers.data.Measurement
 import com.epimorphics.android.myrivers.fragments.WIMSDataFragment
 import com.epimorphics.android.myrivers.models.InputStreamToWIMSMeasurements
 
@@ -11,7 +12,14 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
-open class WIMSPointRatingsAPI(private val mWIMSDataFragment: WIMSDataFragment) :
+/**
+ * A class handling a query requesting WIMSPoint Measurements from the WIMS API. Call is made
+ * asynchronously in the background.
+ *
+ * @see WIMSPoint
+ * @see Measurement
+ */
+open class WIMSPointMeasurementsAPI(private val mWIMSDataFragment: WIMSDataFragment) :
         AsyncTask<WIMSPoint, Void, WIMSPoint>() {
 
     lateinit var conn: HttpURLConnection
@@ -20,9 +28,17 @@ open class WIMSPointRatingsAPI(private val mWIMSDataFragment: WIMSDataFragment) 
         private val TAG = "WIMS_RATINGS_API"
     }
 
+    /**
+     * Builds uri, opens an http connection, makes a get request and returns parsed result.
+     * All done in the background.
+     *
+     * @param params WIMSPoint for which Measurements are to be populated
+     * @return WIMSPoint with Measurements populated
+     */
     override fun doInBackground(vararg params: WIMSPoint): WIMSPoint {
         val wimsPoint = params[0]
 
+        // Builds an URI
         val builder = Uri.Builder()
         builder.scheme("http")
                 .authority("environment.data.gov.uk")
@@ -49,44 +65,53 @@ open class WIMSPointRatingsAPI(private val mWIMSDataFragment: WIMSDataFragment) 
                 .appendQueryParameter("_limit", "5000")
                 .appendQueryParameter("_sort", "-sample")
         val myUrl = builder.build().toString()
-        var url = URL(myUrl)
-
+        val url = URL(myUrl)
         conn = openConnection(url)
-        var response = conn.responseCode
+        val response = conn.responseCode
 
         Log.i(TAG, "Url is: " + url)
         Log.i(TAG, "The response is: " + response)
 
+        // Parses the response
         val inputStream = conn.inputStream
         val inputStreamToWIMSMeasurements = InputStreamToWIMSMeasurements()
         inputStreamToWIMSMeasurements.readJsonStream(wimsPoint, inputStream)
 
         conn.disconnect()
 
-//        Log.i(TAG, wimsPoint.measurementMap.toString())
-
         return wimsPoint
     }
 
+    /**
+     * Called when doInBackground finishes executing. Sends the result back to the WIMSDataFragment.
+     *
+     * @param result WIMSPoint with Measurements populated
+     */
     override fun onPostExecute(result: WIMSPoint) {
         mWIMSDataFragment.setMeasurementsText(result)
     }
 
+    /**
+     * Opens an http connection, sets accept header and makes a GET request
+     *
+     * @param url URL to which to connect
+     * @return HttpURLConnection connection
+     *
+     * @throws IOException
+     */
+    @Throws(IOException::class)
     private fun openConnection(url: URL): HttpURLConnection {
-        try {
-            conn = url.openConnection() as HttpURLConnection
-            conn.readTimeout = 10000
-            conn.connectTimeout = 15000
-            conn.requestMethod = "GET"
-            conn.doInput = true
-            conn.instanceFollowRedirects = true
-            conn.setRequestProperty("Accept", "application/json")
-            HttpURLConnection.setFollowRedirects(true)
-            // Starts the query
-            conn.connect()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+        conn = url.openConnection() as HttpURLConnection
+        conn.readTimeout = 10000
+        conn.connectTimeout = 15000
+        conn.requestMethod = "GET"
+        conn.doInput = true
+        conn.instanceFollowRedirects = true
+        conn.setRequestProperty("Accept", "application/json")
+
+        HttpURLConnection.setFollowRedirects(true)
+        conn.connect()
+
         return conn
     }
 

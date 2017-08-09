@@ -1,11 +1,3 @@
-/**
- * Source googlemaps :
- * <p>
- * https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/
- * android/data/geojson/GeoJsonParser.java
- * <p>
- * Apache License 2.0
- */
 package com.epimorphics.android.myrivers.helpers;
 
 
@@ -32,9 +24,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * Parses a JSONObject and places data into their appropriate GeoJsonFeature objects. Returns an
- * array of
- * GeoJsonFeature objects parsed from the GeoJSON file.
+ *
+ * Parses a JSONObject and places data into their appropriate GeoJsonFeature objects.
+ * Returns an array of GeoJsonFeature objects parsed from the GeoJSON file.
+ *
+ * Based on googlemaps :
+ * <p>
+ * https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/
+ * android/data/geojson/GeoJsonParser.java
+ * <p>
+ * Apache License 2.0
  */
 public class GeoJsonParser {
 
@@ -99,6 +98,13 @@ public class GeoJsonParser {
         parseGeoJson();
     }
 
+    /**
+     * Checks if given type is a geometry
+     *
+     * @param type type
+     * @return true if type is a geometry,
+     *         false otherwise
+     */
     private static boolean isGeometry(String type) {
         return type.matches(POINT + "|" + MULTIPOINT + "|" + LINESTRING + "|" + MULTILINESTRING +
                 "|" + POLYGON + "|" + MULTIPOLYGON + "|" + GEOMETRY_COLLECTION);
@@ -462,26 +468,4 @@ public class GeoJsonParser {
         }
         return features;
     }
-
-    /**
-     * Gets the array of GeoJsonFeature objects
-     *
-     * @return array of GeoJsonFeatures
-     */
-    /* package */ ArrayList<GeoJsonFeature> getFeatures() {
-        return mGeoJsonFeatures;
-    }
-
-    /**
-     * Gets the array containing the coordinates of the bounding box for the FeatureCollection. If
-     * the FeatureCollection did not have a bounding box or if the GeoJSON file did not contain a
-     * FeatureCollection then null will be returned.
-     *
-     * @return LatLngBounds object containing bounding box of FeatureCollection, null if no bounding
-     * box
-     */
-    /* package */ LatLngBounds getBoundingBox() {
-        return mBoundingBox;
-    }
-
 }

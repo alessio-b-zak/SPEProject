@@ -18,6 +18,12 @@ import static com.epimorphics.android.myrivers.data.CDEPoint.OBJECTIVE;
 import static com.epimorphics.android.myrivers.data.CDEPoint.PREDICTED;
 import static com.epimorphics.android.myrivers.data.CDEPoint.REAL;
 
+/**
+ * A class handling a query requesting CDEPoint ratings from the CDE API. Call is made
+ * asynchronously in the background.
+ *
+ * @see CDEPoint
+ */
 public class CDEPointRatingsAPI extends AsyncTask<Object, Void, CDEAsyncReturn> {
 
     private static final String TAG = "CDE_GENERAL_RATINGS";
@@ -27,12 +33,22 @@ public class CDEPointRatingsAPI extends AsyncTask<Object, Void, CDEAsyncReturn> 
         this.mCDEDataFragment = cdeDataFragment;
     }
 
+    /**
+     * Builds uri, opens an http connection, makes a get request and returns parsed result.
+     * All done in the background.
+     *
+     * @param params Object containing a CDEPoint and a ratings group(Real, Predicted, Objective)
+     * @return CDEAsyncReturn an object containing a CDEPoint and a corresponding Classification
+     *
+     * @see CDEAsyncReturn
+     */
     @Override
     protected CDEAsyncReturn doInBackground(Object... params) {
         CDEPoint cdePoint = (CDEPoint) params[0];
         String group = (String) params[1];
         String linkExtension = setLinkExtension(group);
         try {
+            // Builds an URI
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
                     .authority("ea-cde-pub.epimorphics.net")
@@ -58,18 +74,19 @@ public class CDEPointRatingsAPI extends AsyncTask<Object, Void, CDEAsyncReturn> 
             String myUrl = builder.build().toString();
             URL url = new URL(myUrl);
 
+            // Opens a connection and makes a GET request
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
-
-            // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
+
             Log.i(TAG, "Url is: " + url);
             Log.i(TAG, "The response is: " + response);
 
+            // Parses the response
             InputStream inputStream = conn.getInputStream();
             InputStreamToCDEClassification inputStreamToCDEClassification = new InputStreamToCDEClassification();
             inputStreamToCDEClassification.readJsonStream(cdePoint, inputStream, group);
@@ -80,15 +97,26 @@ public class CDEPointRatingsAPI extends AsyncTask<Object, Void, CDEAsyncReturn> 
         return new CDEAsyncReturn(cdePoint, group);
     }
 
+    /**
+     * Called when doInBackground finishes executing. Sends the result back to the CDEDataFragment.
+     *
+     * @param result CDEAsyncReturn returned from the API call
+     */
     @Override
     protected void onPostExecute(CDEAsyncReturn result) {
-        if (result.getClassification().equals(REAL)) {
+        if (result.getGroup().equals(REAL)) {
             mCDEDataFragment.setClassificationText(result.getCdePoint());
         } else {
-            mCDEDataFragment.classificationPopulated(result.getClassification());
+            mCDEDataFragment.classificationPopulated(result.getGroup());
         }
     }
 
+    /**
+     * Given a classification group name it returns a link extension used when by URI builder.
+     *
+     * @param group a classification group name
+     * @return linkExtension
+     */
     private String setLinkExtension(String group) {
         String linkExtension = "";
         switch (group) {

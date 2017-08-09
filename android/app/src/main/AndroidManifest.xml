@@ -39,7 +39,7 @@
        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyAfER61KAx6Fstu7zgT_8g7dX9Jk-gfm0g" />
 
         <activity
             android:name="com.epimorphics.android.myrivers.activities.DataViewActivity"

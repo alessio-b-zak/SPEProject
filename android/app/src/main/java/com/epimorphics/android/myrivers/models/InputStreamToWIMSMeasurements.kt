@@ -9,18 +9,38 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 /**
- * Created by mihajlo on 04/07/17.
+ * Consumes an InputStream and converts it to a list of Measurements
+ *
+ * @see WIMSPoint
+ * @see Measurement
  */
 class InputStreamToWIMSMeasurements : InputStreamHelper() {
 
+    /**
+     * Converts InputStream to JsonReader and consumes it.
+     *
+     * @param wimsPoint WIMSPoint to which parsed Measurements belong
+     * @param inputStream InputStream to be consumed
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
-    fun readJsonStream(wimsPoint: WIMSPoint, `in`: InputStream) {
-        val reader = JsonReader(InputStreamReader(`in`, "UTF-8"))
+    fun readJsonStream(wimsPoint: WIMSPoint, inputStream: InputStream) {
+        val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
         reader.use {
             readMessagesArray(wimsPoint, reader)
         }
     }
 
+    /**
+     * Focuses on the array of objects that are to be converted to Measurements and parses
+     * them one by one.
+     *
+     * @param wimsPoint WIMSPoint to which parsed Measurements belong
+     * @param reader JsonReader to be consumed
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessagesArray(wimsPoint: WIMSPoint, reader: JsonReader) {
         reader.beginObject()
@@ -39,6 +59,14 @@ class InputStreamToWIMSMeasurements : InputStreamHelper() {
         reader.endObject()
     }
 
+    /**
+     * Converts single JsonObject to a Measurement and adds it to the given WIMSPoint's measurementMap.
+     *
+     * @param wimsPoint WIMSPoint to which parsed Measurement belongs
+     * @param reader JsonReader to be consumed
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessage(wimsPoint: WIMSPoint, reader: JsonReader) {
         var determinand = ""
@@ -89,6 +117,9 @@ class InputStreamToWIMSMeasurements : InputStreamHelper() {
         }
         reader.endObject()
 
+        // If wimsPoint contains parsed determinand a new measurement is added to the array list
+        // of measurements for a given determinand. Otherwise a new measurement list is created and
+        // populated with currently parsed measurement.
         if (wimsPoint.measurementMap.containsKey(determinand)) {
             var measurementList = wimsPoint.measurementMap[determinand]
             if (measurementList != null) {

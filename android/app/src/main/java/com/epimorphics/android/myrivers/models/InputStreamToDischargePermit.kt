@@ -8,11 +8,19 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 /**
- * Created by mihajlo on 04/07/17.
+ * Consumes an InputStream and converts it to a List of DischargePermitPoints
+ *
+ * @see DischargePermitPoint
  */
 class InputStreamToDischargePermit : InputStreamHelper() {
-    private val TAG = "DISCHARGE_PERMIT_READER"
 
+    /**
+     * Converts InputStream to JsonReader and consumes it.
+     *
+     * @param inputStream InputStream to be consumed
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readJsonStream(inputStream: InputStream): List<DischargePermitPoint> {
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
@@ -21,6 +29,15 @@ class InputStreamToDischargePermit : InputStreamHelper() {
         }
     }
 
+    /**
+     * Focuses on the array of objects that are to be converted to DischargePermitPoints and parses
+     * them one by one.
+     *
+     * @param reader JsonReader to be consumed
+     * @return List<DischargePermitPoint> result
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessagesArray(reader: JsonReader): List<DischargePermitPoint> {
         val messages = ArrayList<DischargePermitPoint>()
@@ -34,6 +51,14 @@ class InputStreamToDischargePermit : InputStreamHelper() {
         return messages
     }
 
+    /**
+     * Converts single JsonObject to DischargePermitPoint and adds it to the given list of points.
+     *
+     * @param reader JsonReader to be consumed
+     * @param messages an ArrayList of DischargePermitPoints to which parsed point is to be added
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessage(reader: JsonReader, messages: ArrayList<DischargePermitPoint>) {
         var id = ""
@@ -71,6 +96,14 @@ class InputStreamToDischargePermit : InputStreamHelper() {
 
     }
 
+    /**
+     * Returns a single DischargePermitPoint(used by MyAreaFragment) converted from JsonObject.
+     *
+     * @param reader JsonReader to be consumed
+     * @return DischargePermitPoint containing a distance to the user's current location
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessageWithDistance(reader: JsonReader): DischargePermitPoint {
         var id = ""

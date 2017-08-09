@@ -17,11 +17,14 @@ import com.epimorphics.android.myrivers.helpers.FragmentHelper
 
 
 /**
- * Created by mihajlo on 07/07/17.
+ * A fragment occupying full screen showcasing all the data stored inside a CDEPoint.
+ * It is initiated by clicking a "More Info" button in CDEDataFragment
+ *
+ * @see <a href="https://github.com/alessio-b-zak/myRivers/blob/master/graphic%20assets/screenshots/cde_details_view.png">Screenshot</a>
+ * @see CDEDataFragment
  */
-
 open class CDEDetailsFragment : FragmentHelper() {
-    private lateinit var mToolbar: Toolbar  // The toolbar.
+    private lateinit var mToolbar: Toolbar
     private lateinit var mBackButton: ImageButton
     private lateinit var mFullReportButton: Button
     private lateinit var mCDEDetailsView: View
@@ -38,12 +41,26 @@ open class CDEDetailsFragment : FragmentHelper() {
         private val URL_PREFIX = "http://environment.data.gov.uk/catchment-planning/WaterBody/"
     }
 
+    /**
+     * Called when a fragment is created. Initiates mDataViewActivity
+     *
+     * @param savedInstanceState Saved state of the fragment
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
         mDataViewActivity = activity as DataViewActivity
     }
 
+    /**
+     * Called when a fragment view is created. Initiates and manipulates all required layout elements.
+     *
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Saved state of the fragment
+     *
+     * @return inflated and fully populated View
+     */
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_cde_details_view, container, false)
         mCDEDetailsView = view
@@ -53,10 +70,6 @@ open class CDEDetailsFragment : FragmentHelper() {
         mRNAGTable = view.bind(R.id.cde_rnag_table)
         mObjectivesTable = view.bind(R.id.cde_objectives_table)
 
-        mRealClassificationTable.removeAllViewsInLayout()
-        mRNAGTable.removeAllViewsInLayout()
-        mObjectivesTable.removeAllViewsInLayout()
-
         val cdePoint = mDataViewActivity.selectedCDEPoint
 
         val cdePointLabel: TextView = view.bind(R.id.cde_details_title)
@@ -64,8 +77,7 @@ open class CDEDetailsFragment : FragmentHelper() {
 
         mToolbar = view.bind(R.id.cde_details_toolbar)
 
-        mLinearLayout = view.bind(R.id.cde_details_linear_layout)
-
+        // Links to the CDE web view
         mFullReportButton = view.bind(R.id.cde_full_report_button)
         mFullReportButton.setOnClickListener {
             val intent = Intent()
@@ -85,6 +97,11 @@ open class CDEDetailsFragment : FragmentHelper() {
         return view
     }
 
+    /**
+     * Populates CDEPoint Real Classification data
+     *
+     * @param cdePoint CDEPoint containing required data
+     */
     fun setRealClassificationText(cdePoint: CDEPoint) {
         var rowIndex = 0
         // Set Header Row
@@ -111,6 +128,11 @@ open class CDEDetailsFragment : FragmentHelper() {
         }
     }
 
+    /**
+     * Populates CDEPoint Objective Classification data
+     *
+     * @param cdePoint CDEPoint containing required data
+     */
     fun setObjectivePredictedClassificationText(cdePoint: CDEPoint) {
         var rowIndex = 0
         // Set Header Rows
@@ -147,9 +169,9 @@ open class CDEDetailsFragment : FragmentHelper() {
     }
 
     /**
+     * Populates CDEPoint RNAG data
      *
-     *
-     *
+     * @param cdePoint CDEPoint containing required data
      */
     fun setRNAGText(cdePoint: CDEPoint) {
         val rnagTitle: TextView = mCDEDetailsView.bind(R.id.cde_rnag_title)
@@ -182,10 +204,20 @@ open class CDEDetailsFragment : FragmentHelper() {
         }
     }
 
+    /**
+     * Adds a row to the classification table
+     *
+     * @param rowIndex Int rowIndex of the table
+     * @param cdePoint CDEPoint containing required data
+     * @param label String name of the classification
+     * @param isReal Boolean set to true if classification in CDEPoint.REAL group
+     * @param isParent Boolean set to true if classification is a group representative (Overall, Ecological, Chemical)
+     */
     fun addClassificationRow(rowIndex: Int, cdePoint: CDEPoint, label: String, isReal: Boolean = true, isParent: Boolean = false) {
-        // First column is always a classification label
+        // First column is always a group label
         val tableRow: TableRow = newTableRow(rowIndex)
 
+        // If classification is not a parent then add left padding
         if (isParent) {
             addTextView(tableRow, CDEPoint.classificationPrintValues[label], 0.35,
                     R.style.text_view_table_parent, Gravity.START)
@@ -196,6 +228,7 @@ open class CDEDetailsFragment : FragmentHelper() {
         }
 
         if (isReal) {
+            // If classification is null show dummy data
             val classification = cdePoint.getClassificationHashMap(CDEPoint.REAL)[label] ?:
                     Classification("N/A", "N/A", "N/A")
 
@@ -205,11 +238,13 @@ open class CDEDetailsFragment : FragmentHelper() {
 
             mRealClassificationTable.addView(tableRow)
         } else {
+            // If classification is null show dummy data
             var classification = cdePoint.getClassificationHashMap(CDEPoint.OBJECTIVE)[label] ?:
                     Classification("N/A", "N/A", "N/A")
             addTextView(tableRow, CDEPoint.ratingPrintValues[classification.value], 0.19)
             addTextView(tableRow, classification.year, 0.135)
 
+            // If classification is null show dummy data
             classification = cdePoint.getClassificationHashMap(CDEPoint.PREDICTED)[label] ?:
                     Classification("N/A", "N/A", "N/A")
             addTextView(tableRow, CDEPoint.ratingPrintValues[classification.value], 0.19)

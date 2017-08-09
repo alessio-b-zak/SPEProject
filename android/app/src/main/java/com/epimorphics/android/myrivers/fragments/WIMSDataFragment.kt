@@ -17,13 +17,15 @@ import com.epimorphics.android.myrivers.data.Measurement
 import com.epimorphics.android.myrivers.data.WIMSPoint
 import com.epimorphics.android.myrivers.helpers.FragmentHelper
 
-
 /**
- * Created by mihajlo on 07/07/17.
+ * A fragment occupying top part of the screen showcasing basic WIMSPoint Measurements.
+ * It is initiated by clicking a WIMSPoint marker in DataViewActivity
+ *
+ * @see <a href="https://github.com/alessio-b-zak/myRivers/blob/master/graphic%20assets/screenshots/wims_data_view.png">Screenshot</a>
+ * @see DataViewActivity
  */
-
 open class WIMSDataFragment : FragmentHelper() {
-    private lateinit var mToolbar: Toolbar  // The toolbar.
+    private lateinit var mToolbar: Toolbar
     private lateinit var mBackButton: ImageButton
     private lateinit var mMoreInfoButton: Button
     private lateinit var mWIMSDataView: View
@@ -32,28 +34,36 @@ open class WIMSDataFragment : FragmentHelper() {
     private lateinit var mDataViewActivity: DataViewActivity
     private lateinit var mMeasurementTable: TableLayout
 
-    private val TAG = "WIMS_DATA_FRAGMENT"
-
+    /**
+     * Called when a fragment is created. Initiates mDataViewActivity
+     *
+     * @param savedInstanceState Saved state of the fragment
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
         mDataViewActivity = activity as DataViewActivity
     }
 
+    /**
+     * Called when a fragment view is created. Initiates and manipulates all required layout elements.
+     *
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Saved state of the fragment
+     *
+     * @return inflated and fully populated View
+     */
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_wims_data_view, container, false)
         mWIMSDataView = view
         mWIMSDataFragment = this
 
-        // Initialise Recycler View and hide it
+        // Initialise Recycler View and hide it so that map is visible
         mRecyclerView = view.bind(R.id.wims_recycler_view)
         mRecyclerView.visibility = View.INVISIBLE
 
         mMeasurementTable = view.bind(R.id.wims_table)
-
-        val wimsPoint = mDataViewActivity.selectedWIMSPoint
-//        WIMSPointRatingsAPI(mWIMSDataFragment).execute(wimsPoint)
-//        WIMSPointMetalsAPI(mWIMSDataFragment).execute(wimsPoint)
 
         mToolbar = view.bind(R.id.wims_data_toolbar)
 
@@ -69,23 +79,34 @@ open class WIMSDataFragment : FragmentHelper() {
         return view
     }
 
+    /**
+     * Shows a "More Info" Button. Called when all the data related to this WIMSPoint is populated.
+     */
     fun showMoreInfoButton() {
         mMoreInfoButton.visibility = View.VISIBLE
     }
 
+    /**
+     * Sets the text in the measurement table.
+     *
+     * @param wimsPoint WIMSPoint containing data to be populated
+     */
     fun setMeasurementsText(wimsPoint: WIMSPoint) {
-//        Log.i(TAG, "Number of measurements pulled: " + wimsPoint.measurementMap.size )
         val wimsName: TextView = mWIMSDataView.bind(R.id.wims_name)
+        // If wimsPoint.label is not null show wimsPoint.label as name, otherwise show wimsPoint.id
         wimsName.text = if(wimsPoint.label != null) "Samples from ${wimsPoint.label}" else "Samples from ${wimsPoint.id}"
 
         var rowIndex = 0
         var tableHeaderRow = newTableRow(rowIndex++)
 
+        // set to true if wims.measurementMap contains at least one record of a general measurement
+        // i.e. pH, Temperature of Water and Conductivity@25C
         val hasGeneralRecords = wimsPoint.measurementMap.any {
             entry: Map.Entry<String, ArrayList<Measurement>> ->
                 WIMSPoint.generalGroup.contains(entry.key)
         }
 
+        // If hasGeneralRecords populate data, otherwise show explanation message
         if (hasGeneralRecords) {
             addTextView(tableHeaderRow, "Determinand", 0.28, R.style.text_view_table_parent, Gravity.START)
             addTextView(tableHeaderRow, "Sample Dates", 0.72, R.style.text_view_table_parent)
@@ -98,6 +119,8 @@ open class WIMSDataFragment : FragmentHelper() {
                     for (measure in wimsPoint.measurementMap[entry]!!) {
                         measurementList.add(measure)
                     }
+                    // Only show general measurements if there are more than 2 available
+                    // Always show latest 3
                     if (measurementList.size > 2) {
                         tableHeaderRow = newTableRow(rowIndex++, true, 1)
 

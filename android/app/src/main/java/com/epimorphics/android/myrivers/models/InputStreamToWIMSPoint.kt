@@ -8,11 +8,19 @@ import java.io.InputStreamReader
 import java.util.*
 
 /**
- * Created by mihajlo on 04/07/17.
+ * Consumes an InputStream and converts it to a List of WIMSPoints
+ *
+ * @see WIMSPoint
  */
 class InputStreamToWIMSPoint {
-    private val TAG = "WIMS_POINTS_READER"
 
+    /**
+     * Converts InputStream to JsonReader and consumes it.
+     *
+     * @param inputStream InputStream to be consumed
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readJsonStream(inputStream: InputStream): List<WIMSPoint> {
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
@@ -21,6 +29,15 @@ class InputStreamToWIMSPoint {
         }
     }
 
+    /**
+     * Focuses on the array of objects that are to be converted to WIMSPoints and parses
+     * them one by one.
+     *
+     * @param reader JsonReader to be consumed
+     * @return List<WIMSPoint> result
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessagesArray(reader: JsonReader): List<WIMSPoint> {
         val messages = ArrayList<WIMSPoint>()
@@ -34,6 +51,15 @@ class InputStreamToWIMSPoint {
         return messages
     }
 
+    /**
+     * Converts single JsonObject to WIMSPoint and returns it.
+     *
+     * @param reader JsonReader to be consumed
+     * @param withDistance a Boolean flag set to true when a distance to the user's location is
+     *                     needed(in MyArea) and false otherwise
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessage(reader: JsonReader, withDistance: Boolean = false): WIMSPoint {
         var id: String = ""

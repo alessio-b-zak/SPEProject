@@ -9,10 +9,21 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 /**
- * Created by mihajlo on 04/07/17.
+ * Consumes an InputStream and converts it to Classification
+ *
+ * @see Classification
  */
 class InputStreamToCDEClassification : InputStreamHelper() {
 
+    /**
+     * Converts InputStream to JsonReader and consumes it.
+     *
+     * @param cdePoint CDEPoint to which parsed Classification belongs
+     * @param inputStream InputStream to be consumed
+     * @param group a name of the group of the Classifications
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readJsonStream(cdePoint: CDEPoint, inputStream: InputStream, group: String) {
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
@@ -22,6 +33,16 @@ class InputStreamToCDEClassification : InputStreamHelper() {
         }
     }
 
+    /**
+     * Focuses on the array of objects that are to be converted to Classifications and parses
+     * them one by one.
+     *
+     * @param cdePoint CDEPoint to which parsed Classification belongs
+     * @param reader JsonReader to be consumed
+     * @param group a name of the group of the Classifications
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessagesArray(cdePoint: CDEPoint, reader: JsonReader, group: String) {
         reader.beginObject()
@@ -40,6 +61,16 @@ class InputStreamToCDEClassification : InputStreamHelper() {
         reader.endObject()
     }
 
+    /**
+     * Converts single JsonObject to Classification and adds it to the given CDEPoint's
+     * classificationHashMap for a given group.
+     *
+     * @param cdePoint CDEPoint to which parsed Classification belongs
+     * @param reader JsonReader to be consumed
+     * @param group a name of the group of the Classifications
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessage(cdePoint: CDEPoint, reader: JsonReader, group: String) {
         var item = ""

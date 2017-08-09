@@ -1,0 +1,140 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>FragmentHelper - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.epimorphics.android.myrivers.helpers</a>&nbsp;/&nbsp;<a href=".">FragmentHelper</a><br/>
+<br/>
+<h1>FragmentHelper</h1>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">FragmentHelper</span></code>
+<p>Helper class providing base functions used by most fragments</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">FragmentHelper</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>Helper class providing base functions used by most fragments</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="add-text-view.html">addTextView</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">addTextView</span><span class="symbol">(</span><span class="identifier">tableRow</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">, </span><span class="identifier">value</span><span class="symbol">:</span>&nbsp;<span class="identifier">java.lang.String</span><span class="symbol">, </span><span class="identifier">weight</span><span class="symbol">:</span>&nbsp;<span class="identifier">double</span><span class="symbol">, </span><span class="identifier">style</span><span class="symbol">:</span>&nbsp;<span class="identifier">int</span><span class="symbol">, </span><span class="identifier">gravity</span><span class="symbol">:</span>&nbsp;<span class="identifier">int</span><span class="symbol">, </span><span class="identifier">startPadding</span><span class="symbol">:</span>&nbsp;<span class="identifier">int</span><span class="symbol">, </span><span class="identifier">popupText</span><span class="symbol">:</span>&nbsp;<span class="identifier">java.lang.String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Adds a TextView to a TableRow</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="bind.html">bind</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">bind</span><span class="symbol">(</span><span class="identifier">$receiver</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">, </span><span class="identifier">res</span><span class="symbol">:</span>&nbsp;<span class="identifier">int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">T</span></code>
+<p>Used to initialise an element from a resource</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="display-popup-window.html">displayPopupWindow</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">displayPopupWindow</span><span class="symbol">(</span><span class="identifier">view</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">, </span><span class="identifier">inputString</span><span class="symbol">:</span>&nbsp;<span class="identifier">java.lang.String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Attaches a popup window to a given view</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="new-table-row.html">newTableRow</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">newTableRow</span><span class="symbol">(</span><span class="identifier">position</span><span class="symbol">:</span>&nbsp;<span class="identifier">int</span><span class="symbol">, </span><span class="identifier">isDoubleRow</span><span class="symbol">:</span>&nbsp;<span class="identifier">boolean</span><span class="symbol">, </span><span class="identifier">offset</span><span class="symbol">:</span>&nbsp;<span class="identifier">int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">NonExistentClass</span></code>
+<p>Creates a new table row</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="simplify-date.html">simplifyDate</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">simplifyDate</span><span class="symbol">(</span><span class="identifier">date</span><span class="symbol">:</span>&nbsp;<span class="identifier">java.lang.String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.lang.String</span></code>
+<p>Converts a date from ISO format to Short Date format</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="../../com.epimorphics.android.myrivers.fragments/-c-d-e-data-fragment/index.html">CDEDataFragment</a></td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">CDEDataFragment</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">com.epimorphics.android.myrivers.helpers.FragmentHelper</span></code>
+<p>A fragment occupying top part of the screen showcasing basic CDEPoint Classifications.
+It is initiated by clicking a geoJSON shape in DataViewActivity</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../com.epimorphics.android.myrivers.fragments/-c-d-e-details-fragment/index.html">CDEDetailsFragment</a></td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">CDEDetailsFragment</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">com.epimorphics.android.myrivers.helpers.FragmentHelper</span></code>
+<p>A fragment occupying full screen showcasing all the data stored inside a CDEPoint.
+It is initiated by clicking a "More Info" button in CDEDataFragment</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../com.epimorphics.android.myrivers.fragments/-discharge-permit-data-fragment/index.html">DischargePermitDataFragment</a></td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">DischargePermitDataFragment</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">com.epimorphics.android.myrivers.helpers.FragmentHelper</span></code>
+<p>A fragment occupying top part of the screen showcasing all data stored within a DischargePermitPoint.
+It is initiated by clicking a DischargePermitPoint marker in DataViewActivity</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../com.epimorphics.android.myrivers.fragments/-info-fragment/index.html">InfoFragment</a></td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">InfoFragment</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">com.epimorphics.android.myrivers.helpers.FragmentHelper</span></code>
+<p>A fragment occupying full screen showcasing information about what the app is and how to use it.
+It is initiated by clicking a "How it Works" button in the drawer</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../com.epimorphics.android.myrivers.fragments/-my-area-fragment/index.html">MyAreaFragment</a></td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">MyAreaFragment</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">com.epimorphics.android.myrivers.helpers.FragmentHelper</span></code>
+<p>A fragment occupying full screen showcasing data about users surrounding area.
+It is initiated by clicking a "Where am I?" button in the drawer</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../com.epimorphics.android.myrivers.fragments/-w-i-m-s-data-fragment/index.html">WIMSDataFragment</a></td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">WIMSDataFragment</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">com.epimorphics.android.myrivers.helpers.FragmentHelper</span></code>
+<p>A fragment occupying top part of the screen showcasing basic WIMSPoint Measurements.
+It is initiated by clicking a WIMSPoint marker in DataViewActivity</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../com.epimorphics.android.myrivers.fragments/-w-i-m-s-details-fragment/index.html">WIMSDetailsFragment</a></td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">WIMSDetailsFragment</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">com.epimorphics.android.myrivers.helpers.FragmentHelper</span></code>
+<p>A fragment occupying full screen showcasing all the data stored inside a WIMSPoint.
+It is initiated by clicking a "More Info" button in WIMSDataFragment</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,329 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CDEPoint - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.epimorphics.android.myrivers.data</a>&nbsp;/&nbsp;<a href=".">CDEPoint</a><br/>
+<br/>
+<h1>CDEPoint</h1>
+<code><span class="keyword">class </span><span class="identifier">CDEPoint</span></code>
+<p>Data class representing an individual waterbody found in Catchment Data Explorer:</p>
+<p><strong>See Also</strong><br/>
+&lt;a href="http://environment.data.gov.uk/catchment-planning/"&gt;Catchment Data Explorer&lt;/a&gt;</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">CDEPoint</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>Data constructor for a CDE waterbody</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="add-r-n-a-g.html">addRNAG</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">addRNAG</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-classification-hash-map.html">getClassificationHashMap</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getClassificationHashMap</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.util.HashMap</span><span class="symbol">&lt;</span><span class="identifier">java.lang.String</span><span class="symbol">,</span>&nbsp;<a href="../-classification/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.Classification</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-label.html">getLabel</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getLabel</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.lang.String</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-latitude.html">getLatitude</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getLatitude</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">double</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-longitude.html">getLongitude</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getLongitude</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">double</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-river-line.html">getRiverLine</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getRiverLine</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">GeoJsonFeature</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-river-polygon.html">getRiverPolygon</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getRiverPolygon</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">GeoJsonFeature</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-rnag-list.html">getRnagList</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getRnagList</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.util.List</span><span class="symbol">&lt;</span><a href="../-r-n-a-g/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.RNAG</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-waterbody-id.html">getWaterbodyId</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getWaterbodyId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.lang.String</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="set-label.html">setLabel</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setLabel</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="set-river-line.html">setRiverLine</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setRiverLine</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="set-waterbody-id.html">setWaterbodyId</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setWaterbodyId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Other members</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-a-c-t-i-v-e.html">ACTIVE</a></td>
+<td>
+<code><span class="identifier">ACTIVE</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-b-a-d.html">BAD</a></td>
+<td>
+<code><span class="identifier">BAD</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-b-i-o-l-o-g-i-c-a-l_-e-l-e-m-e-n-t-s.html">BIOLOGICAL_ELEMENTS</a></td>
+<td>
+<code><span class="identifier">BIOLOGICAL_ELEMENTS</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-c-h-e-m-i-c-a-l.html">CHEMICAL</a></td>
+<td>
+<code><span class="identifier">CHEMICAL</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-d-o-e-s_-n-o-t_-s-u-p-p-o-r-t-s_-g-o-o-d.html">DOES_NOT_SUPPORTS_GOOD</a></td>
+<td>
+<code><span class="identifier">DOES_NOT_SUPPORTS_GOOD</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-e-c-o-l-o-g-i-c-a-l.html">ECOLOGICAL</a></td>
+<td>
+<code><span class="identifier">ECOLOGICAL</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-f-a-i-l.html">FAIL</a></td>
+<td>
+<code><span class="identifier">FAIL</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-f-a-i-l-s_-t-h-r-e-s-h-o-l-d.html">FAILS_THRESHOLD</a></td>
+<td>
+<code><span class="identifier">FAILS_THRESHOLD</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-f-o-r_-i-n-f-o-r-m-a-t-i-o-n.html">FOR_INFORMATION</a></td>
+<td>
+<code><span class="identifier">FOR_INFORMATION</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-g-o-o-d.html">GOOD</a></td>
+<td>
+<code><span class="identifier">GOOD</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-h-a-z-a-r-d-o-u-s_-s-u-b-s-t-a-n-c-e-s.html">HAZARDOUS_SUBSTANCES</a></td>
+<td>
+<code><span class="identifier">HAZARDOUS_SUBSTANCES</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-h-i-g-h.html">HIGH</a></td>
+<td>
+<code><span class="identifier">HIGH</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-h-y-d-r-o-m-o-r-p-h-o-l-o-g-i-c-a-l_-e-l-e-m-e-n-t-s.html">HYDROMORPHOLOGICAL_ELEMENTS</a></td>
+<td>
+<code><span class="identifier">HYDROMORPHOLOGICAL_ELEMENTS</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-m-o-d-e-r-a-t-e.html">MODERATE</a></td>
+<td>
+<code><span class="identifier">MODERATE</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-n-o-t_-a-s-s-e-s-s-e-d.html">NOT_ASSESSED</a></td>
+<td>
+<code><span class="identifier">NOT_ASSESSED</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-n-o-t_-r-e-q-u-i-r-e-d.html">NOT_REQUIRED</a></td>
+<td>
+<code><span class="identifier">NOT_REQUIRED</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-n-o_-t-r-e-n-d.html">NO_TREND</a></td>
+<td>
+<code><span class="identifier">NO_TREND</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-o-b-j-e-c-t-i-v-e.html">OBJECTIVE</a></td>
+<td>
+<code><span class="identifier">OBJECTIVE</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-o-t-h-e-r_-p-o-l-l-u-t-a-n-t-s.html">OTHER_POLLUTANTS</a></td>
+<td>
+<code><span class="identifier">OTHER_POLLUTANTS</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-o-v-e-r-a-l-l.html">OVERALL</a></td>
+<td>
+<code><span class="identifier">OVERALL</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-p-a-s-s-e-s_-t-h-r-e-s-h-o-l-d.html">PASSES_THRESHOLD</a></td>
+<td>
+<code><span class="identifier">PASSES_THRESHOLD</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-p-h-y-s-i-c-o_-c-h-e-m-i-c-a-l_-e-l-e-m-e-n-t-s.html">PHYSICO_CHEMICAL_ELEMENTS</a></td>
+<td>
+<code><span class="identifier">PHYSICO_CHEMICAL_ELEMENTS</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-p-o-o-r.html">POOR</a></td>
+<td>
+<code><span class="identifier">POOR</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-p-r-e-d-i-c-t-e-d.html">PREDICTED</a></td>
+<td>
+<code><span class="identifier">PREDICTED</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-p-r-i-o-r-i-t-y_-s-u-b-s-t-a-n-c-e-s.html">PRIORITY_SUBSTANCES</a></td>
+<td>
+<code><span class="identifier">PRIORITY_SUBSTANCES</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-r-e-a-l.html">REAL</a></td>
+<td>
+<code><span class="identifier">REAL</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-r-e-v-e-r-s-a-l_-o-f_-t-r-e-n-d.html">REVERSAL_OF_TREND</a></td>
+<td>
+<code><span class="identifier">REVERSAL_OF_TREND</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-r-n-a-g.html">RNAG</a></td>
+<td>
+<code><span class="identifier">RNAG</span></code>
+<p>Constants used for manipulating data</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="-s-p-e-c-i-f-i-c_-p-o-l-l-u-t-a-n-t-s.html">SPECIFIC_POLLUTANTS</a></td>
+<td>
+<code><span class="identifier">SPECIFIC_POLLUTANTS</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-s-u-p-p-o-r-t-i-n-g_-e-l-e-m-e-n-t-s.html">SUPPORTING_ELEMENTS</a></td>
+<td>
+<code><span class="identifier">SUPPORTING_ELEMENTS</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-s-u-p-p-o-r-t-s_-g-o-o-d.html">SUPPORTS_GOOD</a></td>
+<td>
+<code><span class="identifier">SUPPORTS_GOOD</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="-u-p-w-a-r-d_-t-r-e-n-d.html">UPWARD_TREND</a></td>
+<td>
+<code><span class="identifier">UPWARD_TREND</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="chemical-group.html">chemicalGroup</a></td>
+<td>
+<code><span class="identifier">chemicalGroup</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="classification-print-values.html">classificationPrintValues</a></td>
+<td>
+<code><span class="identifier">classificationPrintValues</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="ecological-group.html">ecologicalGroup</a></td>
+<td>
+<code><span class="identifier">ecologicalGroup</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="rating-print-values.html">ratingPrintValues</a></td>
+<td>
+<code><span class="identifier">ratingPrintValues</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

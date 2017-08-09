@@ -1,0 +1,68 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>InputStreamToDischargePermit - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.epimorphics.android.myrivers.models</a>&nbsp;/&nbsp;<a href=".">InputStreamToDischargePermit</a><br/>
+<br/>
+<h1>InputStreamToDischargePermit</h1>
+<code><span class="keyword">class </span><span class="identifier">InputStreamToDischargePermit</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../com.epimorphics.android.myrivers.helpers/-input-stream-helper/index.html"><span class="identifier">com.epimorphics.android.myrivers.helpers.InputStreamHelper</span></a></code>
+<p>Consumes an InputStream and converts it to a List of DischargePermitPoints</p>
+<p><strong>See Also</strong><br/>
+<p><a href="../../com.epimorphics.android.myrivers.data/-discharge-permit-point/index.html">DischargePermitPoint</a></p>
+</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">InputStreamToDischargePermit</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>Consumes an InputStream and converts it to a List of DischargePermitPoints</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="read-json-stream.html">readJsonStream</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readJsonStream</span><span class="symbol">(</span><span class="identifier">inputStream</span><span class="symbol">:</span>&nbsp;<span class="identifier">java.io.InputStream</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.util.List</span><span class="symbol">&lt;</span><a href="../../com.epimorphics.android.myrivers.data/-discharge-permit-point/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.DischargePermitPoint</span></a><span class="symbol">&gt;</span></code>
+<p>Converts InputStream to JsonReader and consumes it.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="read-message.html">readMessage</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readMessage</span><span class="symbol">(</span><span class="identifier">reader</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">, </span><span class="identifier">messages</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Converts single JsonObject to DischargePermitPoint and adds it to the given list of points.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="read-message-with-distance.html">readMessageWithDistance</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readMessageWithDistance</span><span class="symbol">(</span><span class="identifier">reader</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.epimorphics.android.myrivers.data/-discharge-permit-point/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.DischargePermitPoint</span></a></code>
+<p>Returns a single DischargePermitPoint(used by MyAreaFragment) converted from JsonObject.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="read-messages-array.html">readMessagesArray</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readMessagesArray</span><span class="symbol">(</span><span class="identifier">reader</span><span class="symbol">:</span>&nbsp;<span class="identifier">NonExistentClass</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.util.List</span><span class="symbol">&lt;</span><a href="../../com.epimorphics.android.myrivers.data/-discharge-permit-point/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.DischargePermitPoint</span></a><span class="symbol">&gt;</span></code>
+<p>Focuses on the array of objects that are to be converted to DischargePermitPoints and parses
+them one by one.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

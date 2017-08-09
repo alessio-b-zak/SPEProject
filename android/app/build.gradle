@@ -9,6 +9,12 @@ android {
             storeFile file("../Signing/debug_bitbuster.keystore")
             storePassword 'android'
         }
+        config {
+            keyAlias 'myRiversKey'
+            keyPassword 'surethingitis'
+            storeFile file('/home/mihajlo/Documents/myRivers_server/myRiversKeyStore.jks')
+            storePassword 'isthisagoodpassword?'
+        }
     }
     compileSdkVersion 26
     buildToolsVersion '26.0.1'
@@ -16,7 +22,7 @@ android {
         applicationId "com.epimorphics.android.myrivers"
         minSdkVersion 18
         targetSdkVersion 26
-        versionCode 2
+        versionCode 3
         versionName "1.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -27,6 +33,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
@@ -49,13 +56,14 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.5'
     compile 'com.cocoahero.android:geojson:1.0.1@jar'
     // https://mvnrepository.com/artifact/io.jeo/proj4j
-    compile group: 'io.jeo', name: 'proj4j', version: '0.1.1'
+    compile 'io.jeo:proj4j:0.1.1'
     // Drawer
     compile('com.mikepenz:materialdrawer:5.9.2@aar') {
         transitive = true
     }
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
+
 repositories {
     mavenCentral()
 }

@@ -17,18 +17,20 @@ import com.epimorphics.android.myrivers.activities.DataViewActivity
 import com.epimorphics.android.myrivers.data.Measurement
 import com.epimorphics.android.myrivers.data.WIMSPoint
 import com.epimorphics.android.myrivers.helpers.FragmentHelper
-import org.w3c.dom.Text
 
 
 /**
- * Created by mihajlo on 07/07/17.
+ * A fragment occupying full screen showcasing all the data stored inside a WIMSPoint.
+ * It is initiated by clicking a "More Info" button in WIMSDataFragment
+ *
+ * @see <a href="https://github.com/alessio-b-zak/myRivers/blob/master/graphic%20assets/screenshots/wims_details_view.png">Screenshot</a>
+ * @see WIMSDataFragment
  */
-
 open class WIMSDetailsFragment : FragmentHelper() {
     private lateinit var mDataViewActivity: DataViewActivity
     private lateinit var mWIMSDetailsFragment: WIMSDetailsFragment
     private lateinit var mWIMSDetailsView: View
-    private lateinit var mToolbar: Toolbar  // The toolbar.
+    private lateinit var mToolbar: Toolbar
     private lateinit var mBackButton: ImageButton
     private lateinit var mFullReportButton: Button
     private lateinit var mGeneralTable: TableLayout
@@ -42,13 +44,26 @@ open class WIMSDetailsFragment : FragmentHelper() {
     private val TAG = "WIMS_DETAILS_FRAGMENT"
     private val URL_PREFIX = "http://environment.data.gov.uk/water-quality/view/sampling-point/"
 
-
+    /**
+     * Called when a fragment is created. Initiates mDataViewActivity
+     *
+     * @param savedInstanceState Saved state of the fragment
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
         mDataViewActivity = activity as DataViewActivity
     }
 
+    /**
+     * Called when a fragment view is created. Initiates and manipulates all required layout elements.
+     *
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Saved state of the fragment
+     *
+     * @return inflated and fully populated View
+     */
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_wims_details_view, container, false)
         mWIMSDetailsView = view
@@ -65,10 +80,12 @@ open class WIMSDetailsFragment : FragmentHelper() {
         val wimsPoint = mDataViewActivity.selectedWIMSPoint
 
         val wimsPointLabel: TextView = view.bind(R.id.wims_details_title)
+        // If wimsPoint.label is not null show wimsPoint.label as name, otherwise show wimsPoint.id
         wimsPointLabel.text = if(wimsPoint.label != null) "Samples from ${wimsPoint.label}" else "Samples from ${wimsPoint.id}"
 
         mToolbar = view.bind(R.id.wims_details_toolbar)
 
+        // Links to the WIMS web view
         mFullReportButton = view.bind(R.id.wims_full_report_button)
         mFullReportButton.setOnClickListener {
             val intent = Intent()
@@ -81,17 +98,23 @@ open class WIMSDetailsFragment : FragmentHelper() {
         mBackButton = view.bind(R.id.back_button_wims_details_view)
         mBackButton.setOnClickListener { activity.onBackPressed() }
 
-        setText(wimsPoint)
+        populateData(wimsPoint)
 
         return view
     }
 
-    fun setText(wimsPoint: WIMSPoint) {
+    /**
+     * Populates data into the data tables
+     *
+     * @param wimsPoint WIMSPoint containing data to be populated
+     */
+    fun populateData(wimsPoint: WIMSPoint) {
         val groupList = arrayListOf<String>("general", "diss_oxygen", "oxygen_demand",
                 "nitrates", "phosphates", "metals", "solids");
 
         var emptyGroupCount = 0
 
+        // Loops through all the measurement groups and populates the data
         for (group in groupList) {
             var groupDeterminandList = ArrayList<String>()
             var groupTable = mGeneralTable
@@ -124,7 +147,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
                     groupDeterminandList = WIMSPoint.solidGroup
                     groupTable = mSolidsTable
                 }
-                else -> {
+                else -> { // metals
                     val filterMap = wimsPoint.measurementMap.filterKeys {
                         key: String ->
                         !WIMSPoint.nonMetalGroup.contains(key)
@@ -170,6 +193,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
             }
         }
 
+        // If there is not data show an info message pointing out the "Detailed Report" button available
         if (groupList.size == emptyGroupCount) {
             val noDataExplanation: TextView = mWIMSDetailsView.bind(R.id.wims_details_no_data)
             noDataExplanation.visibility = View.VISIBLE

@@ -10,14 +10,14 @@ import org.osgeo.proj4j.CoordinateReferenceSystem;
 import org.osgeo.proj4j.CoordinateTransform;
 import org.osgeo.proj4j.ProjCoordinate;
 
-/******************************************************************
- * Created by mihajlo on 21/06/17.
+
+/**
+ * A helper class used to convert coordinates between coordinate systems.
  *
  * Based on:
  * https://github.com/chrisveness/geodesy
  * (c) Chris Veness 2011-2014 / MIT Licence
- *****************************************************************/
-
+ */
 public class CoordinateSystemConverter {
 
     private final String osgb36 = "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 " +
@@ -32,7 +32,11 @@ public class CoordinateSystemConverter {
     private final CoordinateReferenceSystem crsWGS84 = crsFactory.createFromParameters("EPSG:4326", wgs84);
 
     /**
-     * Parse grid reference to easting/northing form
+     * Converts a national grid reference into easting and northing
+     *
+     * @param ngrGridRef String nationalGridReference
+     * @return Pair\<Double, Double\> easting, northing
+     *
      */
     private static Pair<Double, Double> parse(String ngrGridRef) {
         ngrGridRef = ngrGridRef.trim().replaceAll(" ", "");
@@ -84,6 +88,12 @@ public class CoordinateSystemConverter {
         return new Pair<Double, Double>(Double.parseDouble(eʹ), Double.parseDouble(nʹ));
     }
 
+    /**
+     * Converts national grid reference to latitude/longitude point
+     *
+     * @param ngrGridRef String nationalGridReference
+     * @return LatLng latitudeLongitude
+     */
     public LatLng convertNgrToLatLng(String ngrGridRef) {
         Pair<Double, Double> eastNorth = parse(ngrGridRef);
 
@@ -96,6 +106,13 @@ public class CoordinateSystemConverter {
         return new LatLng(output.y, output.x);
     }
 
+    /**
+     * Converts easting and northing point to latitude and longitude point
+     *
+     * @param easting Double easting
+     * @param northing Double northing
+     * @return LatLng latitudeLongitude
+     */
     public LatLng convertEastNorthToLatLng(Double easting, Double northing) {
         ProjCoordinate output = new ProjCoordinate();
         ProjCoordinate input = new ProjCoordinate(easting, northing);
@@ -106,6 +123,13 @@ public class CoordinateSystemConverter {
         return new LatLng(output.y, output.x);
     }
 
+    /**
+     * Converts latitude/longitude point to easting and northing point
+     *
+     * @param latitude Double latitude
+     * @param longitude Double longitude
+     * @return Pair\<Double, Double\> easting, northing
+     */
     public Pair<Double, Double> convertLatLngToEastNorth(Double latitude, Double longitude) {
         ProjCoordinate output = new ProjCoordinate();
         ProjCoordinate input = new ProjCoordinate(longitude, latitude);

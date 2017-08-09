@@ -7,14 +7,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Stefan on 08/02/2017.
+ * A helper class allowing Markers of different type to be shown on the GoogleMap at the same time
+ *
+ * @see com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
+ * @see com.google.android.gms.maps.GoogleMap.OnCameraIdleListener
+ *
  */
-
 public class MultiListener implements GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraIdleListener {
 
-    List<GoogleMap.OnMarkerClickListener> onClickListeners = new ArrayList<GoogleMap.OnMarkerClickListener>();
-    List<GoogleMap.OnCameraIdleListener> cameraIdleListeners = new ArrayList<>();
+    private List<GoogleMap.OnMarkerClickListener> onClickListeners = new ArrayList<GoogleMap.OnMarkerClickListener>();
+    private List<GoogleMap.OnCameraIdleListener> cameraIdleListeners = new ArrayList<>();
 
+    /**
+     * Adds OnMarkerClickListener to the onClickListeners
+     *
+     * @param listener OnMarkerClickListener to be added to the onClickListeners
+     */
+    public void addOM(GoogleMap.OnMarkerClickListener listener) {
+        onClickListeners.add(listener);
+    }
+
+    /**
+     * Adds OnCameraIdleListener to the cameraIdleListeners
+     *
+     * @param listener OnCameraIdleListener to be added to the cameraIdleListeners
+     */
+    public void addOC(GoogleMap.OnCameraIdleListener listener) {
+        cameraIdleListeners.add(listener);
+    }
+
+    /**
+     * Calls onMarkerClick listener and hides info window
+     *
+     * @param marker clicked marker
+     */
     @Override
     public boolean onMarkerClick(Marker marker) {
         for (GoogleMap.OnMarkerClickListener m : onClickListeners) {
@@ -24,14 +50,9 @@ public class MultiListener implements GoogleMap.OnMarkerClickListener, GoogleMap
         return true;
     }
 
-    public void addOM(GoogleMap.OnMarkerClickListener l) {
-        onClickListeners.add(l);
-    }
-
-    public void addOC(GoogleMap.OnCameraIdleListener l) {
-        cameraIdleListeners.add(l);
-    }
-
+    /**
+     * Calls onCameraIdle listener on all currently held cameraIdleListeners
+     */
     @Override
     public void onCameraIdle() {
         for (GoogleMap.OnCameraIdleListener m : cameraIdleListeners) {

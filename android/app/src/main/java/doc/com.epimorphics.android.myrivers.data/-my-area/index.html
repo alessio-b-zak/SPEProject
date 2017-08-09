@@ -1,0 +1,144 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>MyArea - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.epimorphics.android.myrivers.data</a>&nbsp;/&nbsp;<a href=".">MyArea</a><br/>
+<br/>
+<h1>MyArea</h1>
+<code><span class="keyword">class </span><span class="identifier">MyArea</span></code>
+<p>Data class storing details of the nearest waterbody(including characteristics), water quality sampling point and pollution permit holder</p>
+<p><strong>See Also</strong><br/>
+WIMSPointDischargePermitPointCDEPointCharacteristic</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">MyArea</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>Data constructor which initialises all properties to null</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="get-characteristic-list.html">getCharacteristicList</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getCharacteristicList</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.util.ArrayList</span><span class="symbol">&lt;</span><a href="../-characteristic/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.Characteristic</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-has-waterbody.html">getHasWaterbody</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getHasWaterbody</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.lang.Boolean</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-management-catchment.html">getManagementCatchment</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getManagementCatchment</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.lang.String</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-operational-catchment.html">getOperationalCatchment</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getOperationalCatchment</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.lang.String</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-permit-point.html">getPermitPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getPermitPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-discharge-permit-point/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.DischargePermitPoint</span></a></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-river-basin-district.html">getRiverBasinDistrict</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getRiverBasinDistrict</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.lang.String</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-w-i-m-s-point.html">getWIMSPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getWIMSPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-w-i-m-s-point/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.WIMSPoint</span></a></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-waterbody.html">getWaterbody</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getWaterbody</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">java.lang.String</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="set-characteristic-list.html">setCharacteristicList</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setCharacteristicList</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="set-has-waterbody.html">setHasWaterbody</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setHasWaterbody</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>If no waterbody found add true to isDataLoaded to allow listener to fire when the rest of the data is loaded</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-management-catchment.html">setManagementCatchment</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setManagementCatchment</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="set-on-populated-listener.html">setOnPopulatedListener</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setOnPopulatedListener</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="set-operational-catchment.html">setOperationalCatchment</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setOperationalCatchment</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="set-permit-point.html">setPermitPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setPermitPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>If the nearest for all CDE, WIMS and EPR is loaded fire the listener.onMyAreaPopulated()</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-river-basin-district.html">setRiverBasinDistrict</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setRiverBasinDistrict</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>If the nearest for all CDE, WIMS and EPR is loaded fire the listener.onMyAreaPopulated()</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-waterbody.html">setWaterbody</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setWaterbody</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="set-wims-point.html">setWimsPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setWimsPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>If the nearest for all CDE, WIMS and EPR is loaded fire the listener.onMyAreaPopulated()</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

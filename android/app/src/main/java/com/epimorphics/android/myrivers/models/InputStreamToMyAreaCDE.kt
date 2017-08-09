@@ -9,10 +9,21 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 /**
- * Created by mihajlo on 04/07/17.
+ * Consumes an InputStream and populates relevant fields of MyArea relating to the nearest waterbody
+ *
+ * @see MyArea
+ * @see Characteristic
  */
 class InputStreamToMyAreaCDE : InputStreamHelper() {
 
+    /**
+     * Converts InputStream to JsonReader and consumes it.
+     *
+     * @param inputStream InputStream to be consumed
+     * @param myArea an object which is to be populated with waterbody data
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readJsonStream(inputStream: InputStream, myArea: MyArea) {
         val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
@@ -22,6 +33,15 @@ class InputStreamToMyAreaCDE : InputStreamHelper() {
         }
     }
 
+    /**
+     * Focuses on the array of objects that are to be converted to Classifications and parses
+     * them one by one.
+     *
+     * @param reader JsonReader to be consumed
+     * @param myArea an object which is to be populated with waterbody data
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readMessagesArray(reader: JsonReader, myArea: MyArea) {
         reader.beginObject()
@@ -30,7 +50,7 @@ class InputStreamToMyAreaCDE : InputStreamHelper() {
             if (name == "items") {
                 reader.beginArray()
                 while (reader.hasNext()) {
-                    readMessage(reader, myArea)
+                    readWaterbody(reader, myArea)
                 }
                 reader.endArray()
             } else {
@@ -40,50 +60,79 @@ class InputStreamToMyAreaCDE : InputStreamHelper() {
         reader.endObject()
     }
 
+    /**
+     * Reads in waterbody name and continues to parse operationalCatchment and characteristicList
+     *
+     * @param reader JsonReader to be consumed
+     * @param myArea an object which is to be populated with waterbody data
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
-    fun readMessage(reader: JsonReader, myArea: MyArea) {
-        val characteristicList = arrayListOf<Characteristic>()
-
+    fun readWaterbody(reader: JsonReader, myArea: MyArea) {
         reader.beginObject()
         while (reader.hasNext()) {
             val name = reader.nextName()
             when (name) {
                 "label" -> myArea.waterbody = reader.nextString()
-                "isVersionOf" -> myArea.operationalCatchment = readVersionOf(reader, characteristicList)
+                "isVersionOf" -> readOperationalCatchment(reader, myArea)
                 else -> reader.skipValue()
             }
         }
         reader.endObject()
-        myArea.characteristicList = characteristicList;
     }
 
+    /**
+     * Reads in waterbody operationalCatchment and continues to parse characteristicList
+     *
+     * @param reader JsonReader to be consumed
+     * @param myArea an object which is to be populated with waterbody data
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
-    fun readVersionOf(reader: JsonReader, characteristicList: ArrayList<Characteristic>): String {
-        var operationalCatchment = ""
-
+    fun readOperationalCatchment(reader: JsonReader, myArea: MyArea) {
         reader.beginObject()
         while (reader.hasNext()) {
             val name = reader.nextName()
             when (name) {
-                "characteristic" -> readCharacteristics(reader, characteristicList)
-                "inOperationalCatchment" -> operationalCatchment = readItemToString(reader, "@id")
+                "characteristic" -> readCharacteristics(reader, myArea)
+                "inOperationalCatchment" -> myArea.operationalCatchment = readItemToString(reader, "@id")
                 else -> reader.skipValue()
             }
         }
         reader.endObject()
-
-        return operationalCatchment
     }
 
+    /**
+     * Reads a characteristicList from the JsonObject
+     *
+     * @param reader JsonReader to be consumed
+     * @param myArea an object which is to be populated with waterbody data
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
-    fun readCharacteristics(reader: JsonReader, characteristicList: ArrayList<Characteristic>) {
+    fun readCharacteristics(reader: JsonReader, myArea: MyArea) {
+        val characteristicList = arrayListOf<Characteristic>()
+
         reader.beginArray()
         while (reader.hasNext()) {
             readSingleCharacteristic(reader, characteristicList)
         }
         reader.endArray()
+
+        myArea.characteristicList = characteristicList
     }
 
+    /**
+     * Reads a single characteristic from the JsonObject and adds it to the characteristicList
+     *
+     * @param reader JsonReader to be consumed
+     * @param characteristicList a list to be populated with individual characteristics
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readSingleCharacteristic(reader: JsonReader, characteristicList: ArrayList<Characteristic>) {
         var unitLabel = arrayListOf<String>()
@@ -104,6 +153,14 @@ class InputStreamToMyAreaCDE : InputStreamHelper() {
         }
     }
 
+    /**
+     * Reads a single characteristic unit and label from the JsonObject and returns it
+     *
+     * @param reader JsonReader to be consumed
+     * @return ArrayList of String containing unit and label of a currently parsed characteristic
+     *
+     * @throws IOException
+     */
     @Throws(IOException::class)
     fun readUnitLabel(reader: JsonReader): ArrayList<String> {
         var unit = ""

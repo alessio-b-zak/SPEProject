@@ -10,12 +10,23 @@ import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 
 /**
- * Created by mihajlo on 04/07/17.
+ * A renderer class for a WIMSPoint marker
+ *
+ * @param context Application context
+ * @param mMap GoogleMap
+ * @param clusterManager ClusterManager
+ *
+ * @see WIMSPoint
  */
 class WIMSPointRenderer(context: Context, val mMap: GoogleMap, clusterManager: ClusterManager<WIMSPoint>) :
         DefaultClusterRenderer<WIMSPoint>(context, mMap, clusterManager) {
-
-    override fun onBeforeClusterItemRendered(sp: WIMSPoint, markerOptions: MarkerOptions) {
+    /**
+     * Sets marker icon from resource drawable
+     *
+     * @param wimsPoint a DischargePermitPoint for which a marker icon is to be set
+     * @param markerOptions a MarkerOptions of a given wimsPoint
+     */
+    override fun onBeforeClusterItemRendered(wimsPoint: WIMSPoint, markerOptions: MarkerOptions) {
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_wims_marker))
     }
 }

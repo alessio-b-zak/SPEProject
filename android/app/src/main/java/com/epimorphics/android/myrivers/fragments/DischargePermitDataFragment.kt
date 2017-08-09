@@ -18,7 +18,11 @@ import com.epimorphics.android.myrivers.activities.DataViewActivity
 import com.epimorphics.android.myrivers.helpers.FragmentHelper
 
 /**
- * Created by mihajlo on 05/07/17.
+ * A fragment occupying top part of the screen showcasing all data stored within a DischargePermitPoint.
+ * It is initiated by clicking a DischargePermitPoint marker in DataViewActivity
+ *
+ * @see <a href="https://github.com/alessio-b-zak/myRivers/blob/master/graphic assets/screenshots/permit_data_view.png">Screenshot</a>
+ * @see DataViewActivity
  */
 open class DischargePermitDataFragment : FragmentHelper() {
 
@@ -28,12 +32,26 @@ open class DischargePermitDataFragment : FragmentHelper() {
     private lateinit var mDischargePermitDataView: View
     private lateinit var mDataViewActivity: DataViewActivity
 
+    /**
+     * Called when a fragment is created. Initiates mDataViewActivity
+     *
+     * @param savedInstanceState Saved state of the fragment
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
         mDataViewActivity = activity as DataViewActivity
     }
 
+    /**
+     * Called when a fragment view is created. Initiates and manipulates all required layout elements.
+     *
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Saved state of the fragment
+     *
+     * @return inflated and fully populated View
+     */
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_permit_data_view, container, false)
         mDischargePermitDataView = view
@@ -43,12 +61,13 @@ open class DischargePermitDataFragment : FragmentHelper() {
         val mBackButton: ImageButton = view.bind(R.id.back_button_permit_data_view)
         mBackButton.setOnClickListener { activity.onBackPressed() }
 
-        // Initialise Recycler View and hide it
+        // Initialise Recycler View and hide it so that map is visible
         mRecyclerView = view.bind(R.id.permit_grid_view)
         mRecyclerView.visibility = View.INVISIBLE
 
         val permitPoint = mDataViewActivity.selectedPermitPoint
 
+        // Links to the EPR web view
         val mFullReportButton: Button = view.bind(R.id.full_report_button_permit_data_view)
         mFullReportButton.setOnClickListener {
             val intent = Intent()
@@ -61,6 +80,7 @@ open class DischargePermitDataFragment : FragmentHelper() {
         val permitHolderNameView: TextView = view.bind(R.id.permit_holder_name)
         permitHolderNameView.text = permitPoint.holder
 
+        // Initiates the data table and populates it
         mDataTable = view.bind(R.id.permit_table)
 
         var rowIndex = 0
@@ -77,7 +97,7 @@ open class DischargePermitDataFragment : FragmentHelper() {
         addTextView(tableRow, permitPoint.siteType, childWeight)
         mDataTable.addView(tableRow)
 
-        tableRow = newTableRow(rowIndex++)
+        tableRow = newTableRow(rowIndex)
         addTextView(tableRow, "Effective Since:", parentWeight, R.style.text_view_table_parent, Gravity.START)
         addTextView(tableRow, simplifyDate(permitPoint.effectiveDate), childWeight)
         mDataTable.addView(tableRow)

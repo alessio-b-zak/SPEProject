@@ -1,0 +1,437 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>DataViewActivity - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.epimorphics.android.myrivers.activities</a>&nbsp;/&nbsp;<a href=".">DataViewActivity</a><br/>
+<br/>
+<h1>DataViewActivity</h1>
+<code><span class="keyword">class </span><span class="identifier">DataViewActivity</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">FragmentActivity</span><span class="symbol">, </span><a href="../../com.epimorphics.android.myrivers.interfaces/-on-task-completed/index.html"><span class="identifier">com.epimorphics.android.myrivers.interfaces.OnTaskCompleted</span></a><span class="symbol">, </span><span class="identifier">OnMapReadyCallback</span><span class="symbol">, </span><span class="identifier">ConnectionCallbacks</span><span class="symbol">, </span><span class="identifier">OnConnectionFailedListener</span><span class="symbol">, </span><span class="identifier">LocationListener</span></code>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="clear-markers.html">clearMarkers</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">clearMarkers</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Clears all markers of provided view that are currently shown on the map</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="close-view.html">closeView</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">closeView</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Closes the given data view</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="create-location-request.html">createLocationRequest</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">createLocationRequest</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">LocationRequest</span></code>
+<p>Creates location request</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="current-location.html">currentLocation</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">currentLocation</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Displays exact users location on the map. Called when mGPSButton is pressed</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="dismissible-snackbar.html">dismissibleSnackbar</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">dismissibleSnackbar</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Snackbar</span></code>
+<p>Returns a dismissible Snackbar displaying given message for the given amount of time</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="display-home-layer.html">displayHomeLayer</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">displayHomeLayer</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Based on the condition hides or shows home buttons and locks or unlocks the drawer</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="display-location.html">displayLocation</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">displayLocation</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Displays users current location on the map</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-current-location.html">getCurrentLocation</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getCurrentLocation</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Location</span></code>
+<p>Returns current client location</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-my-area.html">getMyArea</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getMyArea</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.epimorphics.android.myrivers.data/-my-area/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.MyArea</span></a></code>
+<p>Returns myArea</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-progress-spinner.html">getProgressSpinner</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getProgressSpinner</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ProgressBar</span></code>
+<p>Returns a progress spinner</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-selected-c-d-e-point.html">getSelectedCDEPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getSelectedCDEPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.epimorphics.android.myrivers.data/-c-d-e-point/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.CDEPoint</span></a></code>
+<p>Returns a selected CDEPoint</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-selected-permit-point.html">getSelectedPermitPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getSelectedPermitPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.epimorphics.android.myrivers.data/-discharge-permit-point/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.DischargePermitPoint</span></a></code>
+<p>Returns a selected DischargePermitPoint</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-selected-w-i-m-s-point.html">getSelectedWIMSPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getSelectedWIMSPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.epimorphics.android.myrivers.data/-w-i-m-s-point/index.html"><span class="identifier">com.epimorphics.android.myrivers.data.WIMSPoint</span></a></code>
+<p>Returns a selected WIMSPoint</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="has-g-p-s-on.html">hasGPSOn</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">hasGPSOn</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">boolean</span></code>
+<p>Returns true if client has GPS turned ON and false otherwise</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="has-network-connection.html">hasNetworkConnection</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">hasNetworkConnection</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">boolean</span></code>
+<p>Returns true if client has network connection and false otherwise</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="load-markers.html">loadMarkers</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">loadMarkers</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Makes a relevant API call depending on the provided view and loads markers returned by the API</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-activity-result.html">onActivityResult</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onActivityResult</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Called when search result is selected in Google's Autocomplete Search Fragment. Updates map camera to focus on the selected location</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-back-pressed.html">onBackPressed</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onBackPressed</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Handles Back Button Presses</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-connected.html">onConnected</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onConnected</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Requests location permissions from the user and if available zooms in to the current location. Called when connection established with Google Play Service Location API</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-connection-failed.html">onConnectionFailed</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onConnectionFailed</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Called when there is an error connecting the client to the service</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-connection-suspended.html">onConnectionSuspended</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onConnectionSuspended</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Called when user is temporarily in a disconnected state.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-create.html">onCreate</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onCreate</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>A main activity showing a map and different data layers. Initiated by SplashActivity</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-location-changed.html">onLocationChanged</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onLocationChanged</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Called when clients location has changed. Updates the position of the currentLocationMarker</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-map-ready.html">onMapReady</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onMapReady</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Called when the map is created. Manipulates the map style, sets the default view on the map of UK and initialises data managers</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-request-permissions-result.html">onRequestPermissionsResult</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onRequestPermissionsResult</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Requests permission for location information at runtime. Need for devices running Android 6 upwards</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-stop.html">onStop</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onStop</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Called when the activity is no longer visible to the user. Disconnects from the google api client.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-task-completed-c-d-e-point.html">onTaskCompletedCDEPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onTaskCompletedCDEPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Populates the map with CDEPoints returned by CDEPointAPI</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-task-completed-c-d-e-river-line.html">onTaskCompletedCDERiverLine</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onTaskCompletedCDERiverLine</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Displays a CDEPoint river line returned by CDERiverLineAPI on top of the catchment GeoJsonFeature</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-task-completed-discharge-permit-point.html">onTaskCompletedDischargePermitPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onTaskCompletedDischargePermitPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Populates the map with DischargePermiPoints returned by DischargePermitPointAPI</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-task-completed-my-area-c-d-e.html">onTaskCompletedMyAreaCDE</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onTaskCompletedMyAreaCDE</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Manages API calls required to populate myArea</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-task-completed-my-area-permit.html">onTaskCompletedMyAreaPermit</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onTaskCompletedMyAreaPermit</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Updates the myArea.permitPoint with the result returned from MyAreaNearestPermitAPI</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-task-completed-my-area-w-i-m-s.html">onTaskCompletedMyAreaWIMS</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onTaskCompletedMyAreaWIMS</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Updates the myArea.wimsPoint with the result returned from MyAreaNearestWIMSAPI</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-task-completed-w-i-m-s-point.html">onTaskCompletedWIMSPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onTaskCompletedWIMSPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Populates the map with WIMSPoints returned by WIMSPointAPI</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="open-c-d-e-details-fragment.html">openCDEDetailsFragment</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">openCDEDetailsFragment</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Opens a CDEDetailsFragment</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="open-info-view.html">openInfoView</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">openInfoView</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Opens an InfoFragment</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="open-search.html">openSearch</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">openSearch</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Opens an Autocomplete Search Fragment provided by the Google Places API</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="open-view.html">openView</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">openView</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Opens the given data view</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="open-w-i-m-s-details-fragment.html">openWIMSDetailsFragment</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">openWIMSDetailsFragment</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Opens a WIMSDetailsFragment</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-camera-focus-on-marker.html">setCameraFocusOnMarker</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setCameraFocusOnMarker</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Closes current data view, opens data view to which given marker belongs and zooms in to it</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-location-marker.html">setLocationMarker</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setLocationMarker</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Updates the position of the currentLocationMarker</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-map-on-camera-idle-listener.html">setMapOnCameraIdleListener</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setMapOnCameraIdleListener</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Sets an onCameraIdleListener to the map ensuring that the data is updated as user browses the map</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-selected-c-d-e-point.html">setSelectedCDEPoint</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setSelectedCDEPoint</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Sets a selected CDEPoint</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-up-c-d-e-manager.html">setUpCDEManager</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setUpCDEManager</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Initializes GeoJsonLayer and sets onFeatureClickListener to open a CDEDataFragment</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-up-multi-manager.html">setUpMultiManager</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setUpMultiManager</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Initialises mMultiListener</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-up-permit-manager.html">setUpPermitManager</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setUpPermitManager</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Initializes mPermitClusterManager and sets onClusterItemClickListener to open a DischargePermitDataFragment and onClusterClickListener to zoom in until markers are unclustered</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-up-w-i-m-s-manager.html">setUpWIMSManager</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setUpWIMSManager</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Initializes mWimsClusterManager and sets onClusterItemClickListener to open a WIMSDataFragment and onClusterClickListener to zoom in until markers are unclustered</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="setup-drawer.html">setupDrawer</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setupDrawer</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Initialises the drawer</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="show-my-area.html">showMyArea</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">showMyArea</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Runs through a series of checks and if all met it Opens a MyAreaFragment. Otherwise a relevant snackbar is displayed on the screen</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="show-search-dialog.html">showSearchDialog</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">showSearchDialog</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Displays a dialog box informing user of the search conditions</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="update-layer-name.html">updateLayerName</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">updateLayerName</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Updates the layer name located on the toolbar with the given view</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="update-map-camera-position-to-current-location.html">updateMapCameraPositionToCurrentLocation</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">updateMapCameraPositionToCurrentLocation</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Updates map camera position to the clients current location</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Other members</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-s-h-a-r-e-d_-p-r-e-f-e-r-e-n-c-e-s_-n-a-m-e.html">SHARED_PREFERENCES_NAME</a></td>
+<td>
+<code><span class="identifier">SHARED_PREFERENCES_NAME</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

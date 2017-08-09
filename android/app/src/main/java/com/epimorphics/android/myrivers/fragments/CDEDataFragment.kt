@@ -21,9 +21,12 @@ import com.epimorphics.android.myrivers.helpers.FragmentHelper
 
 
 /**
- * Created by mihajlo on 07/07/17.
+ * A fragment occupying top part of the screen showcasing basic CDEPoint Classifications.
+ * It is initiated by clicking a geoJSON shape in DataViewActivity
+ *
+ * @see <a href="https://github.com/alessio-b-zak/myRivers/blob/master/graphic%20assets/screenshots/cde_data_view.png">Screenshot</a>
+ * @see DataViewActivity
  */
-
 open class CDEDataFragment : FragmentHelper() {
     private lateinit var mToolbar: Toolbar
     private lateinit var mBackButton: ImageButton
@@ -35,29 +38,41 @@ open class CDEDataFragment : FragmentHelper() {
     private lateinit var mDetailsTable: TableLayout
     private lateinit var isDataLoaded: HashMap<String, Boolean>
 
+    /**
+     * Called when a fragment is created. Initiates mDataViewActivity
+     *
+     * @param savedInstanceState Saved state of the fragment
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mDataViewActivity = activity as DataViewActivity
     }
 
+    /**
+     * Called when a fragment view is created. Initiates and manipulates all required layout elements.
+     *
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Saved state of the fragment
+     *
+     * @return inflated and fully populated View
+     */
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_cde_data_view, container, false)
         mCDEDataView = view
         mCDEDataFragment = this
 
-        // Initialise Recycler View and hide it
+        // Initialise Recycler View and hide it so that map is visible
         mRecyclerView = view.bind(R.id.cde_grid_view)
         mRecyclerView.visibility = View.INVISIBLE
 
         mDetailsTable = view.bind(R.id.cde_table)
 
         val cdePoint = mDataViewActivity.selectedCDEPoint
-
         CDERiverLineAPI(mDataViewActivity).execute(cdePoint)
 
         val cdePointLabel: TextView = view.bind(R.id.cde_label)
-        val label = cdePoint.label
-        cdePointLabel.text = label
+        cdePointLabel.text = cdePoint.label
 
         mToolbar = view.bind(R.id.cde_toolbar)
 
@@ -77,7 +92,7 @@ open class CDEDataFragment : FragmentHelper() {
         // Checks if rnagList is populated
         // If it is [then fragment is opened by going back from the CDEDetailsFragment]
         //      data is already loaded and moreInfoButton should be visible
-        // else [fragment is initialised by clicking on geoJSON feature]
+        // else [fragment is initialised by clicking on geoJSON feature in DataViewActivity]
         //      populate rnagList
         if (cdePoint.rnagList.isNotEmpty()) {
             mMoreInfoButton.visibility = View.VISIBLE
@@ -88,6 +103,11 @@ open class CDEDataFragment : FragmentHelper() {
         return view
     }
 
+    /**
+     * Populates CDEPoint Classification data
+     *
+     * @param cdePoint CDEPoint containing required data
+     */
     fun setClassificationText(cdePoint: CDEPoint) {
         var rowIndex = 0
         // Add header row
@@ -128,8 +148,14 @@ open class CDEDataFragment : FragmentHelper() {
         }
     }
 
-    fun classificationPopulated(classification: String) {
-        isDataLoaded[classification] = true
+    /**
+     * Called when classification data for a specific group of classifications is populated from the
+     * API call. If all the data is loaded then mMoreInfoButton is set to be visible.
+     *
+     * @param group a group of classifications populated by the API
+     */
+    fun classificationPopulated(group: String) {
+        isDataLoaded[group] = true
         if (isDataLoaded.all { entry: Map.Entry<String, Boolean> -> entry.value }) {
             mMoreInfoButton.visibility = View.VISIBLE
         }

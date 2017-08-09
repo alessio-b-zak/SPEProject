@@ -111,7 +111,6 @@ public class CDEPoint {
         ratingPrintValues.put("N/A", "N/A");
     }
 
-    // Object fields
     private String waterbodyId;
     private String label;
     private LatLng location;
@@ -120,6 +119,15 @@ public class CDEPoint {
     private HashMap<String, HashMap<String, Classification>> classificationHashMap;
     private List<RNAG> rnagList;
 
+    /**
+     * Data constructor for a CDE waterbody
+     *
+     * @param waterbodyId identifier
+     * @param label name
+     * @param latitude latitude
+     * @param longitude longitude
+     * @param riverPolygon river catchment as GeoJsonFeature
+     */
     public CDEPoint(String waterbodyId, String label, double latitude, double longitude, GeoJsonFeature riverPolygon) {
         this.waterbodyId = waterbodyId;
         this.label = label;
@@ -134,8 +142,6 @@ public class CDEPoint {
     }
 
     /**
-     * Returns waterbodyId
-     *
      * @return String waterbodyId
      */
     public String getWaterbodyId() {
@@ -143,8 +149,6 @@ public class CDEPoint {
     }
 
     /**
-     * Returns label
-     *
      * @return String label
      */
     public String getLabel() {
@@ -152,8 +156,6 @@ public class CDEPoint {
     }
 
     /**
-     * Returns latitude
-     *
      * @return double latitude
      */
     public double getLatitude() {
@@ -161,8 +163,6 @@ public class CDEPoint {
     }
 
     /**
-     * Returns longitude
-     *
      * @return double longitude
      */
     public double getLongitude() {
@@ -170,17 +170,13 @@ public class CDEPoint {
     }
 
     /**
-     * Returns River Catchment as a GeoJSON polygon
-     *
-     * @return GeoJsonFeature riverPolygon
+     * @return GeoJsonFeature riverPolygon(i.e. river catchment)
      */
     public GeoJsonFeature getRiverPolygon() {
         return riverPolygon;
     }
 
     /**
-     * Returns River Line as a GeoJSON multi line
-     *
      * @return GeoJsonFeature riverLine
      */
     public GeoJsonFeature getRiverLine() {
@@ -188,10 +184,8 @@ public class CDEPoint {
     }
 
     /**
-     * Returns a HashMap of a given classification group
-     *
-     * @param group
-     * @return HashMap classification
+     * @param group for which a HashMap of classifications is to be returned
+     * @return HashMap group of a given group
      * @see Classification
      */
     public HashMap<String, Classification> getClassificationHashMap(String group) {
@@ -199,9 +193,7 @@ public class CDEPoint {
     }
 
     /**
-     * Returns a list of Reasons for Not Achieving Good
-     *
-     * @return List<RNAG> rnagList
+     * @return List\<RNAG\> rnagList
      * @see RNAG
      */
     public List<RNAG> getRnagList() {
@@ -209,9 +201,7 @@ public class CDEPoint {
     }
 
     /**
-     * Adds given RNAG to the rnagList
-     *
-     * @param rnag
+     * @param rnag a single reason for not achieving good to be added to the list
      * @see RNAG
      */
     public void addRNAG(RNAG rnag) {
@@ -219,27 +209,22 @@ public class CDEPoint {
     }
 
     /**
-     * Sets the waterbodyId
-     *
-     * @param waterbodyId
+     * @param waterbodyId waterbody identifier
      */
     public void setWaterbodyId(String waterbodyId) {
         this.waterbodyId = waterbodyId;
     }
 
     /**
-     * Sets the label
-     *
-     * @param label
+     * @param label waterbody name
      */
     public void setLabel(String label) {
         this.label = label;
     }
 
     /**
-     * Sets the GeoJSON multi line representing the river line
-     *
-     * @param riverLine
+     * @param riverLine GeoJsonFeature representing river line
+     * @see GeoJsonFeature
      */
     public void setRiverLine(GeoJsonFeature riverLine) {
         this.riverLine = riverLine;

@@ -3,6 +3,7 @@ package com.epimorphics.android.myrivers.models;
 import com.epimorphics.android.myrivers.data.CDEPoint;
 import com.epimorphics.android.myrivers.helpers.CoordinateSystemConverter;
 import com.epimorphics.android.myrivers.helpers.GeoJsonParser;
+import com.epimorphics.android.myrivers.helpers.InputStreamHelper;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.data.geojson.GeoJsonFeature;
 
@@ -17,57 +18,71 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by cp153 on 06/12/2016.
+ * Consumes an InputStream and converts it to a List<CDEPoint>
+ *
+ * @see CDEPoint
  */
-
-public class InputStreamToCDEPoint {
-
-    private static final String TAG = "IN_STREAM_TO_CDE";
+public class InputStreamToCDEPoint extends InputStreamHelper {
 
     private CoordinateSystemConverter coordinateSystemConverter;
 
+    /**
+     * Data constructor initialises CoordinateSytstemConverter
+     *
+     * @see CoordinateSystemConverter
+     */
     public InputStreamToCDEPoint() {
         coordinateSystemConverter = new CoordinateSystemConverter();
     }
 
-    private static JSONObject inStreamToJSONObject(InputStream in) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            BufferedReader streamReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            StringBuilder responseStrBuilder = new StringBuilder();
+    /**
+     * Converts InputStream to JsonObject
+     *
+     * @param inputStream InputStream to be converted
+     * @return JSONObject corresponding to the given InputStream
+     * @throws JSONException if JSONObject not convertible from StringBuilder
+     * @throws IOException if InputStream not convertible to BufferReader
+     */
+    private static JSONObject inStreamToJSONObject(InputStream inputStream)
+            throws IOException, JSONException {
 
-            String inputStr;
-            while ((inputStr = streamReader.readLine()) != null)
-                responseStrBuilder.append(inputStr);
-            jsonObject = new JSONObject(responseStrBuilder.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+        StringBuilder responseStrBuilder = new StringBuilder();
+
+        String inputStr;
+        while ((inputStr = streamReader.readLine()) != null) {
+            responseStrBuilder.append(inputStr);
         }
-        return jsonObject;
+        return new JSONObject(responseStrBuilder.toString());
     }
 
-    public List<CDEPoint> readJsonStream(InputStream in) throws IOException {
-        JSONObject jsonObject = inStreamToJSONObject(in);
+    /**
+     * Converts InputStream to a List<CDEPoint>
+     *
+     * @param inputStream InputStream to be converted
+     * @return List<CDEPoint> resulting from conversion of inputStream
+     * @throws IOException if InputStream not convertible to JSONObject
+     * @throws JSONException if JSONObject not accessed properly
+     */
+    public List<CDEPoint> readJsonStream(InputStream inputStream) throws IOException, JSONException {
+        JSONObject jsonObject = inStreamToJSONObject(inputStream);
         List<CDEPoint> messages = new ArrayList<CDEPoint>();
         int i = 0;
-        try {
-            while (i < jsonObject.getJSONArray("features").length()) {
-                JSONObject feature = jsonObject.getJSONArray("features").getJSONObject(i);
-                GeoJsonFeature geoJsonFeature = GeoJsonParser.parseFeature(feature);
-                JSONObject properties = feature.getJSONObject("properties");
-                String waterbodyId = properties.getString("waterBodyNotation");
-                String label = properties.getString("label");
-                String ngr = properties.getString("ngr");
 
-                LatLng location = coordinateSystemConverter.convertNgrToLatLng(ngr);
+        while (i < jsonObject.getJSONArray("features").length()) {
+            JSONObject feature = jsonObject.getJSONArray("features").getJSONObject(i);
+            GeoJsonFeature geoJsonFeature = GeoJsonParser.parseFeature(feature);
+            JSONObject properties = feature.getJSONObject("properties");
+            String waterbodyId = properties.getString("waterBodyNotation");
+            String label = properties.getString("label");
+            String ngr = properties.getString("ngr");
 
-                messages.add(new CDEPoint(waterbodyId, label, location.latitude, location.longitude, geoJsonFeature));
-                i++;
-            }
+            LatLng location = coordinateSystemConverter.convertNgrToLatLng(ngr);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+            messages.add(new CDEPoint(waterbodyId, label, location.latitude, location.longitude, geoJsonFeature));
+            i++;
         }
+
         return messages;
     }
 }

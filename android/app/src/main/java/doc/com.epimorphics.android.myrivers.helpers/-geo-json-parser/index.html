@@ -1,0 +1,38 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>GeoJsonParser - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.epimorphics.android.myrivers.helpers</a>&nbsp;/&nbsp;<a href=".">GeoJsonParser</a><br/>
+<br/>
+<h1>GeoJsonParser</h1>
+<code><span class="keyword">class </span><span class="identifier">GeoJsonParser</span></code>
+<p>Parses a JSONObject and places data into their appropriate GeoJsonFeature objects. Returns an array of GeoJsonFeature objects parsed from the GeoJSON file. Based on googlemaps : 
+<p> https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/ android/data/geojson/GeoJsonParser.java </p>
+<p> Apache License 2.0</p>
+</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="parse-feature.html">parseFeature</a></td>
+<td>
+<code><span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">parseFeature</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">GeoJsonFeature</span></code>
+<p>Parses a single GeoJSON feature which contains a geometry and properties member both of which can be null. Also parses the bounding box and id members of the feature if they exist.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="parse-geometry.html">parseGeometry</a></td>
+<td>
+<code><span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">parseGeometry</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Geometry</span></code>
+<p>Parses a single GeoJSON geometry object containing a coordinates array or a geometries array if it has type GeometryCollection</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,53 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>MultiListener - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.epimorphics.android.myrivers.helpers</a>&nbsp;/&nbsp;<a href=".">MultiListener</a><br/>
+<br/>
+<h1>MultiListener</h1>
+<code><span class="keyword">class </span><span class="identifier">MultiListener</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">OnMarkerClickListener</span><span class="symbol">, </span><span class="identifier">OnCameraIdleListener</span></code>
+<p>A helper class allowing Markers of different type to be shown on the GoogleMap at the same time</p>
+<p><strong>See Also</strong><br/>
+com.google.android.gms.maps.GoogleMap.OnMarkerClickListenercom.google.android.gms.maps.GoogleMap.OnCameraIdleListener</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="add-o-c.html">addOC</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">addOC</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Adds OnCameraIdleListener to the cameraIdleListeners</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="add-o-m.html">addOM</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">addOM</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Adds OnMarkerClickListener to the onClickListeners</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-camera-idle.html">onCameraIdle</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onCameraIdle</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Calls onCameraIdle listener on all currently held cameraIdleListeners</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="on-marker-click.html">onMarkerClick</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onMarkerClick</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">boolean</span></code>
+<p>Calls onMarkerClick listener and hides info window</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

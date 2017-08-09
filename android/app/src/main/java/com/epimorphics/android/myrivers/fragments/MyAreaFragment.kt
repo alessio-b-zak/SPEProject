@@ -12,14 +12,13 @@ import com.epimorphics.android.myrivers.data.Characteristic
 import com.epimorphics.android.myrivers.data.MyArea
 import com.epimorphics.android.myrivers.helpers.FragmentHelper
 
-
 /**
- * Created by mihajlo on 18/07/17.
+ * A fragment occupying full screen showcasing data about users surrounding area.
+ * It is initiated by clicking a "Where am I?" button in the drawer
+ *
+ * @see <a href="https://github.com/alessio-b-zak/myRivers/blob/master/graphic%20assets/screenshots/my_area_view.png">Screenshot</a>
  */
 class MyAreaFragment : FragmentHelper() {
-
-    private val TAG = "MY_AREA_VIEW"
-
     private lateinit var mDataViewActivity: DataViewActivity
     private lateinit var mMyAreaView: View
     private lateinit var mCDETable: TableLayout
@@ -30,11 +29,25 @@ class MyAreaFragment : FragmentHelper() {
     private lateinit var mWIMSPointButton: Button
     private lateinit var mPermitPointButton: Button
 
+    /**
+     * Called when a fragment is created. Initiates mDataViewActivity
+     *
+     * @param savedInstanceState Saved state of the fragment
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mDataViewActivity = activity as DataViewActivity
     }
 
+    /**
+     * Called when a fragment view is created. Initiates and manipulates all required layout elements.
+     *
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Saved state of the fragment
+     *
+     * @return inflated and fully populated View
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_my_area_view, container, false)
 
@@ -52,11 +65,9 @@ class MyAreaFragment : FragmentHelper() {
         mCharacteristicsTable = view.bind(R.id.my_area_characteristics_table)
 
         mPermitPointButton = view.bind(R.id.my_area_permit_button)
-//        setButtonColor(mPermitPointButton)
         mPermitPointButton.visibility = View.GONE
 
         mWIMSPointButton = view.bind(R.id.my_area_wims_button)
-//        setButtonColor(mWIMSPointButton)
         mWIMSPointButton.visibility = View.GONE
 
         populateCDEData()
@@ -66,6 +77,10 @@ class MyAreaFragment : FragmentHelper() {
         return view
     }
 
+    /**
+     * Checks if myArea has waterbody populated. If it does the data is shown, otherwise an info
+     * message is shown.
+     */
     fun populateCDEData() {
         if(myArea.hasWaterbody) {
             populateWaterbodyDetails()
@@ -77,6 +92,10 @@ class MyAreaFragment : FragmentHelper() {
         }
     }
 
+    /**
+     * Populates waterbody details including nearest waterbody, operational and management catchment
+     * as well as river basin district.
+     */
     fun populateWaterbodyDetails() {
         var rowIndex = 0
         val parentWeight = 0.3
@@ -103,6 +122,9 @@ class MyAreaFragment : FragmentHelper() {
         mCDETable.addView(tableRow)
     }
 
+    /**
+     * Populates river catchment characteristics such as length and area.
+     */
     fun populateCharacteristicsDetails() {
         var rowIndex = 0
         val parentWeight = 0.4
@@ -117,6 +139,9 @@ class MyAreaFragment : FragmentHelper() {
         }
     }
 
+    /**
+     * Populates button description including distance to the nearest WIMSPoint
+     */
     fun populateWIMSData() {
         mWIMSPointButton.setOnClickListener {
             mDataViewActivity.setCameraFocusOnMarker(myArea.wimsPoint)
@@ -126,6 +151,9 @@ class MyAreaFragment : FragmentHelper() {
         mWIMSPointButton.text = buttonDescription
     }
 
+    /**
+     * Populates button description including distance to the nearest DischargePermitPoint
+     */
     fun populatePermitData() {
         mPermitPointButton.setOnClickListener {
             mDataViewActivity.setCameraFocusOnMarker(myArea.permitPoint)
