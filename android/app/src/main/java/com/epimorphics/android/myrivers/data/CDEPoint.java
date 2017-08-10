@@ -113,7 +113,6 @@ public class CDEPoint {
 
     private String waterbodyId;
     private String label;
-    private LatLng location;
     private GeoJsonFeature riverPolygon;
     private GeoJsonFeature riverLine;
     private HashMap<String, HashMap<String, Classification>> classificationHashMap;
@@ -124,14 +123,11 @@ public class CDEPoint {
      *
      * @param waterbodyId identifier
      * @param label name
-     * @param latitude latitude
-     * @param longitude longitude
      * @param riverPolygon river catchment as GeoJsonFeature
      */
-    public CDEPoint(String waterbodyId, String label, double latitude, double longitude, GeoJsonFeature riverPolygon) {
+    public CDEPoint(String waterbodyId, String label, GeoJsonFeature riverPolygon) {
         this.waterbodyId = waterbodyId;
         this.label = label;
-        this.location = new LatLng(latitude, longitude);
         this.classificationHashMap = new HashMap<String, HashMap<String, Classification>>();
         this.classificationHashMap.put(REAL, new HashMap<String, Classification>());
         this.classificationHashMap.put(OBJECTIVE, new HashMap<String, Classification>());
@@ -153,20 +149,6 @@ public class CDEPoint {
      */
     public String getLabel() {
         return label;
-    }
-
-    /**
-     * @return double latitude
-     */
-    public double getLatitude() {
-        return location.latitude;
-    }
-
-    /**
-     * @return double longitude
-     */
-    public double getLongitude() {
-        return location.longitude;
     }
 
     /**

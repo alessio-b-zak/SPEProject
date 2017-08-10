@@ -14,10 +14,34 @@
 <tbody>
 <tr>
 <td>
+<a href="add-markers-or-snack.html">addMarkersOrSnack</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">addMarkersOrSnack</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Adds markers to the map if zoom level condition is met. Otherwise it shows an error Snackbar</p>
+</td>
+</tr>
+<tr>
+<td>
 <a href="clear-markers.html">clearMarkers</a></td>
 <td>
 <code><span class="keyword">fun </span><span class="identifier">clearMarkers</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
 <p>Clears all markers of provided view that are currently shown on the map</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="close-c-d-e-data-fragment.html">closeCDEDataFragment</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">closeCDEDataFragment</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Closes CDEDataFragment by removing the fragment and calling closeDataFragment</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="close-data-fragment.html">closeDataFragment</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">closeDataFragment</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Closes given view's data fragment by clearing the markers, opening that view as a layer in DataViewActivity and resetting map padding and home buttons.</p>
 </td>
 </tr>
 <tr>
@@ -158,6 +182,14 @@
 </tr>
 <tr>
 <td>
+<a href="on-cluster-click-default.html">onClusterClickDefault</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onClusterClickDefault</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Makes a maximum zoom onto the cluster keeping all ClusterItems inside the view port</p>
+</td>
+</tr>
+<tr>
+<td>
 <a href="on-connected.html">onConnected</a></td>
 <td>
 <code><span class="keyword">fun </span><span class="identifier">onConnected</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
@@ -286,10 +318,26 @@
 </tr>
 <tr>
 <td>
+<a href="open-fragment.html">openFragment</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">openFragment</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Opens a given fragment</p>
+</td>
+</tr>
+<tr>
+<td>
 <a href="open-info-view.html">openInfoView</a></td>
 <td>
 <code><span class="keyword">fun </span><span class="identifier">openInfoView</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
 <p>Opens an InfoFragment</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="open-my-area-view.html">openMyAreaView</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">openMyAreaView</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Runs through a series of checks and if all met it Opens a MyAreaFragment. Otherwise a relevant snackbar is displayed on the screen</p>
 </td>
 </tr>
 <tr>
@@ -350,9 +398,9 @@
 </tr>
 <tr>
 <td>
-<a href="set-up-c-d-e-manager.html">setUpCDEManager</a></td>
+<a href="set-up-c-d-e-view-single.html">setUpCDEViewSingle</a></td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">setUpCDEManager</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<code><span class="keyword">fun </span><span class="identifier">setUpCDEViewSingle</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
 <p>Initializes GeoJsonLayer and sets onFeatureClickListener to open a CDEDataFragment</p>
 </td>
 </tr>
@@ -366,18 +414,18 @@
 </tr>
 <tr>
 <td>
-<a href="set-up-permit-manager.html">setUpPermitManager</a></td>
+<a href="set-up-permit-view-single.html">setUpPermitViewSingle</a></td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">setUpPermitManager</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<code><span class="keyword">fun </span><span class="identifier">setUpPermitViewSingle</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
 <p>Initializes mPermitClusterManager and sets onClusterItemClickListener to open a DischargePermitDataFragment and onClusterClickListener to zoom in until markers are unclustered</p>
 </td>
 </tr>
 <tr>
 <td>
-<a href="set-up-w-i-m-s-manager.html">setUpWIMSManager</a></td>
+<a href="set-up-w-i-m-s-view-single.html">setUpWIMSViewSingle</a></td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">setUpWIMSManager</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
-<p>Initializes mWimsClusterManager and sets onClusterItemClickListener to open a WIMSDataFragment and onClusterClickListener to zoom in until markers are unclustered</p>
+<code><span class="keyword">fun </span><span class="identifier">setUpWIMSViewSingle</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
+<p>Initializes mWIMSClusterManager and sets onClusterItemClickListener to open a WIMSDataFragment and onClusterClickListener to zoom in until markers are unclustered</p>
 </td>
 </tr>
 <tr>
@@ -386,14 +434,6 @@
 <td>
 <code><span class="keyword">fun </span><span class="identifier">setupDrawer</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
 <p>Initialises the drawer</p>
-</td>
-</tr>
-<tr>
-<td>
-<a href="show-my-area.html">showMyArea</a></td>
-<td>
-<code><span class="keyword">fun </span><span class="identifier">showMyArea</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">void</span></code>
-<p>Runs through a series of checks and if all met it Opens a MyAreaFragment. Otherwise a relevant snackbar is displayed on the screen</p>
 </td>
 </tr>
 <tr>

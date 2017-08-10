@@ -64,6 +64,7 @@ import com.epimorphics.android.myrivers.apis.WIMSPointMeasurementsAPI;
 import com.epimorphics.android.myrivers.data.CDEPoint;
 import com.epimorphics.android.myrivers.data.DischargePermitPoint;
 import com.epimorphics.android.myrivers.data.MyArea;
+import com.epimorphics.android.myrivers.data.Point;
 import com.epimorphics.android.myrivers.data.WIMSPoint;
 import com.epimorphics.android.myrivers.fragments.CDEDataFragment;
 import com.epimorphics.android.myrivers.fragments.CDEDetailsFragment;
@@ -174,7 +175,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     private boolean wasZoomSnackDisplayed;
 
     private int currentView;
-    private boolean connected;
+    private boolean connectedToGooglePlayService;
     private int mMapCameraPadding;
 
     /**
@@ -252,9 +253,8 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         setMapOnCameraIdleListener(view);
         updateLayerName(view);
         // If zoomed in enough then load markers
-        if (mMap.getCameraPosition().zoom > BASE_ZOOM_LEVEL - 1) {
-            loadMarkers(view);
-        }
+        dismissSnackbars();
+        addMarkersOrSnack(view);
     }
 
     /**
@@ -412,16 +412,25 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                clearMarkers(view_params);
-                if (mMap.getCameraPosition().zoom > BASE_ZOOM_LEVEL - 1) {
-                    loadMarkers(view_params);
-                } else {
-                    if (!wasZoomSnackDisplayed && !zoomSnack.isShown() && hasNetworkConnection()) {
-                        zoomSnack.show();
-                    }
-                }
+                addMarkersOrSnack(view_params);
             }
         });
+    }
+
+    /**
+     * Adds markers to the map if zoom level condition is met. Otherwise it shows an error Snackbar
+     *
+     * @param view int layer name
+     */
+    public void addMarkersOrSnack(int view) {
+        clearMarkers(view);
+        if (mMap.getCameraPosition().zoom > BASE_ZOOM_LEVEL - 1) {
+            loadMarkers(view);
+        } else {
+            if (!wasZoomSnackDisplayed && !zoomSnack.isShown() && hasNetworkConnection()) {
+                zoomSnack.show();
+            }
+        }
     }
 
     /**
@@ -465,54 +474,57 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      *
      * @see MyAreaFragment
      */
-    public void showMyArea() {
-        if (hasNetworkConnection()) {
-            if (hasGPSOn(getApplicationContext())) {
-                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (connected) {
-                        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
-                    }
-                    if (mLocation != null) {
-                        displayHomeLayer(false);
-
-                        mProgressSpinner.setVisibility(View.VISIBLE);
-                        final Snackbar snack = Snackbar.make(findViewById(R.id.fragment_container),
-                                "Determining your exact location",
-                                Snackbar.LENGTH_INDEFINITE);
-                        snack.show();
-
-                        myArea = new MyArea();
-
-                        new MyAreaCDEAPI(this).execute(getCurrentLocation(), myArea);
-
-                        myArea.setOnPopulatedListener(new OnPopulated() {
-                            @Override
-                            public void onMyAreaPopulated() {
-                                Fragment fragment = new MyAreaFragment();
-                                mMyAreaFragment = (MyAreaFragment) fragment;
-
-                                mFragmentManager.beginTransaction()
-                                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-                                        .add(R.id.fragment_container, mMyAreaFragment)
-                                        .addToBackStack(null).commit();
-
-                                mProgressSpinner.setVisibility(View.INVISIBLE);
-                                snack.dismiss();
-                            }
-                        });
-                    } else {
-                        displaySimpleSnackbar("Failed to determine your exact location", Snackbar.LENGTH_SHORT);
-                    }
-                } else {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-                }
-            } else {
-                displaySimpleSnackbar("GPS Required", Snackbar.LENGTH_SHORT);
-            }
-        } else {
+    public void openMyAreaView() {
+        if (!hasNetworkConnection()) {
             displaySimpleSnackbar("Internet Connection Required", Snackbar.LENGTH_SHORT);
+            return;
         }
+        if (!hasGPSOn(getApplicationContext())) {
+            displaySimpleSnackbar("GPS Required", Snackbar.LENGTH_SHORT);
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            return;
+        }
+
+        if (connectedToGooglePlayService) {
+            mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, createLocationRequest(), this);
+        }
+
+        if(mLocation == null) {
+            displaySimpleSnackbar("Failed to determine your exact location", Snackbar.LENGTH_SHORT);
+            return;
+        }
+
+        displayHomeLayer(false);
+
+        mProgressSpinner.setVisibility(View.VISIBLE);
+        final Snackbar snack = Snackbar.make(findViewById(R.id.fragment_container),
+                "Determining your exact location",
+                Snackbar.LENGTH_INDEFINITE);
+        snack.show();
+
+        myArea = new MyArea();
+
+        new MyAreaCDEAPI(this).execute(getCurrentLocation(), myArea);
+
+        myArea.setOnPopulatedListener(new OnPopulated() {
+            @Override
+            public void onMyAreaPopulated() {
+                Fragment fragment = new MyAreaFragment();
+                mMyAreaFragment = (MyAreaFragment) fragment;
+
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                        .add(R.id.fragment_container, mMyAreaFragment)
+                        .addToBackStack(null).commit();
+
+                mProgressSpinner.setVisibility(View.INVISIBLE);
+                snack.dismiss();
+            }
+        });
 
     }
 
@@ -523,10 +535,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     protected void onStop() {
         super.onStop();
-        if (connected) {
+        if (connectedToGooglePlayService) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
-            connected = false;
         }
     }
 
@@ -536,7 +547,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      *
      * @see CDEDataFragment
      */
-    public void setUpCDEManager() {
+    public void setUpCDEViewSingle() {
         mGeoJsonLayer = new GeoJsonLayer(mMap, new JSONObject());
         mGeoJsonLayer.setOnFeatureClickListener(new Layer.OnFeatureClickListener() {
             @Override
@@ -568,12 +579,13 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     }
 
     /**
-     * Initializes mWimsClusterManager and sets onClusterItemClickListener to open a WIMSDataFragment
-     * and onClusterClickListener to zoom in until markers are unclustered
+     * Initializes mWIMSClusterManager and sets onClusterItemClickListener to open a
+     * WIMSDataFragment and onClusterClickListener to zoom in until markers are
+     * unclustered
      *
      * @see WIMSDataFragment
      */
-    public void setUpWIMSManager() {
+    public void setUpWIMSViewSingle() {
         mWIMSClusterManager = new ClusterManager<>(this, mMap);
         mWIMSClusterManager.setRenderer(new WIMSPointRenderer(this, mMap, mWIMSClusterManager));
         mWIMSClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<WIMSPoint>() {
@@ -600,10 +612,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         new WIMSPointMeasurementsAPI(mWIMSDataFragment).execute(selectedWIMSPoint);
                         new WIMSPointMetalsAPI(mWIMSDataFragment).execute(selectedWIMSPoint);
 
-                        mFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-                                .add(R.id.fragment_container, fragment)
-                                .addToBackStack(null).commit();
+                        openFragment(fragment, R.anim.slide_in_top, R.anim.slide_out_top);
                     }
                 }
                 return true;
@@ -613,13 +622,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mWIMSClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<WIMSPoint>() {
             @Override
             public boolean onClusterClick(Cluster<WIMSPoint> cluster) {
-                LatLngBounds.Builder builder = LatLngBounds.builder();
-                for (ClusterItem item : cluster.getItems()) {
-                    builder.include(item.getPosition());
-                }
-                final LatLngBounds bounds = builder.build();
-                mMap.setPadding(0, 0, 0, 0);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                onClusterClickDefault(cluster);
                 return true;
             }
         });
@@ -632,7 +635,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      *
      * @see DischargePermitDataFragment
      */
-    public void setUpPermitManager() {
+    public void setUpPermitViewSingle() {
         mPermitClusterManager = new ClusterManager<>(this, mMap);
         mPermitClusterManager.setRenderer(new DischargePermitPointRenderer(this, mMap, mPermitClusterManager));
         mPermitClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<DischargePermitPoint>() {
@@ -654,12 +657,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         mPermitClusterManager.cluster();
 
                         fragment = new DischargePermitDataFragment();
-                        DischargePermitDataFragment mDischargePermitDataFragment = (DischargePermitDataFragment) fragment;
-
-                        mFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-                                .add(R.id.fragment_container, fragment)
-                                .addToBackStack(null).commit();
+                        openFragment(fragment, R.anim.slide_in_top, R.anim.slide_out_top);
                     }
                 }
                 return true;
@@ -668,16 +666,25 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mPermitClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<DischargePermitPoint>() {
             @Override
             public boolean onClusterClick(Cluster<DischargePermitPoint> cluster) {
-                LatLngBounds.Builder builder = LatLngBounds.builder();
-                for (ClusterItem item : cluster.getItems()) {
-                    builder.include(item.getPosition());
-                }
-                final LatLngBounds bounds = builder.build();
-                mMap.setPadding(0, 0, 0, 0);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                onClusterClickDefault(cluster);
                 return true;
             }
         });
+    }
+
+    /**
+     * Makes a maximum zoom onto the cluster keeping all ClusterItems inside the view port
+     *
+     * @param cluster Cluster
+     */
+    public void onClusterClickDefault(Cluster cluster) {
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        for (Object item : cluster.getItems()) {
+            builder.include(((ClusterItem) item).getPosition());
+        }
+        final LatLngBounds bounds = builder.build();
+        mMap.setPadding(0, 0, 0, 0);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
     }
 
     /**
@@ -687,11 +694,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      */
     public void openCDEDetailsFragment() {
         Fragment fragment = new CDEDetailsFragment();
-        mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
-                .add(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
+        openFragment(fragment, R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     /**
@@ -701,8 +704,19 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      */
     public void openWIMSDetailsFragment() {
         Fragment fragment = new WIMSDetailsFragment();
+        openFragment(fragment, R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
+    /**
+     * Opens a given fragment
+     *
+     * @param fragment Fragment to be opened
+     * @param animationIn Open animation
+     * @param animationOut Close animation
+     */
+    public void openFragment(Fragment fragment, int animationIn, int animationOut) {
         mFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right)
+                .setCustomAnimations(animationIn, 0, 0, animationOut)
                 .add(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
@@ -764,9 +778,9 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      * @see MultiListener
      */
     public void setUpMultiManager() {
-        setUpWIMSManager();
-        setUpPermitManager();
-        setUpCDEManager();
+        setUpWIMSViewSingle();
+        setUpPermitViewSingle();
+        setUpCDEViewSingle();
 
         mMultiListener.addOC(mWIMSClusterManager);
         mMultiListener.addOC(mPermitClusterManager);
@@ -781,7 +795,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     /**
      * Populates the map with WIMSPoints returned by WIMSPointAPI
      *
-     * @param result List\<WIMSPoint\> created after an API call in WIMSPointAPI
+     * @param result List<WIMSPoint> created after an API call in WIMSPointAPI
      *
      * @see WIMSPointAPI
      */
@@ -794,7 +808,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     /**
      * Populates the map with CDEPoints returned by CDEPointAPI
      *
-     * @param result List\<CDEPoint\> created after an API call in CDEPointAPI
+     * @param result List<CDEPoint> created after an API call in CDEPointAPI
      *
      * @see CDEPointAPI
      */
@@ -830,7 +844,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     /**
      * Populates the map with DischargePermiPoints returned by DischargePermitPointAPI
      *
-     * @param result List\<DischargePermitPoint\> created after an API call in DischargePermitPointAPI
+     * @param result List<DischargePermitPoint> created after an API call in DischargePermitPointAPI
      * @see DischargePermitPointAPI
      */
     @Override
@@ -886,27 +900,29 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            connected = true;
-            if (!hasGPSOn(getApplicationContext())) {
-                openView(currentView);
-            } else {
-                displayLocation();
-                mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-                    @Override
-                    public void onCameraIdle() {
-                        if (mMap.getCameraPosition().zoom < BASE_ZOOM_LEVEL - 1) {
-                            displayLocation();
-                            openView(currentView);
-                        } else {
-                            openView(currentView);
-                            return;
-                        }
-                    }
-                });
-            }
-        } else {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            return;
+        }
+
+        connectedToGooglePlayService = true;
+        if (!hasGPSOn(getApplicationContext())) {
+            openView(currentView);
+        } else {
+            displayLocation();
+            mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                @Override
+                public void onCameraIdle() {
+                    if (mMap.getCameraPosition().zoom < BASE_ZOOM_LEVEL - 1) {
+                        displayLocation();
+                        openView(currentView);
+                    } else {
+                        openView(currentView);
+                        // Doesn't work without return, sorry Mike
+                        return;
+                    }
+                }
+            });
         }
     }
 
@@ -950,7 +966,6 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return mLocationRequest;
-
     }
 
     /**
@@ -984,7 +999,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      */
     public void currentLocation(View v) {
         if (hasGPSOn(v.getContext())) {
-            if (!connected) {
+            if (!connectedToGooglePlayService) {
                 mGoogleApiClient.connect();
             } else {
                 displayLocation();
@@ -1003,15 +1018,16 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_LOCATION) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // We can now safely use the API we requested access to
-                Log.i(TAG, "Location request allowed");
-                connected = true;
-                displayLocation();
-            } else {
-                connected = false;
-            }
+        if (requestCode != REQUEST_LOCATION) {
+            return;
+        }
+        if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // We can now safely use the API we requested access to
+            Log.i(TAG, "Location request allowed");
+            connectedToGooglePlayService = true;
+            displayLocation();
+        } else {
+            connectedToGooglePlayService = false;
         }
     }
 
@@ -1022,7 +1038,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      */
     @Override
     public void onConnectionSuspended(int i) {
-        connected = false;
+        connectedToGooglePlayService = false;
         Log.i(TAG, "Connection Suspended");
         mGoogleApiClient.connect();
     }
@@ -1036,8 +1052,37 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i(TAG, "Connection Failed");
         displaySimpleSnackbar("Location Connection Failed", Snackbar.LENGTH_SHORT);
-        connected = false;
+        connectedToGooglePlayService = false;
         mGoogleApiClient.connect();
+    }
+
+    /**
+     * Closes CDEDataFragment by removing the fragment and calling closeDataFragment
+     *
+     * @param fragment Fragment to be removed
+     */
+    public void closeCDEDataFragment(Fragment fragment) {
+        mFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
+                .remove(fragment)
+                .commit();
+        closeDataFragment(CDE, false);
+    }
+
+    /**
+     * Closes given view's data fragment by clearing the markers, opening that view as a layer in
+     * DataViewActivity and resetting map padding and home buttons.
+     *
+     * @param view view which data fragment is to be closed
+     * @param popBackStack if true fragment manager's back stack is popped
+     */
+    public void closeDataFragment(int view, boolean popBackStack) {
+        if(popBackStack) mFragmentManager.popBackStack();
+        clearMarkers(view);
+        openView(view);
+        mProgressSpinner.setVisibility(View.INVISIBLE);
+        mMap.setPadding(0, 0, 0, 0);
+        displayHomeLayer(true);
     }
 
     /**
@@ -1047,33 +1092,15 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     public void onBackPressed() {
         Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
         if (fragment instanceof WIMSDataFragment) {
-            mFragmentManager.popBackStack();
-            clearMarkers(WIMS);
-            openView(WIMS);
-            mProgressSpinner.setVisibility(View.INVISIBLE);
-            mMap.setPadding(0, 0, 0, 0);
-            displayHomeLayer(true);
+            closeDataFragment(WIMS, true);
         } else if (fragment instanceof CDEDataFragment) {
-            mFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
-                    .remove(fragment)
-                    .commit();
-            clearMarkers(CDE);
-            openView(CDE);
-            mProgressSpinner.setVisibility(View.INVISIBLE);
-            mMap.setPadding(0, 0, 0, 0);
-            displayHomeLayer(true);
+            closeCDEDataFragment(fragment);
         } else if (fragment instanceof CDEDetailsFragment) {
             mFragmentManager.popBackStack();
         } else if (fragment instanceof WIMSDetailsFragment) {
             mFragmentManager.popBackStack();
         } else if (fragment instanceof DischargePermitDataFragment) {
-            mFragmentManager.popBackStack();
-            clearMarkers(PERMIT);
-            openView(PERMIT);
-            mProgressSpinner.setVisibility(View.INVISIBLE);
-            mMap.setPadding(0, 0, 0, 0);
-            displayHomeLayer(true);
+            closeDataFragment(PERMIT, true);
         } else if (fragment instanceof InfoFragment) {
             mFragmentManager.popBackStack();
             displayHomeLayer(true);
@@ -1161,12 +1188,12 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork != null) { // connected to the internet
+        if (activeNetwork != null) { // connectedToGooglePlayService to the internet
             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                // connected to wifi
+                // connectedToGooglePlayService to wifi
                 haveConnectedWifi = true;
             } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                // connected to the mobile provider's data plan
+                // connectedToGooglePlayService to the mobile provider's data plan
                 haveConnectedMobile = true;
             }
         }
@@ -1271,7 +1298,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
      * Closes current data view, opens data view to which given marker belongs and zooms in to it
      * @param point Object marker
      */
-    public void setCameraFocusOnMarker(Object point) {
+    public void setCameraFocusOnMarker(Point point) {
         LatLng position = null;
         onBackPressed();
         closeView(currentView);
@@ -1346,7 +1373,7 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                                 openView(PERMIT);
                                 break;
                             case 4:
-                                showMyArea();
+                                openMyAreaView();
                                 break;
                             case 5:
                                 openInfoView();

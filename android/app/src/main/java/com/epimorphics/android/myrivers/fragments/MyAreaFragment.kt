@@ -51,7 +51,7 @@ class MyAreaFragment : FragmentHelper() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_my_area_view, container, false)
 
-        mMyAreaView = view;
+        mMyAreaView = view
 
         myArea = mDataViewActivity.myArea
 

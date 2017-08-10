@@ -103,9 +103,9 @@ class InputStreamToWIMSMeasurements : InputStreamHelper() {
                     name = reader.nextName()
                     if (name == "sampleDateTime") {
                         dateTimeString = reader.nextString()
-                        date = dateTimeString.substring(0, 10);
+                        date = dateTimeString.substring(0, 10)
                     } else if (name == "samplingPoint") {
-                        label = readItemToString(reader);
+                        label = readItemToString(reader)
                     } else {
                         reader.skipValue()
                     }

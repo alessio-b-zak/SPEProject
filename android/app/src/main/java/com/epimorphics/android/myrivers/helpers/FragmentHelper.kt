@@ -18,7 +18,7 @@ import com.epimorphics.android.myrivers.R
  * Helper class providing base functions used by most fragments
  *
  */
-abstract class FragmentHelper() : Fragment() {
+abstract class FragmentHelper : Fragment() {
 
     /**
      * Used to initialise an element from a resource

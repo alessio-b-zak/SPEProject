@@ -110,7 +110,7 @@ open class WIMSDetailsFragment : FragmentHelper() {
      */
     fun populateData(wimsPoint: WIMSPoint) {
         val groupList = arrayListOf<String>("general", "diss_oxygen", "oxygen_demand",
-                "nitrates", "phosphates", "metals", "solids");
+                "nitrates", "phosphates", "metals", "solids")
 
         var emptyGroupCount = 0
 

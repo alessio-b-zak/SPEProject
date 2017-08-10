@@ -24,17 +24,6 @@ import java.util.List;
  */
 public class InputStreamToCDEPoint extends InputStreamHelper {
 
-    private CoordinateSystemConverter coordinateSystemConverter;
-
-    /**
-     * Data constructor initialises CoordinateSytstemConverter
-     *
-     * @see CoordinateSystemConverter
-     */
-    public InputStreamToCDEPoint() {
-        coordinateSystemConverter = new CoordinateSystemConverter();
-    }
-
     /**
      * Converts InputStream to JsonObject
      *
@@ -75,11 +64,8 @@ public class InputStreamToCDEPoint extends InputStreamHelper {
             JSONObject properties = feature.getJSONObject("properties");
             String waterbodyId = properties.getString("waterBodyNotation");
             String label = properties.getString("label");
-            String ngr = properties.getString("ngr");
 
-            LatLng location = coordinateSystemConverter.convertNgrToLatLng(ngr);
-
-            messages.add(new CDEPoint(waterbodyId, label, location.latitude, location.longitude, geoJsonFeature));
+            messages.add(new CDEPoint(waterbodyId, label, geoJsonFeature));
             i++;
         }
 

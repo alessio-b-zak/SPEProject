@@ -15,7 +15,7 @@ import java.net.URL
  *
  * @see MyArea
  */
-open class MyAreaCatchmentsAPI() :
+open class MyAreaCatchmentsAPI :
         AsyncTask<MyArea, Void, Unit>() {
 
     private val TAG = "MY_AREA_CATCHMENTS_API"
