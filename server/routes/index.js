@@ -100,7 +100,7 @@ router.get('/getClassification/:easting/:northing', function(req, res){
 //:lat1/:lon1/:lat3/:lon3/:lastActive
 router.get('/getWIMSPoints/:lat1/:lon1/:lat3/:lon3/:lastActive', function(req, res) {
 
-    // Cast all parametters into integers
+    // Cast all parametters into floats
     var lat1 = parseFloat(req.params.lat1);
     var lon1 = parseFloat(req.params.lon1);
     var lat3 = parseFloat(req.params.lat3);
@@ -118,11 +118,11 @@ router.get('/getWIMSPoints/:lat1/:lon1/:lat3/:lon3/:lastActive', function(req, r
     wimsPoints.find({
         loc: {
             $geoWithin: {
-                $polygon: [ [ lat1, lon1 ],
-                            [ lat2, lon2 ],
-                            [ lat3, lon3 ],
-                            [ lat4, lon4 ],
-                            [ lat1, lon1 ] ]
+                $polygon: [ [ lon1, lat1 ],
+                            [ lon2, lat2 ],
+                            [ lon3, lat3 ],
+                            [ lon4, lat4 ],
+                            [ lon1, lat1 ] ]
             }
         },
         lastActive: {
@@ -281,11 +281,12 @@ router.get('/getNearestPermit/:lat/:lon', function(req, res) {
     });
 });
 
-// Every Saturday at 03:59 repopulate wims data
+// Every first monday of the month at 03:59 repopulate epr data
 var wims_update_rule = new schedule.RecurrenceRule();
+wims_update_rule.dayOfMonth = [1, 2, 3, 4, 5, 6, 7];
+wims_update_rule.dayOfWeek = 1;
 wims_update_rule.hour = 3;
 wims_update_rule.minute = 59;
-wims_update_rule.dayOfWeek = 6;
 
 var update_wims = schedule.scheduleJob(wims_update_rule, function(){
     var db = mongoose.connection;
@@ -371,11 +372,12 @@ function handleError(err) {
     console.log('Error saving the permit: ' + err);
 }
 
-// Every Saturday at 02:59 repopulate epr data
+// Every first monday of the month at 02:59 repopulate epr data
 var epr_update_rule = new schedule.RecurrenceRule();
+epr_update_rule.dayOfMonth = [1, 2, 3, 4, 5, 6, 7];
+epr_update_rule.dayOfWeek = 1;
 epr_update_rule.hour = 2;
 epr_update_rule.minute = 59;
-epr_update_rule.dayOfWeek = 6;
 
 var update_epr = schedule.scheduleJob(epr_update_rule, function(){
     const db = mongoose.connection;
