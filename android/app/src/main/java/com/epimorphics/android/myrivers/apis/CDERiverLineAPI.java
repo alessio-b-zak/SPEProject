@@ -45,7 +45,7 @@ public class CDERiverLineAPI extends AsyncTask<CDEPoint, Void, CDEPoint> {
             // Builds an URI
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .authority("ea-cde-pub.epimorphics.net")
+                    .authority("environment.data.gov.uk")
                     .appendPath("catchment-planning")
                     .appendPath("so")
                     .appendPath("WaterBody")

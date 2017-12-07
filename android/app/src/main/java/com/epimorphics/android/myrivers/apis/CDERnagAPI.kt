@@ -40,7 +40,7 @@ open class CDERnagAPI(private val mCDEDataFragment: CDEDataFragment) :
         // Builds an URI
         val builder = Uri.Builder()
         builder.scheme("http")
-                .authority("ea-cde-pub.epimorphics.net")
+                .authority("environment.data.gov.uk")
                 .appendPath("catchment-planning")
                 .appendPath("data")
                 .appendPath("reason-for-failure.json")

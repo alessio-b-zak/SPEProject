@@ -51,7 +51,7 @@ public class CDEPointRatingsAPI extends AsyncTask<Object, Void, CDEAsyncReturn> 
             // Builds an URI
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
-                    .authority("ea-cde-pub.epimorphics.net")
+                    .authority("environment.data.gov.uk")
                     .appendPath("catchment-planning")
                     .appendPath("data")
                     .appendPath("classification" + linkExtension + ".json")
