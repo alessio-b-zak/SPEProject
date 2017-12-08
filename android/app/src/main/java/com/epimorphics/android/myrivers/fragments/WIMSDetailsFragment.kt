@@ -116,8 +116,8 @@ open class WIMSDetailsFragment : FragmentHelper() {
 
         // Loops through all the measurement groups and populates the data
         for (group in groupList) {
-            var groupDeterminandList = ArrayList<String>()
-            var groupTable = mGeneralTable
+            var groupDeterminandList: ArrayList<String>
+            var groupTable: TableLayout
             val groupTitle: TextView = mWIMSDetailsView.bind(resources.getIdentifier(
                     "wims_details_" + group + "_title",
                     "id", mDataViewActivity.packageName))

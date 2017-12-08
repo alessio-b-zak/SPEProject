@@ -44,18 +44,13 @@ class InputStreamToMyAreaCatchments : InputStreamHelper() {
     fun readMessagesArray(reader: JsonReader, myArea: MyArea) {
         reader.beginObject()
         while (reader.hasNext()) {
-            var name = reader.nextName()
-            if (name == "result") {
-                reader.beginObject()
+            val name = reader.nextName()
+            if (name == "items") {
+                reader.beginArray()
                 while (reader.hasNext()) {
-                    name = reader.nextName()
-                    if (name == "primaryTopic") {
-                        readMessage(reader, myArea)
-                    } else {
-                        reader.skipValue()
-                    }
+                    readMessage(reader, myArea)
                 }
-                reader.endObject()
+                reader.endArray()
             } else {
                 reader.skipValue()
             }

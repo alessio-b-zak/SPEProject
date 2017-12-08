@@ -40,10 +40,10 @@ open class MyAreaCDEAPI(private val listener: OnTaskCompleted) :
         myArea = params[1] as MyArea
         // Creates a miniature polygon around users location and uses it as a parameter to the
         // geolocation CDE API call
-        val topLeft: LatLng = LatLng(myLocation.latitude + 0.0005, myLocation.longitude - 0.0005)
-        val topRight: LatLng = LatLng(myLocation.latitude + 0.0005, myLocation.longitude + 0.0005)
-        val botRight: LatLng = LatLng(myLocation.latitude - 0.0005, myLocation.longitude + 0.0005)
-        val botLeft: LatLng = LatLng(myLocation.latitude - 0.0005, myLocation.longitude - 0.0005)
+        val topLeft = LatLng(myLocation.latitude + 0.0005, myLocation.longitude - 0.0005)
+        val topRight = LatLng(myLocation.latitude + 0.0005, myLocation.longitude + 0.0005)
+        val botRight = LatLng(myLocation.latitude - 0.0005, myLocation.longitude + 0.0005)
+        val botLeft = LatLng(myLocation.latitude - 0.0005, myLocation.longitude - 0.0005)
 
         // Builds an URI
         val builder = Uri.Builder()

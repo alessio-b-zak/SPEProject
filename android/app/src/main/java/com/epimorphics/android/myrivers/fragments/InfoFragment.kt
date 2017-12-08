@@ -41,7 +41,7 @@ class InfoFragment : FragmentHelper() {
         val view = inflater.inflate(R.layout.fragment_info_view, container, false)
 
         mBackButton = view.bind(R.id.back_button_info_view)
-        mBackButton.setOnClickListener { activity.onBackPressed() }
+        mBackButton.setOnClickListener { activity!!.onBackPressed() }
 
         // Creates a movementMethod for a link to the Government Licence
         val licence: TextView = view.bind(R.id.info_description)

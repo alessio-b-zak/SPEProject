@@ -103,7 +103,7 @@ abstract class FragmentHelper : Fragment() {
         textView.gravity = gravity
 
         // basePadding is set to a different value for mobile and tabled devices
-        val basePadding = context.resources.getDimensionPixelSize(R.dimen.table_base_padding)
+        val basePadding = context!!.resources.getDimensionPixelSize(R.dimen.table_base_padding)
         textView.setPaddingRelative(basePadding + startPadding, 0, basePadding, 0)
 
         // set the style of the TextView

@@ -508,11 +508,11 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
 
         myArea = new MyArea();
 
-        new MyAreaCDEAPI(this).execute(getCurrentLocation(), myArea);
-
+        Log.d(TAG, "I should be opening myArea now");
         myArea.setOnPopulatedListener(new OnPopulated() {
             @Override
             public void onMyAreaPopulated() {
+                Log.d(TAG, "My Area Populated!");
                 Fragment fragment = new MyAreaFragment();
                 mMyAreaFragment = (MyAreaFragment) fragment;
 
@@ -520,11 +520,14 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
                         .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_top)
                         .add(R.id.fragment_container, mMyAreaFragment)
                         .addToBackStack(null).commit();
-
+                Log.d(TAG, "GOGOGOGOG");
                 mProgressSpinner.setVisibility(View.INVISIBLE);
                 snack.dismiss();
             }
         });
+
+
+        new MyAreaCDEAPI(this).execute(getCurrentLocation(), myArea);
 
     }
 
@@ -535,10 +538,10 @@ public class DataViewActivity extends FragmentActivity implements OnTaskComplete
     @Override
     protected void onStop() {
         super.onStop();
-        if (connectedToGooglePlayService) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            mGoogleApiClient.disconnect();
-        }
+//        if (connectedToGooglePlayService) {
+//            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+//            mGoogleApiClient.disconnect();
+//        }
     }
 
 

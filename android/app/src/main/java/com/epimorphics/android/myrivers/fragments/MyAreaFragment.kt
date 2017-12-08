@@ -57,7 +57,7 @@ class MyAreaFragment : FragmentHelper() {
 
         mBackButton = view.bind(R.id.back_button_my_area_view)
         mBackButton.setOnClickListener {
-            activity.onBackPressed()
+            activity!!.onBackPressed()
         }
 
         mCDETable = view.bind(R.id.my_area_summary_table)
@@ -88,7 +88,7 @@ class MyAreaFragment : FragmentHelper() {
         } else {
             mCDETable.visibility = View.GONE
             mCharacteristicsTable.visibility = View.GONE
-            mCharacteristicsTitle.text = context.resources.getString(R.string.my_area_unable_to_find_waterbody)
+            mCharacteristicsTitle.text = context!!.resources.getString(R.string.my_area_unable_to_find_waterbody)
         }
     }
 
